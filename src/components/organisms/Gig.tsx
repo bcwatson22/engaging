@@ -1,53 +1,67 @@
-import Image from "next/image";
-import dayjs from "dayjs";
+import { useId } from "react";
+import { Dates } from "../atoms/Dates";
+import { Bullet } from "../atoms/Bullet";
+import { Company } from "../molecules/Company";
 
-const dateFormat = "MMMM YYYY";
+type Props = Scroll & Gig;
 
-export const Gig = ({
-  id,
-  role,
-  company,
-  logo,
-  city,
-  capacity,
-  dates,
-  bullets,
-}: Gig) => {
-  const startDate = dates[0];
-  const dateFrom = dayjs(startDate).format(dateFormat);
-  const endDate = dates[1];
-  const hasEndDate = !!endDate;
-  const dateTo = hasEndDate ? dayjs(endDate).format(dateFormat) : "present";
+const getRoleName = (
+  index: number,
+  total: number,
+  hasMultiple = false
+): string => {
+  switch (true) {
+    case !hasMultiple:
+      return "";
+    case index === 0:
+      return " linker";
+    case index < total:
+      return " linker linkee";
+    case index === total:
+      return " linkee";
+    default:
+      return "";
+  }
+};
+
+export const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
+  const sectionId = useId();
 
   return (
-    <section key={id}>
-      <h3 className="mb-2 leading-8 text-theme-2-b">{role}</h3>
-      <p>
-        {company}, {city}; {capacity}
-      </p>
-      <p className="mb-2">
-        <time dateTime={startDate}>{dateFrom}</time>
-        {startDate !== endDate && (
-          <>
-            {" - "}
-            {hasEndDate ? <time dateTime={endDate}>{dateTo}</time> : dateTo}
-          </>
-        )}
-      </p>
-      {logo?.url && (
-        <Image
-          src={logo.url}
-          alt={`${company} logo`}
-          width={100}
-          height={100}
-          priority
-        />
-      )}
-      <ul>
-        {bullets.map((bullet) => (
-          <li key={`${bullet.at(0)}-${bullet.at(1)}`}>{bullet}</li>
-        ))}
-      </ul>
+    <section aria-labelledby={sectionId} className="gig">
+      <Company
+        company={company}
+        logo={logo}
+        city={city}
+        sectionId={sectionId}
+        delay={delay}
+      />
+      {roles.map(({ id, role, dates, capacity, bullets }, index) => {
+        const numOfRoles = roles.length;
+        const hasMultiple = numOfRoles > 1;
+        const className = getRoleName(index, numOfRoles - 1, hasMultiple);
+
+        return (
+          <div key={id} className={`role${className}`}>
+            <h4
+              className={`text-brand-blue dark:text-brand-yellow${
+                hasMultiple ? " multiple" : ""
+              }`}
+            >
+              {role}
+            </h4>
+            <div className="flex">
+              <Dates dates={dates} className="mb-4" />
+              <p className="capacity">{capacity}</p>
+            </div>
+            <ul className="bullets">
+              {bullets.map((content) => (
+                <Bullet key={content.slice(0, 15)}>{content}</Bullet>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
     </section>
   );
 };

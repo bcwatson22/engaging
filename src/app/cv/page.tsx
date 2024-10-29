@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { NextPage } from "next";
 import {
   OperationResult,
@@ -8,22 +7,36 @@ import {
   gql,
 } from "@urql/core";
 import { registerUrql } from "@urql/next/rsc";
-import dayjs from "dayjs";
+import ReactMarkdown from "react-markdown";
+
 import { Section } from "@/components/organisms/Section";
 import { Gig } from "@/components/organisms/Gig";
 import { Header } from "@/components/molecules/Header";
+import { Details } from "@/components/molecules/Details";
+import { Qualification } from "@/components/molecules/Qualification";
+import { Reference } from "@/components/molecules/Reference";
 
 const getCvQuery = gql`
   query {
     cvs(first: 1) {
       id
-      logo {
+      logoLightBackground {
+        id
+        url
+      }
+      logoDarkBackground {
         id
         url
       }
       title
       intro
-      address
+      address {
+        id
+        streetAddress
+        locality
+        countryName
+        postalCode
+      }
       contactLinks {
         id
         text
@@ -31,16 +44,19 @@ const getCvQuery = gql`
       }
       gigs {
         id
-        role
         company
         logo {
           id
           url
         }
         city
-        capacity
-        dates
-        bullets
+        roles {
+          id
+          role
+          dates
+          capacity
+          bullets
+        }
       }
       skills
       qualifications {
@@ -60,6 +76,11 @@ const getCvQuery = gql`
         person
         role
         company
+        link {
+          id
+          text
+          target
+        }
       }
     }
   }
@@ -75,15 +96,16 @@ const makeClient = () =>
 
 const { getClient } = registerUrql(makeClient);
 
-const Resume: NextPage = async () => {
-  const response: OperationResult<Result> = await getClient().query(
+const CVPage: NextPage = async () => {
+  const { data }: OperationResult<Result> = await getClient().query(
     getCvQuery,
     {}
   );
 
   const {
     title,
-    logo,
+    logoDarkBackground,
+    logoLightBackground,
     intro,
     address,
     contactLinks,
@@ -92,25 +114,39 @@ const Resume: NextPage = async () => {
     qualifications,
     onlineLinks,
     references,
-  } = response!.data!.cvs![0];
+  } = data!.cvs[0];
 
   return (
-    <main className="min-h-screen m-6 p-6 border-3 border-theme-2-b overflow-hidden">
-      <Header title={title} logo={logo} intro={intro} />
+    <main className="main">
+      <Header
+        title={title}
+        logoDarkBackground={logoDarkBackground}
+        logoLightBackground={logoLightBackground}
+        intro={intro}
+      />
       <div className="sections">
-        <Section heading="Details and digits">
-          <p className="leading-8">Address is {address}</p>
-          <ul>
-            {contactLinks?.map(({ id, text, target }) => (
-              <li key={id}>
-                <a href={target}>{text}</a>
-              </li>
-            ))}
-          </ul>
+        <Section heading="Digits" margin="0px">
+          <Details address={address} links={contactLinks} />
         </Section>
-        <Section heading="Experience">
-          {gigs?.map((gig) => (
-            <Gig key={gig.id} {...gig} />
+        <Section heading="Experience" margin="0px" delay={0.1}>
+          {gigs?.map((gig, i) => (
+            <Gig key={gig.id} {...gig} delay={i === 0 ? 0.2 : 0} />
+          ))}
+        </Section>
+        <Section heading="Skills">
+          <ReactMarkdown>{skills}</ReactMarkdown>
+        </Section>
+        <Section heading="Qualifications">
+          {qualifications?.map((qualification) => (
+            <Qualification key={qualification.id} {...qualification} />
+          ))}
+        </Section>
+        <Section heading="Profile">
+          <Details links={onlineLinks} />
+        </Section>
+        <Section heading="References" margin="0px">
+          {references?.map((reference) => (
+            <Reference key={reference.id} {...reference} />
           ))}
         </Section>
       </div>
@@ -120,4 +156,4 @@ const Resume: NextPage = async () => {
 
 export const revalidate = 3600 * 24;
 
-export default Resume;
+export default CVPage;

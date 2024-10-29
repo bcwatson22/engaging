@@ -10,6 +10,13 @@ type Asset = ID & {
   url: string;
 };
 
+type Address = {
+  streetAddress: string;
+  locality: string;
+  countryName: string;
+  postalCode: string;
+};
+
 type Link = ID & {
   text: string;
   target: string;
@@ -21,35 +28,47 @@ type Position = {
 };
 
 type Gig = ID &
-  Position & {
-    capacity: string;
+  Pick<Position, "company"> & {
     city: string;
     logo: Asset;
-    dates: string[];
-    bullets: string[];
+    roles: Role[];
   };
 
-type Qualification = {
+type Role = ID &
+  Pick<Position, "role"> & {
+    dates: string[];
+    bullets: string[];
+    capacity: string;
+  };
+
+type Qualification = ID & {
   institution: string;
   location: string;
   dates: string[];
   description: string;
 };
 
-type Reference = Position & {
-  person: string;
-  link: Link;
-};
+type Reference = ID &
+  Position & {
+    person: string;
+    link: Link;
+  };
 
 type CV = {
   title: string;
-  logo: Asset;
+  logoLightBackground: Asset;
+  logoDarkBackground: Asset;
   intro: string;
-  address: string;
+  address: Address;
   contactLinks: Link[];
   gigs: Gig[];
-  skills: string[];
+  skills: string;
   qualifications: Qualification[];
   onlineLinks: Link[];
   references: Reference[];
+};
+
+type Scroll = {
+  delay?: number;
+  margin?: string;
 };

@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { NextPage } from "next";
 import {
   OperationResult,
@@ -8,69 +8,69 @@ import {
   gql,
 } from "@urql/core";
 import { registerUrql } from "@urql/next/rsc";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
-const GET_CV = gql`
-  query {
-    cvs(first: 1) {
-      id
-      logo {
-        id
-        url
-      }
-      title
-      intro
-      address
-      contactLinks {
-        id
-        text
-        target
-      }
-      gigs {
-        id
-        role
-        company
-        logo {
-          id
-          url
-        }
-        city
-        capacity
-        dates
-        bullets
-      }
-      skills
-      qualifications {
-        id
-        institution
-        location
-        dates
-        description
-      }
-      onlineLinks {
-        id
-        text
-        target
-      }
-      references {
-        id
-        person
-        role
-        company
-      }
-    }
-  }
-`;
+// const GET_CV = gql`
+//   query {
+//     cvs(first: 1) {
+//       id
+//       logo {
+//         id
+//         url
+//       }
+//       title
+//       intro
+//       address
+//       contactLinks {
+//         id
+//         text
+//         target
+//       }
+//       gigs {
+//         id
+//         role
+//         company
+//         logo {
+//           id
+//           url
+//         }
+//         city
+//         capacity
+//         dates
+//         bullets
+//       }
+//       skills
+//       qualifications {
+//         id
+//         institution
+//         location
+//         dates
+//         description
+//       }
+//       onlineLinks {
+//         id
+//         text
+//         target
+//       }
+//       references {
+//         id
+//         person
+//         role
+//         company
+//       }
+//     }
+//   }
+// `;
 
-const makeClient = () =>
-  createClient({
-    url: process.env.HYGRAPH_ENDPOINT!,
-    exchanges: [cacheExchange, fetchExchange],
-  });
+// const makeClient = () =>
+//   createClient({
+//     url: process.env.HYGRAPH_ENDPOINT!,
+//     exchanges: [cacheExchange, fetchExchange],
+//   });
 
-const { getClient } = registerUrql(makeClient);
+// const { getClient } = registerUrql(makeClient);
 
-const dateFormat = "MMMM YYYY";
+// const dateFormat = "MMMM YYYY";
 
 const Home: NextPage = async () => {
   return (

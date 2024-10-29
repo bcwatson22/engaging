@@ -7,19 +7,35 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      "theme-1-a": "#f7b633",
-      "theme-1-b": "#90a4ae",
-      "theme-1-c": "#607d8b",
-      "theme-1-d": "#37474f",
-      "theme-2-a": "#ececeb",
-      "theme-2-b": "#f9a828",
-      "theme-2-c": "#07617d",
-      "theme-2-d": "#2e383f",
-    },
     extend: {
+      colors: {
+        "theme-1-a": "#f7b633",
+        "theme-1-b": "#90a4ae",
+        "theme-1-c": "#607d8b",
+        "theme-1-d": "#37474f",
+        "theme-2-a": "#ececeb",
+        "theme-2-b": "#f9a828",
+        "theme-2-c": "#07617d",
+        "theme-2-d": "#2e383f",
+        // "brand-yellow": "#edce2d",
+        "brand-yellow": "#f9a828",
+        "brand-green": "#458c25",
+        "brand-blue": "#245385",
+        "brand-red": "#740a01",
+      },
+      top: {
+        1.5: "0.375rem",
+        2.5: "0.625rem",
+      },
+      textIndent: {
+        full: "-99999rem",
+      },
       borderWidth: {
         3: "3px",
+        12: "12px",
+        16: "16px",
+        20: "20px",
+        24: "24px",
       },
       textDecorationThickness: {
         3: "3px",
