@@ -6,6 +6,8 @@ type Props = {
 export const Details = ({ address, links }: Props) => {
   const { streetAddress, locality, countryName, postalCode } = address ?? {};
 
+  /* phone email website profile repo */
+
   return (
     <>
       {address && (
@@ -18,9 +20,12 @@ export const Details = ({ address, links }: Props) => {
       )}
       <address className="address">
         <ul>
-          {links?.map(({ id, text, target }) => (
+          {links?.map(({ id, text, target, icon }) => (
             <li key={id}>
-              <a href={target} className="link">
+              <a
+                href={target}
+                className={`link border-y- icon ${icon.toLowerCase()}`}
+              >
                 {text}
               </a>
             </li>

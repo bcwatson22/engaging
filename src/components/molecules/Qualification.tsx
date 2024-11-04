@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { Dates } from "../atoms/Dates";
 
-export const Qualification = ({
+const Qualification = ({
   institution,
   location,
   dates,
@@ -17,3 +17,5 @@ export const Qualification = ({
     </section>
   );
 };
+
+export { Qualification };

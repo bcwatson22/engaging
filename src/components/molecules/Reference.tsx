@@ -15,7 +15,7 @@ export const Reference = ({
       <p className="mt-0">
         {role}, {company}
       </p>
-      <a href={target} className="link">
+      <a href={target} className="link icon profile">
         {text}
       </a>
     </section>

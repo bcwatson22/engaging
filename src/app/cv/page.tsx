@@ -41,6 +41,7 @@ const getCvQuery = gql`
         id
         text
         target
+        icon
       }
       gigs {
         id
@@ -70,6 +71,7 @@ const getCvQuery = gql`
         id
         text
         target
+        icon
       }
       references {
         id
@@ -80,6 +82,7 @@ const getCvQuery = gql`
           id
           text
           target
+          icon
         }
       }
     }

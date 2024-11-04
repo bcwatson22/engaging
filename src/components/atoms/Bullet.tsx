@@ -7,7 +7,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const Bullet = ({ children }: Props) => {
+const Bullet = ({ children }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -21,3 +21,5 @@ export const Bullet = ({ children }: Props) => {
     </li>
   );
 };
+
+export { Bullet };

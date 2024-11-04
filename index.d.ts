@@ -6,6 +6,8 @@ type ID = {
   id: string;
 };
 
+type Icon = "Phone" | "Email" | "Website" | "Profile" | "Repo";
+
 type Asset = ID & {
   url: string;
 };
@@ -20,6 +22,7 @@ type Address = {
 type Link = ID & {
   text: string;
   target: string;
+  icon: Icon;
 };
 
 type Position = {
@@ -69,6 +72,6 @@ type CV = {
 };
 
 type Scroll = {
-  delay?: number;
-  margin?: string;
+  delay?: Orchestration["delay"];
+  margin?: UseInViewOptions["margin"];
 };

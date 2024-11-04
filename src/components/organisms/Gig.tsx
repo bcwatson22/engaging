@@ -1,7 +1,7 @@
-import { useId } from "react";
+import { Suspense, useId } from "react";
 import { Dates } from "../atoms/Dates";
 import { Bullet } from "../atoms/Bullet";
-import { Company } from "../molecules/Company";
+import { Company, CompanyProps } from "../molecules/Company";
 
 type Props = Scroll & Gig;
 
@@ -24,18 +24,22 @@ const getRoleName = (
   }
 };
 
-export const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
+const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
   const sectionId = useId();
+
+  const companyProps: CompanyProps = {
+    company,
+    logo,
+    city,
+    sectionId,
+    delay,
+  };
 
   return (
     <section aria-labelledby={sectionId} className="gig">
-      <Company
-        company={company}
-        logo={logo}
-        city={city}
-        sectionId={sectionId}
-        delay={delay}
-      />
+      <Suspense>
+        <Company {...companyProps} />
+      </Suspense>
       {roles.map(({ id, role, dates, capacity, bullets }, index) => {
         const numOfRoles = roles.length;
         const hasMultiple = numOfRoles > 1;
@@ -56,7 +60,9 @@ export const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
             </div>
             <ul className="bullets">
               {bullets.map((content) => (
-                <Bullet key={content.slice(0, 15)}>{content}</Bullet>
+                <Suspense key={content.slice(0, 15)}>
+                  <Bullet>{content}</Bullet>
+                </Suspense>
               ))}
             </ul>
           </div>
@@ -65,3 +71,5 @@ export const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
     </section>
   );
 };
+
+export { Gig };

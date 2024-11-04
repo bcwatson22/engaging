@@ -6,7 +6,7 @@ type Props = Pick<
   "title" | "logoDarkBackground" | "logoLightBackground" | "intro"
 >;
 
-export const Header = ({
+const Header = ({
   title,
   logoDarkBackground,
   logoLightBackground,
@@ -43,3 +43,5 @@ export const Header = ({
     </header>
   );
 };
+
+export { Header };

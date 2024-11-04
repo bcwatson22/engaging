@@ -22,7 +22,7 @@
   }
 
   h2 {
-    @apply text-2xl;
+    @apply text-2xl font-medium;
   }
 
   h3 {
@@ -74,13 +74,6 @@
     text-decoration: underline;
     @apply underline-offset-4 decoration-2 decoration-brand-blue dark:decoration-brand-yellow;
 
-    /* padding-left:1.25rem;
-    position: relative;
-    &:before {
-      content: "\01F525";
-      @apply absolute left-0;
-    } */
-
     &:hover,
     &:focus-visible {
       @apply decoration-transparent;
@@ -88,6 +81,48 @@
 
     &:active {
       @apply decoration-brand-blue dark:decoration-brand-yellow;
+    }
+  }
+
+  .phone,
+  .email,
+  .website,
+  .profile,
+  .repo {
+    @apply relative pl-6;
+
+    &:before {
+      @apply absolute top-1/2 -translate-y-1/2 left-0 mt-px text-sm;
+    }
+  }
+
+  .phone {
+    &:before {
+      content: "📱";
+    }
+  }
+
+  .email {
+    &:before {
+      content: "✉️";
+    }
+  }
+
+  .website {
+    &:before {
+      content: "🌐";
+    }
+  }
+
+  .profile {
+    &:before {
+      content: "👤";
+    }
+  }
+
+  .repo {
+    &:before {
+      content: "🚀";
     }
   }
 

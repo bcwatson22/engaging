@@ -7,7 +7,7 @@ type Props = {
 
 const dateFormat = "MMMM YYYY";
 
-export const Dates = ({ dates, className }: Props) => {
+const Dates = ({ dates, className }: Props) => {
   const startDate = dates[0];
   const dateFrom = dayjs(startDate).format(dateFormat);
   const endDate = dates[1];
@@ -26,3 +26,5 @@ export const Dates = ({ dates, className }: Props) => {
     </p>
   );
 };
+
+export { Dates };
