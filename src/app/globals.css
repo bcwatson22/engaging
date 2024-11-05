@@ -47,15 +47,19 @@
 
 @layer components {
   .header {
-    @apply grid grid-cols-1 md:grid-cols-[22rem_1fr] lg:grid-cols-[22rem_22rem] gap-6 lg:gap-24;
+    @apply grid grid-cols-1 md:grid-cols-[22rem_1fr] lg:grid-cols-[22rem_22rem] gap-6 lg:gap-24 items-center;
   }
 
   .main {
     @apply min-h-screen m-6 p-6 lg:p-16 border-3 border-brand-blue dark:border-brand-yellow overflow-clip;
   }
 
+  .inner {
+    @apply mx-auto lg:max-w-[60rem] lg:pl-16 xl:pl-32;
+  }
+
   .sections {
-    @apply grid grid-cols-1 md:grid-cols-[min-content_1fr] gap-x-12 gap-y-8 md:gap-y-16 lg:gap-24 mt-12 lg:mt-24 items-start;
+    @apply grid grid-cols-1 md:grid-cols-[min-content_1fr] gap-x-12 gap-y-8 md:gap-y-16 lg:gap-24 xl:gap-36 mt-12 lg:mt-24 items-start;
   }
 
   .divider {

@@ -32,7 +32,7 @@ const Header = ({
   return (
     <header className="header">
       <h1 className="sr-only">{title}</h1>
-      <picture className="mx-auto md:mx-0">
+      <picture className="mx-auto md:mx-0 mb-auto">
         <source media="(prefers-color-scheme: dark)" srcSet={dark} />
         <source media="(prefers-color-scheme: light)" srcSet={light} />
         <img {...imageProps} alt={commonImageProps.alt} />

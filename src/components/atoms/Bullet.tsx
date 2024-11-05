@@ -11,7 +11,7 @@ const Bullet = ({ children }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["end end", "start 80vw"],
+    offset: ["end end", "start 80vh"],
   });
 
   return (

@@ -6,7 +6,10 @@ type Props = {
 export const Details = ({ address, links }: Props) => {
   const { streetAddress, locality, countryName, postalCode } = address ?? {};
 
-  /* phone email website profile repo */
+  /* 
+    Tailwind made me do it! 
+    Options are: phone // email // website // profile // repo 
+  */
 
   return (
     <>
