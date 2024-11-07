@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { Suspense, useId } from "react";
 import { Dates } from "../atoms/Dates";
 
 const Qualification = ({
@@ -12,7 +12,9 @@ const Qualification = ({
   return (
     <section aria-labelledby={sectionId} className="qualification">
       <h3>{institution}</h3>
-      <Dates dates={dates} />
+      <Suspense>
+        <Dates dates={dates} />
+      </Suspense>
       <p className="mt-0">{description}</p>
     </section>
   );

@@ -12,11 +12,18 @@ type Props = Scroll &
 
 const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const triggerProps = useScrollTrigger({ ref, delay, margin: "0px" });
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("print").matches);
+  const triggerProps = useScrollTrigger({ ref, delay });
+  const preferredProps =
+    // prefersReducedMotion ? {} :
+    triggerProps;
 
   return (
-    <motion.header ref={ref} className="company" {...triggerProps}>
-      <figure className="icon">
+    <motion.header ref={ref} className="company" {...preferredProps}>
+      <figure>
         {logo?.url && (
           <Image
             src={logo.url}

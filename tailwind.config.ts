@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      aspectRatio: {
+        logo: "320 / 111",
+      },
       colors: {
         "theme-1-a": "#f7b633",
         "theme-1-b": "#90a4ae",

@@ -1,7 +1,7 @@
 import { useId } from "react";
-import { Dates } from "../atoms/Dates";
+import { Icon } from "../atoms/Icon";
 
-export const Reference = ({
+const Reference = ({
   person,
   role,
   company,
@@ -15,9 +15,12 @@ export const Reference = ({
       <p className="mt-0">
         {role}, {company}
       </p>
-      <a href={target} className="link icon profile">
+      <a href={target} className="link icon">
+        <Icon icon="Profile" />
         {text}
       </a>
     </section>
   );
 };
+
+export { Reference };

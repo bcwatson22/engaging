@@ -1,0 +1,51 @@
+
+@layer base {
+  body {
+    -webkit-print-color-adjust: exact!important;
+    print-color-adjust: exact!important;
+    @apply text-base text-zinc-950  bg-gray-50 selection:bg-brand-blue selection:text-gray-50;
+    @apply dark:text-gray-50 dark:bg-zinc-950;
+    @apply print:text-xs;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  ul,
+  li {
+    @apply m-0;
+  }
+
+  h1 {
+    @apply text-3xl;
+    @apply print:text-2xl;
+  }
+
+  h2 {
+    @apply text-2xl font-medium;
+    @apply print:text-lg;
+  }
+
+  h3 {
+    @apply text-xl font-bold;
+    @apply print:text-base;
+  }
+
+  h4 {
+    @apply text-lg;
+    @apply print:text-sm;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    + p,
+    + address {
+      @apply mt-4;
+    }
+  }
+}

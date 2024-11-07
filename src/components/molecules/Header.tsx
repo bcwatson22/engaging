@@ -1,5 +1,6 @@
 import { getImageProps, ImageProps } from "next/image";
-import dayjs from "dayjs";
+import { Intro } from "../atoms/Intro";
+import { CSSProperties, Suspense } from "react";
 
 type Props = Pick<
   CV,
@@ -12,9 +13,10 @@ const Header = ({
   logoLightBackground,
   intro,
 }: Props) => {
+  const alt = "Billy Watson logo";
   const commonImageProps: ImageProps = {
     src: logoLightBackground?.url,
-    alt: "Billy Watson logo",
+    alt,
     width: 448,
     height: 156,
     priority: true,
@@ -26,19 +28,25 @@ const Header = ({
     props: { srcSet: light, ...imageProps },
   } = getImageProps({ ...commonImageProps, src: logoLightBackground?.url });
 
-  const yearsOfExperience = dayjs().diff("2012-06-01", "year").toString();
-  const formattedIntro = intro.replace("{{experience}}", yearsOfExperience);
-
   return (
     <header className="header">
       <h1 className="sr-only">{title}</h1>
-      <picture className="mx-auto md:mx-0 mb-auto">
-        <source media="(prefers-color-scheme: dark)" srcSet={dark} />
+      <picture className="screen-logo">
+        <source media="print" srcSet={light} />
         <source media="(prefers-color-scheme: light)" srcSet={light} />
+        <source media="(prefers-color-scheme: dark)" srcSet={dark} />
         <img {...imageProps} alt={commonImageProps.alt} />
       </picture>
+      <span
+        className="print-logo"
+        style={{ backgroundImage: `url(${logoLightBackground?.url})` }}
+      >
+        {alt}
+      </span>
       <div>
-        <p className="text-sm">{formattedIntro}</p>
+        <Suspense>
+          <Intro intro={intro} />
+        </Suspense>
       </div>
     </header>
   );

@@ -2,7 +2,7 @@
 
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import "./globals.css";
+import "../styles/globals.css";
 import { FC, useCallback } from "react";
 import type { Container, Engine } from "tsparticles-engine";
 import Particles from "react-tsparticles";
@@ -44,7 +44,7 @@ const RootLayout: FC<Layout> = ({ children }) => {
 
   return (
     <html lang="en">
-      <body className={`${nunito.className}`}>
+      <body className={`cv ${nunito.className}`}>
         {/* <Particles
           id="tsparticles"
           init={particlesInit}

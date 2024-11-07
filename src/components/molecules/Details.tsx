@@ -1,15 +1,12 @@
+import { Icon } from "../atoms/Icon";
+
 type Props = {
   address?: Address;
   links: Link[];
 };
 
-export const Details = ({ address, links }: Props) => {
+const Details = ({ address, links }: Props) => {
   const { streetAddress, locality, countryName, postalCode } = address ?? {};
-
-  /* 
-    Tailwind made me do it! 
-    Options are: phone // email // website // profile // repo 
-  */
 
   return (
     <>
@@ -25,10 +22,8 @@ export const Details = ({ address, links }: Props) => {
         <ul>
           {links?.map(({ id, text, target, icon }) => (
             <li key={id}>
-              <a
-                href={target}
-                className={`link border-y- icon ${icon.toLowerCase()}`}
-              >
+              <a href={target} className="link icon">
+                <Icon icon={icon} />
                 {text}
               </a>
             </li>
@@ -38,3 +33,5 @@ export const Details = ({ address, links }: Props) => {
     </>
   );
 };
+
+export { Details };

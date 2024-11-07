@@ -55,7 +55,9 @@ const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
               {role}
             </h4>
             <div className="flex">
-              <Dates dates={dates} className="mb-4" />
+              <Suspense>
+                <Dates dates={dates} className="mb-4" />
+              </Suspense>
               <p className="capacity">{capacity}</p>
             </div>
             <ul className="bullets">
