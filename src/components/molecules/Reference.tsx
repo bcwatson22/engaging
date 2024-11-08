@@ -1,12 +1,7 @@
 import { useId } from "react";
-import { Icon } from "../atoms/Icon";
+import { Link } from "../atoms/Link";
 
-const Reference = ({
-  person,
-  role,
-  company,
-  link: { text, target },
-}: Reference) => {
+const Reference = ({ person, role, company, link }: Reference) => {
   const sectionId = useId();
 
   return (
@@ -15,10 +10,7 @@ const Reference = ({
       <p className="mt-0">
         {role}, {company}
       </p>
-      <a href={target} className="link icon">
-        <Icon icon="Profile" />
-        {text}
-      </a>
+      <Link link={link} />
     </section>
   );
 };

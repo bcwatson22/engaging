@@ -1,4 +1,5 @@
 import { Icon } from "../atoms/Icon";
+import { Link } from "../atoms/Link";
 
 type Props = {
   address?: Address;
@@ -20,14 +21,17 @@ const Details = ({ address, links }: Props) => {
       )}
       <address className="address">
         <ul>
-          {links?.map(({ id, text, target, icon }) => (
-            <li key={id}>
-              <a href={target} className="link icon">
-                <Icon icon={icon} />
-                {text}
-              </a>
-            </li>
-          ))}
+          {links?.map((link) => {
+            const { id, target } = link;
+            const useRawTarget =
+              target.startsWith("tel:") || target.startsWith("mailto:");
+
+            return (
+              <li key={id}>
+                <Link link={link} useRawTarget={useRawTarget} />
+              </li>
+            );
+          })}
         </ul>
       </address>
     </>
