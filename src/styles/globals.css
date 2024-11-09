@@ -2,6 +2,20 @@
 @import "layers/components.css";
 @import "layers/utilities.css";
 
+@import "../components/atoms/Bullet/Bullet.css";
+@import "../components/atoms/Divider/Divider.css";
+@import "../components/atoms/Link/Link.css";
+
+@import "../components/molecules/Company/Company.css";
+@import "../components/molecules/Details/Details.css";
+@import "../components/molecules/Header/Header.css";
+@import "../components/molecules/Qualification/Qualification.css";
+
+@import "../components/organisms/Gig/Gig.css";
+@import "../components/organisms/Section/Section.css";
+
+@import "pages/cv.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

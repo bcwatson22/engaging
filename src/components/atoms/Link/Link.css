@@ -1,0 +1,39 @@
+@layer components {
+  .link {
+    text-decoration: underline;
+    @apply underline-offset-4 decoration-2 decoration-brand-blue;
+    @apply dark:decoration-brand-yellow;
+
+    &:hover,
+    &:focus-visible {
+      @apply decoration-transparent;
+    }
+
+    &:active {
+      @apply decoration-brand-blue;
+      @apply dark:decoration-brand-yellow;
+    }
+  }
+
+  .url {
+    &:after {
+      content: attr(data-url);
+      @apply hidden;
+      @apply print:inline-block;
+    }
+
+    span {
+      @apply print:sr-only;
+    }
+  }
+
+  .icon {
+    @apply relative pl-8;
+    @apply print:pl-5;
+
+    svg {
+      @apply w-6 h-6 absolute top-1/2 -translate-y-1/2 left-0;
+      @apply print:w-4 print:h-4;
+    }
+  }
+}

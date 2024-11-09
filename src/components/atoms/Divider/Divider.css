@@ -1,0 +1,13 @@
+@layer components {
+  .divider {
+    @apply whitespace-nowrap inline-block relative text-brand-blue;
+    @apply dark:text-brand-yellow;
+    @apply print:!opacity-100 print:!transform-none motion-reduce:!opacity-100 motion-reduce:!transform-none;
+
+    > span {
+      @apply absolute bottom-[-12px] right-0 w-screen h-0 border-b-3 border-brand-blue indent-full;
+      @apply dark:border-brand-yellow;
+      @apply print:!transform-none motion-reduce:!transform-none;
+    }
+  }
+}

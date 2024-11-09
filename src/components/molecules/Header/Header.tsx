@@ -1,6 +1,6 @@
 import { getImageProps, ImageProps } from "next/image";
-import { Intro } from "../atoms/Intro";
-import { CSSProperties, Suspense } from "react";
+import { Intro } from "../../atoms/Intro/Intro";
+import { Suspense } from "react";
 
 type Props = Pick<
   CV,

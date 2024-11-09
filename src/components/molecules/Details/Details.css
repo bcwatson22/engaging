@@ -1,0 +1,18 @@
+@layer components {
+  .address {
+    @apply not-italic;
+
+    ul {
+      @apply flex flex-wrap;
+
+      li:not(:last-of-type):after {
+        content: "//";
+        @apply mx-3;
+      }
+    }
+  }
+
+  .h-adr > span:not(:last-child):after {
+    content: ", ";
+  }
+}

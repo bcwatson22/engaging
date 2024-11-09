@@ -1,0 +1,25 @@
+@layer components {
+  .cv {
+    @apply border-12 border-brand-blue;
+    @apply dark:border-brand-yellow;
+    @apply print:border-0;
+  }
+
+  .main {
+    @apply min-h-screen m-6 p-6 border-3 border-brand-blue overflow-clip;
+    @apply lg:p-16;
+    @apply dark:border-brand-yellow;
+    @apply print:m-0;
+  }
+
+  .inner {
+    @apply mx-auto;
+    @apply lg:max-w-[60rem] lg:pl-16 xl:pl-32;
+  }
+
+  .sections {
+    @apply grid grid-cols-1 gap-x-12 gap-y-8 mt-12 items-start;
+    @apply md:grid-cols-[min-content_1fr] md:gap-y-16 lg:gap-24 xl:gap-36 lg:mt-24;
+    @apply print:grid-cols-[min-content_1fr] print:gap-x-8 print:gap-y-12;
+  }
+}

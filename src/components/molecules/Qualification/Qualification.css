@@ -1,0 +1,12 @@
+@layer components {
+  .qualification {
+    &:not(:last-of-type) {
+      @apply mb-6;
+      @apply md:mb-12;
+    }
+
+    a {
+      @apply print:inline-block print:mt-0.5;
+    }
+  }
+}

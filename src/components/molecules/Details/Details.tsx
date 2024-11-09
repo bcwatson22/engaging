@@ -1,5 +1,4 @@
-import { Icon } from "../atoms/Icon";
-import { Link } from "../atoms/Link";
+import { Link } from "@/components/atoms/Link";
 
 type Props = {
   address?: Address;

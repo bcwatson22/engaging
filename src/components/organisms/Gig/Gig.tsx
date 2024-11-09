@@ -1,7 +1,7 @@
 import { Suspense, useId } from "react";
-import { Dates } from "../atoms/Dates";
-import { Bullet } from "../atoms/Bullet";
-import { Company, CompanyProps } from "../molecules/Company";
+import { Dates } from "@/components/atoms/Dates";
+import { Bullet } from "@/components/atoms/Bullet";
+import { Company, CompanyProps } from "@/components/molecules/Company";
 
 type Props = Scroll & Gig;
 

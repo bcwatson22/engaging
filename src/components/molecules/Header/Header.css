@@ -1,0 +1,17 @@
+@layer components {
+  .header {
+    @apply grid grid-cols-1 gap-6 items-center;
+    @apply md:grid-cols-[22rem_1fr] lg:grid-cols-[22rem_22rem] lg:gap-24;
+    @apply print:grid-cols-2 gap-8;
+  }
+
+  .screen-logo {
+    @apply mx-auto md:mx-0 mb-auto;
+    @apply print:hidden;
+  }
+
+  .print-logo {
+    @apply hidden indent-full aspect-logo bg-no-repeat bg-cover;
+    @apply print:block;
+  }
+}
