@@ -1,13 +1,9 @@
 import { NextPage } from "next";
-import {
-  OperationResult,
-  cacheExchange,
-  createClient,
-  fetchExchange,
-  gql,
-} from "@urql/core";
-import { registerUrql } from "@urql/next/rsc";
+import { OperationResult } from "@urql/core";
 import ReactMarkdown from "react-markdown";
+
+import { cv } from "@/queries/cv";
+import { client } from "@/queries/client";
 
 import { Section } from "@/components/organisms/Section";
 import { Gig } from "@/components/organisms/Gig";
@@ -16,94 +12,10 @@ import { Details } from "@/components/molecules/Details";
 import { Qualification } from "@/components/molecules/Qualification";
 import { Reference } from "@/components/molecules/Reference";
 
-const getCvQuery = gql`
-  query {
-    cvs(first: 1) {
-      id
-      logoLightBackground {
-        id
-        url
-      }
-      logoDarkBackground {
-        id
-        url
-      }
-      title
-      intro
-      address {
-        id
-        streetAddress
-        locality
-        countryName
-        postalCode
-      }
-      contactLinks {
-        id
-        text
-        target
-        icon
-      }
-      gigs {
-        id
-        company
-        logo {
-          id
-          url
-        }
-        city
-        roles {
-          id
-          role
-          dates
-          capacity
-          bullets
-        }
-      }
-      skills
-      qualifications {
-        id
-        institution
-        location
-        dates
-        description
-      }
-      onlineLinks {
-        id
-        text
-        target
-        icon
-      }
-      references {
-        id
-        person
-        role
-        company
-        link {
-          id
-          text
-          target
-          icon
-        }
-      }
-    }
-  }
-`;
-
 type Result = { cvs: CV[] };
 
-const makeClient = () =>
-  createClient({
-    url: process.env.HYGRAPH_ENDPOINT!,
-    exchanges: [cacheExchange, fetchExchange],
-  });
-
-const { getClient } = registerUrql(makeClient);
-
 const CVPage: NextPage = async () => {
-  const { data }: OperationResult<Result> = await getClient().query(
-    getCvQuery,
-    {}
-  );
+  const { data }: OperationResult<Result> = await client().query(cv, {});
 
   const {
     title,

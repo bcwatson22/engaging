@@ -1,0 +1,9 @@
+@layer components {
+  .skill {
+    @apply bg-purple-500 rounded-full;
+
+    span {
+      @apply indent-full;
+    }
+  }
+}

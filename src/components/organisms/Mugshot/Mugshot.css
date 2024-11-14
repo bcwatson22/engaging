@@ -1,0 +1,47 @@
+@layer components {
+  .mugshot {
+    @apply relative w-full h-full max-w-96 max-h-96 aspect-square shrink-0 flex justify-center items-center;
+    @apply md:overflow-hidden;
+  }
+
+  .coupon,
+  .info {
+    @apply transition-opacity duration-150;
+  }
+
+  .overview {
+    &:hover {
+      .coupon {
+        @apply opacity-50;
+      }
+      
+      .info {
+        @apply opacity-100;
+      }
+    }
+  }
+
+  .coupon {
+    @apply absolute top-0 left-0 w-full h-full object-cover;
+
+    img {
+      @apply rounded-full shadow-[0_0_5px_1px] shadow-white
+    }
+  }
+
+  .info {
+    @apply relative opacity-0 text-center;
+  }
+
+  .links {
+    @apply mt-4 text-start;
+
+    li {
+      @apply mt-1;
+    }
+  }
+
+  .technologies {
+    @apply absolute top-[100%] pt-3 grid grid-cols-2 gap-4;
+  }
+}

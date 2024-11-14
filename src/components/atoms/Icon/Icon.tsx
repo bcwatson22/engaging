@@ -1,5 +1,6 @@
 import {
   DevicePhoneMobileIcon,
+  DocumentTextIcon,
   AtSymbolIcon,
   GlobeAltIcon,
   UserIcon,
@@ -16,6 +17,8 @@ const getVector = (
   icon: Icon
 ): ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref">> => {
   switch (icon) {
+    case "Document":
+      return DocumentTextIcon;
     case "Phone":
       return DevicePhoneMobileIcon;
     case "Email":

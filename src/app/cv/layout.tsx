@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import "../styles/globals.css";
+import "../../styles/globals.css";
 
 import { type CssVariable } from "next/dist/compiled/@next/font";
-import { Particles } from "@/components/atoms/Particles/Particles";
 
 const variable = "--font-sans" as const satisfies CssVariable;
 
@@ -14,16 +13,13 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: `Engaging Engineering`,
+  title: `Billy Watson CV`,
   description: `Jolly good show what`,
 };
 
 const RootLayout = ({ children }: Layout) => (
   <html lang="en">
-    <body className={`home ${nunito.className}`}>
-      {children}
-      <Particles />
-    </body>
+    <body className={`cv ${nunito.className}`}>{children}</body>
   </html>
 );
 

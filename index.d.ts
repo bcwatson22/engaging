@@ -6,10 +6,36 @@ type ID = {
   id: string;
 };
 
-type Icon = "Phone" | "Email" | "Website" | "Profile" | "Repo";
+type Link = ID & {
+  text: string;
+  target: string;
+  icon: Icon;
+};
 
 type Asset = ID & {
   url: string;
+};
+
+type Icon = "Document" | "Phone" | "Email" | "Website" | "Profile" | "Repo";
+
+type Mugshot = {
+  image: Asset;
+  heading: string;
+  description: string;
+  links?: Link[];
+};
+
+type Technology = ID & {
+  name: string;
+  icon: Asset;
+  link?: Link;
+};
+
+type Home = ID & {
+  title: string;
+  description: string;
+  mugshot: Mugshot;
+  technologies: Technology[];
 };
 
 type Address = {
@@ -17,12 +43,6 @@ type Address = {
   locality: string;
   countryName: string;
   postalCode: string;
-};
-
-type Link = ID & {
-  text: string;
-  target: string;
-  icon: Icon;
 };
 
 type Position = {
