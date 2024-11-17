@@ -1,3 +1,7 @@
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
 @layer components {
   .mugshot {
     @apply relative;
@@ -27,7 +31,7 @@
     @apply absolute top-0 left-0 w-full h-full object-cover;
 
     img {
-      @apply rounded-full shadow-[0_0_5px_1px] shadow-white
+      @apply rounded-full shadow-[0_0_5px_1px] shadow-white;
     }
   }
 
@@ -46,13 +50,69 @@
   .technologies {
     @apply pt-4 grid grid-cols-3 gap-4;
     @apply xs:grid-cols-4 sm:grid-cols-6 md:pt-0 md:block;
+    /* @apply md:top-1/2 md:-translate-y-1/2 md:left-1/2 md:-translate-x-1/2; */
+    /* @apply animate-[rotate_30s_linear_infinite]; */
 
     li {
-      @apply md:absolute md:w-24 md:h-24;
+      @apply md:absolute md:top-[42%] md:left-[42%] md:w-24 md:h-24;
+      transform: rotateZ(calc((var(--n) + 6) * calc(360 / 12) * 1deg))
+        translateY(260%)
+        rotateZ(calc((var(--n) + 6) * calc(360 / 12) * -1deg));
 
-      /* @apply bg-yellow-200 rounded-full; */
+      &:nth-of-type(1) {
+        --n: 12;
+      }
 
-      &:nth-of-type(12n + 1),
+      &:nth-of-type(2) {
+        --n: 1;
+      }
+
+      &:nth-of-type(3) {
+        --n: 2;
+      }
+
+      &:nth-of-type(4) {
+        --n: 3;
+      }
+
+      &:nth-of-type(5) {
+        --n: 4;
+      }
+
+      &:nth-of-type(6) {
+        --n: 5;
+      }
+
+      &:nth-of-type(7) {
+        --n: 6;
+      }
+
+      &:nth-of-type(8) {
+        --n: 7;
+      }
+
+      &:nth-of-type(9) {
+        --n: 8;
+      }
+
+      &:nth-of-type(10) {
+        --n: 9;
+      }
+
+      &:nth-of-type(11) {
+        --n: 10;
+      }
+
+      &:nth-of-type(12) {
+        --n: 11;
+      }
+
+      /* transform: rotate(calc(var(--n) * 30deg));
+      transform-origin: 0 288px;
+      margin-left: 288px;
+      margin-top: 0px; */
+
+      /* &:nth-of-type(12n + 1),
       &:nth-of-type(12n + 7) {
         @apply left-1/2 -translate-x-1/2;
       }
@@ -88,17 +148,13 @@
         @apply right-0;
       }
 
-      /* &:nth-of-type(12n + 3) {
-        @apply top-0;
-      } */
-
       &:nth-of-type(12n + 7) {
         @apply bottom-0;
       }
 
       &:nth-of-type(12n + 9) {
         @apply left-0;
-      }
+      } */
     }
   }
 }
