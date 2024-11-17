@@ -9,6 +9,7 @@
 
     img {
       @apply absolute top-0 left-0 w-full h-full p-3 object-contain flex justify-center items-center;
+      /* @apply md:p-0; */
     }
 
     span {

@@ -1,8 +1,7 @@
 @layer components {
   .home {
     main {
-      @apply flex flex-col items-center p-6;
-      @apply md:justify-center
+      @apply flex flex-col justify-center items-center p-6;
     }
   }
 }

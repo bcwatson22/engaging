@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "480px",
+      },
       aspectRatio: {
         logo: "320 / 111",
       },
@@ -29,6 +32,20 @@ const config: Config = {
       top: {
         1.5: "0.375rem",
         2.5: "0.625rem",
+        "1/6": "16.67%",
+        "5/6": "83.33%",
+      },
+      left: {
+        "1/6": "16.67%",
+        "5/6": "83.33%",
+      },
+      right: {
+        "1/6": "16.67%",
+        "5/6": "83.33%",
+      },
+      bottom: {
+        "1/6": "16.67%",
+        "5/6": "83.33%",
       },
       textIndent: {
         full: "-99999rem",

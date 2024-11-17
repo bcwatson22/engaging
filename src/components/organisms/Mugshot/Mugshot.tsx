@@ -43,7 +43,6 @@ const Mugshot = ({
           )}
         </div>
       </section>
-
       <ul className="technologies">
         {technologies.map((technology) => (
           <li key={technology.id}>
