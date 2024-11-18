@@ -20,17 +20,11 @@ const Details = ({ address, links }: Props) => {
       )}
       <address className="address">
         <ul>
-          {links?.map((link) => {
-            const { id, target } = link;
-            const useRawTarget =
-              target.startsWith("tel:") || target.startsWith("mailto:");
-
-            return (
-              <li key={id}>
-                <Link link={link} useRawTarget={useRawTarget} />
-              </li>
-            );
-          })}
+          {links?.map((link) => (
+            <li key={link.id}>
+              <Link link={link} />
+            </li>
+          ))}
         </ul>
       </address>
     </>

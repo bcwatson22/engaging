@@ -19,6 +19,8 @@
     &:after {
       content: attr(data-url);
       @apply hidden;
+      text-decoration: underline;
+      @apply underline-offset-4 decoration-2 decoration-brand-blue;
       @apply print:inline-block;
     }
 

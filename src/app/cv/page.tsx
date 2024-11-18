@@ -11,6 +11,7 @@ import { Header } from "@/components/molecules/Header";
 import { Details } from "@/components/molecules/Details";
 import { Qualification } from "@/components/molecules/Qualification";
 import { Reference } from "@/components/molecules/Reference";
+import { mockCv } from "@/mocks/cv";
 
 type Result = { cvs: CV[] };
 
@@ -29,7 +30,7 @@ const CVPage: NextPage = async () => {
     qualifications,
     onlineLinks,
     references,
-  } = data!.cvs[0];
+  } = data ? data.cvs[0] : mockCv;
 
   return (
     <main className="main">

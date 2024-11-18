@@ -5,20 +5,16 @@ import { home } from "@/queries/home";
 import { client } from "@/queries/client";
 
 import { Mugshot } from "@/components/organisms/Mugshot";
-
-type Home = ID & {
-  title: string;
-  description: string;
-  mugshot: Mugshot;
-  technologies: Technology[];
-};
+import { mockHome } from "@/mocks/home";
 
 type Result = { homes: Home[] };
 
 const Home: NextPage = async () => {
   const { data }: OperationResult<Result> = await client().query(home, {});
 
-  const { title, description, mugshot, technologies } = data!.homes[0];
+  const { title, description, mugshot, technologies } = data
+    ? data.homes[0]
+    : mockHome;
 
   return (
     <main className="main">

@@ -1,11 +1,12 @@
-@keyframes rotate {
-  to { transform: rotate(360deg); }
+@keyframes tech {
+  to { transform: rotate(-360deg); }
 }
 
 @layer components {
   .mugshot {
     @apply relative;
     @apply md:p-24;
+    @apply print:p-6;
   }
 
   .coupon,
@@ -15,10 +16,12 @@
 
   .overview {
     @apply relative w-[calc(100vw-3rem)] h-[calc(100vw-3rem)] max-w-96 max-h-96 aspect-square flex justify-center items-center mx-auto;
+    @apply md:z-20;
+    @apply print:grid print:grid-cols-2 print:gap-8 print:aspect-auto print:h-auto print:max-h-none print:w-auto print:max-w-none print:mb-8;
 
     &:hover {
       .coupon {
-        @apply opacity-50;
+        @apply opacity-30;
       }
       
       .info {
@@ -29,6 +32,7 @@
 
   .coupon {
     @apply absolute top-0 left-0 w-full h-full object-cover;
+    @apply print:relative;
 
     img {
       @apply rounded-full shadow-[0_0_5px_1px] shadow-white;
@@ -37,6 +41,7 @@
 
   .info {
     @apply relative opacity-0 text-center;
+    @apply print:opacity-100 print:text-start;
   }
 
   .links {
@@ -48,16 +53,13 @@
   }
 
   .technologies {
-    @apply pt-4 grid grid-cols-3 gap-4;
-    @apply xs:grid-cols-4 sm:grid-cols-6 md:pt-0 md:block;
-    /* @apply md:top-1/2 md:-translate-y-1/2 md:left-1/2 md:-translate-x-1/2; */
-    /* @apply animate-[rotate_30s_linear_infinite]; */
+    @apply pt-4 grid grid-cols-3 gap-4 animate-[spin_240s_linear_infinite]; 
+    @apply max-md:animate-none xs:grid-cols-4 sm:grid-cols-6 md:z-10 md:pt-0 md:block md:absolute md:top-0 md:left-0 md:w-full md:h-full;
+    @apply print:relative print:grid print:animate-none print:w-auto print:h-auto motion-reduce:animate-none;
 
     li {
-      @apply md:absolute md:top-[42%] md:left-[42%] md:w-24 md:h-24;
-      transform: rotateZ(calc((var(--n) + 6) * calc(360 / 12) * 1deg))
-        translateY(260%)
-        rotateZ(calc((var(--n) + 6) * calc(360 / 12) * -1deg));
+      @apply md:absolute md:top-[42%] md:left-[42%] md:w-24 md:min-h-24;
+      @apply print:relative print:top-0 print:left-0;
 
       &:nth-of-type(1) {
         --n: 12;
@@ -106,55 +108,18 @@
       &:nth-of-type(12) {
         --n: 11;
       }
+      
+      @media screen and (min-width: 768px) {
+        transform: rotateZ(calc((var(--n) + 6) * calc(360 / 12) * 1deg))
+          translateY(300%)
+          rotateZ(calc((var(--n) + 6) * calc(360 / 12) * -1deg));
 
-      /* transform: rotate(calc(var(--n) * 30deg));
-      transform-origin: 0 288px;
-      margin-left: 288px;
-      margin-top: 0px; */
-
-      /* &:nth-of-type(12n + 1),
-      &:nth-of-type(12n + 7) {
-        @apply left-1/2 -translate-x-1/2;
+        div {
+          @apply animate-[tech_240s_linear_infinite];
+          @apply max-md:animate-none;
+          @apply print:animate-none motion-reduce:animate-none;
+        }
       }
-
-      &:nth-of-type(12n + 1) {
-        @apply top-0;
-      }
-
-      &:nth-of-type(12n + 2),
-      &:nth-of-type(12n + 12) {
-        @apply top-[16.67%];
-      }
-
-      &:nth-of-type(12n + 2) {
-        @apply left-2/3 -translate-x-[calc(66.66%-2.5rem)] -translate-y-[16.67%] -mt-12;
-      }
-
-      &:nth-of-type(12n + 3),
-      &:nth-of-type(12n + 11) {
-        @apply top-1/3 -translate-y-1/3;
-      }
-
-      &:nth-of-type(12n + 3) {
-        @apply left-[83.33%] -translate-x-[calc(83.33%-3rem)] -mt-10;
-      }
-
-      &:nth-of-type(12n + 4),
-      &:nth-of-type(12n + 9) {
-        @apply top-1/2 -translate-y-1/2;
-      }
-
-      &:nth-of-type(12n + 4) {
-        @apply right-0;
-      }
-
-      &:nth-of-type(12n + 7) {
-        @apply bottom-0;
-      }
-
-      &:nth-of-type(12n + 9) {
-        @apply left-0;
-      } */
     }
   }
 }

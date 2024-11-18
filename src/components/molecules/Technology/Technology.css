@@ -1,18 +1,25 @@
 @layer components {
   .technology {
     @apply relative w-full aspect-square flex justify-center items-center text-center;
+    @apply print:aspect-auto print:grid;
 
     figure,
     span {
       @apply transition-opacity duration-150;
     }
 
+    figure {
+      @apply flex justify-center items-center print:w-24 print:h-24;
+    }
+
     img {
       @apply absolute top-0 left-0 w-full h-full p-3 object-contain flex justify-center items-center;
+      @apply print:relative print:block print:w-full print:h-full;
     }
 
     span {
       @apply relative opacity-0 text-sm;
+      @apply print:opacity-100;
     }
 
     &:hover {
@@ -27,6 +34,7 @@
 
     .white {
       @apply brightness-0 invert;
+      @apply print:brightness-100 print:invert-0;
     }
   }
 }

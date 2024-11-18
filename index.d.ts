@@ -18,7 +18,7 @@ type Asset = ID & {
 
 type Icon = "Document" | "Phone" | "Email" | "Website" | "Profile" | "Repo";
 
-type Mugshot = {
+type Mugshot = ID & {
   image: Asset;
   heading: string;
   description: string;
@@ -31,14 +31,18 @@ type Technology = ID & {
   link?: Link;
 };
 
-type Home = ID & {
+type Meta = {
   title: string;
   description: string;
-  mugshot: Mugshot;
-  technologies: Technology[];
 };
 
-type Address = {
+type Home = ID &
+  Meta & {
+    mugshot: Mugshot;
+    technologies: Technology[];
+  };
+
+type Address = ID & {
   streetAddress: string;
   locality: string;
   countryName: string;
@@ -77,19 +81,19 @@ type Reference = ID &
     link: Link;
   };
 
-type CV = {
-  title: string;
-  logoLightBackground: Asset;
-  logoDarkBackground: Asset;
-  intro: string;
-  address: Address;
-  contactLinks: Link[];
-  gigs: Gig[];
-  skills: string;
-  qualifications: Qualification[];
-  onlineLinks: Link[];
-  references: Reference[];
-};
+type CV = ID &
+  Meta & {
+    logoLightBackground: Asset;
+    logoDarkBackground: Asset;
+    intro: string;
+    address: Address;
+    contactLinks: Link[];
+    gigs: Gig[];
+    skills: string;
+    qualifications: Qualification[];
+    onlineLinks: Link[];
+    references: Reference[];
+  };
 
 type Scroll = {
   delay?: Orchestration["delay"];

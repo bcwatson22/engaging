@@ -5,6 +5,7 @@
 @import "../components/atoms/Bullet/Bullet.css";
 @import "../components/atoms/Divider/Divider.css";
 @import "../components/atoms/Link/Link.css";
+@import "../components/atoms/Particles/Particles.css";
 
 @import "../components/molecules/Company/Company.css";
 @import "../components/molecules/Details/Details.css";
