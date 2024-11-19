@@ -16,23 +16,25 @@ const Skeleton = ({ className }: Props) => (
   </div>
 );
 
+const SkeletonLine = ({ size = "base" }: Props) => (
+  <Skeleton
+    className={size === "small" ? "skeleton-line-small" : "skeleton-line-base"}
+  />
+);
+
 const SkeletonParagraph = ({
   className,
   numOfLines = 4,
   size = "base",
-}: Props) => {
-  const classNames = size === "small" ? "small" : "base";
+}: Props) => (
+  <div className={`skeleton-paragraph${className ? " " + className : ""}`}>
+    {Array(numOfLines - 1)
+      .keys()
+      .map((key) => (
+        <SkeletonLine key={key} size={size} />
+      ))}
+    <SkeletonLine size={size} />
+  </div>
+);
 
-  return (
-    <div className={`skeleton-paragraph${className ? " " + className : ""}`}>
-      {Array(numOfLines - 1)
-        .keys()
-        .map((key) => (
-          <Skeleton key={key} className={classNames} />
-        ))}
-      <Skeleton className={classNames} />
-    </div>
-  );
-};
-
-export { Skeleton, SkeletonParagraph };
+export { Skeleton, SkeletonParagraph, SkeletonLine };
