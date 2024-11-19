@@ -11,6 +11,7 @@ import { ForwardRefExoticComponent, SVGProps } from "react";
 
 type Props = {
   icon: Icon;
+  className?: string;
 };
 
 const getVector = (
@@ -34,10 +35,10 @@ const getVector = (
   }
 };
 
-const Icon = ({ icon }: Props) => {
+const Icon = ({ icon, className }: Props) => {
   const Component = getVector(icon);
 
-  return <Component />;
+  return <Component className={className} />;
 };
 
 export { Icon };

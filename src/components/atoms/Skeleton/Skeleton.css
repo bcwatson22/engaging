@@ -5,7 +5,7 @@
   }
 
   .skeleton-line-base {
-    @apply h-4;
+    @apply h-4 my-0.5;
   }
 
   .skeleton-line-small {

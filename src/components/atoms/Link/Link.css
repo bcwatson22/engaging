@@ -32,10 +32,10 @@
   .icon {
     @apply relative pl-8;
     @apply print:pl-5;
+  }
 
-    svg {
-      @apply w-6 h-6 absolute top-1/2 -translate-y-1/2 left-0;
-      @apply print:w-4 print:h-4;
-    }
+  .vector {
+    @apply w-6 h-6 absolute top-1/2 -translate-y-1/2 left-0;
+    @apply print:w-4 print:h-4;
   }
 }

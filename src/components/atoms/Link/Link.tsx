@@ -1,8 +1,16 @@
 import { Icon } from "@/components/atoms/Icon";
+import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton";
 
 type Props = {
   link: Link;
 };
+
+const LinkSkeleton = () => (
+  <div className="link icon relative">
+    <Skeleton className="vector rounded-full" />
+    <SkeletonLine className="w-[6.75rem]" />
+  </div>
+);
 
 const Link = ({ link: { text, target, icon } }: Props) => {
   let displayUrl =
@@ -18,10 +26,10 @@ const Link = ({ link: { text, target, icon } }: Props) => {
       className={`link icon${displayUrl ? " url" : ""}`}
       data-url={displayUrl}
     >
-      <Icon icon={icon} />
+      <Icon icon={icon} className="vector" />
       <span>{text}</span>
     </a>
   );
 };
 
-export { Link };
+export { Link, LinkSkeleton };

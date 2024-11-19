@@ -17,13 +17,11 @@ const MugshotSkeleton = () => (
   <div className="mugshot mugshot-skeleton">
     <Skeleton className="overview" />
     <ul className="technologies">
-      {Array(12)
-        .keys()
-        .map((key) => (
-          <li key={key}>
-            <TechnologySkeleton />
-          </li>
-        ))}
+      {[...Array(12).keys()].map((key) => (
+        <li key={key}>
+          <TechnologySkeleton />
+        </li>
+      ))}
     </ul>
   </div>
 );

@@ -1,6 +1,4 @@
-"use client";
-
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { Intro } from "@/components/atoms/Intro";
 import { Logo } from "@/components/atoms/Logo";
 import { mockCv } from "@/mocks/cv";
@@ -31,35 +29,19 @@ const Header = ({
   logoDarkBackground,
   logoLightBackground,
   intro,
-}: Props) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  return (
-    <>
-      {isLoading ? (
-        <HeaderSkeleton />
-      ) : (
-        <header className="header">
-          <h1 className="sr-only">{title}</h1>
-          <Logo
-            logoDarkBackground={logoDarkBackground}
-            logoLightBackground={logoLightBackground}
-          />
-          <div>
-            <Suspense>
-              <Intro intro={intro} />
-            </Suspense>
-          </div>
-        </header>
-      )}
-      <button
-        className="absolute top-4 left-4"
-        onClick={() => setIsLoading(!isLoading)}
-      >
-        Toggle
-      </button>
-    </>
-  );
-};
+}: Props) => (
+  <header className="header">
+    <h1 className="sr-only">{title}</h1>
+    <Logo
+      logoDarkBackground={logoDarkBackground}
+      logoLightBackground={logoLightBackground}
+    />
+    <div>
+      <Suspense>
+        <Intro intro={intro} />
+      </Suspense>
+    </div>
+  </header>
+);
 
 export { Header };
