@@ -1,13 +1,13 @@
 "use client";
 
+import { MugshotSkeleton } from "@/components/organisms/Mugshot";
 import { NextPage } from "next";
 
-const LoadingPage: NextPage = () => {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Loading</h1>
-    </main>
-  );
-};
+const Loading: NextPage = () => (
+  <main className="main">
+    <h1 className="sr-only">Engaging Engineering</h1>
+    <MugshotSkeleton />
+  </main>
+);
 
-export default LoadingPage;
+export default Loading;

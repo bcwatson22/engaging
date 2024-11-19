@@ -1,12 +1,19 @@
+import { Skeleton } from "@/components/atoms/Skeleton";
 import Image from "next/image";
 
 type Props = {
   technology: Technology;
 };
 
+const TechnologySkeleton = () => (
+  <div className="technology technology-skeleton">
+    <Skeleton className="logo" />
+  </div>
+);
+
 const Technology = ({ technology: { id, icon, name } }: Props) => (
   <div key={id} className="technology">
-    <figure>
+    <figure className="logo">
       {icon?.url && (
         <Image
           className={name === "Next" ? "white" : ""}
@@ -18,9 +25,9 @@ const Technology = ({ technology: { id, icon, name } }: Props) => (
         />
       )}
     </figure>
-    <span>{name}</span>
+    <span className="name">{name}</span>
   </div>
 );
 
-export { Technology };
+export { Technology, TechnologySkeleton };
 export type { Props as TechnologyProps };

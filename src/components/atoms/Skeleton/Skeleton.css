@@ -1,0 +1,5 @@
+@layer components {
+  .skeleton {
+    @apply bg-zinc-700 animate-pulse;
+  }
+}

@@ -3,12 +3,12 @@
     @apply relative w-full aspect-square flex justify-center items-center text-center;
     @apply print:aspect-auto print:grid;
 
-    figure,
-    span {
+    .logo,
+    .name {
       @apply transition-opacity duration-150;
     }
 
-    figure {
+    .logo {
       @apply flex justify-center items-center print:w-24 print:h-24;
     }
 
@@ -17,17 +17,17 @@
       @apply print:relative print:block print:w-full print:h-full;
     }
 
-    span {
+    .name {
       @apply relative opacity-0 text-sm;
       @apply print:opacity-100;
     }
 
     &:hover {
-      figure {
+      .logo {
         @apply opacity-30;
       }
 
-      span {
+      .name {
         @apply opacity-100;
       }
     }
@@ -35,6 +35,20 @@
     .white {
       @apply brightness-0 invert;
       @apply print:brightness-100 print:invert-0;
+    }
+  }
+
+  .technology-skeleton {
+    @apply p-3;
+
+    .logo {
+      @apply rounded-full w-full h-full aspect-square;
+    }
+
+    &:hover {
+      .logo {
+        @apply opacity-100;
+      }
     }
   }
 }

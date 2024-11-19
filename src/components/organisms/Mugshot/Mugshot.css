@@ -122,4 +122,12 @@
       }
     }
   }
+
+  .mugshot-skeleton {
+    @apply w-full;
+
+    .overview {
+      @apply rounded-full;
+    }
+  }
 }
