@@ -2,6 +2,8 @@ const label = "Loading...";
 
 type Props = {
   className?: string;
+  numOfLines?: number;
+  size?: "base" | "small";
 };
 
 const Skeleton = ({ className }: Props) => (
@@ -14,4 +16,23 @@ const Skeleton = ({ className }: Props) => (
   </div>
 );
 
-export { Skeleton };
+const SkeletonParagraph = ({
+  className,
+  numOfLines = 4,
+  size = "base",
+}: Props) => {
+  const classNames = size === "small" ? "small" : "base";
+
+  return (
+    <div className={`skeleton-paragraph${className ? " " + className : ""}`}>
+      {Array(numOfLines - 1)
+        .keys()
+        .map((key) => (
+          <Skeleton key={key} className={classNames} />
+        ))}
+      <Skeleton className={classNames} />
+    </div>
+  );
+};
+
+export { Skeleton, SkeletonParagraph };

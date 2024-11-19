@@ -1,11 +1,30 @@
-import { getImageProps, ImageProps } from "next/image";
-import { Intro } from "../../atoms/Intro/Intro";
-import { Suspense } from "react";
+"use client";
+
+import { Suspense, useState } from "react";
+import { Intro } from "@/components/atoms/Intro";
+import { Logo } from "@/components/atoms/Logo";
+import { mockCv } from "@/mocks/cv";
+import { SkeletonParagraph } from "@/components/atoms/Skeleton";
 
 type Props = Pick<
   CV,
   "title" | "logoDarkBackground" | "logoLightBackground" | "intro"
 >;
+
+const { logoDarkBackground, logoLightBackground } = mockCv;
+
+const HeaderSkeleton = () => (
+  <div className="header header-skeleton">
+    <h1 className="sr-only">Billy Watson</h1>
+    <Logo
+      logoDarkBackground={logoDarkBackground}
+      logoLightBackground={logoLightBackground}
+    />
+    <div>
+      <SkeletonParagraph size="small" />
+    </div>
+  </div>
+);
 
 const Header = ({
   title,
@@ -13,42 +32,33 @@ const Header = ({
   logoLightBackground,
   intro,
 }: Props) => {
-  const alt = "Billy Watson logo";
-  const commonImageProps: ImageProps = {
-    src: logoLightBackground?.url,
-    alt,
-    width: 448,
-    height: 156,
-    priority: true,
-  };
-  const {
-    props: { srcSet: dark },
-  } = getImageProps({ ...commonImageProps, src: logoDarkBackground?.url });
-  const {
-    props: { srcSet: light, ...imageProps },
-  } = getImageProps({ ...commonImageProps, src: logoLightBackground?.url });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   return (
-    <header className="header">
-      <h1 className="sr-only">{title}</h1>
-      <picture className="screen-logo">
-        <source media="print" srcSet={light} />
-        <source media="(prefers-color-scheme: light)" srcSet={light} />
-        <source media="(prefers-color-scheme: dark)" srcSet={dark} />
-        <img {...imageProps} alt={commonImageProps.alt} />
-      </picture>
-      <span
-        className="print-logo"
-        style={{ backgroundImage: `url(${logoLightBackground?.url})` }}
+    <>
+      {isLoading ? (
+        <HeaderSkeleton />
+      ) : (
+        <header className="header">
+          <h1 className="sr-only">{title}</h1>
+          <Logo
+            logoDarkBackground={logoDarkBackground}
+            logoLightBackground={logoLightBackground}
+          />
+          <div>
+            <Suspense>
+              <Intro intro={intro} />
+            </Suspense>
+          </div>
+        </header>
+      )}
+      <button
+        className="absolute top-4 left-4"
+        onClick={() => setIsLoading(!isLoading)}
       >
-        {alt}
-      </span>
-      <div>
-        <Suspense>
-          <Intro intro={intro} />
-        </Suspense>
-      </div>
-    </header>
+        Toggle
+      </button>
+    </>
   );
 };
 

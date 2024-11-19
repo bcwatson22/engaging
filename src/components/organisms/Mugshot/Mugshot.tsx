@@ -1,5 +1,3 @@
-// "use client";
-
 import { useId } from "react";
 import Image from "next/image";
 
@@ -36,13 +34,7 @@ const Mugshot = ({
 }: Props) => {
   const sectionId = useId();
 
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
-
   return (
-    // <>
-    //   {isLoading ? (
-    //     <MugshotSkeleton />
-    //   ) : (
     <article className="mugshot">
       <section aria-labelledby={sectionId} className="overview">
         {image?.url && (
@@ -78,14 +70,6 @@ const Mugshot = ({
         ))}
       </ul>
     </article>
-    //   )}
-    //   <button
-    //     className="absolute top-4 left-4"
-    //     onClick={() => setIsLoading(!isLoading)}
-    //   >
-    //     Toggle
-    //   </button>
-    // </>
   );
 };
 
