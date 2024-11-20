@@ -7,10 +7,55 @@ import {
   TechnologySkeleton,
 } from "@/components/molecules/Technology";
 import { Skeleton } from "@/components/atoms/Skeleton";
+import { mockHome } from "@/mocks/home";
 
 type Props = {
   mugshot: Mugshot;
   technologies: Technology[];
+};
+
+const MugshotError = () => {
+  const sectionId = useId();
+
+  const { image, heading } = mockHome.mugshot;
+
+  return (
+    <section aria-labelledby={sectionId} className="overview overview-error">
+      <figure className="coupon">
+        <Image
+          src={image.url}
+          alt={`Portrait of ${heading}`}
+          width={600}
+          height={600}
+          className="opacity-30"
+          priority
+        />
+      </figure>
+      <div className="info opacity-100">
+        <h2 id={sectionId}>Oops</h2>
+        <p>
+          Something went wrong, but believe it or not you&apos;re not actually
+          reading this, so it&apos;s all ok.
+        </p>
+      </div>
+      <ul className="technologies">
+        {[...Array(12).keys()].map((key) => (
+          <li key={key}>
+            <TechnologySkeleton />
+          </li>
+        ))}
+      </ul>
+      {/* <div className="overview rounded-full bg-zinc-700">
+        <div className="info opacity-100">
+          <h2 id={sectionId}>Oops</h2>
+          <p>
+            Something went wrong, but believe it or not you&apos;re not actually
+            reading this, so it&apos;s all ok.
+          </p>
+        </div>
+      </div> */}
+    </section>
+  );
 };
 
 const MugshotSkeleton = () => (
@@ -71,5 +116,5 @@ const Mugshot = ({
   );
 };
 
-export { Mugshot, MugshotSkeleton };
+export { Mugshot, MugshotError, MugshotSkeleton };
 export type { Props as MugshotProps };

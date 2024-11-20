@@ -1,5 +1,7 @@
 @keyframes tech {
-  to { transform: rotate(-360deg); }
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
 @layer components {
@@ -23,8 +25,16 @@
       .coupon {
         @apply opacity-30;
       }
-      
+
       .info {
+        @apply opacity-100;
+      }
+    }
+  }
+
+  .overview-error {
+    &:hover {
+      .coupon {
         @apply opacity-100;
       }
     }
@@ -40,7 +50,7 @@
   }
 
   .info {
-    @apply relative opacity-0 text-center;
+    @apply relative p-4 opacity-0 text-center;
     @apply print:opacity-100 print:text-start;
   }
 
@@ -53,7 +63,7 @@
   }
 
   .technologies {
-    @apply pt-4 grid grid-cols-3 gap-4 animate-[spin_240s_linear_infinite]; 
+    @apply pt-4 grid grid-cols-3 gap-4 animate-[spin_240s_linear_infinite];
     @apply max-md:animate-none xs:grid-cols-4 sm:grid-cols-6 md:z-10 md:pt-0 md:block md:absolute md:top-0 md:left-0 md:w-full md:h-full;
     @apply print:relative print:grid print:animate-none print:w-auto print:h-auto motion-reduce:animate-none;
 
@@ -108,7 +118,7 @@
       &:nth-of-type(12) {
         --n: 11;
       }
-      
+
       @media screen and (min-width: 768px) {
         transform: rotateZ(calc((var(--n) + 6) * calc(360 / 12) * 1deg))
           translateY(300%)

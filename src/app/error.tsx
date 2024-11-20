@@ -2,12 +2,15 @@
 
 import { NextPage } from "next";
 
-const ErrorPage: NextPage = () => {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Error</h1>
-    </main>
-  );
-};
+import { Particles } from "@/components/atoms/Particles";
+import { MugshotError } from "@/components/organisms/Mugshot";
 
-export default ErrorPage;
+const Error: NextPage = () => (
+  <main className="home main">
+    <h1 className="sr-only">Engaging Engineering</h1>
+    <MugshotError />
+    <Particles />
+  </main>
+);
+
+export default Error;
