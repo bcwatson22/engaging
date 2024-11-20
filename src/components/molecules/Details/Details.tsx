@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+// "use client";
+// import { useState } from "react";
 
 import { Link, LinkSkeleton } from "@/components/atoms/Link";
 import { SkeletonLine } from "@/components/atoms/Skeleton";
@@ -23,35 +23,35 @@ const DetailsSkeleton = () => (
 const Details = ({ address, links }: Props) => {
   const { streetAddress, locality, countryName, postalCode } = address ?? {};
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
 
   return (
+    // <>
+    //   {isLoading ? (
+    //     <DetailsSkeleton />
+    //   ) : (
     <>
-      {isLoading ? (
-        <DetailsSkeleton />
-      ) : (
-        <>
-          {address && (
-            <p className="h-adr">
-              <span className="p-street-address">{streetAddress}</span>
-              <span className="p-locality">{locality}</span>
-              <span className="p-country-name sr-only">{countryName}</span>
-              <span className="p-postal-code">{postalCode}</span>
-            </p>
-          )}
-          <address className="address">
-            <ul>
-              {links?.map((link) => (
-                <li key={link.id}>
-                  <Link link={link} />
-                </li>
-              ))}
-            </ul>
-          </address>
-        </>
+      {address && (
+        <p className="h-adr">
+          <span className="p-street-address">{streetAddress}</span>
+          <span className="p-locality">{locality}</span>
+          <span className="p-country-name sr-only">{countryName}</span>
+          <span className="p-postal-code">{postalCode}</span>
+        </p>
       )}
-      <button onClick={() => setIsLoading(!isLoading)}>Toggle</button>
+      <address className="address">
+        <ul>
+          {links?.map((link) => (
+            <li key={link.id}>
+              <Link link={link} />
+            </li>
+          ))}
+        </ul>
+      </address>
     </>
+    //   )}
+    //   <button onClick={() => setIsLoading(!isLoading)}>Toggle</button>
+    // </>
   );
 };
 
