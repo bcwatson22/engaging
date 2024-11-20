@@ -12,17 +12,24 @@ import { mockHome } from "@/mocks/home";
 
 type Result = { homes: Home[] };
 
-const metadata: Metadata = {
-  title: `Engaging Engineering`,
-  description: `Jolly good show what`,
+const fetchPageData = async (): Promise<OperationResult<Result>> =>
+  await client().query(home, {});
+
+const generateMetadata = async (): Promise<Metadata> => {
+  const { data } = await fetchPageData();
+
+  const { title, description } = data ? data.homes[0] : mockHome;
+
+  return {
+    title,
+    description,
+  };
 };
 
 const Home: NextPage = async () => {
-  const { data }: OperationResult<Result> = await client().query(home, {});
+  const { data } = await fetchPageData();
 
-  const { title, description, mugshot, technologies } = data
-    ? data.homes[0]
-    : mockHome;
+  const { title, mugshot, technologies } = data ? data.homes[0] : mockHome;
 
   return (
     <main className="home main">
@@ -36,4 +43,4 @@ const Home: NextPage = async () => {
 const revalidate = 3600 * 24;
 
 export default Home;
-export { metadata, revalidate };
+export { generateMetadata, revalidate };

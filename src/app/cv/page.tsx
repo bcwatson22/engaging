@@ -17,8 +17,11 @@ import { mockCv } from "@/mocks/cv";
 
 type Result = { cvs: CV[] };
 
+const fetchPageData = async (): Promise<OperationResult<Result>> =>
+  await client().query(cv, {});
+
 const generateMetadata = async (): Promise<Metadata> => {
-  const { data }: OperationResult<Result> = await client().query(cv, {});
+  const { data } = await fetchPageData();
 
   const { title, description } = data ? data.cvs[0] : mockCv;
 
@@ -29,7 +32,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const CVPage: NextPage = async () => {
-  const { data }: OperationResult<Result> = await client().query(cv, {});
+  const { data } = await fetchPageData();
 
   const {
     title,
