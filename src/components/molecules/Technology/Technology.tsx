@@ -6,8 +6,8 @@ type Props = {
 };
 
 const TechnologySkeleton = () => (
-  <div className="technology technology-skeleton">
-    <Skeleton className="logo" />
+  <div className="technology p-3">
+    <Skeleton className="logo rounded-full w-full h-full aspect-square opacity-100" />
   </div>
 );
 

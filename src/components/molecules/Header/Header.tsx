@@ -12,7 +12,7 @@ type Props = Pick<
 const { logoDarkBackground, logoLightBackground } = mockCv;
 
 const HeaderSkeleton = () => (
-  <div className="header header-skeleton">
+  <div className="header">
     <h1 className="sr-only">Billy Watson</h1>
     <Logo
       logoDarkBackground={logoDarkBackground}
@@ -44,4 +44,4 @@ const Header = ({
   </header>
 );
 
-export { Header };
+export { Header, HeaderSkeleton };

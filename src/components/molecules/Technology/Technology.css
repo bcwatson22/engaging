@@ -38,7 +38,7 @@
     }
   }
 
-  .technology-skeleton {
+  /* .technology-skeleton {
     @apply p-3;
 
     .logo {
@@ -50,5 +50,5 @@
         @apply opacity-100;
       }
     }
-  }
+  } */
 }
