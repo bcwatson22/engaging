@@ -12,13 +12,14 @@ import { mockHome } from "@/mocks/home";
 
 type Result = { homes: Home[] };
 
-const fetchPageData = async (): Promise<OperationResult<Result>> =>
-  await client().query(home, {});
+const getData = async (): Promise<Home> => {
+  const { data }: OperationResult<Result> = await client().query(home, {});
+
+  return data ? data.homes[0] : mockHome;
+};
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { data } = await fetchPageData();
-
-  const { title, description } = data ? data.homes[0] : mockHome;
+  const { title, description } = await getData();
 
   return {
     title,
@@ -27,9 +28,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const Home: NextPage = async () => {
-  const { data } = await fetchPageData();
-
-  const { title, mugshot, technologies } = data ? data.homes[0] : mockHome;
+  const { title, mugshot, technologies } = await getData();
 
   return (
     <main className="home main">
