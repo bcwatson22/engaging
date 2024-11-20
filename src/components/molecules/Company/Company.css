@@ -5,23 +5,23 @@
     @apply print:relative print:top-0 print:-ml-8 print:!opacity-100 print:!transform-none motion-reduce:!opacity-100 motion-reduce:!transform-none;
 
     &:before {
-      content: '';
+      content: "";
       @apply bg-gray-50 block absolute -top-2 -left-2 w-[calc(100%+1rem)] h-[calc(100%+1rem)] shadow-[0_3px_5px_3px] shadow-gray-50;
       @apply dark:bg-zinc-950 dark:shadow-zinc-950;
       @apply print:content-none;
     }
+  }
 
-    figure,
-    div {
-      @apply relative;
-    }
+  .company-logo,
+  .company-details {
+    @apply relative;
+  }
 
-    figure {
-      @apply shrink-0 bg-white w-[5rem] h-[5rem] rounded-full flex items-center justify-center shadow-lg;
-      @apply md:w-[6.25rem] md:h-[6.25rem];
-      @apply dark:shadow-zinc-700;
-      @apply print:w-[4rem] print:h-[4rem] print:shadow-none print:border-2 print:border-zinc-300;
-    }
+  .company-logo {
+    @apply shrink-0 bg-white w-[5rem] h-[5rem] rounded-full flex items-center justify-center shadow-lg;
+    @apply md:w-[6.25rem] md:h-[6.25rem];
+    @apply dark:shadow-zinc-700;
+    @apply print:w-[4rem] print:h-[4rem] print:shadow-none print:border-2 print:border-zinc-300;
 
     img {
       @apply w-[3.75rem] h-[3.75rem] object-contain;

@@ -12,6 +12,7 @@
 @import "../components/molecules/Details/Details.css";
 @import "../components/molecules/Header/Header.css";
 @import "../components/molecules/Qualification/Qualification.css";
+@import "../components/molecules/Role/Role.css";
 @import "../components/molecules/Technology/Technology.css";
 
 @import "../components/organisms/Gig/Gig.css";

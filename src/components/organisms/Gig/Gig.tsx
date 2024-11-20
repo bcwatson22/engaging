@@ -1,28 +1,22 @@
+"use client";
+import { useState } from "react";
+
 import { Suspense, useId } from "react";
-import { Dates } from "@/components/atoms/Dates";
-import { Bullet } from "@/components/atoms/Bullet";
-import { Company, CompanyProps } from "@/components/molecules/Company";
+import {
+  Company,
+  CompanyProps,
+  CompanySkeleton,
+} from "@/components/molecules/Company";
+import { Role, RoleSkeleton } from "@/components/molecules/Role";
 
 type Props = Scroll & Gig;
 
-const getRoleName = (
-  index: number,
-  total: number,
-  hasMultiple = false
-): string => {
-  switch (true) {
-    case !hasMultiple:
-      return "";
-    case index === 0:
-      return " linker";
-    case index < total:
-      return " linker linkee";
-    case index === total:
-      return " linkee";
-    default:
-      return "";
-  }
-};
+const GigSkeleton = () => (
+  <div className="gig">
+    <CompanySkeleton />
+    <RoleSkeleton />
+  </div>
+);
 
 const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
   const sectionId = useId();
@@ -35,43 +29,30 @@ const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
     delay,
   };
 
-  return (
-    <section aria-labelledby={sectionId} className="gig">
-      <Suspense>
-        <Company {...companyProps} />
-      </Suspense>
-      {roles.map(({ id, role, dates, capacity, bullets }, index) => {
-        const numOfRoles = roles.length;
-        const hasMultiple = numOfRoles > 1;
-        const className = getRoleName(index, numOfRoles - 1, hasMultiple);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-        return (
-          <div key={id} className={`role${className}`}>
-            <h4
-              className={`text-brand-blue dark:text-brand-yellow${
-                hasMultiple ? " multiple" : ""
-              }`}
-            >
-              {role}
-            </h4>
-            <div className="flex">
-              <Suspense>
-                <Dates dates={dates} className="mb-4" />
-              </Suspense>
-              <p className="capacity">{capacity}</p>
-            </div>
-            <ul className="bullets">
-              {bullets.map((content) => (
-                <Suspense key={content.slice(0, 15)}>
-                  <Bullet>{content}</Bullet>
-                </Suspense>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
-    </section>
+  return (
+    <>
+      <button
+        className="absolute top-0 left-0 z-100"
+        onClick={() => setIsLoading(!isLoading)}
+      >
+        Toggle
+      </button>
+      {isLoading ? (
+        <GigSkeleton />
+      ) : (
+        <section aria-labelledby={sectionId} className="gig">
+          <Suspense>
+            <Company {...companyProps} />
+          </Suspense>
+          {roles.map((role, index) => (
+            <Role key={role.id} {...role} index={index} total={roles.length} />
+          ))}
+        </section>
+      )}
+    </>
   );
 };
 
-export { Gig };
+export { Gig, GigSkeleton };

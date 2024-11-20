@@ -1,6 +1,3 @@
-// "use client";
-// import { useState } from "react";
-
 import { Link, LinkSkeleton } from "@/components/atoms/Link";
 import { SkeletonLine } from "@/components/atoms/Skeleton";
 
@@ -9,11 +6,19 @@ type Props = {
   links: Link[];
 };
 
-const DetailsSkeleton = () => (
+type SkeletonProps = {
+  hasParagraph?: boolean;
+  numOfLinks?: number;
+};
+
+const DetailsSkeleton = ({
+  hasParagraph = false,
+  numOfLinks = 2,
+}: SkeletonProps) => (
   <div className="details py-px">
-    <SkeletonLine className="w-[16rem]" />
-    <div className="flex gap-8 mt-6">
-      {[...Array(2).keys()].map((key) => (
+    {hasParagraph && <SkeletonLine className="w-[16rem] mb-6" />}
+    <div className="flex gap-8">
+      {[...Array(numOfLinks).keys()].map((key) => (
         <LinkSkeleton key={key} />
       ))}
     </div>
@@ -23,13 +28,7 @@ const DetailsSkeleton = () => (
 const Details = ({ address, links }: Props) => {
   const { streetAddress, locality, countryName, postalCode } = address ?? {};
 
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
-
   return (
-    // <>
-    //   {isLoading ? (
-    //     <DetailsSkeleton />
-    //   ) : (
     <>
       {address && (
         <p className="h-adr">
@@ -49,10 +48,7 @@ const Details = ({ address, links }: Props) => {
         </ul>
       </address>
     </>
-    //   )}
-    //   <button onClick={() => setIsLoading(!isLoading)}>Toggle</button>
-    // </>
   );
 };
 
-export { Details };
+export { Details, DetailsSkeleton };

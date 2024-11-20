@@ -1,6 +1,6 @@
 @layer components {
   .skeleton {
-    @apply bg-zinc-400 animate-pulse;
+    @apply bg-zinc-300 animate-pulse;
     @apply dark:bg-zinc-700;
   }
 
@@ -10,6 +10,22 @@
 
   .skeleton-line-small {
     @apply h-3 my-px;
+  }
+
+  .h1 {
+    @apply h-[1.875rem] my-[3px];
+  }
+
+  .h2 {
+    @apply h-6 my-1.5;
+  }
+
+  .h3 {
+    @apply h-5 my-1.5;
+  }
+
+  .h4 {
+    @apply h-[1.25rem] my-1.5;
   }
 
   .skeleton-paragraph {

@@ -37,18 +37,4 @@
       @apply print:brightness-100 print:invert-0;
     }
   }
-
-  /* .technology-skeleton {
-    @apply p-3;
-
-    .logo {
-      @apply rounded-full w-full h-full aspect-square;
-    }
-
-    &:hover {
-      .logo {
-        @apply opacity-100;
-      }
-    }
-  } */
 }

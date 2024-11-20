@@ -1,0 +1,82 @@
+@layer components {
+  .role,
+  .multiple,
+  .linker,
+  .linkee {
+    @apply relative;
+
+    &:before,
+    &:after {
+      @apply block absolute bg-zinc-300;
+      @apply dark:bg-zinc-800;
+    }
+  }
+
+  .role,
+  .multiple,
+  .linker {
+    &:before,
+    &:after {
+      @apply top-2;
+    }
+  }
+
+  .role {
+    @apply mt-4;
+    @apply lg:mt-8;
+
+    h4 {
+      @apply print:font-bold;
+    }
+  }
+
+  .multiple,
+  .linker {
+    &:before {
+      content: "";
+    }
+  }
+
+  .multiple {
+    &:before {
+      @apply w-3 h-3 -left-12 rounded-full;
+      @apply print:w-2.5 print:h-2.5 print:-left-10;
+    }
+  }
+
+  .linker,
+  .linkee {
+    &:before,
+    &:after {
+      content: "";
+      @apply w-0.5 -left-[43px] z-0;
+      @apply print:-left-[36px];
+    }
+  }
+
+  .linker {
+    &:before {
+      @apply h-full;
+    }
+  }
+
+  .linkee {
+    &:after {
+      @apply -top-6 h-8;
+      @apply lg:h-8;
+    }
+  }
+
+  .capacity {
+    @apply mt-0;
+
+    &:before {
+      content: "\2022";
+      @apply mr-2;
+    }
+  }
+
+  .bullets {
+    @apply z-10;
+  }
+}

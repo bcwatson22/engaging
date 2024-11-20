@@ -23,4 +23,26 @@
       @apply bg-brand-red;
     }
   }
+
+  .bullet-skeleton {
+    span {
+      @apply top-1/2 -translate-y-1/2;
+    }
+
+    &:nth-of-type(4n+1) span {
+      @apply bg-brand-blue;
+    }
+
+    &:nth-of-type(4n+2) span {
+      @apply bg-brand-red;
+    }
+
+    &:nth-of-type(4n+3) span {
+      @apply bg-brand-yellow;
+    }
+
+    &:nth-of-type(4n+4) span {
+      @apply bg-brand-green;
+    }
+  }
 }

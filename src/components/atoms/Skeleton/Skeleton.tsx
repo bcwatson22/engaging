@@ -2,6 +2,7 @@ const label = "Loading...";
 
 type Props = {
   className?: string;
+  level?: "h1" | "h2" | "h3" | "h4";
   numOfLines?: number;
   size?: "base" | "small";
 };
@@ -24,6 +25,10 @@ const SkeletonLine = ({ className, size = "base" }: Props) => (
   />
 );
 
+const SkeletonHeading = ({ className, level = "h2" }: Props) => (
+  <Skeleton className={`${level}${className ? " " + className : ""}`} />
+);
+
 const SkeletonParagraph = ({
   className,
   numOfLines = 4,
@@ -37,4 +42,4 @@ const SkeletonParagraph = ({
   </div>
 );
 
-export { Skeleton, SkeletonParagraph, SkeletonLine };
+export { Skeleton, SkeletonHeading, SkeletonLine, SkeletonParagraph };
