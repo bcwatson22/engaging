@@ -60,10 +60,9 @@ const CVPage: NextPage = async () => {
               <Details address={address} links={contactLinks} />
             </Section>
             <Section heading="Experience" margin="0px" delay={0.1}>
-              {/* {gigs?.map((gig, i) => ( */}
-              {/* <Gig key={gig.id} {...gig} delay={i === 0 ? 0.2 : 0} /> */}
-              {/* ))} */}
-              <Gig {...gigs[1]} delay={0} />
+              {gigs?.map((gig, i) => (
+                <Gig key={gig.id} {...gig} delay={i === 0 ? 0.2 : 0} />
+              ))}
             </Section>
             <Section heading="Skills">
               <ReactMarkdown>{skills}</ReactMarkdown>
