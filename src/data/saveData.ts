@@ -6,12 +6,7 @@ type Pages = {
   Home: Home;
 };
 
-type Params = {
-  data: Pages[keyof Pages];
-  page: keyof Pages;
-};
-
-export const saveData = ({ data, page }: Params) =>
+export const saveData = (data: Pages[keyof Pages], page: keyof Pages) =>
   fs.writeFile(
     path.join(
       __dirname,
