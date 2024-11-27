@@ -13,14 +13,14 @@ import { Details } from "@/components/molecules/Details";
 import { Qualification } from "@/components/molecules/Qualification";
 import { Reference } from "@/components/molecules/Reference";
 
-import { mockCv } from "@/mocks/cv";
+import { mockCV } from "@/data/cv";
 
 type Result = { cvs: CV[] };
 
 const getData = async (): Promise<CV> => {
   const { data }: OperationResult<Result> = await client().query(cv, {});
 
-  return data ? data.cvs[0] : mockCv;
+  return data ? data.cvs[0] : mockCV;
 };
 
 const generateMetadata = async (): Promise<Metadata> => {

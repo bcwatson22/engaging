@@ -1,4 +1,4 @@
-export const mockCv: CV = {
+export const mockCV: CV = {
   id: "club6319l12d508mjxd2ordel",
   title: "Billy Watson",
   description:

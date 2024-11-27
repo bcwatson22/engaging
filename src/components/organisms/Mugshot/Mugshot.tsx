@@ -7,7 +7,7 @@ import {
   TechnologySkeleton,
 } from "@/components/molecules/Technology";
 import { Skeleton } from "@/components/atoms/Skeleton";
-import { mockHome } from "@/mocks/home";
+import { mockHome } from "@/data/home";
 
 type Props = {
   mugshot: Mugshot;
@@ -97,7 +97,7 @@ const Mugshot = ({
           {links && (
             <ul className="links">
               {links.map((link) => (
-                <li key={link.id}>
+                <li key={link?.id}>
                   <Link link={link} />
                 </li>
               ))}

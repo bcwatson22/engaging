@@ -11,8 +11,4 @@
       }
     }
   }
-
-  .h-adr > span:not(:last-child):after {
-    content: ", ";
-  }
 }

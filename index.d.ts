@@ -4,13 +4,16 @@ type Layout = Readonly<{
 
 type ID = {
   id: string;
+  __typename?: string;
 };
 
-type Link = ID & {
-  text: string;
-  target: string;
-  icon: Icon;
-};
+type Link =
+  | (ID & {
+      text: string;
+      target: string;
+      icon: Icon;
+    })
+  | null;
 
 type Asset = ID & {
   url: string;

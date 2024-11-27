@@ -2,6 +2,7 @@
 @import "layers/components.css";
 @import "layers/utilities.css";
 
+@import "../components/atoms/Address/Address.css";
 @import "../components/atoms/Bullet/Bullet.css";
 @import "../components/atoms/Divider/Divider.css";
 @import "../components/atoms/Link/Link.css";

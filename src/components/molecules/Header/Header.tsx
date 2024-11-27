@@ -1,15 +1,17 @@
 import { Suspense } from "react";
+
 import { Intro } from "@/components/atoms/Intro";
 import { Logo } from "@/components/atoms/Logo";
-import { mockCv } from "@/mocks/cv";
 import { SkeletonParagraph } from "@/components/atoms/Skeleton";
+
+import { mockCV } from "@/data/cv";
 
 type Props = Pick<
   CV,
   "title" | "logoDarkBackground" | "logoLightBackground" | "intro"
 >;
 
-const { logoDarkBackground, logoLightBackground } = mockCv;
+const { logoDarkBackground, logoLightBackground } = mockCV;
 
 const HeaderSkeleton = () => (
   <div className="header">

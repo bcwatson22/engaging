@@ -1,0 +1,5 @@
+@layer components {
+  .h-adr > span:not(:last-child):after {
+    content: ", ";
+  }
+}
