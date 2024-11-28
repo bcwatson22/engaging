@@ -3,6 +3,7 @@
     &:not(:last-of-type) {
       @apply mb-6;
       @apply md:mb-12;
+      @apply print:mb-4;
     }
 
     a {

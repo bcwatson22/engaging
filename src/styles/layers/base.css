@@ -1,8 +1,7 @@
-
 @layer base {
   body {
-    -webkit-print-color-adjust: exact!important;
-    print-color-adjust: exact!important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
     @apply text-base text-zinc-950  bg-gray-50 selection:bg-brand-blue selection:text-gray-50;
     @apply dark:text-gray-50 dark:bg-zinc-950;
     @apply print:text-xs;
@@ -46,6 +45,7 @@
     + p,
     + address {
       @apply mt-4;
+      @apply print:mt-2;
     }
   }
 }

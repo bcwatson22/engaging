@@ -1,6 +1,7 @@
 @layer components {
   .address {
     @apply not-italic;
+    @apply print:mb-4;
 
     ul {
       @apply flex flex-wrap;

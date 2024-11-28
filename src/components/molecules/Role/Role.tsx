@@ -51,7 +51,7 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
       >
         {role}
       </h4>
-      <div className="flex flex-wrap mb-4">
+      <div className="flex flex-wrap mb-4 print:mb-1">
         <Suspense>
           <Dates dates={dates} className="mr-2" />
         </Suspense>

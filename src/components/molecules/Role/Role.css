@@ -18,6 +18,7 @@
     &:before,
     &:after {
       @apply top-2;
+      @apply print:top-1.5;
     }
   }
 
