@@ -1,6 +1,6 @@
 import { gql } from "urql";
 
-export const home = gql`
+export const queryHome = gql`
   query Home {
     homes(first: 1) {
       id

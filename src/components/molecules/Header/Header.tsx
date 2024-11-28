@@ -4,7 +4,7 @@ import { Intro } from "@/components/atoms/Intro";
 import { Logo } from "@/components/atoms/Logo";
 import { SkeletonParagraph } from "@/components/atoms/Skeleton";
 
-import { mockCV } from "@/data/cv";
+import { mockCV } from "@/data/mock/cv";
 
 type Props = Pick<
   CV,

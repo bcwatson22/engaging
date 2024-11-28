@@ -1,5 +1,6 @@
 @layer components {
   .particles {
+    @apply animate-fade;
     @apply print:hidden;
   }
 }

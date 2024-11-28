@@ -83,6 +83,15 @@ const config: Config = {
         300: "300ms",
         400: "400ms",
       },
+      animation: {
+        fade: "fadeIn .5s ease-in-out",
+      },
+      keyframes: {
+        fadeIn: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+      },
     },
   },
   plugins: [],

@@ -3,28 +3,21 @@ import { NextPage } from "next";
 import { OperationResult } from "@urql/core";
 import ReactMarkdown from "react-markdown";
 
-import { cv } from "@/queries/cv";
-import { client } from "@/queries/client";
+import { queryCV } from "@/queries/cv";
 
-import { Section } from "@/components/organisms/Section";
-import { Gig } from "@/components/organisms/Gig";
+import { getData } from "@/data/functions/getData";
+import { saveData } from "@/data/functions/saveData";
+import { cacheCV } from "@/data/cache/cv";
+
 import { Header } from "@/components/molecules/Header";
 import { Details } from "@/components/molecules/Details";
 import { Qualification } from "@/components/molecules/Qualification";
 import { Reference } from "@/components/molecules/Reference";
-
-import { mockCV } from "@/data/cv";
-
-type Result = { cvs: CV[] };
-
-const getData = async (): Promise<CV> => {
-  const { data }: OperationResult<Result> = await client().query(cv, {});
-
-  return data ? data.cvs[0] : mockCV;
-};
+import { Gig } from "@/components/organisms/Gig";
+import { Section } from "@/components/organisms/Section";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description } = await getData();
+  const { title, description } = await getData<CV>(queryCV, "cvs", cacheCV);
 
   return {
     title,
@@ -33,6 +26,10 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const CVPage: NextPage = async () => {
+  const data = await getData<CV>(queryCV, "cvs", cacheCV);
+
+  saveData(data, "CV");
+
   const {
     title,
     logoDarkBackground,
@@ -45,7 +42,7 @@ const CVPage: NextPage = async () => {
     qualifications,
     onlineLinks,
     references,
-  } = await getData();
+  } = data;
 
   return (
     <main className="cv main">

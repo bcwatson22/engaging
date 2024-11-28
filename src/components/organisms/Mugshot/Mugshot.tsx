@@ -7,7 +7,7 @@ import {
   TechnologySkeleton,
 } from "@/components/molecules/Technology";
 import { Skeleton } from "@/components/atoms/Skeleton";
-import { mockHome } from "@/data/home";
+import { cacheHome } from "@/data/cache/home";
 
 type Props = {
   mugshot: Mugshot;
@@ -17,7 +17,7 @@ type Props = {
 const MugshotError = () => {
   const sectionId = useId();
 
-  const { image, heading } = mockHome.mugshot;
+  const { image, heading } = cacheHome.mugshot;
 
   return (
     <section aria-labelledby={sectionId} className="overview overview-error">

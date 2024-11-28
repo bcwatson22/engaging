@@ -1,6 +1,6 @@
 import { gql } from "urql";
 
-export const cv = gql`
+export const queryCV = gql`
   query CV {
     cvs(first: 1) {
       id
