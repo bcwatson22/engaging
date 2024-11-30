@@ -7,5 +7,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    coverage: {
+      reportsDirectory: "./src/tests/unit/coverage",
+      include: ["**/*.{js,jsx,ts,tsx}"],
+    },
   },
 });
