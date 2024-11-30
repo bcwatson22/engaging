@@ -1,6 +1,5 @@
 import { expect, describe, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/vitest";
 
 import { Address, AddressProps } from "./Address";
 import { mockCV } from "@/data/mock/cv";
