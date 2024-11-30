@@ -1,12 +1,13 @@
 import { useId } from "react";
 import Image from "next/image";
 
-import { Link } from "@/components/atoms/Link";
+import { Link } from "@/components/atoms/Link/Link";
 import {
   Technology,
   TechnologySkeleton,
-} from "@/components/molecules/Technology";
-import { Skeleton } from "@/components/atoms/Skeleton";
+} from "@/components/molecules/Technology/Technology";
+import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
+
 import { cacheHome } from "@/data/cache/home";
 
 type Props = {
@@ -45,15 +46,6 @@ const MugshotError = () => {
           </li>
         ))}
       </ul>
-      {/* <div className="overview rounded-full bg-zinc-700">
-        <div className="info opacity-100">
-          <h2 id={sectionId}>Oops</h2>
-          <p>
-            Something went wrong, but believe it or not you&apos;re not actually
-            reading this, so it&apos;s all ok.
-          </p>
-        </div>
-      </div> */}
     </section>
   );
 };

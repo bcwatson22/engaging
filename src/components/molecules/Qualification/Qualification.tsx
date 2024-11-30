@@ -1,5 +1,6 @@
 import { Suspense, useId } from "react";
-import { Dates } from "@/components/atoms/Dates";
+
+import { Dates } from "@/components/atoms/Dates/Dates";
 
 const Qualification = ({
   institution,

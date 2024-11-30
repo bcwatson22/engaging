@@ -2,8 +2,8 @@
 
 import { NextPage } from "next";
 
-import { Particles } from "@/components/atoms/Particles";
-import { MugshotError } from "@/components/organisms/Mugshot";
+import { Particles } from "@/components/atoms/Particles/Particles";
+import { MugshotError } from "@/components/organisms/Mugshot/Mugshot";
 
 const Error: NextPage = () => (
   <main className="home main">

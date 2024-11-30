@@ -1,8 +1,11 @@
 import { Suspense } from "react";
 
-import { Dates } from "@/components/atoms/Dates";
-import { Bullet, BulletSkeleton } from "@/components/atoms/Bullet";
-import { SkeletonHeading, SkeletonLine } from "@/components/atoms/Skeleton";
+import { Dates } from "@/components/atoms/Dates/Dates";
+import { Bullet, BulletSkeleton } from "@/components/atoms/Bullet/Bullet";
+import {
+  SkeletonHeading,
+  SkeletonLine,
+} from "@/components/atoms/Skeleton/Skeleton";
 
 type Props = Role & {
   index: number;

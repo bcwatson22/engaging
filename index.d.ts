@@ -1,7 +1,3 @@
-type Layout = Readonly<{
-  children: ReactNode;
-}>;
-
 type ID = {
   id: string;
   __typename?: string;

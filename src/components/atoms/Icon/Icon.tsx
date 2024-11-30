@@ -9,6 +9,14 @@ import {
 } from "@heroicons/react/24/outline";
 import { ForwardRefExoticComponent, SVGProps } from "react";
 
+export type Icon =
+  | "Document"
+  | "Phone"
+  | "Email"
+  | "Website"
+  | "Profile"
+  | "Repo";
+
 type Props = {
   icon: Icon;
   className?: string;
@@ -35,10 +43,8 @@ const getVector = (
   }
 };
 
-const Icon = ({ icon, className }: Props) => {
+export const Icon = ({ icon, className }: Props) => {
   const Component = getVector(icon);
 
   return <Component className={className} />;
 };
-
-export { Icon };

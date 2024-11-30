@@ -3,12 +3,14 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRef } from "react";
+
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
+
 import {
   Skeleton,
   SkeletonHeading,
   SkeletonLine,
-} from "@/components/atoms/Skeleton";
+} from "@/components/atoms/Skeleton/Skeleton";
 
 type Props = Scroll &
   Pick<Gig, "company" | "city" | "logo"> & {

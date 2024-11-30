@@ -1,5 +1,6 @@
 import { ReactNode, Suspense } from "react";
-import { Divider, DividerProps } from "@/components/atoms/Divider";
+
+import { Divider, DividerProps } from "@/components/atoms/Divider/Divider";
 
 type Props = DividerProps & {
   children: ReactNode;

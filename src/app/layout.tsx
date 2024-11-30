@@ -1,7 +1,13 @@
+import { ReactNode } from "react";
+
 import { type CssVariable } from "next/dist/compiled/@next/font";
 import { Nunito } from "next/font/google";
 
 import "@/styles/globals.css";
+
+type Layout = Readonly<{
+  children: ReactNode;
+}>;
 
 const variable = "--font-sans" as const satisfies CssVariable;
 

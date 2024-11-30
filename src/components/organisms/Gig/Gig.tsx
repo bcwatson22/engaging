@@ -1,10 +1,11 @@
 import { Suspense, useId } from "react";
+
 import {
   Company,
   CompanyProps,
   CompanySkeleton,
-} from "@/components/molecules/Company";
-import { Role, RoleSkeleton } from "@/components/molecules/Role";
+} from "@/components/molecules/Company/Company";
+import { Role, RoleSkeleton } from "@/components/molecules/Role/Role";
 
 type Props = Scroll & Gig;
 

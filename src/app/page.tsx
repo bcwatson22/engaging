@@ -7,8 +7,8 @@ import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 import { cacheHome } from "@/data/cache/home";
 
-import { Particles } from "@/components/atoms/Particles";
-import { Mugshot } from "@/components/organisms/Mugshot";
+import { Particles } from "@/components/atoms/Particles/Particles";
+import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const { title, description } = await getData<Home>(

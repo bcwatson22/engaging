@@ -14,3 +14,4 @@ const Address = ({
 );
 
 export { Address };
+export type { Props as AddressProps };

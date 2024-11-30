@@ -4,6 +4,17 @@
   }
 }
 
+@keyframes throb {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.85);
+  }
+}
+
 @layer components {
   .mugshot {
     @apply relative;
@@ -68,55 +79,73 @@
     @apply print:relative print:grid print:animate-none print:w-auto print:h-auto motion-reduce:animate-none;
 
     li {
+      @apply transform-gpu;
       @apply md:absolute md:top-[42%] md:left-[42%] md:w-24 md:min-h-24;
       @apply print:relative print:top-0 print:left-0;
 
       &:nth-of-type(1) {
         --n: 12;
+        --delay: 0s;
       }
 
       &:nth-of-type(2) {
         --n: 1;
+        --delay: 0.5s;
       }
 
       &:nth-of-type(3) {
         --n: 2;
+        --delay: 1s;
       }
 
       &:nth-of-type(4) {
         --n: 3;
+        --delay: 1.5s;
       }
 
       &:nth-of-type(5) {
         --n: 4;
+        --delay: 2s;
       }
 
       &:nth-of-type(6) {
         --n: 5;
+        --delay: 2.5s;
       }
 
       &:nth-of-type(7) {
         --n: 6;
+        --delay: 3s;
       }
 
       &:nth-of-type(8) {
         --n: 7;
+        --delay: 3.5s;
       }
 
       &:nth-of-type(9) {
         --n: 8;
+        --delay: 4s;
       }
 
       &:nth-of-type(10) {
         --n: 9;
+        --delay: 4.5s;
       }
 
       &:nth-of-type(11) {
         --n: 10;
+        --delay: 5s;
       }
 
       &:nth-of-type(12) {
         --n: 11;
+        --delay: 5.5s;
+      }
+
+      div {
+        @apply animate-[throb_5s_linear_infinite];
+        animation-delay: var(--delay);
       }
 
       @media screen and (min-width: 768px) {
@@ -126,6 +155,7 @@
 
         div {
           @apply animate-[tech_240s_linear_infinite];
+          animation-delay: 0s;
           @apply max-md:animate-none;
           @apply print:animate-none motion-reduce:animate-none;
         }

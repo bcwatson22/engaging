@@ -1,10 +1,11 @@
 "use client";
 
-import { DetailsSkeleton } from "@/components/molecules/Details";
-import { HeaderSkeleton } from "@/components/molecules/Header";
-import { GigSkeleton } from "@/components/organisms/Gig";
-import { Section } from "@/components/organisms/Section";
 import { NextPage } from "next";
+
+import { DetailsSkeleton } from "@/components/molecules/Details/Details";
+import { HeaderSkeleton } from "@/components/molecules/Header/Header";
+import { GigSkeleton } from "@/components/organisms/Gig/Gig";
+import { Section } from "@/components/organisms/Section/Section";
 
 const Loading: NextPage = () => (
   <main className="cv main">

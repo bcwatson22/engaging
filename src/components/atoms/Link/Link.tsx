@@ -1,5 +1,5 @@
-import { Icon } from "@/components/atoms/Icon";
-import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton";
+import { Icon } from "@/components/atoms/Icon/Icon";
+import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
 
 type Props = {
   link: Link;
@@ -12,7 +12,9 @@ const LinkSkeleton = () => (
   </div>
 );
 
-const Link = ({ link: { text, target, icon } }: Props) => {
+const Link = ({ link }: Props) => {
+  const { text, target, icon } = link!;
+
   let displayUrl =
     target.startsWith("tel:") || target.startsWith("mailto:") ? null : target;
 

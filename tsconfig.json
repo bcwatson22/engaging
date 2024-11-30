@@ -29,6 +29,7 @@
     "target": "ES2017"
   },
   "include": [
+    "./vitest.setup.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

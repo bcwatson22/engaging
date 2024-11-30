@@ -1,5 +1,6 @@
 import { useId } from "react";
-import { Link } from "@/components/atoms/Link";
+
+import { Link } from "@/components/atoms/Link/Link";
 
 const Reference = ({ person, role, company, link }: Reference) => {
   const sectionId = useId();

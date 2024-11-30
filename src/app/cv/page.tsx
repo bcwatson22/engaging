@@ -9,12 +9,12 @@ import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 import { cacheCV } from "@/data/cache/cv";
 
-import { Header } from "@/components/molecules/Header";
-import { Details } from "@/components/molecules/Details";
-import { Qualification } from "@/components/molecules/Qualification";
-import { Reference } from "@/components/molecules/Reference";
-import { Gig } from "@/components/organisms/Gig";
-import { Section } from "@/components/organisms/Section";
+import { Header } from "@/components/molecules/Header/Header";
+import { Details } from "@/components/molecules/Details/Details";
+import { Qualification } from "@/components/molecules/Qualification/Qualification";
+import { Reference } from "@/components/molecules/Reference/Reference";
+import { Gig } from "@/components/organisms/Gig/Gig";
+import { Section } from "@/components/organisms/Section/Section";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const { title, description } = await getData<CV>(queryCV, "cvs", cacheCV);

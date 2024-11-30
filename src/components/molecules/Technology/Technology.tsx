@@ -1,5 +1,6 @@
-import { Skeleton } from "@/components/atoms/Skeleton";
 import Image from "next/image";
+
+import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
 
 type Props = {
   technology: Technology;

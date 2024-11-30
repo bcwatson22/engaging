@@ -2,7 +2,7 @@
 
 import { useScroll, motion } from "framer-motion";
 import { ReactNode, useRef } from "react";
-import { SkeletonLine } from "../Skeleton";
+import { SkeletonLine } from "../Skeleton/Skeleton";
 
 type Props = {
   children: ReactNode;
