@@ -12,6 +12,7 @@
   "dependencies": {
     "@urql/core": "^4.3.0",
     "@urql/next": "^1.1.1",
+    "@vercel/speed-insights": "^1.1.0",
     "framer-motion": "^11.11.10",
     "graphql": "^16.8.1",
     "next": "15.0.0",
