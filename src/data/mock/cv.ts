@@ -1,20 +1,16 @@
 export const mockCV: CV = {
-  id: "club6319l12d508mjxd2ordel",
   title: "Billy Watson",
   description:
     "A creative, responsible, motivated Front End Engineer from the Peaks with over 12 years' experience including React (+ Native), Next, Node and TypeScript.",
   logoLightBackground: {
-    id: "cm2lwg36w435m08l6trm5axhg",
     url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lwg36w435n08l6stxnouwg",
   },
   logoDarkBackground: {
-    id: "cm2lwgbp33vv606mh2a0o6uuu",
     url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lwgbp33vv706mhpi2qr6yu",
   },
   intro:
     "A creative, responsible, motivated Front End Engineer from the Peak District with {{experience}} years' experience including React (+ Native), Next, Node and TypeScript.\n\nI've worked in both agency and client side roles, and graduated with a 1st from Leeds Met University. My interests include scuba diving and mountain biking.",
   address: {
-    id: "cm2okptsmag4108mo3xu62vbj",
     streetAddress: "20 Perigree Road",
     locality: "Sheffield",
     countryName: "United Kingdom",
@@ -22,13 +18,11 @@ export const mockCV: CV = {
   },
   contactLinks: [
     {
-      id: "club6ijbo15k608mjwp3vbvt8",
       text: "07518 716298",
       target: "tel:+447518716298",
       icon: "Phone",
     },
     {
-      id: "club6ijbn15k408mjdbtofk5l",
       text: "bcwatson22@gmail.com",
       target: "mailto:bcwatson22@gmail.com",
       icon: "Email",
@@ -36,16 +30,13 @@ export const mockCV: CV = {
   ],
   gigs: [
     {
-      id: "clube1yz238gw08mjcdz18wh4",
       company: "Pets at Home",
       logo: {
-        id: "clubdz0os36r508mjnw8otxgr",
         url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/clubdz0os36r608mjw4nvs4jt",
       },
       city: "Handforth",
       roles: [
         {
-          id: "cm2neqkizi0ju06mh04a040bx",
           role: "Principal Front End Engineer",
           dates: ["2024-10-01"],
           capacity: "Contract",
@@ -58,7 +49,6 @@ export const mockCV: CV = {
           ],
         },
         {
-          id: "cm2nemw5ai1xk07mlpvfdtuy4",
           role: "Technical Lead",
           dates: ["2023-04-01", "2024-10-01"],
           capacity: "Contract",
@@ -75,18 +65,15 @@ export const mockCV: CV = {
       ],
     },
     {
-      id: "clubdvasw35b808mja0vxjnu6",
       company: "IAM Cloud",
       logo: {
-        id: "cm2okf596agtg07lbngz3pp6d",
         url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2okf596agth07lbn517p2qj",
       },
       city: "Huddersfield",
       roles: [
         {
-          id: "cm2nfy4pyie4s06mhz6yt546z",
           role: "Senior Software Engineer",
-          dates: ["2022-09-01"],
+          dates: ["2022-09-01", "2023-04-01"],
           capacity: "Contract",
           bullets: [
             "Developed software UI used by thousands of companies and millions of customers",
@@ -101,16 +88,13 @@ export const mockCV: CV = {
       ],
     },
     {
-      id: "cm2lquwsz1nb308l63uzrttur",
       company: "Pollen",
       logo: {
-        id: "cm2nfyqfdiebn06mhewqskuup",
         url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2nfyqfdiebo06mhdai9k5rh",
       },
       city: "London",
       roles: [
         {
-          id: "cm2ng0po7iere06mhpzkxlzwe",
           role: "Senior Software Engineer",
           dates: ["2022-04-01", "2022-08-01"],
           capacity: "Permanent",
@@ -127,16 +111,13 @@ export const mockCV: CV = {
       ],
     },
     {
-      id: "cm2ng4tbail0u08l6tj9mzz3b",
       company: "Absurd",
       logo: {
-        id: "cm2lqorpg1lfg08l61g6q82bg",
         url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lqorpg1lfh08l6x1lw804x",
       },
       city: "Manchester",
       roles: [
         {
-          id: "cm2ng4tbail0v08l6c6htoy3c",
           role: "Lead Front End Developer",
           dates: ["2021-07-01", "2022-04-01"],
           capacity: "Permanent",
@@ -151,7 +132,6 @@ export const mockCV: CV = {
           ],
         },
         {
-          id: "cm2ng4tbail0w08l6s72j8nf2",
           role: "Senior Front End Developer",
           dates: ["2018-09-01", "2021-07-01"],
           capacity: "Permanent",
@@ -168,16 +148,13 @@ export const mockCV: CV = {
       ],
     },
     {
-      id: "cm2ng6uj5ilo508l6d8ypj9aj",
       company: "Plusnet",
       logo: {
-        id: "cm2ng5fs1ih2i06mh8w9jk24m",
         url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2ng5fs1ih2j06mhqvaqpfcp",
       },
       city: "Sheffield",
       roles: [
         {
-          id: "cm2ng6uj5ilo608l6oykjts0i",
           role: "Front End Developer",
           dates: ["2016-05-01", "2017-12-01"],
           capacity: "Permanent",
@@ -193,16 +170,13 @@ export const mockCV: CV = {
       ],
     },
     {
-      id: "club6ijbp15k808mji4kripj2",
       company: "Havas Lynx",
       logo: {
-        id: "cm2lqmy9a1kup08l6owc0es5s",
         url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lqmy9a1kuq08l61zq7supx",
       },
       city: "Manchester",
       roles: [
         {
-          id: "cm2ngaf8oijma06mhisdczw1k",
           role: "Front End Developer",
           dates: ["2014-03-01", "2015-08-01"],
           capacity: "Permanent",
@@ -216,7 +190,6 @@ export const mockCV: CV = {
           ],
         },
         {
-          id: "cm2ngaf8oijm906mhlcrbblvp",
           role: "Junior Front End Developer",
           dates: ["2012-07-01", "2014-03-01"],
           capacity: "Permanent",
@@ -230,7 +203,6 @@ export const mockCV: CV = {
           ],
         },
         {
-          id: "cm2ngaf8oijm806mhsz3mv1cl",
           role: "Placement Developer",
           dates: ["2012-07-01", "2012-07-01"],
           capacity: "Placement",
@@ -247,14 +219,12 @@ export const mockCV: CV = {
     "Through my wealth of experience - across agency, in-house and freelance roles - I've gained a vast array of skillsets and expertise in a range of web and native technologies. I specialise in JavaScript and have thorough experience of using modern techniques and frameworks including React, Vue and Angular; but also have the thirst and drive to learn new skills and develop my knowledge to stay at the cutting edge.\n\nAs a T-shaped engineer, I value collaboration with members of the wider project team across different disciplines. Having experience of leading teams and mentoring other engineers, I also find the management side of the job really rewarding, while at the same time cherishing the technical challenge of being an expert engineer. I am passionate about usability and accessibility and how these enhance UX. I am also highly skilled in using creative software including Figma, Sketch and Photoshop.",
   qualifications: [
     {
-      id: "club67ocb13nw08mjxerotjn8",
       institution: "Leeds Metropolitan University",
       location: "West Yorkshire",
       dates: ["2009-09-01", "2012-05-31"],
       description: "First Class BSc (Hons) in Multimedia Technology",
     },
     {
-      id: "club67oca13nu08mjn809p351",
       institution: "Lady Manners School",
       location: "Derbyshire",
       dates: ["2001-09-01", "2008-05-31"],
@@ -263,19 +233,16 @@ export const mockCV: CV = {
   ],
   onlineLinks: [
     {
-      id: "cm2omyislawj307mlv6y1c2xu",
       text: "Portfolio",
       target: "https://engaging.engineering",
       icon: "Website",
     },
     {
-      id: "club6fzpe168x07mg0mrfmjig",
       text: "LinkedIn",
       target: "https://linkedin.com/in/watsonbilly",
       icon: "Profile",
     },
     {
-      id: "club6fzpd168v07mgrbo4zk0p",
       text: "Github",
       target: "https://github.com/bcwatson22",
       icon: "Repo",
@@ -283,36 +250,30 @@ export const mockCV: CV = {
   ],
   references: [
     {
-      id: "cm2ngc6drinux08l60puqvs6p",
       person: "Tom Tollafield",
       role: "Head of Software",
       company: "Pets at Home",
       link: {
-        id: "cm2ou5gm5d5en08mo5ikyytcb",
         text: "LinkedIn",
         target: "https://linkedin.com/in/tom-tollafield-9732ba18 ",
         icon: "Profile",
       },
     },
     {
-      id: "cm2ngbgdsinm808l6l6gymwkv",
       person: "Mattia Battiston",
       role: "Engineering Manager",
       company: "Pollen",
       link: {
-        id: "cm2ou5gm6d5eo08mo8ag10n7e",
         text: "LinkedIn",
         target: "https://linkedin.com/in/mattiabattiston ",
         icon: "Profile",
       },
     },
     {
-      id: "club6fzpf168z07mgwz4uhre7",
       person: "Rob Dorsett",
       role: "Technical Director",
       company: "Absurd",
       link: {
-        id: "cm2ou5gm7d5ep08mogutttijd",
         text: "LinkedIn",
         target: "https://linkedin.com/in/rob-dorsett-6b4378b0 ",
         icon: "Profile",

@@ -15,9 +15,7 @@ describe("Address", () => {
   it("renders an address", () => {
     setup();
 
-    const { id, ...mockAddress } = mockCV.address;
-
-    for (const value of Object.values(mockAddress))
+    for (const value of Object.values(mockCV.address))
       expect(screen.getByText(value)).toBeInTheDocument();
   });
 });

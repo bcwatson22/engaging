@@ -1,5 +1,5 @@
 type ID = {
-  id: string;
+  id?: string;
   __typename?: string;
 };
 

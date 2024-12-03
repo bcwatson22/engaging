@@ -30,3 +30,4 @@ const Dates = ({ dates, className }: Props) => {
 };
 
 export { Dates };
+export type { Props as DatesProps };

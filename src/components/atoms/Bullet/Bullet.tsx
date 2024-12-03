@@ -54,3 +54,4 @@ const Bullet = ({ children }: Props) => {
 };
 
 export { Bullet, BulletSkeleton };
+export type { Props as BulletProps };
