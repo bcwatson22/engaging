@@ -38,7 +38,7 @@ const Header = ({
       logoDarkBackground={logoDarkBackground}
       logoLightBackground={logoLightBackground}
     />
-    <div>
+    <div className="text-sm print:text-xs">
       <Suspense>
         <Intro intro={intro} />
       </Suspense>

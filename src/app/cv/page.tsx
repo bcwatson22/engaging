@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { NextPage } from "next";
-import { OperationResult } from "@urql/core";
 import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";

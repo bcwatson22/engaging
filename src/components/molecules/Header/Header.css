@@ -3,6 +3,10 @@
     @apply grid grid-cols-1 gap-6 items-center;
     @apply md:grid-cols-2 lg:grid-cols-[22rem_minmax(1rem,_1fr)] lg:items-center lg:gap-12;
     @apply print:grid-cols-2 print:gap-8;
+
+    p {
+      @apply md:inline;
+    }
   }
 
   .screen-logo {
