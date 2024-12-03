@@ -83,13 +83,9 @@ const Particles = () => {
     []
   );
 
-  if (init) {
-    return (
-      <TSParticles id="tsparticles" options={options} className="particles" />
-    );
-  }
-
-  return <></>;
+  return init ? (
+    <TSParticles id="tsparticles" options={options} className="particles" />
+  ) : null;
 };
 
 export { Particles };
