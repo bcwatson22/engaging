@@ -5,11 +5,11 @@
 
     ul {
       @apply flex flex-wrap;
+    }
 
-      & li:not(:last-of-type):after {
-        content: "//";
-        @apply mx-3;
-      }
+    li:not(:last-of-type):after {
+      content: "//";
+      @apply mx-3;
     }
   }
 }
