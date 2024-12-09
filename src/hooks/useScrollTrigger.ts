@@ -10,7 +10,7 @@ type Return = AnimationProps;
 export const useScrollTrigger = ({
   ref,
   delay = 0,
-  margin = "-60px",
+  margin = "-20px",
 }: Params): Return => {
   const isInView = useInView(ref, {
     once: true,

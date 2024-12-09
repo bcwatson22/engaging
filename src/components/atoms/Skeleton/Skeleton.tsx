@@ -42,4 +42,4 @@ const SkeletonParagraph = ({
   </div>
 );
 
-export { Skeleton, SkeletonHeading, SkeletonLine, SkeletonParagraph };
+export { Skeleton, SkeletonHeading, SkeletonLine, SkeletonParagraph, label };

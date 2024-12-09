@@ -9,42 +9,49 @@ import {
 } from "@heroicons/react/24/outline";
 import { ForwardRefExoticComponent, SVGProps } from "react";
 
-export type Icon =
-  | "Document"
-  | "Phone"
-  | "Email"
-  | "Website"
-  | "Profile"
-  | "Repo";
+const iconOptions = [
+  "Document",
+  "Phone",
+  "Email",
+  "Website",
+  "Profile",
+  "Repo",
+  "User",
+] as const;
+
+type IconOption = (typeof iconOptions)[number];
 
 type Props = {
-  icon: Icon;
+  icon: IconOption;
   className?: string;
+  isHidden?: boolean;
 };
 
-const getVector = (
-  icon: Icon
-): ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref">> => {
-  switch (icon) {
-    case "Document":
-      return DocumentTextIcon;
-    case "Phone":
-      return DevicePhoneMobileIcon;
-    case "Email":
-      return AtSymbolIcon;
-    case "Website":
-      return GlobeAltIcon;
-    case "Profile":
-      return IdentificationIcon;
-    case "Repo":
-      return RocketLaunchIcon;
-    default:
-      return UserIcon;
-  }
+const iconMap: Record<
+  IconOption,
+  ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref">>
+> = {
+  Document: DocumentTextIcon,
+  Email: AtSymbolIcon,
+  Phone: DevicePhoneMobileIcon,
+  Profile: IdentificationIcon,
+  Repo: RocketLaunchIcon,
+  User: UserIcon,
+  Website: GlobeAltIcon,
 };
 
-export const Icon = ({ icon, className }: Props) => {
-  const Component = getVector(icon);
+const Icon = ({ icon, className, isHidden = true }: Props) => {
+  const Component = iconMap[icon];
 
-  return <Component className={className} />;
+  return (
+    <Component
+      className={className}
+      role="graphics-symbol"
+      aria-label={icon}
+      aria-hidden={isHidden}
+    />
+  );
 };
+
+export { Icon, iconOptions };
+export type { Props as IconProps };

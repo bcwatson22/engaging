@@ -1,6 +1,9 @@
 @layer components {
   .section {
-    @apply mb-8;
+    &:not(:last-of-type) {
+      @apply mb-8;
+    }
+
     @apply md:mt-1 md:mb-0;
     @apply print:mb-0;
 

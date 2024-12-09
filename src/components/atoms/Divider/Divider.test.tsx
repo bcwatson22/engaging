@@ -1,8 +1,9 @@
-import { expect, describe, it, vi, Mock, beforeEach } from "vitest";
+import { expect, describe, it, vi, type Mock, beforeEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
-import { Divider, DividerProps } from "./Divider";
+import { Divider, type DividerProps } from "./Divider";
+import { type Target } from "framer-motion";
 
 vi.mock("@/hooks/useScrollTrigger", () => ({
   useScrollTrigger: vi.fn(),
@@ -14,7 +15,7 @@ type SetupOptions = {
   useScrollTrigger: UseScrollTrigger;
 };
 
-const defaultScrollTrigger = {
+const defaultScrollTrigger: UseScrollTrigger = {
   initial: { opacity: 0, y: "10px" },
   animate: { opacity: 1, y: 0 },
   transition: { delay: 0 },
@@ -46,25 +47,27 @@ describe("Divider", () => {
     cleanup();
   });
 
-  it("renders a heading", () => {
-    setup();
+  describe("heading", () => {
+    it("renders a heading", () => {
+      setup();
 
-    expect(
-      screen.getByRole("heading", {
-        level: 2,
-        name: new RegExp(mockHeading, "i"),
-      })
-    ).toBeInTheDocument();
-  });
+      expect(
+        screen.getByRole("heading", {
+          level: 2,
+          name: new RegExp(mockHeading, "i"),
+        })
+      ).toBeInTheDocument();
+    });
 
-  it("uses the initial values returned from useScrollTrigger for the heading style", () => {
-    setup();
+    it("uses the initial values returned from useScrollTrigger for the heading style", () => {
+      setup();
 
-    const { opacity, y } = defaultScrollTrigger.initial;
+      const { opacity, y } = defaultScrollTrigger.initial as Target;
 
-    expect(screen.getByRole("heading")).toHaveStyle({
-      opacity,
-      transform: `translateY(${y})`,
+      expect(screen.getByRole("heading")).toHaveStyle({
+        opacity,
+        transform: `translateY(${y})`,
+      });
     });
   });
 });

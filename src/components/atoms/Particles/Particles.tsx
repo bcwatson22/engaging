@@ -6,17 +6,19 @@ import {
   initParticlesEngine,
 } from "@tsparticles/react";
 import { type ISourceOptions } from "@tsparticles/engine";
-import { loadSlim } from "@tsparticles/slim"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
+import { loadSlim } from "@tsparticles/slim";
 
 const Particles = () => {
   const [init, setInit] = useState<boolean>(false);
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
+    (async () => {
+      await initParticlesEngine(async (engine) => {
+        await loadSlim(engine);
+      });
+
       setInit(true);
-    });
+    })();
   }, []);
 
   const options: ISourceOptions = useMemo(

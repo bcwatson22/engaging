@@ -13,3 +13,4 @@ const Intro = ({ intro }: Props) => {
 };
 
 export { Intro };
+export type { Props as IntroProps };

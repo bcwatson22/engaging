@@ -94,6 +94,9 @@ devDependencies:
   tailwindcss:
     specifier: ^3.3.0
     version: 3.4.3
+  typescript:
+    specifier: 5.7.2
+    version: 5.7.2
   vite-tsconfig-paths:
     specifier: ^5.1.3
     version: 5.1.3(typescript@5.7.2)(vite@6.0.1)

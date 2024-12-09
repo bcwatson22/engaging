@@ -1,7 +1,7 @@
-import { expect, describe, it, afterEach, vi } from "vitest";
+import { expect, describe, it, beforeEach, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Dates, DatesProps } from "./Dates";
+import { Dates, type DatesProps } from "./Dates";
 import { mockCV } from "@/data/mock/cv";
 
 const mockDates = mockCV.gigs[1].roles[0].dates;
@@ -14,7 +14,7 @@ const setup = (props?: Partial<DatesProps>) =>
   render(<Dates {...defaultProps} {...props} />);
 
 describe("Dates", () => {
-  afterEach(() => {
+  beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });

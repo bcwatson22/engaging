@@ -1,7 +1,7 @@
 import { expect, describe, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 
-import { Address, AddressProps } from "./Address";
+import { Address, type AddressProps } from "./Address";
 import { mockCV } from "@/data/mock/cv";
 
 const defaultProps: AddressProps = {

@@ -15,7 +15,17 @@ type Asset = ID & {
   url: string;
 };
 
-type Icon = "Document" | "Phone" | "Email" | "Website" | "Profile" | "Repo";
+const iconOptions = [
+  "Document",
+  "Phone",
+  "Email",
+  "Website",
+  "Profile",
+  "Repo",
+  "User",
+] as const;
+
+type Icon = (typeof iconOptions)[number];
 
 type Mugshot = ID & {
   image: Asset;

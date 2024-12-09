@@ -9,7 +9,8 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     coverage: {
       reportsDirectory: "./src/tests/unit/coverage",
-      include: ["**/*.{js,jsx,ts,tsx}"],
+      include: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*'"],
     },
+    // include: ["src/**/*.{js,jsx,ts,tsx}"],
   },
 });

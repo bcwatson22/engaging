@@ -1,13 +1,13 @@
 @layer components {
-  .cv {
+  /* .cv {
     @apply border-12 border-brand-blue;
     @apply dark:border-brand-yellow;
     @apply print:border-0;
-  }
+  } */
 
   .wrapper {
-    @apply min-h-screen m-6 p-6 border-3 border-brand-blue overflow-clip;
-    @apply lg:p-16;
+    @apply min-h-screen p-6 border-3 border-brand-blue overflow-clip;
+    @apply sm:m-6 lg:p-16;
     @apply dark:border-brand-yellow;
     @apply print:m-0;
   }

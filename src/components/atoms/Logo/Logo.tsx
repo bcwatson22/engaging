@@ -27,14 +27,17 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: Props) => {
         <source media="(prefers-color-scheme: dark)" srcSet={dark} />
         <img {...imageProps} alt={commonImageProps.alt} />
       </picture>
-      <span
+      <div
         className="print-logo"
         style={{ backgroundImage: `url(${logoLightBackground?.url})` }}
+        role="figure"
+        aria-labelledby="caption"
       >
-        {alt}
-      </span>
+        <span id="caption">{alt}</span>
+      </div>
     </>
   );
 };
 
-export { Logo };
+export { Logo, alt };
+export type { Props as LogoProps };
