@@ -1,15 +1,12 @@
 import { Suspense } from "react";
 
-import { Intro } from "@/components/atoms/Intro/Intro";
-import { Logo } from "@/components/atoms/Logo/Logo";
+import { Intro, TIntro } from "@/components/atoms/Intro/Intro";
+import { Logo, TLogo } from "@/components/atoms/Logo/Logo";
 import { SkeletonParagraph } from "@/components/atoms/Skeleton/Skeleton";
 
 import { cacheCV } from "@/data/cache/cv";
 
-type Props = Pick<
-  CV,
-  "title" | "logoDarkBackground" | "logoLightBackground" | "intro"
->;
+type TProps = Pick<TMeta, "title"> & TLogo & TIntro;
 
 const { logoDarkBackground, logoLightBackground } = cacheCV;
 
@@ -31,7 +28,7 @@ const Header = ({
   logoDarkBackground,
   logoLightBackground,
   intro,
-}: Props) => (
+}: TProps) => (
   <header className="header">
     <h1 className="sr-only">{title}</h1>
     <Logo
@@ -47,3 +44,4 @@ const Header = ({
 );
 
 export { Header, HeaderSkeleton };
+export type { TProps as HeaderProps };

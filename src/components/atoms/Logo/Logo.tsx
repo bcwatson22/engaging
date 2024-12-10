@@ -1,10 +1,13 @@
-import { getImageProps, ImageProps } from "next/image";
+import { getImageProps, type ImageProps } from "next/image";
 
-type Props = Pick<CV, "logoDarkBackground" | "logoLightBackground">;
+type TLogo = {
+  logoLightBackground: TAsset;
+  logoDarkBackground: TAsset;
+};
 
 const alt = "Billy Watson logo";
 
-const Logo = ({ logoDarkBackground, logoLightBackground }: Props) => {
+const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
   const commonImageProps: ImageProps = {
     src: logoLightBackground?.url,
     alt,
@@ -40,4 +43,4 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: Props) => {
 };
 
 export { Logo, alt };
-export type { Props as LogoProps };
+export type { TLogo };

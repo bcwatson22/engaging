@@ -1,4 +1,6 @@
-export const mockCV: CV = {
+import { type TCV } from "../types/cv";
+
+export const mockCV: TCV = {
   title: "Billy Watson",
   description:
     "A creative, responsible, motivated Front End Engineer from the Peaks with over 12 years' experience including React (+ Native), Next, Node and TypeScript.",

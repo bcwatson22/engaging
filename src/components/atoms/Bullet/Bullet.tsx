@@ -4,11 +4,11 @@ import { useScroll, motion } from "framer-motion";
 import { ReactNode, useRef } from "react";
 import { SkeletonLine } from "../Skeleton/Skeleton";
 
-type Props = {
+type TProps = {
   children: ReactNode;
 };
 
-type SkeletonProps = {
+type TSkeletonProps = {
   index: number;
 };
 
@@ -31,14 +31,14 @@ const getWidthClassName = (index: number): string => {
   }
 };
 
-const BulletSkeleton = ({ index }: SkeletonProps) => (
+const BulletSkeleton = ({ index }: TSkeletonProps) => (
   <div className="bullet bullet-skeleton">
     <span>Bullet</span>
     <SkeletonLine className={`my-2 ${getWidthClassName(index)}`} />
   </div>
 );
 
-const Bullet = ({ children }: Props) => {
+const Bullet = ({ children }: TProps) => {
   const ref = useRef<HTMLLIElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -54,4 +54,4 @@ const Bullet = ({ children }: Props) => {
 };
 
 export { Bullet, BulletSkeleton };
-export type { Props as BulletProps };
+export type { TProps as BulletProps };

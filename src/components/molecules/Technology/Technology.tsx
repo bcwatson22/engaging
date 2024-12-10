@@ -1,9 +1,16 @@
 import Image from "next/image";
 
+import { type TLink } from "@/components/atoms/Link/Link";
 import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
 
-type Props = {
-  technology: Technology;
+type TTechnology = TID & {
+  name: string;
+  icon: TAsset;
+  link?: TLink;
+};
+
+type TProps = {
+  technology: TTechnology;
 };
 
 const TechnologySkeleton = () => (
@@ -12,7 +19,7 @@ const TechnologySkeleton = () => (
   </div>
 );
 
-const Technology = ({ technology: { id, icon, name } }: Props) => (
+const Technology = ({ technology: { id, icon, name } }: TProps) => (
   <div key={id} className="technology">
     <figure className="logo">
       {icon?.url && (
@@ -31,4 +38,4 @@ const Technology = ({ technology: { id, icon, name } }: Props) => (
 );
 
 export { Technology, TechnologySkeleton };
-export type { Props as TechnologyProps };
+export type { TTechnology, TProps as TechnologyProps };

@@ -1,17 +1,17 @@
 import { vi, expect, describe, it, beforeEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Logo, type LogoProps, alt } from "./Logo";
+import { Logo, type TLogo, alt } from "./Logo";
 import { mockCV } from "@/data/mock/cv";
 
 const { logoLightBackground, logoDarkBackground } = mockCV;
 
-const defaultProps: LogoProps = {
+const defaultProps: TLogo = {
   logoLightBackground,
   logoDarkBackground,
 };
 
-const setup = (props?: Partial<LogoProps>) =>
+const setup = (props?: Partial<TLogo>) =>
   render(<Logo {...defaultProps} {...props} />);
 
 describe("Logo", () => {

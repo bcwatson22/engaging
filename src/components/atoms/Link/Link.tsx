@@ -1,14 +1,22 @@
 import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from "react";
 import NextLink from "next/link";
 
-import { Icon } from "@/components/atoms/Icon/Icon";
+import { Icon, type TIcon } from "@/components/atoms/Icon/Icon";
 import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
 
-type Props = {
-  link: Link;
+type TLink =
+  | (TID & {
+      text: string;
+      target: string;
+      icon: TIcon;
+    })
+  | null;
+
+type TProps = {
+  link: TLink;
 };
 
-type Shared = Omit<ComponentPropsWithRef<"a">, "href"> & {
+type TShared = Omit<ComponentPropsWithRef<"a">, "href"> & {
   href: HTMLAttributeAnchorTarget;
   "data-url": string | null;
 };
@@ -20,7 +28,7 @@ const LinkSkeleton = () => (
   </div>
 );
 
-const Inner = ({ link }: Props) => {
+const Inner = ({ link }: TProps) => {
   const { text, icon } = link!;
 
   return (
@@ -31,7 +39,7 @@ const Inner = ({ link }: Props) => {
   );
 };
 
-const Link = ({ link }: Props) => {
+const Link = ({ link }: TProps) => {
   const { target } = link!;
 
   const isLocal = target.startsWith("/");
@@ -43,7 +51,7 @@ const Link = ({ link }: Props) => {
 
   if (target.startsWith("https://")) displayUrl = target.split("https://")[1];
 
-  const props: Shared = {
+  const props: TShared = {
     href: target,
     className: `link icon${displayUrl ? " url" : ""}`,
     "data-url": displayUrl,
@@ -61,4 +69,4 @@ const Link = ({ link }: Props) => {
 };
 
 export { Link, LinkSkeleton };
-export type { Props as LinkProps };
+export type { TLink, TProps as LinkProps };

@@ -1,7 +1,7 @@
 import { AnimationProps, useInView } from "framer-motion";
 import { RefObject } from "react";
 
-type Params = Scroll & {
+type Params = TScroll & {
   ref: RefObject<HTMLDivElement>;
 };
 

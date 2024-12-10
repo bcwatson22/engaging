@@ -19,16 +19,16 @@ const iconOptions = [
   "User",
 ] as const;
 
-type IconOption = (typeof iconOptions)[number];
+type TIcon = (typeof iconOptions)[number];
 
-type Props = {
-  icon: IconOption;
+type TProps = {
+  icon: TIcon;
   className?: string;
   isHidden?: boolean;
 };
 
 const iconMap: Record<
-  IconOption,
+  TIcon,
   ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref">>
 > = {
   Document: DocumentTextIcon,
@@ -40,7 +40,7 @@ const iconMap: Record<
   Website: GlobeAltIcon,
 };
 
-const Icon = ({ icon, className, isHidden = true }: Props) => {
+const Icon = ({ icon, className, isHidden = true }: TProps) => {
   const Component = iconMap[icon];
 
   return (
@@ -54,4 +54,4 @@ const Icon = ({ icon, className, isHidden = true }: Props) => {
 };
 
 export { Icon, iconOptions };
-export type { Props as IconProps };
+export type { TIcon, TProps as IconProps };

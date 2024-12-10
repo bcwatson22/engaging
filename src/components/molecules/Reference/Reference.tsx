@@ -1,8 +1,14 @@
 import { useId } from "react";
 
-import { Link } from "@/components/atoms/Link/Link";
+import { Link, type TLink } from "@/components/atoms/Link/Link";
 
-const Reference = ({ person, role, company, link }: Reference) => {
+type TReference = TID &
+  TPosition & {
+    person: string;
+    link: TLink;
+  };
+
+const Reference = ({ person, role, company, link }: TReference) => {
   const sectionId = useId();
 
   return (
@@ -17,3 +23,4 @@ const Reference = ({ person, role, company, link }: Reference) => {
 };
 
 export { Reference };
+export type { TReference };

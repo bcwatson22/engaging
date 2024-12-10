@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import { NextPage } from "next";
+import { type NextPage, type Metadata } from "next";
 
 import { queryHome } from "@/queries/home";
 
+import { type THome } from "@/data/types/home";
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 import { cacheHome } from "@/data/cache/home";
@@ -11,7 +11,7 @@ import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description } = await getData<Home>(
+  const { title, description } = await getData<THome>(
     queryHome,
     "homes",
     cacheHome
@@ -24,7 +24,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const Home: NextPage = async () => {
-  const data = await getData<Home>(queryHome, "homes", cacheHome);
+  const data = await getData<THome>(queryHome, "homes", cacheHome);
 
   saveData(data, "Home", 3);
 

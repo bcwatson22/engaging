@@ -2,12 +2,21 @@ import { Suspense, useId } from "react";
 
 import {
   Company,
-  CompanyProps,
   CompanySkeleton,
+  type TCompany,
 } from "@/components/molecules/Company/Company";
-import { Role, RoleSkeleton } from "@/components/molecules/Role/Role";
+import {
+  Role,
+  RoleSkeleton,
+  type TRole,
+} from "@/components/molecules/Role/Role";
 
-type Props = Scroll & Gig;
+type TGig = TID &
+  Pick<TCompany, "company" | "city" | "logo"> & {
+    roles: TRole[];
+  };
+
+type TProps = TScroll & TGig;
 
 const GigSkeleton = () => (
   <div className="gig">
@@ -16,10 +25,10 @@ const GigSkeleton = () => (
   </div>
 );
 
-const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
+const Gig = ({ company, logo, city, roles, delay = 0 }: TProps) => {
   const sectionId = useId();
 
-  const companyProps: CompanyProps = {
+  const companyProps: TCompany = {
     company,
     logo,
     city,
@@ -40,3 +49,4 @@ const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
 };
 
 export { Gig, GigSkeleton };
+export type { TGig };

@@ -4,11 +4,11 @@ import { useRef } from "react";
 import { motion, useScroll } from "framer-motion";
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
-type Props = Scroll & {
+type TProps = TScroll & {
   heading: string;
 };
 
-const Divider = ({ heading, delay = 0 }: Props) => {
+const Divider = ({ heading, delay = 0 }: TProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -27,4 +27,4 @@ const Divider = ({ heading, delay = 0 }: Props) => {
 };
 
 export { Divider };
-export type { Props as DividerProps };
+export type { TProps as DividerProps };

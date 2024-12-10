@@ -1,6 +1,6 @@
 "use client";
 
-import { NextPage } from "next";
+import { type NextPage } from "next";
 
 import { MugshotSkeleton } from "@/components/organisms/Mugshot/Mugshot";
 

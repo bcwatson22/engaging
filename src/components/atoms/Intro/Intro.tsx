@@ -3,9 +3,11 @@
 import dayjs from "dayjs";
 import ReactMarkdown from "react-markdown";
 
-type Props = Pick<CV, "intro">;
+type TIntro = {
+  intro: string;
+};
 
-const Intro = ({ intro }: Props) => {
+const Intro = ({ intro }: TIntro) => {
   const yearsOfExperience = dayjs().diff("2012-06-01", "year").toString();
   const formattedIntro = intro.replace("{{experience}}", yearsOfExperience);
 
@@ -13,4 +15,4 @@ const Intro = ({ intro }: Props) => {
 };
 
 export { Intro };
-export type { Props as IntroProps };
+export type { TIntro };

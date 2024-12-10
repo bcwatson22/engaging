@@ -1,13 +1,13 @@
-import { Address } from "@/components/atoms/Address/Address";
-import { Link, LinkSkeleton } from "@/components/atoms/Link/Link";
+import { Address, type TAddress } from "@/components/atoms/Address/Address";
+import { Link, LinkSkeleton, type TLink } from "@/components/atoms/Link/Link";
 import { SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
 
-type Props = {
-  address?: Address;
-  links: Link[];
+type TProps = {
+  address?: TAddress;
+  links: TLink[];
 };
 
-type SkeletonProps = {
+type TSkeletonProps = {
   hasParagraph?: boolean;
   numOfLinks?: number;
 };
@@ -15,7 +15,7 @@ type SkeletonProps = {
 const DetailsSkeleton = ({
   hasParagraph = false,
   numOfLinks = 2,
-}: SkeletonProps) => (
+}: TSkeletonProps) => (
   <div className="details py-px">
     {hasParagraph && <SkeletonLine className="w-[16rem] mb-6" />}
     <div className="flex gap-8">
@@ -26,7 +26,7 @@ const DetailsSkeleton = ({
   </div>
 );
 
-const Details = ({ address, links }: Props) => (
+const Details = ({ address, links }: TProps) => (
   <>
     {address && <Address address={address} />}
     <address className="address">

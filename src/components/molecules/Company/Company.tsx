@@ -11,9 +11,12 @@ import {
   SkeletonHeading,
   SkeletonLine,
 } from "@/components/atoms/Skeleton/Skeleton";
+import { type TGig } from "@/components/organisms/Gig/Gig";
 
-type Props = Scroll &
-  Pick<Gig, "company" | "city" | "logo"> & {
+type TCompany = TScroll &
+  Pick<TPosition, "company"> & {
+    city: string;
+    logo: TAsset;
     sectionId: string;
   };
 
@@ -27,7 +30,7 @@ const CompanySkeleton = () => (
   </div>
 );
 
-const Company = ({ company, city, logo, sectionId, delay }: Props) => {
+const Company = ({ company, city, logo, sectionId, delay }: TCompany) => {
   const ref = useRef<HTMLDivElement>(null);
   const triggerProps = useScrollTrigger({ ref, delay });
 
@@ -53,4 +56,4 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
 };
 
 export { Company, CompanySkeleton };
-export type { Props as CompanyProps };
+export type { TCompany };

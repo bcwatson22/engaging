@@ -1,17 +1,17 @@
 import { vi, expect, describe, it, beforeEach, afterEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Intro, type IntroProps } from "./Intro";
+import { Intro, type TIntro } from "./Intro";
 import { mockCV } from "@/data/mock/cv";
 
 const mockSplit = mockCV.intro.split("\n\n");
 const mockToday = new Date(2024, 12, 8);
 
-const defaultProps: IntroProps = {
+const defaultProps: TIntro = {
   intro: mockSplit[1],
 };
 
-const setup = (props?: Partial<IntroProps>) =>
+const setup = (props?: Partial<TIntro>) =>
   render(<Intro {...defaultProps} {...props} />);
 
 describe("Intro", () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { NextPage } from "next";
+import { type NextPage } from "next";
 
 import { DetailsSkeleton } from "@/components/molecules/Details/Details";
 import { HeaderSkeleton } from "@/components/molecules/Header/Header";

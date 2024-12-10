@@ -1,6 +1,6 @@
 "use client";
 
-import { NextPage } from "next";
+import { type NextPage } from "next";
 
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { MugshotError } from "@/components/organisms/Mugshot/Mugshot";

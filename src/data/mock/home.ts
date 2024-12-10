@@ -1,4 +1,6 @@
-export const mockHome: Home = {
+import { type THome } from "../types/home";
+
+export const mockHome: THome = {
   title: "Engaging Engineering",
   description:
     "Contract expertise for Next, Node, React Native and Typescript projects",

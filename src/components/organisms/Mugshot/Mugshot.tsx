@@ -1,18 +1,26 @@
 import { useId } from "react";
 import Image from "next/image";
 
-import { Link } from "@/components/atoms/Link/Link";
+import { Link, type TLink } from "@/components/atoms/Link/Link";
 import {
   Technology,
   TechnologySkeleton,
+  type TTechnology,
 } from "@/components/molecules/Technology/Technology";
 import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
 
 import { cacheHome } from "@/data/cache/home";
 
-type Props = {
-  mugshot: Mugshot;
-  technologies: Technology[];
+type TMugshot = TID & {
+  image: TAsset;
+  heading: string;
+  description: string;
+  links?: TLink[];
+};
+
+type TProps = {
+  mugshot: TMugshot;
+  technologies: TTechnology[];
 };
 
 const MugshotError = () => {
@@ -66,7 +74,7 @@ const MugshotSkeleton = () => (
 const Mugshot = ({
   mugshot: { heading, description, image, links },
   technologies,
-}: Props) => {
+}: TProps) => {
   const sectionId = useId();
 
   return (
@@ -109,4 +117,4 @@ const Mugshot = ({
 };
 
 export { Mugshot, MugshotError, MugshotSkeleton };
-export type { Props as MugshotProps };
+export type { TMugshot, TProps as MugshotProps };

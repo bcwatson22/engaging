@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { NextPage } from "next";
+import { type NextPage, type Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";
 
+import { type TCV } from "@/data/types/cv";
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 import { cacheCV } from "@/data/cache/cv";
@@ -16,7 +16,7 @@ import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description } = await getData<CV>(queryCV, "cvs", cacheCV);
+  const { title, description } = await getData<TCV>(queryCV, "cvs", cacheCV);
 
   return {
     title,
@@ -25,7 +25,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const CVPage: NextPage = async () => {
-  const data = await getData<CV>(queryCV, "cvs", cacheCV);
+  const data = await getData<TCV>(queryCV, "cvs", cacheCV);
 
   saveData(data, "CV");
 
