@@ -20,11 +20,13 @@ export const mockCV: TCV = {
   },
   contactLinks: [
     {
+      id: "1",
       text: "07518 716298",
       target: "tel:+447518716298",
       icon: "Phone",
     },
     {
+      id: "2",
       text: "bcwatson22@gmail.com",
       target: "mailto:bcwatson22@gmail.com",
       icon: "Email",

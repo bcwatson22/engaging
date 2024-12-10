@@ -42,3 +42,4 @@ const Details = ({ address, links }: TProps) => (
 );
 
 export { Details, DetailsSkeleton };
+export { type TProps as DetailsProps };

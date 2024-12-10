@@ -9,12 +9,14 @@ type TQualification = TID & {
   description: string;
 };
 
-const Qualification = ({ institution, dates, description }: TQualification) => {
+type TProps = TQualification;
+
+const Qualification = ({ institution, dates, description }: TProps) => {
   const sectionId = useId();
 
   return (
     <section aria-labelledby={sectionId} className="qualification">
-      <h3>{institution}</h3>
+      <h3 id={sectionId}>{institution}</h3>
       <Suspense>
         <Dates dates={dates} />
       </Suspense>
@@ -24,4 +26,4 @@ const Qualification = ({ institution, dates, description }: TQualification) => {
 };
 
 export { Qualification };
-export type { TQualification };
+export type { TQualification, TProps as QualificationProps };

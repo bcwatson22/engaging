@@ -1,9 +1,10 @@
 import { expect, describe, it, vi, type Mock, beforeEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
+import { type Target } from "framer-motion";
+
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 import { Divider, type DividerProps } from "./Divider";
-import { type Target } from "framer-motion";
 
 vi.mock("@/hooks/useScrollTrigger", () => ({
   useScrollTrigger: vi.fn(),
@@ -21,7 +22,7 @@ const defaultScrollTrigger: UseScrollTrigger = {
   transition: { delay: 0 },
 };
 
-const mockHeading = "mock-heading";
+const mockHeading = "mockHeading";
 
 const defaultProps: DividerProps = {
   heading: mockHeading,

@@ -11,7 +11,6 @@ import {
   SkeletonHeading,
   SkeletonLine,
 } from "@/components/atoms/Skeleton/Skeleton";
-import { type TGig } from "@/components/organisms/Gig/Gig";
 
 type TCompany = TScroll &
   Pick<TPosition, "company"> & {
@@ -19,6 +18,8 @@ type TCompany = TScroll &
     logo: TAsset;
     sectionId: string;
   };
+
+type TProps = TCompany;
 
 const CompanySkeleton = () => (
   <div className="company">
@@ -30,14 +31,14 @@ const CompanySkeleton = () => (
   </div>
 );
 
-const Company = ({ company, city, logo, sectionId, delay }: TCompany) => {
+const Company = ({ company, city, logo, sectionId, delay }: TProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const triggerProps = useScrollTrigger({ ref, delay });
 
   return (
     <motion.header ref={ref} className="company" {...triggerProps}>
-      <figure className="company-logo">
-        {logo?.url && (
+      {logo?.url && (
+        <figure className="company-logo">
           <Image
             src={logo.url}
             alt={`${company} logo`}
@@ -45,8 +46,8 @@ const Company = ({ company, city, logo, sectionId, delay }: TCompany) => {
             height={80}
             priority
           />
-        )}
-      </figure>
+        </figure>
+      )}
       <div className="company-details">
         <h3 id={sectionId}>{company}</h3>
         <p className="mt-0">{city}</p>
@@ -56,4 +57,4 @@ const Company = ({ company, city, logo, sectionId, delay }: TCompany) => {
 };
 
 export { Company, CompanySkeleton };
-export type { TCompany };
+export type { TCompany, TProps as CompanyProps };

@@ -8,7 +8,9 @@ type TReference = TID &
     link: TLink;
   };
 
-const Reference = ({ person, role, company, link }: TReference) => {
+type TProps = TReference;
+
+const Reference = ({ person, role, company, link }: TProps) => {
   const sectionId = useId();
 
   return (
@@ -23,4 +25,4 @@ const Reference = ({ person, role, company, link }: TReference) => {
 };
 
 export { Reference };
-export type { TReference };
+export type { TReference, TProps as ReferenceProps };
