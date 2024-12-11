@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, type ReactNode } from "react";
 import Image from "next/image";
 
 import { Link, type TLink } from "@/components/atoms/Link/Link";
@@ -8,8 +8,6 @@ import {
   type TTechnology,
 } from "@/components/molecules/Technology/Technology";
 import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
-
-import { cacheHome } from "@/data/cache/home";
 
 type TMugshot = TID & {
   image: TAsset;
@@ -21,41 +19,6 @@ type TMugshot = TID & {
 type Props = {
   mugshot: TMugshot;
   technologies: TTechnology[];
-};
-
-const MugshotError = () => {
-  const sectionId = useId();
-
-  const { image, heading } = cacheHome.mugshot;
-
-  return (
-    <section aria-labelledby={sectionId} className="overview overview-error">
-      <figure className="coupon">
-        <Image
-          src={image.url}
-          alt={`Portrait of ${heading}`}
-          width={600}
-          height={600}
-          className="opacity-30"
-          priority
-        />
-      </figure>
-      <div className="info opacity-100">
-        <h2 id={sectionId}>Oops</h2>
-        <p>
-          Something went wrong, but believe it or not you&apos;re not actually
-          reading this, so it&apos;s all ok.
-        </p>
-      </div>
-      <ul className="technologies">
-        {[...Array(12).keys()].map((key) => (
-          <li key={key}>
-            <TechnologySkeleton />
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
 };
 
 const MugshotSkeleton = () => (
@@ -116,5 +79,5 @@ const Mugshot = ({
   );
 };
 
-export { Mugshot, MugshotError, MugshotSkeleton };
+export { Mugshot, MugshotSkeleton };
 export type { TMugshot, Props as MugshotProps };

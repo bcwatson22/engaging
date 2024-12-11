@@ -7,7 +7,7 @@ type Props = {
   links: TLink[];
 };
 
-type TSkeletonProps = {
+type SkeletonProps = {
   hasParagraph?: boolean;
   numOfLinks?: number;
 };
@@ -15,7 +15,7 @@ type TSkeletonProps = {
 const DetailsSkeleton = ({
   hasParagraph = false,
   numOfLinks = 2,
-}: TSkeletonProps) => (
+}: SkeletonProps) => (
   <div className="details py-px">
     {hasParagraph && <SkeletonLine className="w-[16rem] mb-6" />}
     <div className="flex gap-8">

@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
 };
 
-type TSkeletonProps = {
+type SkeletonProps = {
   index: number;
 };
 
@@ -31,7 +31,7 @@ const getWidthClassName = (index: number): string => {
   }
 };
 
-const BulletSkeleton = ({ index }: TSkeletonProps) => (
+const BulletSkeleton = ({ index }: SkeletonProps) => (
   <div className="bullet bullet-skeleton">
     <span>Bullet</span>
     <SkeletonLine className={`my-2 ${getWidthClassName(index)}`} />

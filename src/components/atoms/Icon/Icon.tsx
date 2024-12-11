@@ -1,11 +1,13 @@
 import {
+  ArrowPathIcon,
+  AtSymbolIcon,
   DevicePhoneMobileIcon,
   DocumentTextIcon,
-  AtSymbolIcon,
   GlobeAltIcon,
-  UserIcon,
+  HomeIcon,
   IdentificationIcon,
   RocketLaunchIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { ForwardRefExoticComponent, SVGProps } from "react";
 
@@ -13,10 +15,12 @@ const iconOptions = [
   "Document",
   "Phone",
   "Email",
-  "Website",
+  "Home",
   "Profile",
   "Repo",
+  "Retry",
   "User",
+  "Website",
 ] as const;
 
 type TIcon = (typeof iconOptions)[number];
@@ -33,9 +37,11 @@ const iconMap: Record<
 > = {
   Document: DocumentTextIcon,
   Email: AtSymbolIcon,
+  Home: HomeIcon,
   Phone: DevicePhoneMobileIcon,
   Profile: IdentificationIcon,
   Repo: RocketLaunchIcon,
+  Retry: ArrowPathIcon,
   User: UserIcon,
   Website: GlobeAltIcon,
 };

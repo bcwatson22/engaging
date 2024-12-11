@@ -1,16 +1,17 @@
 "use client";
 
-import { type NextPage } from "next";
+import { useEffect } from "react";
 
-import { Particles } from "@/components/atoms/Particles/Particles";
-import { MugshotError } from "@/components/organisms/Mugshot/Mugshot";
+import { Error, type ErrorProps } from "@/components/pages/Error/Error";
 
-const Error: NextPage = () => (
-  <main className="home main">
-    <h1 className="sr-only">Engaging Engineering</h1>
-    <MugshotError />
-    <Particles />
-  </main>
-);
+type Props = Pick<ErrorProps, "reset"> & {
+  error: Error & { digest?: string };
+};
 
-export default Error;
+const ErrorPage = ({ error, reset }: Props) => {
+  useEffect(() => console.error(error), [error]);
+
+  return <Error reset={reset} />;
+};
+
+export default ErrorPage;

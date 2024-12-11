@@ -7,7 +7,7 @@ import { HeaderSkeleton } from "@/components/molecules/Header/Header";
 import { GigSkeleton } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
 
-const Loading: NextPage = () => (
+const LoadingPage: NextPage = () => (
   <main className="cv main">
     <div className="wrapper">
       <div className="inner">
@@ -27,4 +27,4 @@ const Loading: NextPage = () => (
   </main>
 );
 
-export default Loading;
+export default LoadingPage;
