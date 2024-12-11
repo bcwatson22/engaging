@@ -9,7 +9,7 @@ type TTechnology = TID & {
   link?: TLink;
 };
 
-type TProps = TTechnology;
+type Props = TTechnology;
 
 const TechnologySkeleton = () => (
   <div className="technology p-3">
@@ -17,7 +17,7 @@ const TechnologySkeleton = () => (
   </div>
 );
 
-const Technology = ({ id, icon, name }: TProps) => (
+const Technology = ({ id, icon, name }: Props) => (
   <div key={id} className="technology">
     <figure className="logo">
       {icon?.url && (
@@ -36,4 +36,4 @@ const Technology = ({ id, icon, name }: TProps) => (
 );
 
 export { Technology, TechnologySkeleton };
-export type { TTechnology, TProps as TechnologyProps };
+export type { TTechnology, Props as TechnologyProps };

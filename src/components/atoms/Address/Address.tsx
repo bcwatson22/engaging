@@ -5,13 +5,13 @@ type TAddress = TID & {
   postalCode: string;
 };
 
-type TProps = {
+type Props = {
   address: TAddress;
 };
 
 const Address = ({
   address: { streetAddress, locality, countryName, postalCode },
-}: TProps) => (
+}: Props) => (
   <p className="h-adr">
     <span className="p-street-address">{streetAddress}</span>
     <span className="p-locality">{locality}</span>
@@ -21,4 +21,4 @@ const Address = ({
 );
 
 export { Address };
-export type { TAddress, TProps as AddressProps };
+export type { TAddress, Props as AddressProps };

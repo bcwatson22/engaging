@@ -19,7 +19,7 @@ type TCompany = TScroll &
     sectionId: string;
   };
 
-type TProps = TCompany;
+type Props = TCompany;
 
 const CompanySkeleton = () => (
   <div className="company">
@@ -31,7 +31,7 @@ const CompanySkeleton = () => (
   </div>
 );
 
-const Company = ({ company, city, logo, sectionId, delay }: TProps) => {
+const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const triggerProps = useScrollTrigger({ ref, delay });
 
@@ -57,4 +57,4 @@ const Company = ({ company, city, logo, sectionId, delay }: TProps) => {
 };
 
 export { Company, CompanySkeleton };
-export type { TCompany, TProps as CompanyProps };
+export type { TCompany, Props as CompanyProps };

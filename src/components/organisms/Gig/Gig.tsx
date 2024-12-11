@@ -16,7 +16,7 @@ type TGig = TID &
     roles: TRole[];
   };
 
-type TProps = TScroll & TGig;
+type Props = TScroll & TGig;
 
 const GigSkeleton = () => (
   <div className="gig">
@@ -25,7 +25,7 @@ const GigSkeleton = () => (
   </div>
 );
 
-const Gig = ({ company, logo, city, roles, delay = 0 }: TProps) => {
+const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
   const sectionId = useId();
 
   const companyProps: TCompany = {

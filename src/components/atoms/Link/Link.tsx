@@ -12,7 +12,7 @@ type TLink =
     })
   | null;
 
-type TProps = {
+type Props = {
   link: TLink;
 };
 
@@ -28,7 +28,7 @@ const LinkSkeleton = () => (
   </div>
 );
 
-const Inner = ({ link }: TProps) => {
+const Inner = ({ link }: Props) => {
   const { text, icon } = link!;
 
   return (
@@ -39,7 +39,7 @@ const Inner = ({ link }: TProps) => {
   );
 };
 
-const Link = ({ link }: TProps) => {
+const Link = ({ link }: Props) => {
   const { target } = link!;
 
   const isLocal = target.startsWith("/");
@@ -69,4 +69,4 @@ const Link = ({ link }: TProps) => {
 };
 
 export { Link, LinkSkeleton };
-export type { TLink, TProps as LinkProps };
+export type { TLink, Props as LinkProps };

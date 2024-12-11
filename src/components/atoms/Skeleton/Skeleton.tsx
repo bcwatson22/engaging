@@ -1,13 +1,13 @@
 const label = "Loading...";
 
-type TProps = {
+type Props = {
   className?: string;
   level?: "h1" | "h2" | "h3" | "h4";
   numOfLines?: number;
   size?: "base" | "small";
 };
 
-const Skeleton = ({ className }: TProps) => (
+const Skeleton = ({ className }: Props) => (
   <div
     className={`skeleton${className ? " " + className : ""}`}
     role="status"
@@ -17,7 +17,7 @@ const Skeleton = ({ className }: TProps) => (
   </div>
 );
 
-const SkeletonLine = ({ className, size = "base" }: TProps) => (
+const SkeletonLine = ({ className, size = "base" }: Props) => (
   <Skeleton
     className={`${
       size === "small" ? "skeleton-line-small" : "skeleton-line-base"
@@ -25,7 +25,7 @@ const SkeletonLine = ({ className, size = "base" }: TProps) => (
   />
 );
 
-const SkeletonHeading = ({ className, level = "h2" }: TProps) => (
+const SkeletonHeading = ({ className, level = "h2" }: Props) => (
   <Skeleton className={`${level}${className ? " " + className : ""}`} />
 );
 
@@ -33,7 +33,7 @@ const SkeletonParagraph = ({
   className,
   numOfLines = 4,
   size = "base",
-}: TProps) => (
+}: Props) => (
   <div className={`skeleton-paragraph${className ? " " + className : ""}`}>
     {[...Array(numOfLines - 1).keys()].map((key) => (
       <SkeletonLine key={key} size={size} />

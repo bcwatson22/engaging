@@ -6,7 +6,7 @@ import { SkeletonParagraph } from "@/components/atoms/Skeleton/Skeleton";
 
 import { cacheCV } from "@/data/cache/cv";
 
-type TProps = Pick<TMeta, "title"> & TLogo & TIntro;
+type Props = Pick<TMeta, "title"> & TLogo & TIntro;
 
 const { logoDarkBackground, logoLightBackground } = cacheCV;
 
@@ -28,7 +28,7 @@ const Header = ({
   logoDarkBackground,
   logoLightBackground,
   intro,
-}: TProps) => (
+}: Props) => (
   <header className="header">
     <h1 className="sr-only">{title}</h1>
     <Logo
@@ -44,4 +44,4 @@ const Header = ({
 );
 
 export { Header, HeaderSkeleton };
-export type { TProps as HeaderProps };
+export type { Props as HeaderProps };

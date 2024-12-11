@@ -4,7 +4,7 @@ import { useScroll, motion } from "framer-motion";
 import { ReactNode, useRef } from "react";
 import { SkeletonLine } from "../Skeleton/Skeleton";
 
-type TProps = {
+type Props = {
   children: ReactNode;
 };
 
@@ -38,7 +38,7 @@ const BulletSkeleton = ({ index }: TSkeletonProps) => (
   </div>
 );
 
-const Bullet = ({ children }: TProps) => {
+const Bullet = ({ children }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -54,4 +54,4 @@ const Bullet = ({ children }: TProps) => {
 };
 
 export { Bullet, BulletSkeleton };
-export type { TProps as BulletProps };
+export type { Props as BulletProps };

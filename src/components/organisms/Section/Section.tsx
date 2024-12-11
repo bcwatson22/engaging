@@ -2,12 +2,12 @@ import { ReactNode, Suspense } from "react";
 
 import { Divider, DividerProps } from "@/components/atoms/Divider/Divider";
 
-type TProps = DividerProps & {
+type Props = DividerProps & {
   children: ReactNode;
   className?: string;
 };
 
-const Section = ({ heading, children, className, delay = 0 }: TProps) => (
+const Section = ({ heading, children, className, delay = 0 }: Props) => (
   <>
     <Suspense>
       <Divider heading={heading} delay={delay} />
@@ -19,4 +19,4 @@ const Section = ({ heading, children, className, delay = 0 }: TProps) => (
 );
 
 export { Section };
-export type { TProps as SectionProps };
+export type { Props as SectionProps };

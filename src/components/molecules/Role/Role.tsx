@@ -14,7 +14,7 @@ type TRole = TID &
     capacity: string;
   };
 
-type TProps = TRole & {
+type Props = TRole & {
   index: number;
   total: number;
 };
@@ -48,7 +48,7 @@ const RoleSkeleton = () => (
   </div>
 );
 
-const Role = ({ role, dates, capacity, bullets, index, total }: TProps) => {
+const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
   const hasMultiple = total > 1;
   const linkClassNames = getLinkClassNames(index, total - 1, hasMultiple);
 
@@ -79,4 +79,4 @@ const Role = ({ role, dates, capacity, bullets, index, total }: TProps) => {
 };
 
 export { Role, RoleSkeleton };
-export type { TRole, TProps as RoleProps };
+export type { TRole, Props as RoleProps };

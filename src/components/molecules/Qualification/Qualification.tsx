@@ -9,9 +9,9 @@ type TQualification = TID & {
   description: string;
 };
 
-type TProps = TQualification;
+type Props = TQualification;
 
-const Qualification = ({ institution, dates, description }: TProps) => {
+const Qualification = ({ institution, dates, description }: Props) => {
   const sectionId = useId();
 
   return (
@@ -26,4 +26,4 @@ const Qualification = ({ institution, dates, description }: TProps) => {
 };
 
 export { Qualification };
-export type { TQualification, TProps as QualificationProps };
+export type { TQualification, Props as QualificationProps };

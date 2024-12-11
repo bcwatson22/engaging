@@ -2,14 +2,14 @@
 
 import dayjs from "dayjs";
 
-type TProps = {
+type Props = {
   dates: string[];
   className?: string;
 };
 
 const dateFormat = "MMMM YYYY";
 
-const Dates = ({ dates, className }: TProps) => {
+const Dates = ({ dates, className }: Props) => {
   const startDate = dates[0];
   const dateFrom = dayjs(startDate).format(dateFormat);
   const endDate = dates[1];
@@ -30,4 +30,4 @@ const Dates = ({ dates, className }: TProps) => {
 };
 
 export { Dates };
-export type { TProps as DatesProps };
+export type { Props as DatesProps };

@@ -21,7 +21,7 @@ const iconOptions = [
 
 type TIcon = (typeof iconOptions)[number];
 
-type TProps = {
+type Props = {
   icon: TIcon;
   className?: string;
   isHidden?: boolean;
@@ -40,7 +40,7 @@ const iconMap: Record<
   Website: GlobeAltIcon,
 };
 
-const Icon = ({ icon, className, isHidden = true }: TProps) => {
+const Icon = ({ icon, className, isHidden = true }: Props) => {
   const Component = iconMap[icon];
 
   return (
@@ -54,4 +54,4 @@ const Icon = ({ icon, className, isHidden = true }: TProps) => {
 };
 
 export { Icon, iconOptions };
-export type { TIcon, TProps as IconProps };
+export type { TIcon, Props as IconProps };

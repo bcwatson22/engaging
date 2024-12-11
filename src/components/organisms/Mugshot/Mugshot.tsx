@@ -18,7 +18,7 @@ type TMugshot = TID & {
   links?: TLink[];
 };
 
-type TProps = {
+type Props = {
   mugshot: TMugshot;
   technologies: TTechnology[];
 };
@@ -74,7 +74,7 @@ const MugshotSkeleton = () => (
 const Mugshot = ({
   mugshot: { heading, description, image, links },
   technologies,
-}: TProps) => {
+}: Props) => {
   const sectionId = useId();
 
   return (
@@ -117,4 +117,4 @@ const Mugshot = ({
 };
 
 export { Mugshot, MugshotError, MugshotSkeleton };
-export type { TMugshot, TProps as MugshotProps };
+export type { TMugshot, Props as MugshotProps };

@@ -2,7 +2,7 @@ import { Address, type TAddress } from "@/components/atoms/Address/Address";
 import { Link, LinkSkeleton, type TLink } from "@/components/atoms/Link/Link";
 import { SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
 
-type TProps = {
+type Props = {
   address?: TAddress;
   links: TLink[];
 };
@@ -26,7 +26,7 @@ const DetailsSkeleton = ({
   </div>
 );
 
-const Details = ({ address, links }: TProps) => (
+const Details = ({ address, links }: Props) => (
   <>
     {address && <Address address={address} />}
     <address className="address">
@@ -42,4 +42,4 @@ const Details = ({ address, links }: TProps) => (
 );
 
 export { Details, DetailsSkeleton };
-export { type TProps as DetailsProps };
+export { type Props as DetailsProps };
