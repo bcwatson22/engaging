@@ -40,7 +40,7 @@ describe("Details", () => {
   });
 
   describe("address", () => {
-    it("renders an Address if defined", () => {
+    it("renders an Address component if defined", () => {
       setup();
 
       expect(Address).toHaveBeenNthCalledWith(
@@ -50,7 +50,7 @@ describe("Details", () => {
       );
     });
 
-    it("doesn't render an Address if undefined", () => {
+    it("doesn't render an Address component if undefined", () => {
       setup({
         address: undefined,
       });
@@ -60,7 +60,7 @@ describe("Details", () => {
   });
 
   describe("links", () => {
-    it("renders a listitem and Link for each item", () => {
+    it("renders a listitem and Link component for each item", () => {
       setup();
 
       expect(screen.getAllByRole("listitem")).toHaveLength(links.length);

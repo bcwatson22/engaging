@@ -9,9 +9,7 @@ type TTechnology = TID & {
   link?: TLink;
 };
 
-type TProps = {
-  technology: TTechnology;
-};
+type TProps = TTechnology;
 
 const TechnologySkeleton = () => (
   <div className="technology p-3">
@@ -19,7 +17,7 @@ const TechnologySkeleton = () => (
   </div>
 );
 
-const Technology = ({ technology: { id, icon, name } }: TProps) => (
+const Technology = ({ id, icon, name }: TProps) => (
   <div key={id} className="technology">
     <figure className="logo">
       {icon?.url && (

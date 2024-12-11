@@ -15,7 +15,7 @@ const Reference = ({ person, role, company, link }: TProps) => {
 
   return (
     <section aria-labelledby={sectionId} className="qualification">
-      <h3>{person}</h3>
+      <h3 id={sectionId}>{person}</h3>
       <p className="mt-0">
         {role}, {company}
       </p>

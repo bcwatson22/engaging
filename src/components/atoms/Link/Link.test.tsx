@@ -36,7 +36,7 @@ describe("Link", () => {
       expect(screen.getByRole("link", { name: text })).toBeInTheDocument();
     });
 
-    it("renders an icon", () => {
+    it("renders an Icon component", () => {
       setup();
 
       expect(Icon).toHaveBeenNthCalledWith(

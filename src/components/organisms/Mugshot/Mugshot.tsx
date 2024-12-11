@@ -108,7 +108,7 @@ const Mugshot = ({
       <ul className="technologies">
         {technologies.map((technology) => (
           <li key={technology.id}>
-            <Technology key={technology.id} technology={technology} />
+            <Technology {...technology} />
           </li>
         ))}
       </ul>
