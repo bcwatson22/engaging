@@ -1,4 +1,4 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
+import type { Mock } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 
 import {

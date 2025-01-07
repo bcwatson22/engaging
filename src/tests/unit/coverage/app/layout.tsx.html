@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -91,62 +91,65 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { type ReactNode } from "react";
-<span class="cstat-no" title="statement not covered" >import { SpeedInsights } from "@vercel/speed-insights/next";</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 &nbsp;
-import { type CssVariable } from "next/dist/compiled/@next/font";
-<span class="cstat-no" title="statement not covered" >import { Nunito } from "next/font/google";</span>
+import type { CssVariable } from "next/dist/compiled/@next/font";
+import { Nunito } from "next/font/google";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import "@/styles/globals.css";</span>
+import "@/styles/globals.css";
 &nbsp;
-type Layout = Readonly&lt;{
+type Props = Readonly&lt;{
   children: ReactNode;
 }&gt;;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const variable = "--font-sans" as const satisfies CssVariable;</span>
+const variable = "--font-sans" as const satisfies CssVariable;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const nunito = Nunito({</span>
-<span class="cstat-no" title="statement not covered" >  subsets: ["latin"],</span>
-<span class="cstat-no" title="statement not covered" >  weight: ["400", "500", "700"],</span>
-<span class="cstat-no" title="statement not covered" >  variable: "--font-sans" satisfies typeof variable,</span>
-<span class="cstat-no" title="statement not covered" >});</span>
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-sans" satisfies typeof variable,
+});
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const Layout = ({ children }: Layout) =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >  &lt;html lang="en"&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;body className={nunito.className}&gt;{children}&lt;/body&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;SpeedInsights /&gt;</span>
-<span class="cstat-no" title="statement not covered" >  &lt;/html&gt;</span>
+const Layout = ({ children }: Props) =&gt; (
+  &lt;html lang="en"&gt;
+    &lt;body className={nunito.className}&gt;{children}&lt;/body&gt;
+    &lt;SpeedInsights /&gt;
+  &lt;/html&gt;
 );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default Layout;</span>
+export default Layout;
+export type { Props as LayoutProps };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -154,7 +157,7 @@ type Layout = Readonly&lt;{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-11T15:59:28.875Z
+                at 2025-01-07T19:45:48.196Z
             </div>
         <script src="../prettify.js"></script>
         <script>

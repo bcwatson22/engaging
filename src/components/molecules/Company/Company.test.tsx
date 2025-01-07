@@ -1,10 +1,11 @@
-import { expect, describe, it, vi, type Mock, beforeEach } from "vitest";
+import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { type Target } from "framer-motion";
+import type { Target } from "framer-motion";
+
+import { Company, CompanySkeleton, type CompanyProps } from "./Company";
 
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
-import { Company, CompanySkeleton, type CompanyProps } from "./Company";
 import { mockCV } from "@/data/mock/cv";
 
 vi.mock("@/hooks/useScrollTrigger", () => ({
@@ -88,7 +89,10 @@ describe("Company", () => {
 
       expect(
         screen.getByRole("img", { name: `${company} logo` })
-      ).toBeInTheDocument();
+      ).toHaveAttribute(
+        "src",
+        expect.stringContaining(encodeURIComponent(logo.url))
+      );
     });
 
     it("doesn't render an image if undefined", () => {

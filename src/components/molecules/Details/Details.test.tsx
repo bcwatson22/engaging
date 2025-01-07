@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Details, DetailsSkeleton, type DetailsProps } from "./Details";
+
 import { Address } from "@/components/atoms/Address/Address";
 import { Link } from "@/components/atoms/Link/Link";
 
@@ -26,12 +26,8 @@ const defaultProps: DetailsProps = {
   links,
 };
 
-const setup = (props?: Partial<DetailsProps>) => {
-  (Address as Mock).mockImplementation(() => null);
-  (Link as Mock).mockImplementation(() => null);
-
+const setup = (props?: Partial<DetailsProps>) =>
   render(<Details {...defaultProps} {...props} />);
-};
 
 describe("Details", () => {
   beforeEach(() => {
@@ -63,8 +59,10 @@ describe("Details", () => {
     it("renders a listitem and Link component for each item", () => {
       setup();
 
-      expect(screen.getAllByRole("listitem")).toHaveLength(links.length);
-      expect(Link).toHaveBeenCalledTimes(links.length);
+      const numberOfLinks = links.length;
+
+      expect(screen.getAllByRole("listitem")).toHaveLength(numberOfLinks);
+      expect(Link).toHaveBeenCalledTimes(numberOfLinks);
     });
   });
 });

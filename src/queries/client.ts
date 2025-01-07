@@ -7,4 +7,4 @@ const makeClient = () =>
     exchanges: [cacheExchange, fetchExchange],
   });
 
-export const client = registerUrql(makeClient).getClient;
+export const client = registerUrql(makeClient).getClient().query;

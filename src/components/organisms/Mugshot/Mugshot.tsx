@@ -43,17 +43,15 @@ const Mugshot = ({
   return (
     <article className="mugshot">
       <section aria-labelledby={sectionId} className="overview">
-        {image?.url && (
-          <figure className="coupon">
-            <Image
-              src={image.url}
-              alt={`Portrait of ${heading}`}
-              width={600}
-              height={600}
-              priority
-            />
-          </figure>
-        )}
+        <figure className="coupon">
+          <Image
+            src={image.url}
+            alt={`Portrait of ${heading}`}
+            width={600}
+            height={600}
+            priority
+          />
+        </figure>
         <div className="info">
           <h2 id={sectionId}>{heading}</h2>
           <p>{description}</p>

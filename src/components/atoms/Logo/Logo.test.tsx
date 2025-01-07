@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Logo, type TLogo, alt } from "./Logo";
+
 import { mockCV } from "@/data/mock/cv";
 
 const { logoLightBackground, logoDarkBackground } = mockCV;
@@ -23,7 +23,10 @@ describe("Logo", () => {
   it("renders an image for screen", () => {
     setup();
 
-    expect(screen.getByRole("img", { name: alt })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: alt })).toHaveAttribute(
+      "src",
+      expect.stringContaining(encodeURIComponent(logoLightBackground.url))
+    );
   });
 
   it("renders an image for print", () => {

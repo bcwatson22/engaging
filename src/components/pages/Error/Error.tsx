@@ -8,17 +8,24 @@ import { cacheHome } from "@/data/cache/home";
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
+import { type TMugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 type Props = {
   heading?: string;
   children?: ReactNode;
+  content?: TMugshot;
   reset?: () => void;
 };
 
-const Error = ({ heading = "Oops", children, reset }: Props) => {
+const Error = ({
+  heading = "Oops",
+  children,
+  content = cacheHome.mugshot,
+  reset,
+}: Props) => {
   const sectionId = useId();
 
-  const { image, heading: name } = cacheHome.mugshot;
+  const { image, heading: name } = content;
 
   return (
     <main className="home main">
@@ -50,7 +57,7 @@ const Error = ({ heading = "Oops", children, reset }: Props) => {
             </button>
           )}
         </div>
-        <ul className="technologies hidden md:grid">
+        <ul className="technologies technologies-error hidden md:grid">
           {[...Array(12).keys()].map((key) => (
             <li key={key}>
               <TechnologySkeleton />

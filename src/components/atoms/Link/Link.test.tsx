@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Link, LinkSkeleton, type LinkProps } from "./Link";
+
 import { Icon } from "@/components/atoms/Icon/Icon";
 
 import { mockCV } from "@/data/mock/cv";
@@ -17,11 +17,8 @@ const defaultProps: LinkProps = {
   link: mockLink,
 };
 
-const setup = (props?: Partial<LinkProps>) => {
-  (Icon as Mock).mockImplementation(() => null);
-
+const setup = (props?: Partial<LinkProps>) =>
   render(<Link {...defaultProps} {...props} />);
-};
 
 describe("Link", () => {
   beforeEach(() => {

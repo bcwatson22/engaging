@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">91.89% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/36</span>
+                <span class='fraction'>34/37</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">91.89% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/36</span>
+                <span class='fraction'>34/37</span>
             </div>
         
             
@@ -135,11 +135,20 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,14 +176,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">8x</span>
@@ -189,6 +194,11 @@
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
@@ -213,15 +223,19 @@ import NextLink from "next/link";
 import { Icon, type TIcon } from "@/components/atoms/Icon/Icon";
 import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
 &nbsp;
+type TInner = {
+  text: string;
+  icon: TIcon;
+};
+&nbsp;
 type TLink =
-  | (TID &amp; {
-      text: string;
-      target: string;
-      icon: TIcon;
-    })
+  | (TID &amp;
+      TInner &amp; {
+        target: string;
+      })
   | null;
 &nbsp;
-type TProps = {
+type Props = {
   link: TLink;
 };
 &nbsp;
@@ -237,19 +251,15 @@ const LinkSkeleton = () =&gt; (
   &lt;/div&gt;
 );
 &nbsp;
-const Inner = ({ link }: TProps) =&gt; {
-  const { text, icon } = link!;
+const Inner = ({ text, icon }: TInner) =&gt; (
+  &lt;&gt;
+    &lt;Icon icon={icon} className="vector" isHidden /&gt;
+    &lt;span&gt;{text}&lt;/span&gt;
+  &lt;/&gt;
+);
 &nbsp;
-  return (
-    &lt;&gt;
-      &lt;Icon icon={icon} className="vector" isHidden /&gt;
-      &lt;span&gt;{text}&lt;/span&gt;
-    &lt;/&gt;
-  );
-};
-&nbsp;
-const Link = ({ link }: TProps) =&gt; {
-  const { target } = link!;
+const Link = ({ link }: Props) =&gt; {
+  const { target, text, icon } = link!;
 &nbsp;
   const isLocal = target.startsWith("/");
 &nbsp;
@@ -260,25 +270,30 @@ const Link = ({ link }: TProps) =&gt; {
 &nbsp;
   if (target.startsWith("https://")) displayUrl = target.split("https://")[1];
 &nbsp;
-  const props: TShared = {
+  const outerProps: TShared = {
     href: target,
     className: `link icon${displayUrl ? " url" : ""}`,
     "data-url": displayUrl,
   };
 &nbsp;
+  const innerProps: TInner = {
+    text,
+    icon,
+  };
+&nbsp;
   return <span class="branch-0 cbranch-no" title="branch not covered" >isLocal ? (</span>
-<span class="cstat-no" title="statement not covered" >    &lt;NextLink {...props}&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Inner link={link} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >    &lt;NextLink {...outerProps}&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Inner {...innerProps} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/NextLink&gt;</span>
   ) : (
-    &lt;a {...props}&gt;
-      &lt;Inner link={link} /&gt;
+    &lt;a {...outerProps}&gt;
+      &lt;Inner {...innerProps} /&gt;
     &lt;/a&gt;
   );
 };
 &nbsp;
-export { Link, LinkSkeleton };
-export type { TLink, TProps as LinkProps };
+export { Link, LinkSkeleton, Inner };
+export type { TLink, Props as LinkProps };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -286,7 +301,7 @@ export type { TLink, TProps as LinkProps };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-11T15:59:28.875Z
+                at 2025-01-07T19:45:48.196Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

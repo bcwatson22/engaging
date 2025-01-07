@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Qualification, type QualificationProps } from "./Qualification";
+
 import { Dates } from "@/components/atoms/Dates/Dates";
 
 import { mockCV } from "@/data/mock/cv";
@@ -19,11 +19,8 @@ const defaultProps: QualificationProps = {
   description,
 };
 
-const setup = (props?: Partial<QualificationProps>) => {
-  (Dates as Mock).mockImplementation(() => null);
-
+const setup = (props?: Partial<QualificationProps>) =>
   render(<Qualification {...defaultProps} {...props} />);
-};
 
 describe("Qualification", () => {
   beforeEach(() => {

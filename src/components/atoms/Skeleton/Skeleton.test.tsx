@@ -1,4 +1,3 @@
-import { vi, expect, describe, it, beforeEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import {
@@ -55,12 +54,12 @@ describe("SkeletonParagraph", () => {
   });
 
   it("renders a SkeletonParagraph loading state", () => {
-    const mockNumOfLines = 7;
+    const numberOfLines = 7;
 
-    render(<SkeletonParagraph numOfLines={mockNumOfLines} />);
+    render(<SkeletonParagraph numOfLines={numberOfLines} />);
 
     expect(screen.getAllByRole("status", { name: label })).toHaveLength(
-      mockNumOfLines
+      numberOfLines
     );
   });
 });

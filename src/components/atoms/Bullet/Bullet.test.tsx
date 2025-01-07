@@ -1,4 +1,3 @@
-import { expect, describe, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 
 import { Bullet, type BulletProps } from "./Bullet";

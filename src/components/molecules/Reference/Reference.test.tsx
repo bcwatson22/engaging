@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Reference, type ReferenceProps } from "./Reference";
+
 import { Link } from "@/components/atoms/Link/Link";
 
 import { mockCV } from "@/data/mock/cv";
@@ -19,11 +19,8 @@ const defaultProps: ReferenceProps = {
   link,
 };
 
-const setup = (props?: Partial<ReferenceProps>) => {
-  (Link as Mock).mockImplementation(() => null);
-
+const setup = (props?: Partial<ReferenceProps>) =>
   render(<Reference {...defaultProps} {...props} />);
-};
 
 describe("Reference", () => {
   beforeEach(() => {

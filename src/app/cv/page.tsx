@@ -1,4 +1,4 @@
-import { type NextPage, type Metadata } from "next";
+import type { NextPage, Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";
@@ -27,7 +27,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 const CVPage: NextPage = async () => {
   const data = await getData<TCV>(queryCV, "cvs", cacheCV);
 
-  saveData(data, "CV");
+  await saveData(data, "CV");
 
   const {
     title,
@@ -58,8 +58,8 @@ const CVPage: NextPage = async () => {
               <Details address={address} links={contactLinks} />
             </Section>
             <Section heading="Experience" margin="0px" delay={0.1}>
-              {gigs?.map((gig, i) => (
-                <Gig key={gig.id} {...gig} delay={i === 0 ? 0.2 : 0} />
+              {gigs?.map((gig, index) => (
+                <Gig key={gig.id} {...gig} delay={index === 0 ? 0.2 : 0} />
               ))}
             </Section>
             <Section heading="Skills">

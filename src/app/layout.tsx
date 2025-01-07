@@ -1,12 +1,12 @@
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import { type CssVariable } from "next/dist/compiled/@next/font";
+import type { CssVariable } from "next/dist/compiled/@next/font";
 import { Nunito } from "next/font/google";
 
 import "@/styles/globals.css";
 
-type Layout = Readonly<{
+type Props = Readonly<{
   children: ReactNode;
 }>;
 
@@ -18,7 +18,7 @@ const nunito = Nunito({
   variable: "--font-sans" satisfies typeof variable,
 });
 
-const Layout = ({ children }: Layout) => (
+const Layout = ({ children }: Props) => (
   <html lang="en">
     <body className={nunito.className}>{children}</body>
     <SpeedInsights />
@@ -26,3 +26,4 @@ const Layout = ({ children }: Layout) => (
 );
 
 export default Layout;
+export type { Props as LayoutProps };

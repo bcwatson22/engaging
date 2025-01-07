@@ -15,3 +15,4 @@ const ErrorPage = ({ error, reset }: Props) => {
 };
 
 export default ErrorPage;
+export type { Props as ErrorPageProps };

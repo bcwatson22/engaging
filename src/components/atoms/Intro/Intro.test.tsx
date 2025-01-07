@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, afterEach } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Intro, type TIntro } from "./Intro";
+
 import { mockCV } from "@/data/mock/cv";
 
 const mockSplit = mockCV.intro.split("\n\n");

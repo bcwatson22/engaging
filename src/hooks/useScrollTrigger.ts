@@ -1,5 +1,5 @@
-import { AnimationProps, useInView } from "framer-motion";
-import { RefObject } from "react";
+import { type AnimationProps, useInView } from "framer-motion";
+import { type RefObject } from "react";
 
 type Params = TScroll & {
   ref: RefObject<HTMLDivElement>;
@@ -7,7 +7,7 @@ type Params = TScroll & {
 
 type Return = AnimationProps;
 
-export const useScrollTrigger = ({
+const useScrollTrigger = ({
   ref,
   delay = 0,
   margin = "-20px",
@@ -24,3 +24,6 @@ export const useScrollTrigger = ({
     transition: { delay },
   };
 };
+
+export { useScrollTrigger };
+export type { Params };

@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Header, HeaderSkeleton, type HeaderProps } from "./Header";
+
 import { Intro } from "@/components/atoms/Intro/Intro";
 import { Logo } from "@/components/atoms/Logo/Logo";
 
@@ -24,12 +24,8 @@ const defaultProps: HeaderProps = {
   intro,
 };
 
-const setup = (props?: Partial<HeaderProps>) => {
-  (Intro as Mock).mockImplementation(() => null);
-  (Logo as Mock).mockImplementation(() => null);
-
+const setup = (props?: Partial<HeaderProps>) =>
   render(<Header {...defaultProps} {...props} />);
-};
 
 describe("Header", () => {
   beforeEach(() => {

@@ -1,10 +1,11 @@
-import { expect, describe, it, vi, type Mock, beforeEach } from "vitest";
+import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { type Target } from "framer-motion";
 
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 import { Divider, type DividerProps } from "./Divider";
+
+import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 vi.mock("@/hooks/useScrollTrigger", () => ({
   useScrollTrigger: vi.fn(),

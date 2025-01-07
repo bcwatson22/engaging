@@ -1,4 +1,3 @@
-import { expect, describe, it, beforeEach, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Icon, type IconProps, iconOptions } from "./Icon";

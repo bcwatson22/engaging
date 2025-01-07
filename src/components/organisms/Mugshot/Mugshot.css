@@ -162,4 +162,14 @@
       }
     }
   }
+
+  .technologies-error {
+    li {
+      @apply md:top-[38%] md:left-[38%];
+    }
+
+    div:hover figure {
+      @apply opacity-100;
+    }
+  }
 }

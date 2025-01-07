@@ -3,7 +3,7 @@ import { type TCV } from "../types/cv";
 export const mockCV: TCV = {
   title: "Billy Watson",
   description:
-    "A creative, responsible, motivated Front End Engineer from the Peaks with over 12 years' experience including React (+ Native), Next, Node and TypeScript.",
+    "Creative, personable and collaborative Front End Engineer with over 12 years' experience including React (+ Native), Next, Node and TypeScript.",
   logoLightBackground: {
     url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lwg36w435n08l6stxnouwg",
   },
@@ -41,6 +41,7 @@ export const mockCV: TCV = {
       city: "Handforth",
       roles: [
         {
+          id: "1",
           role: "Principal Front End Engineer",
           dates: ["2024-10-01"],
           capacity: "Contract",
@@ -53,6 +54,7 @@ export const mockCV: TCV = {
           ],
         },
         {
+          id: "2",
           role: "Technical Lead",
           dates: ["2023-04-01", "2024-10-01"],
           capacity: "Contract",
@@ -76,6 +78,7 @@ export const mockCV: TCV = {
       city: "Huddersfield",
       roles: [
         {
+          id: "3",
           role: "Senior Software Engineer",
           dates: ["2022-09-01", "2023-04-01"],
           capacity: "Contract",
@@ -99,6 +102,7 @@ export const mockCV: TCV = {
       city: "London",
       roles: [
         {
+          id: "4",
           role: "Senior Software Engineer",
           dates: ["2022-04-01", "2022-08-01"],
           capacity: "Permanent",
@@ -122,6 +126,7 @@ export const mockCV: TCV = {
       city: "Manchester",
       roles: [
         {
+          id: "5",
           role: "Lead Front End Developer",
           dates: ["2021-07-01", "2022-04-01"],
           capacity: "Permanent",
@@ -136,6 +141,7 @@ export const mockCV: TCV = {
           ],
         },
         {
+          id: "6",
           role: "Senior Front End Developer",
           dates: ["2018-09-01", "2021-07-01"],
           capacity: "Permanent",
@@ -159,6 +165,7 @@ export const mockCV: TCV = {
       city: "Sheffield",
       roles: [
         {
+          id: "7",
           role: "Front End Developer",
           dates: ["2016-05-01", "2017-12-01"],
           capacity: "Permanent",
@@ -181,6 +188,7 @@ export const mockCV: TCV = {
       city: "Manchester",
       roles: [
         {
+          id: "8",
           role: "Front End Developer",
           dates: ["2014-03-01", "2015-08-01"],
           capacity: "Permanent",
@@ -194,6 +202,7 @@ export const mockCV: TCV = {
           ],
         },
         {
+          id: "9",
           role: "Junior Front End Developer",
           dates: ["2012-07-01", "2014-03-01"],
           capacity: "Permanent",
@@ -207,6 +216,7 @@ export const mockCV: TCV = {
           ],
         },
         {
+          id: "10",
           role: "Placement Developer",
           dates: ["2012-07-01", "2012-07-01"],
           capacity: "Placement",
@@ -255,6 +265,7 @@ export const mockCV: TCV = {
   references: [
     {
       person: "Tom Tollafield",
+      id: "1",
       role: "Head of Software",
       company: "Pets at Home",
       link: {
@@ -265,6 +276,7 @@ export const mockCV: TCV = {
     },
     {
       person: "Mattia Battiston",
+      id: "1",
       role: "Engineering Manager",
       company: "Pollen",
       link: {
@@ -275,6 +287,7 @@ export const mockCV: TCV = {
     },
     {
       person: "Rob Dorsett",
+      id: "1",
       role: "Technical Director",
       company: "Absurd",
       link: {

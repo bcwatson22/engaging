@@ -1,4 +1,3 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import {
@@ -29,9 +28,10 @@ describe("Technology", () => {
     it("renders an image if defined", () => {
       setup();
 
-      expect(
-        screen.getByRole("img", { name: `${name} logo` })
-      ).toBeInTheDocument();
+      expect(screen.getByRole("img", { name: `${name} logo` })).toHaveAttribute(
+        "src",
+        expect.stringContaining(encodeURIComponent(icon.url))
+      );
     });
 
     it("doesn't render an image if undefined", () => {

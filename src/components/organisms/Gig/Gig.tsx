@@ -49,4 +49,4 @@ const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
 };
 
 export { Gig, GigSkeleton };
-export type { TGig };
+export type { TGig, Props as GigProps };

@@ -1,8 +1,8 @@
-import { type NextPage, type Metadata } from "next";
+import type { NextPage, Metadata } from "next";
 
 import { queryHome } from "@/queries/home";
 
-import { type THome } from "@/data/types/home";
+import type { THome } from "@/data/types/home";
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 import { cacheHome } from "@/data/cache/home";
@@ -23,10 +23,10 @@ const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
-const Home: NextPage = async () => {
+const HomePage: NextPage = async () => {
   const data = await getData<THome>(queryHome, "homes", cacheHome);
 
-  saveData(data, "Home", 3);
+  await saveData(data, "Home", 3);
 
   const { title, mugshot, technologies } = data;
 
@@ -41,5 +41,5 @@ const Home: NextPage = async () => {
 
 const revalidate = 3600 * 24;
 
-export default Home;
+export default HomePage;
 export { generateMetadata, revalidate };

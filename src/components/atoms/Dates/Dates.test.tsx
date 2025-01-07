@@ -1,7 +1,7 @@
-import { expect, describe, it, beforeEach, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Dates, type DatesProps } from "./Dates";
+
 import { mockCV } from "@/data/mock/cv";
 
 const mockDates = mockCV.gigs[1].roles[0].dates;

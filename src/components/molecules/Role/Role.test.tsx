@@ -1,7 +1,7 @@
-import { vi, expect, describe, it, beforeEach, type Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
 import { Role, RoleSkeleton, type RoleProps } from "./Role";
+
 import { Bullet } from "@/components/atoms/Bullet/Bullet";
 import { Dates } from "@/components/atoms/Dates/Dates";
 
@@ -30,12 +30,8 @@ const defaultProps: RoleProps = {
   total: 1,
 };
 
-const setup = (props?: Partial<RoleProps>) => {
-  (Bullet as Mock).mockImplementation(() => null);
-  (Dates as Mock).mockImplementation(() => null);
-
+const setup = (props?: Partial<RoleProps>) =>
   render(<Role {...defaultProps} {...props} />);
-};
 
 describe("Role", () => {
   beforeEach(() => {

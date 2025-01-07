@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>23/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>23/23</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,62 +97,62 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">"use client";
 &nbsp;
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { DetailsSkeleton } from "@/components/molecules/Details/Details";</span>
-<span class="cstat-no" title="statement not covered" >import { HeaderSkeleton } from "@/components/molecules/Header/Header";</span>
-<span class="cstat-no" title="statement not covered" >import { GigSkeleton } from "@/components/organisms/Gig/Gig";</span>
-<span class="cstat-no" title="statement not covered" >import { Section } from "@/components/organisms/Section/Section";</span>
+import { DetailsSkeleton } from "@/components/molecules/Details/Details";
+import { HeaderSkeleton } from "@/components/molecules/Header/Header";
+import { GigSkeleton } from "@/components/organisms/Gig/Gig";
+import { Section } from "@/components/organisms/Section/Section";
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const Loading: NextPage = () =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >  &lt;main className="cv main"&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;div className="wrapper"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;div className="inner"&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;HeaderSkeleton /&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;div className="sections"&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;Section heading="Digits" margin="0px"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            &lt;DetailsSkeleton hasParagraph={true} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;/Section&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;Section heading="Experience" margin="0px"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            {[...Array(3).keys()].map((key) =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >              &lt;GigSkeleton key={key} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >            ))}</span>
-<span class="cstat-no" title="statement not covered" >          &lt;/Section&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
-<span class="cstat-no" title="statement not covered" >  &lt;/main&gt;</span>
+const LoadingPage: NextPage = () =&gt; (
+  &lt;main className="cv main"&gt;
+    &lt;div className="wrapper"&gt;
+      &lt;div className="inner"&gt;
+        &lt;HeaderSkeleton /&gt;
+        &lt;div className="sections"&gt;
+          &lt;Section heading="Digits" margin="0px"&gt;
+            &lt;DetailsSkeleton hasParagraph={true} /&gt;
+          &lt;/Section&gt;
+          &lt;Section heading="Experience" margin="0px"&gt;
+            {[...Array(3).keys()].map((key) =&gt; (
+              &lt;GigSkeleton key={key} /&gt;
+            ))}
+          &lt;/Section&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
 );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default Loading;</span>
+export default LoadingPage;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -160,7 +160,7 @@ import { type NextPage } from "next";
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-11T15:59:28.875Z
+                at 2025-01-07T19:45:48.196Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

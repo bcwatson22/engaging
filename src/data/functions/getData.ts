@@ -7,7 +7,7 @@ export const getData = async <Data>(
   key: string,
   fallback: Data
 ): Promise<Data> => {
-  const { data } = await client().query(query, {});
+  const { data } = await client(query, {});
 
   return data ? data[key][0] : fallback;
 };
