@@ -12,7 +12,7 @@ const LoadingPage: NextPage = () => (
     <div className="wrapper">
       <div className="inner">
         <HeaderSkeleton />
-        <div className="sections">
+        <div className="sections pt-1.5">
           <Section heading="Digits" margin="0px">
             <DetailsSkeleton hasParagraph={true} />
           </Section>

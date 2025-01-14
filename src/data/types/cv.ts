@@ -1,10 +1,10 @@
-import { type TAddress } from "@/components/atoms/Address/Address";
-import { type TIntro } from "@/components/atoms/Intro/Intro";
-import { type TLink } from "@/components/atoms/Link/Link";
-import { type TLogo } from "@/components/atoms/Logo/Logo";
-import { type TQualification } from "@/components/molecules/Qualification/Qualification";
-import { type TReference } from "@/components/molecules/Reference/Reference";
-import { type TGig } from "@/components/organisms/Gig/Gig";
+import type { TAddress } from "@/components/atoms/Address/Address";
+import type { TIntro } from "@/components/atoms/Intro/Intro";
+import type { TLink } from "@/components/atoms/Link/Link";
+import type { TLogo } from "@/components/atoms/Logo/Logo";
+import type { TQualification } from "@/components/molecules/Qualification/Qualification";
+import type { TReference } from "@/components/molecules/Reference/Reference";
+import type { TGig } from "@/components/organisms/Gig/Gig";
 
 export type TCV = TID &
   TMeta &

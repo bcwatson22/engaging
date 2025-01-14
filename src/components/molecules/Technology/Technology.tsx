@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { type TLink } from "@/components/atoms/Link/Link";
+import type { TLink } from "@/components/atoms/Link/Link";
 import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
 
 type TTechnology = TID & {

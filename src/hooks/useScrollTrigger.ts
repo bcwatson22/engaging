@@ -1,5 +1,5 @@
 import { type AnimationProps, useInView } from "framer-motion";
-import { type RefObject } from "react";
+import type { RefObject } from "react";
 
 type Params = TScroll & {
   ref: RefObject<HTMLDivElement>;

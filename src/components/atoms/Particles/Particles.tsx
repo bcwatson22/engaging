@@ -5,7 +5,7 @@ import {
   Particles as TSParticles,
   initParticlesEngine,
 } from "@tsparticles/react";
-import { type ISourceOptions } from "@tsparticles/engine";
+import type { ISourceOptions } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
 
 const Particles = () => {

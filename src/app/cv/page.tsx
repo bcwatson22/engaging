@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";
 
-import { type TCV } from "@/data/types/cv";
+import type { TCV } from "@/data/types/cv";
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 import { cacheCV } from "@/data/cache/cv";

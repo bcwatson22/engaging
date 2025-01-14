@@ -1,4 +1,4 @@
-import { type THome } from "../types/home";
+import type { THome } from "../types/home";
 
 export const mockHome: THome = {
   title: "Engaging Engineering",

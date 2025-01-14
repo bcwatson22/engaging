@@ -1,4 +1,4 @@
-import { type TCV } from "../types/cv";
+import type { TCV } from "../types/cv";
 
 export const mockCV: TCV = {
   title: "Billy Watson",

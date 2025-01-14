@@ -1,7 +1,7 @@
 "use client";
 
 import { useScroll, motion } from "framer-motion";
-import { ReactNode, useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import { SkeletonLine } from "../Skeleton/Skeleton";
 
 type Props = {

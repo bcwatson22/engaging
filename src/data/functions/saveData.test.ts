@@ -31,7 +31,7 @@ describe("saveData", () => {
     expect(writeFileSpy).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockPath),
-      expect.stringContaining(`import { type T${mockPageName} }`)
+      expect.stringContaining(`import type { T${mockPageName} }`)
     );
   });
 

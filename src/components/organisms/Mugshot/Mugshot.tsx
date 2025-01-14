@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from "react";
+import { useId } from "react";
 import Image from "next/image";
 
 import { Link, type TLink } from "@/components/atoms/Link/Link";

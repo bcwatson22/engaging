@@ -158,8 +158,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import promises from "fs/promises";
 import path from "path";
 &nbsp;
-import { type TCV } from "../types/cv";
-import { type THome } from "../types/home";
+import type { TCV } from "../types/cv";
+import type { THome } from "../types/home";
 &nbsp;
 type Pages = {
   CV: TCV;
@@ -187,7 +187,7 @@ export const saveData = async (
 &nbsp;
     await writeFile(
       pathToFile,
-      `import { type T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
+      `import type { T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
         data
       )}`
     );

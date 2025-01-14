@@ -1,7 +1,7 @@
 import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { type Target } from "framer-motion";
+import type { Target } from "framer-motion";
 
 import { Divider, type DividerProps } from "./Divider";
 

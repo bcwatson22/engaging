@@ -8,7 +8,7 @@ import { cacheHome } from "@/data/cache/home";
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-import { type TMugshot } from "@/components/organisms/Mugshot/Mugshot";
+import type { TMugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 type Props = {
   heading?: string;

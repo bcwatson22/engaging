@@ -10,4 +10,8 @@
       @apply print:!transform-none motion-reduce:!transform-none;
     }
   }
+
+  /* .static {
+    @apply !opacity-100 !transform-none;
+  } */
 }

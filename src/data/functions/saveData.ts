@@ -1,8 +1,8 @@
 import promises from "fs/promises";
 import path from "path";
 
-import { type TCV } from "../types/cv";
-import { type THome } from "../types/home";
+import type { TCV } from "../types/cv";
+import type { THome } from "../types/home";
 
 type Pages = {
   CV: TCV;
@@ -12,7 +12,7 @@ type Pages = {
 export const saveData = async (
   data: Pages[keyof Pages],
   page: keyof Pages,
-  levels = 4
+  levels = process.env.NODE_ENV === "development" ? 4 : 3
 ) => {
   const { readFile, writeFile } = promises;
 
@@ -30,7 +30,7 @@ export const saveData = async (
 
     await writeFile(
       pathToFile,
-      `import { type T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
+      `import type { T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
         data
       )}`
     );

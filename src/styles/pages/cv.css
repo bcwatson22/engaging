@@ -1,10 +1,4 @@
 @layer components {
-  /* .cv {
-    @apply border-12 border-brand-blue;
-    @apply dark:border-brand-yellow;
-    @apply print:border-0;
-  } */
-
   .wrapper {
     @apply min-h-screen p-6 border-3 border-brand-blue overflow-clip;
     @apply sm:m-6 lg:p-16;
@@ -19,7 +13,7 @@
 
   .sections {
     @apply grid grid-cols-1 gap-x-12 gap-y-8 mt-12 items-start;
-    @apply md:grid-cols-[min-content_1fr] md:gap-y-16 lg:gap-24 xl:gap-36 lg:mt-24;
-    @apply print:grid-cols-[min-content_1fr] print:gap-x-8 print:gap-y-6 print:mt-8;
+    @apply md:grid-cols-[minmax(min-content,_9.75rem)_minmax(1rem,_1fr)] md:gap-y-16 lg:gap-24 lg:mt-24 xl:gap-x-36;
+    @apply print:grid-cols-[minmax(min-content,_9.75rem)_minmax(1rem,_1fr)] print:gap-x-8 print:gap-y-6 print:mt-8;
   }
 }

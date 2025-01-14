@@ -1,5 +1,5 @@
-import { type TCV } from "./cv";
-import { type THome } from "./home";
+import type { TCV } from "./cv";
+import type { THome } from "./home";
 
 type HomesData = {
   homes: THome[];
