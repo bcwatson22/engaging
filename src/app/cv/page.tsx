@@ -15,12 +15,63 @@ import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
 
+const url = "https://engaging.engineering";
+const ogImageUrl = `/api/og`;
+
+const metadata: Metadata = {
+  openGraph: {
+    images: [{ url: ogImageUrl, width: 1200, height: 630 }],
+    type: "website",
+    // siteName: "Engaging Engineering",
+    locale: "en_GB",
+    url,
+  },
+  twitter: {
+    card: "summary_large_image",
+    // title: 'Next.js',
+    images: [ogImageUrl],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+  },
+  appleWebApp: {
+    // title: 'Apple Web App',
+    statusBarStyle: "black-translucent",
+    startupImage: [
+      "/assets/startup/apple-touch-startup-image-768x1004.png",
+      {
+        url: "/assets/startup/apple-touch-startup-image-1536x2008.png",
+        media: "(device-width: 768px) and (device-height: 1024px)",
+      },
+    ],
+  },
+};
+
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description } = await getData<TCV>(queryCV, "cvs", cacheCV);
+  const { title, description, keywords } = await getData<TCV>(
+    queryCV,
+    "cvs",
+    cacheCV
+  );
 
   return {
     title,
     description,
+    keywords,
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      title,
+      description,
+      siteName: title,
+    },
+    twitter: {
+      ...metadata.twitter,
+      title,
+      description,
+    },
   };
 };
 

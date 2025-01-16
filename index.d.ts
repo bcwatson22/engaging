@@ -10,6 +10,7 @@ type TAsset = TID & {
 type TMeta = {
   title: string;
   description: string;
+  keywords: string[];
 };
 
 type TPosition = {

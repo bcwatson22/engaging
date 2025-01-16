@@ -6,6 +6,7 @@ export const queryCV = gql`
       id
       title
       description
+      keywords
       logoLightBackground {
         id
         url

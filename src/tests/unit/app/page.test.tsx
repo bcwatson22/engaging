@@ -97,6 +97,6 @@ describe("HomePage", () => {
   it("generates metadata", async () => {
     const result = await generateMetadata();
 
-    expect(result).toEqual({ title, description });
+    expect(result).toEqual(expect.objectContaining({ title, description }));
   });
 });

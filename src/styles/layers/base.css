@@ -18,7 +18,7 @@
   }
 
   h1 {
-    @apply text-3xl;
+    @apply text-3xl font-normal;
     @apply print:text-2xl;
   }
 
@@ -33,7 +33,7 @@
   }
 
   h4 {
-    @apply text-lg;
+    @apply text-lg font-normal;
     @apply print:text-sm;
   }
 

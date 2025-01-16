@@ -11,7 +11,7 @@ import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description } = await getData<THome>(
+  const { title, description, keywords } = await getData<THome>(
     queryHome,
     "homes",
     cacheHome
@@ -20,6 +20,7 @@ const generateMetadata = async (): Promise<Metadata> => {
   return {
     title,
     description,
+    keywords,
   };
 };
 
