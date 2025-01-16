@@ -4,6 +4,18 @@ export const mockCV: TCV = {
   title: "Billy Watson",
   description:
     "Creative, personable and collaborative Front End Engineer with over 12 years' experience including React (+ Native), Next, Node and TypeScript.",
+  keywords: [
+    "Billy Watson",
+    "Engaging Engineering",
+    "Sheffield",
+    "Contract",
+    "Software Engineer",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next",
+    "Node",
+  ],
   logoLightBackground: {
     url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lwg36w435n08l6stxnouwg",
   },
