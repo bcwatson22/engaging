@@ -2,7 +2,7 @@ import { TypedDocumentNode } from "@urql/core";
 
 import { client } from "@/queries/client";
 
-export const getData = async <Data>(
+const getData = async <Data>(
   query: TypedDocumentNode,
   key: string,
   fallback: Data
@@ -11,3 +11,5 @@ export const getData = async <Data>(
 
   return data ? data[key][0] : fallback;
 };
+
+export { getData };

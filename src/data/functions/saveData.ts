@@ -4,14 +4,14 @@ import path from "path";
 import type { TCV } from "../types/cv";
 import type { THome } from "../types/home";
 
-type Pages = {
+type TPages = {
   CV: TCV;
   Home: THome;
 };
 
-export const saveData = async (
-  data: Pages[keyof Pages],
-  page: keyof Pages,
+const saveData = async (
+  data: TPages[keyof TPages],
+  page: keyof TPages,
   levels = process.env.NODE_ENV === "development" ? 4 : 3
 ) => {
   const { readFile, writeFile } = promises;
@@ -44,3 +44,6 @@ export const saveData = async (
     return false;
   }
 };
+
+export { saveData };
+export type { TPages };

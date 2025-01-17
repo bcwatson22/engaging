@@ -1,11 +1,11 @@
-import type { NextPage, Metadata } from "next";
+import type { NextPage, Metadata, Viewport } from "next";
 import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";
 
 import type { TCV } from "@/data/types/cv";
 import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
+import { saveData, type TPages } from "@/data/functions/saveData";
 import { cacheCV } from "@/data/cache/cv";
 
 import { Header } from "@/components/molecules/Header/Header";
@@ -15,44 +15,22 @@ import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
 
-const url = "https://engaging.engineering";
-const ogImageUrl = `/api/og`;
+import { revalidate } from "@/constants/common";
+import {
+  appleWebApp,
+  metadata,
+  themeColor,
+  viewport,
+} from "@/constants/metadata";
 
-const metadata: Metadata = {
-  openGraph: {
-    images: [{ url: ogImageUrl, width: 1200, height: 630 }],
-    type: "website",
-    // siteName: "Engaging Engineering",
-    locale: "en_GB",
-    url,
-  },
-  twitter: {
-    card: "summary_large_image",
-    // title: 'Next.js',
-    images: [ogImageUrl],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: true,
-  },
-  appleWebApp: {
-    // title: 'Apple Web App',
-    statusBarStyle: "black-translucent",
-    startupImage: [
-      "/assets/startup/apple-touch-startup-image-768x1004.png",
-      {
-        url: "/assets/startup/apple-touch-startup-image-1536x2008.png",
-        media: "(device-width: 768px) and (device-height: 1024px)",
-      },
-    ],
-  },
-};
+const pageName: keyof TPages = "CV";
+const pageNameLower = pageName.toLowerCase();
+const pageNamePlural = "cvs";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const { title, description, keywords } = await getData<TCV>(
     queryCV,
-    "cvs",
+    pageNamePlural,
     cacheCV
   );
 
@@ -72,13 +50,35 @@ const generateMetadata = async (): Promise<Metadata> => {
       title,
       description,
     },
+    appleWebApp: {
+      ...appleWebApp,
+      startupImage: [
+        `/assets/startup-${pageNameLower}.png`,
+        {
+          // url: "/assets/startup-cv-2x.png",
+          url: "/assets/startup/apple-touch-startup-image-1536x2008.png",
+          media: "(device-width: 768px) and (device-height: 1024px)",
+        },
+      ],
+    },
   };
 };
 
-const CVPage: NextPage = async () => {
-  const data = await getData<TCV>(queryCV, "cvs", cacheCV);
+const generateViewport = async (): Promise<Viewport> => ({
+  ...viewport,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f9fafb" },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: themeColor,
+    },
+  ],
+});
 
-  await saveData(data, "CV");
+const CVPage: NextPage = async () => {
+  const data = await getData<TCV>(queryCV, pageNamePlural, cacheCV);
+
+  await saveData(data, pageName);
 
   const {
     title,
@@ -136,7 +136,5 @@ const CVPage: NextPage = async () => {
   );
 };
 
-const revalidate = 3600 * 24;
-
 export default CVPage;
-export { generateMetadata, revalidate };
+export { generateMetadata, generateViewport, revalidate };

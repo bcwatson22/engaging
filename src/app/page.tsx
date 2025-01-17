@@ -4,16 +4,23 @@ import { queryHome } from "@/queries/home";
 
 import type { THome } from "@/data/types/home";
 import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
+import { saveData, type TPages } from "@/data/functions/saveData";
 import { cacheHome } from "@/data/cache/home";
 
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
+import { revalidate } from "@/constants/common";
+import { appleWebApp, metadata, viewport } from "@/constants/metadata";
+
+const pageName: keyof TPages = "CV";
+const pageNameLower = pageName.toLowerCase();
+const pageNamePlural = "cvs";
+
 const generateMetadata = async (): Promise<Metadata> => {
   const { title, description, keywords } = await getData<THome>(
     queryHome,
-    "homes",
+    pageNamePlural,
     cacheHome
   );
 
@@ -21,6 +28,29 @@ const generateMetadata = async (): Promise<Metadata> => {
     title,
     description,
     keywords,
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      title,
+      description,
+      siteName: title,
+    },
+    twitter: {
+      ...metadata.twitter,
+      title,
+      description,
+    },
+    appleWebApp: {
+      ...appleWebApp,
+      startupImage: [
+        `/assets/startup-${pageNameLower}.png`,
+        {
+          // url: "/assets/startup-cv-2x.png",
+          url: "/assets/startup/apple-touch-startup-image-1536x2008.png",
+          media: "(device-width: 768px) and (device-height: 1024px)",
+        },
+      ],
+    },
   };
 };
 
@@ -40,7 +70,5 @@ const HomePage: NextPage = async () => {
   );
 };
 
-const revalidate = 3600 * 24;
-
 export default HomePage;
-export { generateMetadata, revalidate };
+export { generateMetadata, viewport, revalidate };
