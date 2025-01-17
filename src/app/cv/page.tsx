@@ -55,8 +55,7 @@ const generateMetadata = async (): Promise<Metadata> => {
       startupImage: [
         `/assets/startup-${pageNameLower}.png`,
         {
-          // url: "/assets/startup-cv-2x.png",
-          url: "/assets/startup/apple-touch-startup-image-1536x2008.png",
+          url: `/assets/startup-${pageNameLower}-2x.png`,
           media: "(device-width: 768px) and (device-height: 1024px)",
         },
       ],

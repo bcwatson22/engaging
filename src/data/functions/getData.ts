@@ -9,7 +9,7 @@ const getData = async <Data>(
 ): Promise<Data> => {
   const { data } = await client(query, {});
 
-  return data ? data[key][0] : fallback;
+  return data?.[key]?.[0] ? data[key][0] : fallback;
 };
 
 export { getData };
