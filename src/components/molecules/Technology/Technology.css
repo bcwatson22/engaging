@@ -18,7 +18,7 @@
     }
 
     .name {
-      @apply relative opacity-0 text-sm p-x-1;
+      @apply relative opacity-0 text-sm px-1;
       @apply print:opacity-100;
     }
 
