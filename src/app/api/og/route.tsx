@@ -91,7 +91,7 @@ const loadGoogleFont = async (font = fontFamily, text = title) => {
   throw new Error("Failed to load font data");
 };
 
-export const GET = async () =>
+const GET = async () =>
   new ImageResponse(<ImageMarkup />, {
     width: 1200,
     height: 630,
@@ -103,3 +103,5 @@ export const GET = async () =>
       },
     ],
   });
+
+export { GET, ImageMarkup };

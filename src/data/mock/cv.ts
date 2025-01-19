@@ -288,7 +288,7 @@ export const mockCV: TCV = {
     },
     {
       person: "Mattia Battiston",
-      id: "1",
+      id: "2",
       role: "Engineering Manager",
       company: "Pollen",
       link: {
@@ -299,7 +299,7 @@ export const mockCV: TCV = {
     },
     {
       person: "Rob Dorsett",
-      id: "1",
+      id: "3",
       role: "Technical Director",
       company: "Absurd",
       link: {

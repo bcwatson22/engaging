@@ -2,7 +2,7 @@ import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import ReactMarkdown from "react-markdown";
 
-import CVPage, { generateMetadata } from "@/app/cv/page";
+import CVPage, { generateMetadata, generateViewport } from "@/app/cv/page";
 import type { TCV } from "@/data/types/cv";
 import { mockCV } from "@/data/mock/cv";
 
@@ -17,6 +17,8 @@ import { Qualification } from "@/components/molecules/Qualification/Qualificatio
 import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
+
+import { themeColor } from "@/constants/metadata";
 
 vi.mock("react-markdown", () => ({
   default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
@@ -208,5 +210,20 @@ describe("CVPage", () => {
     const result = await generateMetadata();
 
     expect(result).toEqual(expect.objectContaining({ title, description }));
+  });
+
+  it("generates viewport", async () => {
+    const result = await generateViewport();
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        themeColor: expect.arrayContaining([
+          {
+            media: "(prefers-color-scheme: dark)",
+            color: themeColor,
+          },
+        ]),
+      })
+    );
   });
 });

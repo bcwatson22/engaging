@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>31/31</span>
+                <span class='fraction'>33/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>5/8</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>31/31</span>
+                <span class='fraction'>33/35</span>
             </div>
         
             
@@ -109,7 +109,15 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,6 +135,7 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -139,6 +148,7 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -147,6 +157,9 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -155,24 +168,28 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import promises from "fs/promises";
 import path from "path";
 &nbsp;
 import type { TCV } from "../types/cv";
 import type { THome } from "../types/home";
 &nbsp;
-type Pages = {
+type TPages = {
   CV: TCV;
   Home: THome;
 };
 &nbsp;
-export const saveData = async (
-  data: Pages[keyof Pages],
-  page: keyof Pages,
+const saveData = async (
+  data: TPages[keyof TPages],
+  page: keyof TPages,
   levels = process.env.NODE_ENV === <span class="branch-0 cbranch-no" title="branch not covered" >"development" ? <span class="branch-0 cbranch-no" title="branch not covered" >4 : 3</span></span>
 ) =&gt; {
   const { readFile, writeFile } = promises;
 &nbsp;
+  // const levelsEnv = process.env.NODE_ENV === "development" ? levels + 1 : levels;
   const pageLower = page.toLowerCase();
   const pathToFile = path.join(
     __dirname,
@@ -183,16 +200,20 @@ export const saveData = async (
   );
 &nbsp;
   try {
-    await readFile(pathToFile);
+    const file = await readFile(pathToFile);
 &nbsp;
-    await writeFile(
-      pathToFile,
-      `import type { T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
-        data
-      )}`
-    );
+    if (!!file) {
+      await writeFile(
+        pathToFile,
+        `import type { T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
+          data
+        )}`
+      );
 &nbsp;
-    console.log(`${page} page data has been saved!`);
+      console.log(`\n${page} page data has been saved!`);
+<span class="branch-0 cbranch-no" title="branch not covered" >    } else {</span>
+<span class="cstat-no" title="statement not covered" >      console.log(`Couldn't read ${page} page data file.`);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
     return true;
   } catch (err) {
@@ -201,6 +222,9 @@ export const saveData = async (
     return false;
   }
 };
+&nbsp;
+export { saveData };
+export type { TPages };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -208,7 +232,7 @@ export const saveData = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-14T10:32:30.385Z
+                at 2025-01-19T11:33:37.901Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
