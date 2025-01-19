@@ -36,7 +36,7 @@
     h2,
     p,
     li {
-      @apply opacity-0 translate-y-4 transition-all duration-150;
+      @apply opacity-0 translate-y-2 transition-all duration-300;
       @apply motion-reduce:opacity-100 motion-reduce:translate-y-0;
     }
 
