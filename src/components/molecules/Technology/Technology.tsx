@@ -11,6 +11,8 @@ type TTechnology = TID & {
 
 type Props = TTechnology;
 
+const split = "//";
+
 const TechnologySkeleton = () => (
   <div className="technology p-3">
     <Skeleton className="logo rounded-full w-full h-full aspect-square opacity-100" />
@@ -31,7 +33,15 @@ const Technology = ({ id, icon, name }: Props) => (
         />
       )}
     </figure>
-    <span className="name">{name}</span>
+    <span className="name">
+      {name.includes(split)
+        ? name.split(` ${split} `).map((chunk) => (
+            <span key={chunk.slice(0, 5)} className="chunk" data-split={split}>
+              {chunk}
+            </span>
+          ))
+        : name}
+    </span>
   </div>
 );
 

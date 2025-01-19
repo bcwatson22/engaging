@@ -45,7 +45,7 @@ describe("Technology", () => {
     });
   });
 
-  describe("role", () => {
+  describe("name", () => {
     it("renders a span", () => {
       setup();
 

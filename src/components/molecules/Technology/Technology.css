@@ -19,8 +19,16 @@
 
     .name {
       @apply relative opacity-0 text-sm px-1;
-      @apply md:px-2;
       @apply print:opacity-100;
+    }
+
+    .chunk {
+      @apply block;
+
+      &:not(:last-of-type):after {
+        content: attr(data-split);
+        @apply mx-1;
+      }
     }
 
     &:hover {
