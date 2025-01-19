@@ -1,13 +1,15 @@
 import { useId } from "react";
 import Image from "next/image";
 
-import { Link, type TLink } from "@/components/atoms/Link/Link";
+import type { TLink } from "@/components/atoms/Link/Link";
+import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
+
+import { Details } from "@/components/molecules/Details/Details";
 import {
   Technology,
   TechnologySkeleton,
   type TTechnology,
 } from "@/components/molecules/Technology/Technology";
-import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
 
 type TMugshot = TID & {
   image: TAsset;
@@ -55,15 +57,7 @@ const Mugshot = ({
         <div className="info">
           <h2 id={sectionId}>{heading}</h2>
           <p>{description}</p>
-          {links && (
-            <ul className="links">
-              {links.map((link) => (
-                <li key={link?.id}>
-                  <Link link={link} />
-                </li>
-              ))}
-            </ul>
-          )}
+          {links && <Details links={links} />}
         </div>
       </section>
       <ul className="technologies">

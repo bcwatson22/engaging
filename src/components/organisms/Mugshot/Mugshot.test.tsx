@@ -1,19 +1,22 @@
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 
 import { Mugshot, MugshotSkeleton, type MugshotProps } from "./Mugshot";
 
-import { Link } from "@/components/atoms/Link/Link";
+import { Details } from "@/components/molecules/Details/Details";
 import { Technology } from "@/components/molecules/Technology/Technology";
 
 import { mockHome } from "@/data/mock/home";
 
-vi.mock(import("@/components/atoms/Link/Link"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Link: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/molecules/Details/Details"),
+  async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Details: vi.fn(),
+    };
+  }
+);
 
 vi.mock(
   import("@/components/molecules/Technology/Technology"),
@@ -79,15 +82,17 @@ describe("Mugshot", () => {
     });
 
     describe("links", () => {
-      it("renders a listitem and Link component for each item", () => {
+      it("renders a Details component", () => {
         setup();
 
-        const numberOfLinks = links!.length;
+        expect(Details).toHaveBeenNthCalledWith(1, { links }, {});
 
-        expect(
-          within(screen.getByRole("region")).getAllByRole("listitem")
-        ).toHaveLength(numberOfLinks);
-        expect(Link).toHaveBeenCalledTimes(numberOfLinks);
+        // const numberOfLinks = links!.length;
+
+        // expect(
+        //   within(screen.getByRole("region")).getAllByRole("listitem")
+        // ).toHaveLength(numberOfLinks);
+        // expect(Link).toHaveBeenCalledTimes(numberOfLinks);
       });
     });
   });

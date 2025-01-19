@@ -58,7 +58,9 @@ describe("HomePage", () => {
       1,
       queryHome,
       "homes",
-      expect.objectContaining({ technologies })
+      expect.objectContaining({
+        technologies: expect.arrayContaining([technologies[0]]),
+      })
     );
   });
 

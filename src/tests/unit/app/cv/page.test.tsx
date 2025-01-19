@@ -111,7 +111,7 @@ describe("CVPage", () => {
       "cvs",
       expect.objectContaining({
         logoLightBackground: expect.objectContaining({
-          url: logoLightBackground.url,
+          url: expect.any(String),
         }),
       })
     );

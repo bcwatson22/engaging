@@ -105,7 +105,7 @@
   }
 
   .info {
-    @apply relative p-4 opacity-0 text-center w-[11rem];
+    @apply relative p-4 opacity-0 text-center flex flex-col items-center max-w-[22rem];
     @apply print:opacity-100 print:text-start;
   }
 
