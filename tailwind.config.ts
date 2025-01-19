@@ -47,6 +47,9 @@ const config: Config = {
         "1/6": "16.67%",
         "5/6": "83.33%",
       },
+      padding: {
+        0.5: "0.125rem",
+      },
       textIndent: {
         full: "-99999rem",
       },
