@@ -23,7 +23,6 @@ const config: Config = {
         "theme-2-b": "#f9a828",
         "theme-2-c": "#07617d",
         "theme-2-d": "#2e383f",
-        // "brand-yellow": "#edce2d",
         "brand-yellow": "#f9a828",
         "brand-green": "#458c25",
         "brand-blue": "#245385",

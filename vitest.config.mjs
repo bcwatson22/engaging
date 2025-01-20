@@ -9,8 +9,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
     coverage: {
-      reportsDirectory: "./src/tests/unit/coverage",
-      // include: ["./src/**/*.{js,jsx,ts,tsx}"],
+      reportsDirectory: "./src/tests/coverage",
       exclude: [
         "./.next/**/*.*",
         "./*.*",

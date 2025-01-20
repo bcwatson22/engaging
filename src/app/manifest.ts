@@ -19,7 +19,7 @@ const manifest = (): MetadataRoute.Manifest => ({
     const sizes = `${size}x${size}`;
 
     return {
-      src: `/assets/web-app-manifest-${sizes}.png`,
+      src: `/web-app-manifest-${sizes}.png`,
       sizes,
       type: "image/png",
       purpose: "maskable",
