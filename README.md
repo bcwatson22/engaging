@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Engaging Engineering
 
-## Getting Started
+This is a project created with Next, Node, GraphQL, Vitest, TypeScript, Tailwind and Framer - powered by Hygraph, deployed and hosted with Vercel. The Home page showcases technologies and expertise offered by Engaging Engineering, and the CV page is an interactive overview of Billy Watson's vast range of skills and experience.
 
-First, run the development server:
+## Next
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+It uses Next's app router, making use of ISR and dynamic favicons (via code), manifest, robots and sitemap.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## GraphQL
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+GraphQL is used to query and fetch data from Hygraph's headless endpoint via URQL - ensuring a rapid, typed and sensibly-cached approach to enhance DX.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Node
 
-## Learn More
+Several custom Node functions are used to save local versions of GraphQL query responses to ensure up-to-date backups.
 
-To learn more about Next.js, take a look at the following resources:
+## Vitest
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Over 96% code coverage achieved with blazing fast test runner with enhanced DX.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## TypeScript
 
-## Deploy on Vercel
+Of course, everything is strongly typed!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tailwind
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Flexibility and speed of development made the use of Tailwind a no-brainer. The clock animation on the Home page was fiddly but worth it!
+
+## Framer
+
+Subtle interactions bring the CV page to life, both via scroll-anchored line animations and scroll-triggered section animations.
+
+## Hygraph
+
+Hygraph was chosen as the Headless CMS. Their approach to content modelling, custom components and field validation makes for a really pleasing UX.
+
+## Vercel
+
+Using Vercel to deploy and host any Next project is an absolute dream, the use of webhooks into Hygraph publishes make it completely seamless to ensure up-to-date content and builds.

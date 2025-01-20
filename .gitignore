@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/src/tests/unit/coverage
 
 # next.js
 /.next/
