@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { THome } from "@/data/types/home";
 
 type Props = THome;

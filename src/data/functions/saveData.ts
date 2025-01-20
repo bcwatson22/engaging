@@ -16,7 +16,6 @@ const saveData = async (
 ) => {
   const { readFile, writeFile } = promises;
 
-  // const levelsEnv = process.env.NODE_ENV === "development" ? levels + 1 : levels;
   const pageLower = page.toLowerCase();
   const pathToFile = path.join(
     __dirname,

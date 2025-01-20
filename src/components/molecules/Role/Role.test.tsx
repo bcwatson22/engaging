@@ -82,10 +82,10 @@ describe("RoleSkeleton", () => {
   it("renders a skeleton state", () => {
     render(<RoleSkeleton />);
 
-    const numberOfPulses = 9;
+    const numOfPulses = 9;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numberOfPulses
+      numOfPulses
     );
   });
 });

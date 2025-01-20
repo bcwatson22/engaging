@@ -101,10 +101,10 @@ describe("LinkSkeleton", () => {
   it("renders a skeleton state", () => {
     render(<LinkSkeleton />);
 
-    const numberOfPulses = 2;
+    const numOfPulses = 2;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numberOfPulses
+      numOfPulses
     );
   });
 });

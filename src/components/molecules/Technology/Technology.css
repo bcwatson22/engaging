@@ -24,11 +24,6 @@
 
     .chunk {
       @apply block;
-
-      &:not(:last-of-type):after {
-        content: attr(data-split);
-        @apply mx-1;
-      }
     }
 
     &:hover {

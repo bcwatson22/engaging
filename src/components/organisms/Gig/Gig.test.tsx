@@ -70,10 +70,10 @@ describe("GigSkeleton", () => {
   it("renders a skeleton state", () => {
     render(<GigSkeleton />);
 
-    const numberOfPulses = 12;
+    const numOfPulses = 12;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numberOfPulses
+      numOfPulses
     );
   });
 });

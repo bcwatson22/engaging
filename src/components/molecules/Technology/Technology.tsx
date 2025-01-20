@@ -19,31 +19,37 @@ const TechnologySkeleton = () => (
   </div>
 );
 
-const Technology = ({ id, icon, name }: Props) => (
-  <div key={id} className="technology">
-    <figure className="logo">
-      {icon?.url && (
-        <Image
-          className={name === "Next" ? "white" : ""}
-          src={icon.url}
-          alt={`${name} logo`}
-          width={256}
-          height={256}
-          priority
-        />
-      )}
-    </figure>
-    <span className="name">
-      {name.includes(split)
-        ? name.split(` ${split} `).map((chunk) => (
-            <span key={chunk.slice(0, 5)} className="chunk" data-split={split}>
-              {chunk}
-            </span>
-          ))
-        : name}
-    </span>
-  </div>
-);
+const Technology = ({ id, icon, name }: Props) => {
+  const splitNames = name.split(` ${split} `);
+  const numOfSplitNames = splitNames.length;
+
+  return (
+    <div key={id} className="technology">
+      <figure className="logo">
+        {icon?.url && (
+          <Image
+            className={name === "Next" ? "white" : ""}
+            src={icon.url}
+            alt={`${name} logo`}
+            width={256}
+            height={256}
+            priority
+          />
+        )}
+      </figure>
+      <span className="name">
+        {numOfSplitNames > 0
+          ? splitNames.map((chunk, index) => (
+              <span key={chunk.slice(0, 10)} className="chunk">
+                {chunk}
+                {index !== numOfSplitNames - 1 ? ` ${split}` : ""}
+              </span>
+            ))
+          : name}
+      </span>
+    </div>
+  );
+};
 
 export { Technology, TechnologySkeleton };
 export type { TTechnology, Props as TechnologyProps };

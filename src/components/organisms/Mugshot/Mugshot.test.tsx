@@ -86,13 +86,6 @@ describe("Mugshot", () => {
         setup();
 
         expect(Details).toHaveBeenNthCalledWith(1, { links }, {});
-
-        // const numberOfLinks = links!.length;
-
-        // expect(
-        //   within(screen.getByRole("region")).getAllByRole("listitem")
-        // ).toHaveLength(numberOfLinks);
-        // expect(Link).toHaveBeenCalledTimes(numberOfLinks);
       });
     });
   });
@@ -110,10 +103,10 @@ describe("MugshotSkeleton", () => {
   it("renders a skeleton state", () => {
     render(<MugshotSkeleton />);
 
-    const numberOfPulses = 13;
+    const numOfPulses = 13;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numberOfPulses
+      numOfPulses
     );
   });
 });
