@@ -12,11 +12,11 @@ GraphQL is used to query and fetch data from Hygraph's headless endpoint via URQ
 
 ## <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h843reblgj07l7ngxmszpx" alt="Node icon" width="32" style="margin: 0 8px -8px 0" /> Node
 
-Several custom Node functions are used to save local versions of GraphQL query responses to ensure up-to-date backups.
+Several custom Node functions are used to save and retrieve local versions of GraphQL query responses to ensure up-to-date backups.
 
 ## <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dj0eki07l1ll2mj10q" alt="Node icon" width="32" style="margin: 0 8px -8px 0" /> Vitest
 
-Over 96% code coverage achieved with blazing fast test runner with enhanced DX.
+Over 96% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
 
 ## <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h857ombalp07mnsaxn1xzp" alt="TypeScript icon" width="32" style="margin: 0 8px -8px 0" /> TypeScript
 
@@ -28,7 +28,7 @@ Flexibility and speed of development made the use of Tailwind a no-brainer. The 
 
 ## <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dz0f3e07mk7qg2n4z3" alt="Motion icon" width="32" style="margin: 0 8px -8px 0" /> Motion
 
-Subtle interactions bring the CV page to life, both via scroll-anchored line animations and scroll-triggered section animations.
+Subtle motion and interactions bring the CV page to life, both via scroll-anchored line animations and scroll-triggered section transitions.
 
 ## <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dx0e5s07l33tu0wk61" alt="Hygraph icon" width="32" style="margin: 0 8px -8px 0" /> Hygraph
 
