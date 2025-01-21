@@ -6,18 +6,25 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Next
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h83ncpbi5h07mpb71mbnfy" alt="Next icon" width="32" />
-
-It uses Next's app router, making use of modern features like Suspense streaming, server components and dynamic favicons (via code), manifest, robots and sitemap.
+<table>
+  <tr>
+    <td width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h83ncpbi5h07mpb71mbnfy" alt="Next icon" width="32" />
+    </td>
+    <td>
+      It uses Next's app router, making use of modern features like Suspense streaming, server components and dynamic favicons (via code), manifest, robots and sitemap.
+    </td>
+  </tr>
+</table>
 
 ## GraphQL
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h862c7baty07mnczjsadoq" alt="GraphQL icon" width="32" />
     </td>
-    <td valign="middle">
+    <td>
       GraphQL is used to query and fetch data from Hygraph's headless endpoint via URQL - ensuring a rapid, typed and sensibly-cached approach to enhance DX.
     </td>
   </tr>
@@ -40,10 +47,10 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dj0eki07l1ll2mj10q" alt="Node icon" width="32" />
     </td>
-    <td valign="middle">
+    <td>
       Over 96% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
     </td>
   </tr>
@@ -53,11 +60,11 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h857ombalp07mnsaxn1xzp" alt="TypeScript icon" width="32" />
     </td>
-    <td valign="middle">
-      Of course, everything is strongly typed!
+    <td>
+      Of course, everything is strongly typed! To do otherwise in this day and age should be unthinkable.
     </td>
   </tr>
 </table>
@@ -66,10 +73,10 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h87lylbm0a07l7j1a78y0z" alt="Tailwind icon" width="32" />
     </td>
-    <td valign="middle">
+    <td>
       Flexibility and speed of development made the use of Tailwind a no-brainer. The clock animation on the Home page was fun to build!
     </td>
   </tr>
@@ -79,10 +86,10 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dz0f3e07mk7qg2n4z3" alt="Motion icon" width="32" />
     </td>
-    <td valign="middle">
+    <td>
       Subtle motion and interactions bring the CV page to life, both via scroll-anchored line animations and scroll-triggered section transitions.
     </td>
   </tr>
@@ -92,10 +99,10 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dx0e5s07l33tu0wk61" alt="Hygraph icon" width="32" />
     </td>
-    <td valign="middle">
+    <td>
       Hygraph was chosen as the Headless CMS. Their approach to content modelling, custom components and field validation makes for a really pleasing UX.
     </td>
   </tr>
@@ -105,10 +112,10 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="58">
+    <td width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3e50e5w07l3y6quuosf" alt="Vercel icon" width="32" />
     </td>
-    <td valign="middle">
+    <td>
       Using Vercel to deploy and host any Next project is a dream, the use of webhooks into Hygraph publishes make it completely seamless to ensure up-to-date content and builds.
     </td>
   </tr>
