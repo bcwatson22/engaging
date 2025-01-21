@@ -4,7 +4,7 @@ This is a project created with [Next](https://nextjs.org/), [Node](https://nodej
 
 To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pnpm.io/) package manager installed you can do this with `npm i -g pnpm`) and then `pnpm dev` to spin up the dev server.
 
-## <table><tr><td valign="middle"><img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h83ncpbi5h07mpb71mbnfy" alt="Next icon" width="32" style="margin: 0 8px -8px 0" /></td><td valign="middle">Next</td></tr></table>
+## <table><tr><td valign="middle" border="none><img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h83ncpbi5h07mpb71mbnfy" alt="Next icon" width="32" style="margin: 0 8px -8px 0" /></td><td valign="middle">Next</td></tr></table>
 
 It uses Next's app router, making use of modern features like Suspense streaming, server components and dynamic favicons (via code), manifest, robots and sitemap.
 
