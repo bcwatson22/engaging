@@ -14,7 +14,7 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle" width="32">
+    <td valign="middle" width="58">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h862c7baty07mnczjsadoq" alt="GraphQL icon" width="32" />
     </td>
     <td valign="middle">
@@ -25,42 +25,91 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 ## Node
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h843reblgj07l7ngxmszpx" alt="Node icon" width="32" />
-
-Several custom Node functions are used to save and retrieve local versions of GraphQL query responses to ensure up-to-date backups.
+<table>
+  <tr>
+    <td width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h843reblgj07l7ngxmszpx" alt="Node icon" width="32" />
+    </td>
+    <td>
+      Several custom Node functions are used to save and retrieve local versions of GraphQL query responses to ensure up-to-date backups.
+    </td>
+  </tr>
+</table>
 
 ## Vitest
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dj0eki07l1ll2mj10q" alt="Node icon" width="32" />
-
-Over 96% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
+<table>
+  <tr>
+    <td valign="middle" width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dj0eki07l1ll2mj10q" alt="Node icon" width="32" />
+    </td>
+    <td valign="middle">
+      Over 96% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
+    </td>
+  </tr>
+</table>
 
 ## TypeScript
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h857ombalp07mnsaxn1xzp" alt="TypeScript icon" width="32" />
-
-Of course, everything is strongly typed!
+<table>
+  <tr>
+    <td valign="middle" width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h857ombalp07mnsaxn1xzp" alt="TypeScript icon" width="32" />
+    </td>
+    <td valign="middle">
+      Of course, everything is strongly typed!
+    </td>
+  </tr>
+</table>
 
 ## Tailwind
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h87lylbm0a07l7j1a78y0z" alt="Tailwind icon" width="32" />
-
-Flexibility and speed of development made the use of Tailwind a no-brainer. The clock animation on the Home page was fiddly but worth it!
+<table>
+  <tr>
+    <td valign="middle" width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h87lylbm0a07l7j1a78y0z" alt="Tailwind icon" width="32" />
+    </td>
+    <td valign="middle">
+      Flexibility and speed of development made the use of Tailwind a no-brainer. The clock animation on the Home page was fun to build!
+    </td>
+  </tr>
+</table>
 
 ## Motion
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dz0f3e07mk7qg2n4z3" alt="Motion icon" width="32" />
-
-Subtle motion and interactions bring the CV page to life, both via scroll-anchored line animations and scroll-triggered section transitions.
+<table>
+  <tr>
+    <td valign="middle" width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dz0f3e07mk7qg2n4z3" alt="Motion icon" width="32" />
+    </td>
+    <td valign="middle">
+      Subtle motion and interactions bring the CV page to life, both via scroll-anchored line animations and scroll-triggered section transitions.
+    </td>
+  </tr>
+</table>
 
 ## Hygraph
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dx0e5s07l33tu0wk61" alt="Hygraph icon" width="32" />
-
-Hygraph was chosen as the Headless CMS. Their approach to content modelling, custom components and field validation makes for a really pleasing UX.
+<table>
+  <tr>
+    <td valign="middle" width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dx0e5s07l33tu0wk61" alt="Hygraph icon" width="32" />
+    </td>
+    <td valign="middle">
+      Hygraph was chosen as the Headless CMS. Their approach to content modelling, custom components and field validation makes for a really pleasing UX.
+    </td>
+  </tr>
+</table>
 
 ## Vercel
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3e50e5w07l3y6quuosf" alt="Vercel icon" width="32" />
-
-Using Vercel to deploy and host any Next project is a dream, the use of webhooks into Hygraph publishes make it completely seamless to ensure up-to-date content and builds.
+<table>
+  <tr>
+    <td valign="middle" width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3e50e5w07l3y6quuosf" alt="Vercel icon" width="32" />
+    </td>
+    <td valign="middle">
+      Using Vercel to deploy and host any Next project is a dream, the use of webhooks into Hygraph publishes make it completely seamless to ensure up-to-date content and builds.
+    </td>
+  </tr>
+</table>
