@@ -7,13 +7,16 @@ import { Dates } from "@/components/atoms/Dates/Dates";
 
 import { mockCV } from "@/data/mock/cv";
 
-vi.mock(import("@/components/atoms/Bullet/Bullet"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Bullet: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/atoms/Bullet/Bullet"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Bullet: vi.fn(),
+    };
+  }
+);
 
 vi.mock("@/components/atoms/Dates/Dates", () => ({
   Dates: vi.fn(),

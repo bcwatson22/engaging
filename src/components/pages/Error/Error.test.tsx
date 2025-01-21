@@ -9,13 +9,16 @@ import { TechnologySkeleton } from "@/components/molecules/Technology/Technology
 
 import { mockHome } from "@/data/mock/home";
 
-vi.mock(import("@/components/atoms/Link/Link"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Inner: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/atoms/Link/Link"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Inner: vi.fn(),
+    };
+  }
+);
 
 vi.mock("@/components/atoms/Particles/Particles", () => ({
   Particles: vi.fn(),
@@ -23,7 +26,7 @@ vi.mock("@/components/atoms/Particles/Particles", () => ({
 
 vi.mock(
   import("@/components/molecules/Technology/Technology"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,

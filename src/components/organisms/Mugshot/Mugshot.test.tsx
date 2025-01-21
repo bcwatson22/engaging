@@ -9,7 +9,7 @@ import { mockHome } from "@/data/mock/home";
 
 vi.mock(
   import("@/components/molecules/Details/Details"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -20,7 +20,7 @@ vi.mock(
 
 vi.mock(
   import("@/components/molecules/Technology/Technology"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,

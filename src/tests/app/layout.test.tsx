@@ -4,15 +4,18 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Layout, { type LayoutProps } from "@/app/layout";
 
-vi.mock(import("@vercel/speed-insights/next"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    SpeedInsights: vi.fn(),
-  };
-});
+vi.mock(
+  import("@vercel/speed-insights/next"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      SpeedInsights: vi.fn(),
+    };
+  }
+);
 
-vi.mock(import("next/font/google"), async (importOriginal) => {
+vi.mock(import("next/font/google"), async (importOriginal: Function) => {
   const actual = await importOriginal();
   return {
     ...actual,

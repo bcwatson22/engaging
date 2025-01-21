@@ -9,7 +9,7 @@ import { Section } from "@/components/organisms/Section/Section";
 
 vi.mock(
   import("@/components/molecules/Details/Details"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -20,7 +20,7 @@ vi.mock(
 
 vi.mock(
   import("@/components/molecules/Header/Header"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -29,13 +29,16 @@ vi.mock(
   }
 );
 
-vi.mock(import("@/components/organisms/Gig/Gig"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    GigSkeleton: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/organisms/Gig/Gig"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      GigSkeleton: vi.fn(),
+    };
+  }
+);
 
 vi.mock("@/components/organisms/Section/Section", () => ({
   Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),

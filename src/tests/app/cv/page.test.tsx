@@ -34,7 +34,7 @@ vi.mock("@/data/functions/saveData", () => ({
 
 vi.mock(
   import("@/components/molecules/Header/Header"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -45,7 +45,7 @@ vi.mock(
 
 vi.mock(
   import("@/components/molecules/Details/Details"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -62,13 +62,16 @@ vi.mock("@/components/molecules/Reference/Reference", () => ({
   Reference: vi.fn(),
 }));
 
-vi.mock(import("@/components/organisms/Gig/Gig"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Gig: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/organisms/Gig/Gig"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Gig: vi.fn(),
+    };
+  }
+);
 
 vi.mock("@/components/organisms/Section/Section", () => ({
   Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),
@@ -92,7 +95,6 @@ const {
 const setup = async (mockedResolvedValue: TCV | {} = mockCV) => {
   (getData as Mock).mockResolvedValue(mockedResolvedValue);
 
-  // @ts-expect-error Server Component
   return render(await (async () => await CVPage())());
 };
 

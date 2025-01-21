@@ -9,7 +9,7 @@ import { mockCV } from "@/data/mock/cv";
 
 vi.mock(
   import("@/components/molecules/Company/Company"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -18,13 +18,16 @@ vi.mock(
   }
 );
 
-vi.mock(import("@/components/molecules/Role/Role"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Role: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/molecules/Role/Role"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Role: vi.fn(),
+    };
+  }
+);
 
 const { company, logo, city, roles } = mockCV.gigs[0];
 

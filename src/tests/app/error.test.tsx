@@ -4,13 +4,16 @@ import ErrorPage, { type ErrorPageProps } from "@/app/error";
 
 import { Error } from "@/components/pages/Error/Error";
 
-vi.mock(import("@/components/pages/Error/Error"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Error: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/pages/Error/Error"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Error: vi.fn(),
+    };
+  }
+);
 
 const mockError: Error = {
   name: "mockName",

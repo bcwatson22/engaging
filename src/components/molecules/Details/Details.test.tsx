@@ -11,13 +11,16 @@ vi.mock("@/components/atoms/Address/Address", () => ({
   Address: vi.fn(),
 }));
 
-vi.mock(import("@/components/atoms/Link/Link"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Link: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/atoms/Link/Link"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Link: vi.fn(),
+    };
+  }
+);
 
 const { address, contactLinks: links } = mockCV;
 

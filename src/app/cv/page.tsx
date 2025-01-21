@@ -1,4 +1,5 @@
-import type { NextPage, Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";
@@ -74,7 +75,7 @@ const generateViewport = async (): Promise<Viewport> => ({
   ],
 });
 
-const CVPage: NextPage = async () => {
+const CVPage = async (): Promise<ReactNode> => {
   const data = await getData<TCV>(queryCV, pageNamePlural, cacheCV);
 
   await saveData(data, pageName);

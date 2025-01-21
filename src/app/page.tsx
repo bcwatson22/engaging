@@ -1,4 +1,5 @@
-import type { NextPage, Metadata } from "next";
+import type { Metadata } from "next";
+import { type ReactNode, Suspense } from "react";
 
 import { queryHome } from "@/queries/home";
 
@@ -12,6 +13,8 @@ import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 import { revalidate } from "@/constants/common";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
+
+import LoadingPage from "./loading";
 
 const pageName: keyof TPages = "CV";
 const pageNameLower = pageName.toLowerCase();
@@ -53,19 +56,28 @@ const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
-const HomePage: NextPage = async () => {
+const HomePage = async (): Promise<ReactNode> => {
   const data = await getData<THome>(queryHome, "homes", cacheHome);
+
+  // console.log({ data });
 
   await saveData(data, "Home", 3);
 
   const { title, mugshot, technologies } = data;
 
   return (
-    <main className="home main">
-      <h1 className="sr-only">{title}</h1>
-      <Mugshot mugshot={mugshot} technologies={technologies} />
-      <Particles />
-    </main>
+    <>
+      {/* <div className={`placeholder${!!data ? " loaded" : ""}`}>
+        <Suspense>
+          <LoadingPage />
+        </Suspense>
+      </div> */}
+      <main className="home main loaded">
+        <h1 className="sr-only">{title}</h1>
+        <Mugshot mugshot={mugshot} technologies={technologies} />
+        <Particles />
+      </main>
+    </>
   );
 };
 

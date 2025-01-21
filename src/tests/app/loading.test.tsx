@@ -6,7 +6,7 @@ import { MugshotSkeleton } from "@/components/organisms/Mugshot/Mugshot";
 
 vi.mock(
   import("@/components/organisms/Mugshot/Mugshot"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,

@@ -27,7 +27,7 @@ vi.mock("@/components/atoms/Particles/Particles", () => ({
 
 vi.mock(
   import("@/components/organisms/Mugshot/Mugshot"),
-  async (importOriginal) => {
+  async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
@@ -41,7 +41,6 @@ const { title, description, mugshot, technologies } = mockHome;
 const setup = async (mockedResolvedValue: THome | {} = mockHome) => {
   (getData as Mock).mockResolvedValue(mockedResolvedValue);
 
-  // @ts-expect-error Server Component
   return render(await (async () => await HomePage())());
 };
 

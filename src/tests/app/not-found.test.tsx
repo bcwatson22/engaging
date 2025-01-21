@@ -5,21 +5,27 @@ import NotFoundPage from "@/app/not-found";
 import { Link } from "@/components/atoms/Link/Link";
 import { Error } from "@/components/pages/Error/Error";
 
-vi.mock(import("@/components/atoms/Link/Link"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Link: vi.fn(),
-  };
-});
+vi.mock(
+  import("@/components/atoms/Link/Link"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Link: vi.fn(),
+    };
+  }
+);
 
-vi.mock(import("@/components/pages/Error/Error"), async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Error: vi.fn().mockImplementation(({ children }) => <>{children}</>),
-  };
-});
+vi.mock(
+  import("@/components/pages/Error/Error"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      Error: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+    };
+  }
+);
 
 const setup = () => render(<NotFoundPage />);
 
