@@ -14,7 +14,7 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 <table>
   <tr>
-    <td valign="middle">
+    <td valign="middle" width="32">
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h862c7baty07mnczjsadoq" alt="GraphQL icon" width="32" />
     </td>
     <td valign="middle">
