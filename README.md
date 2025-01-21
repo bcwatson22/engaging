@@ -12,9 +12,16 @@ It uses Next's app router, making use of modern features like Suspense streaming
 
 ## GraphQL
 
-<img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h862c7baty07mnczjsadoq" alt="GraphQL icon" width="32" />
-
-GraphQL is used to query and fetch data from Hygraph's headless endpoint via URQL - ensuring a rapid, typed and sensibly-cached approach to enhance DX.
+<table>
+  <tr>
+    <td valign="middle">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h862c7baty07mnczjsadoq" alt="GraphQL icon" width="32" />
+    </td>
+    <td valign="middle">
+      GraphQL is used to query and fetch data from Hygraph's headless endpoint via URQL - ensuring a rapid, typed and sensibly-cached approach to enhance DX.
+    </td>
+  </tr>
+</table>
 
 ## Node
 
