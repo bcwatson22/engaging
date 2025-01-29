@@ -77,7 +77,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h87lylbm0a07l7j1a78y0z" alt="Tailwind icon" width="32" />
     </td>
     <td>
-      Flexibility and speed of development made the use of Tailwind a no-brainer. The clock animation on the Home page was fun to build!
+      Flexibility and speed of development made styling with Tailwind a no-brainer. The clock animation on the Home page was particularly fun to build!
     </td>
   </tr>
 </table>
