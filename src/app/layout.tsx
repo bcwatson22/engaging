@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-
+import { Analytics } from "@vercel/analytics/next";
 import type { CssVariable } from "next/dist/compiled/@next/font";
 import { Nunito } from "next/font/google";
 
@@ -20,6 +20,7 @@ const nunito = Nunito({
 const Layout = ({ children }: Props) => (
   <html lang="en">
     <body className={nunito.className}>{children}</body>
+    <Analytics />
   </html>
 );
 

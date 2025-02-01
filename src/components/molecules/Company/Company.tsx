@@ -31,6 +31,8 @@ const CompanySkeleton = () => (
   </div>
 );
 
+const logoSize = 80;
+
 const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const triggerProps = useScrollTrigger({ ref, delay });
@@ -42,8 +44,8 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
           <Image
             src={logo.url}
             alt={`${company} logo`}
-            width={80}
-            height={80}
+            width={logoSize}
+            height={logoSize}
             priority
           />
         </figure>
