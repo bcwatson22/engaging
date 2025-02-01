@@ -5,6 +5,7 @@ import { OgImage } from "@/components/organisms/OgImage/OgImage";
 import { cacheHome } from "@/data/cache/home";
 
 const fontFamily = "Nunito";
+const errorMessage = "Failed to load font data";
 
 const loadGoogleFont = async (font = fontFamily, text = cacheHome.title) => {
   const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(
@@ -21,7 +22,7 @@ const loadGoogleFont = async (font = fontFamily, text = cacheHome.title) => {
     if (response.status == 200) return await response.arrayBuffer();
   }
 
-  throw new Error("Failed to load font data");
+  throw new Error(errorMessage);
 };
 
 const GET = async () =>
@@ -37,4 +38,4 @@ const GET = async () =>
     ],
   });
 
-export { GET };
+export { GET, loadGoogleFont, errorMessage };

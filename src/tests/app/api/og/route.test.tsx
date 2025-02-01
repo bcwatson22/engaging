@@ -1,11 +1,21 @@
-import { GET } from "@/app/api/og/route";
+import { GET, loadGoogleFont, errorMessage } from "@/app/api/og/route";
 
-describe("dynamic opengraph image", () => {
+describe("dynamic Open Graph image", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("returns ImageResponse", async () => {
-    const result = await GET();
+  it("returns ImageResponse if the fetch was successful", async () => {
+    expect(await GET()).not.toBe(null);
+  });
 
-    expect(result).not.toBe(null);
+  it("throws an error if something went wrong with the fetch", async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        text: async () => "string not containing font data",
+      } as Response)
+    );
+
+    await expect(async () => await loadGoogleFont()).rejects.toThrowError(
+      errorMessage
+    );
   });
 });

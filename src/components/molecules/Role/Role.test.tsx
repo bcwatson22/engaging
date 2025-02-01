@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Role, RoleSkeleton, type RoleProps } from "./Role";
+import { Role, RoleSkeleton, type RoleProps, getLinkClassNames } from "./Role";
 
 import { Bullet } from "@/components/atoms/Bullet/Bullet";
 import { Dates } from "@/components/atoms/Dates/Dates";
@@ -90,5 +90,25 @@ describe("RoleSkeleton", () => {
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
       numOfPulses
     );
+  });
+});
+
+describe("getLinkClassNames", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("returns empty string if hasMultiple is false", () => {
+    expect(getLinkClassNames(0, 5, false)).toBe("");
+  });
+
+  it("returns 'linker' if index is 0'", () => {
+    expect(getLinkClassNames(0, 10, true)).toBe(" linker");
+  });
+
+  it("returns both 'linker' and 'linkee' if index is less than total'", () => {
+    expect(getLinkClassNames(5, 10, true)).toBe(" linker linkee");
+  });
+
+  it("returns both 'linkee' if index is the same as total'", () => {
+    expect(getLinkClassNames(10, 10, true)).toBe(" linkee");
   });
 });

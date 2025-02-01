@@ -78,5 +78,5 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
   );
 };
 
-export { Role, RoleSkeleton };
+export { Role, RoleSkeleton, getLinkClassNames };
 export type { TRole, Props as RoleProps };
