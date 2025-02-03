@@ -1,4 +1,4 @@
-import { TypedDocumentNode } from "@urql/core";
+import type { TypedDocumentNode } from "@urql/core";
 
 import { client } from "@/queries/client";
 

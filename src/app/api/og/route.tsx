@@ -3,27 +3,9 @@ import { ImageResponse } from "next/og";
 import { OgImage } from "@/components/organisms/OgImage/OgImage";
 
 import { cacheHome } from "@/data/cache/home";
+import { loadGoogleFont } from "@/utils/loadGoogleFont";
 
 const fontFamily = "Nunito";
-const errorMessage = "Failed to load font data";
-
-const loadGoogleFont = async (font = fontFamily, text = cacheHome.title) => {
-  const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(
-    text
-  )}`;
-  const css = await (await fetch(url)).text();
-  const resource = css.match(
-    /src: url\((.+)\) format\('(opentype|truetype)'\)/
-  );
-
-  if (resource) {
-    const response = await fetch(resource[1]);
-
-    if (response.status == 200) return await response.arrayBuffer();
-  }
-
-  throw new Error(errorMessage);
-};
 
 const GET = async () =>
   new ImageResponse(<OgImage {...cacheHome} />, {
@@ -38,4 +20,4 @@ const GET = async () =>
     ],
   });
 
-export { GET, loadGoogleFont, errorMessage };
+export { GET };

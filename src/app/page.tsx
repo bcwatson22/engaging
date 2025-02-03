@@ -63,7 +63,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <main className="home main loaded">
+      <main className="home main">
         <h1 className="sr-only">{title}</h1>
         <Mugshot mugshot={mugshot} technologies={technologies} />
         <Suspense>

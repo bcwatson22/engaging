@@ -1,6 +1,6 @@
 @layer components {
   .home {
-    @apply flex flex-col justify-center p-6 bg-black text-white;
+    @apply flex flex-col justify-center p-6 bg-black text-white animate-fade-in;
     @apply md:items-center;
     @apply print:justify-start print:bg-white print:text-black;
 
@@ -11,14 +11,6 @@
 
     &.loaded {
       @apply animate-fade-in;
-    }
-  }
-
-  .placeholder {
-    @apply absolute top-0 left-0 w-screen	h-screen;
-
-    &.loaded {
-      @apply animate-fade-out opacity-0;
     }
   }
 }
