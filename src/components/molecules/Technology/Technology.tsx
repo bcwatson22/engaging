@@ -40,6 +40,7 @@ const Technology = ({ id, icon, name }: Props) => {
               (min-width: 480px) calc(25vw - 2rem), 
               calc(33vw - 3rem)
             `}
+            quality={100}
             priority
           />
         )}

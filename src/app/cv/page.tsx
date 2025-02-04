@@ -112,9 +112,9 @@ const CVPage = async () => {
                 <Gig key={gig.id} {...gig} delay={index === 0 ? 0.2 : 0} />
               ))}
             </Section>
-            {/* <Section heading="Skills">
+            <Section heading="Skills">
               <ReactMarkdown>{skills}</ReactMarkdown>
-            </Section> */}
+            </Section>
             <Section heading="Qualifications">
               {qualifications?.map((qualification) => (
                 <Qualification key={qualification.id} {...qualification} />
