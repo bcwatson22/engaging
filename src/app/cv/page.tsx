@@ -112,7 +112,7 @@ const CVPage = async () => {
                 <Gig key={gig.id} {...gig} delay={index === 0 ? 0.2 : 0} />
               ))}
             </Section>
-            <Section heading="Skills">
+            {/* <Section heading="Skills">
               <ReactMarkdown>{skills}</ReactMarkdown>
             </Section>
             <Section heading="Qualifications">
@@ -127,7 +127,7 @@ const CVPage = async () => {
               {references?.map((reference) => (
                 <Reference key={reference.id} {...reference} />
               ))}
-            </Section>
+            </Section> */}
           </div>
         </div>
       </div>
