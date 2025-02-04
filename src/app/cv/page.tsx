@@ -114,7 +114,7 @@ const CVPage = async () => {
             </Section>
             {/* <Section heading="Skills">
               <ReactMarkdown>{skills}</ReactMarkdown>
-            </Section>
+            </Section> */}
             <Section heading="Qualifications">
               {qualifications?.map((qualification) => (
                 <Qualification key={qualification.id} {...qualification} />
@@ -127,7 +127,7 @@ const CVPage = async () => {
               {references?.map((reference) => (
                 <Reference key={reference.id} {...reference} />
               ))}
-            </Section> */}
+            </Section>
           </div>
         </div>
       </div>

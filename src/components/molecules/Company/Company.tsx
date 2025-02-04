@@ -50,6 +50,7 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
               (min-width: 768px) ${logoSize}px,
               60px
             `}
+            quality={100}
             loading="lazy"
           />
         </figure>
