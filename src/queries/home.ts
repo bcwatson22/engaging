@@ -14,6 +14,7 @@ export const queryHome = gql`
       id
       title
       description
+      keywords
       mugshot {
         id
         image {
