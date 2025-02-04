@@ -6,12 +6,13 @@ type TLogo = {
 };
 
 const alt = "Billy Watson logo";
+const imageWidth = 448;
 
 const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
   const commonImageProps: ImageProps = {
     src: logoLightBackground?.url,
     alt,
-    width: 448,
+    width: imageWidth,
     height: 156,
     priority: true,
   };
@@ -28,7 +29,16 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
         <source media="print" srcSet={light} />
         <source media="(prefers-color-scheme: light)" srcSet={light} />
         <source media="(prefers-color-scheme: dark)" srcSet={dark} />
-        <img {...imageProps} alt={commonImageProps.alt} />
+        <img
+          {...imageProps}
+          alt={commonImageProps.alt}
+          sizes={`
+            (min-width: 1024px) 352px,
+            (min-width: 768px) calc(50vw - 63px),
+            (min-width: 502px) ${imageWidth}px,
+            calc(100vw - 54px)
+          `}
+        />
       </picture>
       <div
         className="print-logo"
@@ -42,5 +52,5 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
   );
 };
 
-export { Logo, alt };
+export { Logo, alt, imageWidth };
 export type { TLogo };

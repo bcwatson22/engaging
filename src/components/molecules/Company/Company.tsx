@@ -46,6 +46,10 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
             alt={`${company} logo`}
             width={logoSize}
             height={logoSize}
+            sizes={`
+              (min-width: 768px) ${logoSize}px,
+              60px
+            `}
             priority
           />
         </figure>
@@ -58,5 +62,5 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   );
 };
 
-export { Company, CompanySkeleton };
+export { Company, CompanySkeleton, logoSize };
 export type { TCompany, Props as CompanyProps };

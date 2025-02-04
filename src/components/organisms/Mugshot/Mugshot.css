@@ -93,6 +93,20 @@
         @apply opacity-100;
       }
     }
+
+    .info {
+      @apply opacity-100 z-20;
+
+      h2,
+      p,
+      li {
+        @apply opacity-100 translate-y-0;
+      }
+    }
+
+    .technologies {
+      @apply hidden animate-none;
+    }
   }
 
   .coupon {
@@ -204,16 +218,6 @@
           @apply print:animate-none motion-reduce:animate-none;
         }
       }
-    }
-  }
-
-  .technologies-error {
-    li {
-      @apply md:top-[38%] md:left-[38%];
-    }
-
-    div:hover figure {
-      @apply opacity-100;
     }
   }
 }

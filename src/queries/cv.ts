@@ -1,5 +1,13 @@
 import { gql } from "urql";
 
+import { imageWidth as singleDensityImageSize } from "@/components/atoms/Logo/Logo";
+import { logoSize as singleDensityLogoSize } from "@/components/molecules/Company/Company";
+
+import { multiplyToString } from "@/utils/multiplyToString";
+
+const imageSize = multiplyToString(singleDensityImageSize);
+const logoSize = multiplyToString(singleDensityLogoSize);
+
 export const queryCV = gql`
   query CV {
     cvs(first: 1) {
@@ -9,11 +17,21 @@ export const queryCV = gql`
       keywords
       logoLightBackground {
         id
-        url
+        url(
+          transformation: {
+            image: { resize: { width: ${imageSize}, fit: scale } }
+            document: { output: { format: webp } }
+          }
+        )
       }
       logoDarkBackground {
         id
-        url
+        url(
+          transformation: {
+            image: { resize: { width: ${imageSize}, fit: scale } }
+            document: { output: { format: webp } }
+          }
+        )
       }
       intro
       address {
@@ -34,7 +52,12 @@ export const queryCV = gql`
         company
         logo {
           id
-          url
+          url(
+            transformation: {
+              image: { resize: { width: ${logoSize}, fit: scale } }
+              document: { output: { format: webp } }
+            }
+          )
         }
         city
         roles {

@@ -8,7 +8,10 @@ import { cacheHome } from "@/data/cache/home";
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-import type { TMugshot } from "@/components/organisms/Mugshot/Mugshot";
+import {
+  imageSize,
+  type TMugshot,
+} from "@/components/organisms/Mugshot/Mugshot";
 
 type Props = {
   heading?: string;
@@ -35,13 +38,13 @@ const Error = ({
           <Image
             src={image.url}
             alt={`Portrait of ${name}`}
-            width={600}
-            height={600}
+            width={imageSize}
+            height={imageSize}
             className="opacity-30"
             priority
           />
         </figure>
-        <div className="info opacity-100 z-20">
+        <div className="info">
           <h2 id={sectionId}>{heading}</h2>
           {children ? (
             children
@@ -57,7 +60,7 @@ const Error = ({
             </button>
           )}
         </div>
-        <ul className="technologies technologies-error hidden md:grid">
+        <ul className="technologies">
           {[...Array(12).keys()].map((key) => (
             <li key={key}>
               <TechnologySkeleton />

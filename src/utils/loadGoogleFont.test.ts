@@ -1,6 +1,6 @@
 import { loadGoogleFont, errorMessage } from "./loadGoogleFont";
 
-describe("dynamic Open Graph image", () => {
+describe("loadGoogleFont", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("returns ArrayBuffer if the fetch was successful", async () => {

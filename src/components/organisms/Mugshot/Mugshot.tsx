@@ -36,6 +36,8 @@ const MugshotSkeleton = () => (
   </div>
 );
 
+const imageSize = 384;
+
 const Mugshot = ({
   mugshot: { heading, description, image, links },
   technologies,
@@ -49,8 +51,12 @@ const Mugshot = ({
           <Image
             src={image.url}
             alt={`Portrait of ${heading}`}
-            width={600}
-            height={600}
+            width={imageSize}
+            height={imageSize}
+            sizes={`
+              (min-width: 480px) ${imageSize}px, 
+              calc(100vw - 3rem)
+            `}
             priority
           />
         </figure>
@@ -71,5 +77,5 @@ const Mugshot = ({
   );
 };
 
-export { Mugshot, MugshotSkeleton };
+export { Mugshot, MugshotSkeleton, imageSize };
 export type { TMugshot, Props as MugshotProps };
