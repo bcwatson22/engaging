@@ -46,11 +46,7 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
             alt={`${company} logo`}
             width={logoSize}
             height={logoSize}
-            sizes={`
-              (min-width: 768px) ${logoSize}px,
-              60px
-            `}
-            quality={100}
+            sizes={`(min-width: 768px) ${logoSize}px, 60px`}
             loading="lazy"
           />
         </figure>

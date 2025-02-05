@@ -1,7 +1,9 @@
 {
-  "name": "portfolio",
+  "name": "engaging",
   "version": "1.0.0",
   "private": true,
+  "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
+  "homepage": "https://github.com/bcwatson22/engaging#readme",
   "scripts": {
     "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production next build",

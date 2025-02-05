@@ -51,7 +51,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dj0eki07l1ll2mj10q" alt="Node icon" width="32" />
     </td>
     <td>
-      Over 97% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
+      Over 98% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
     </td>
   </tr>
 </table>

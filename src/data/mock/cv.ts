@@ -260,7 +260,7 @@ export const mockCV: TCV = {
   onlineLinks: [
     {
       text: "Portfolio",
-      target: "https://engaging.engineering",
+      target: "/",
       icon: "Website",
     },
     {

@@ -79,6 +79,18 @@ describe("Role", () => {
       expect(Bullet).toHaveBeenCalledTimes(bullets.length);
     });
   });
+
+  describe("total", () => {
+    it("adds 'multiple' class if higher than 1", () => {
+      setup({
+        total: 2,
+      });
+
+      expect(screen.getByRole("heading", { level: 4, name: role })).toHaveClass(
+        "multiple"
+      );
+    });
+  });
 });
 
 describe("RoleSkeleton", () => {
@@ -110,5 +122,9 @@ describe("getLinkClassNames", () => {
 
   it("returns both 'linkee' if index is the same as total'", () => {
     expect(getLinkClassNames(10, 10, true)).toBe(" linkee");
+  });
+
+  it("returns empty string as default", () => {
+    expect(getLinkClassNames(12, 10, true)).toBe("");
   });
 });

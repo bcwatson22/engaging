@@ -1,5 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
+import NextLink from "next/link";
+
 import { Link, LinkSkeleton, type LinkProps } from "./Link";
 
 import { Icon } from "@/components/atoms/Icon/Icon";
@@ -8,6 +10,10 @@ import { mockCV } from "@/data/mock/cv";
 
 vi.mock("@/components/atoms/Icon/Icon", () => ({
   Icon: vi.fn(),
+}));
+
+vi.mock("next/link", () => ({
+  default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
 }));
 
 const mockLink = mockCV.onlineLinks[1];
@@ -50,8 +56,22 @@ describe("Link", () => {
         expect(screen.getByRole("link")).toHaveAttribute("href", target);
       });
 
+      it(`doesn't render NextLink if remote`, () => {
+        setup();
+
+        expect(NextLink).not.toHaveBeenCalled();
+      });
+
+      it("renders NextLink if local", () => {
+        setup({
+          link: mockCV.onlineLinks[0],
+        });
+
+        expect(NextLink).toHaveBeenCalledTimes(1);
+      });
+
       describe("when it's a URL", () => {
-        it("adds url class", () => {
+        it("adds 'url' class", () => {
           setup();
 
           expect(screen.getByRole("link")).toHaveClass("url");
@@ -70,14 +90,18 @@ describe("Link", () => {
             link: mockCV.onlineLinks[0],
           });
 
-          expect(screen.getByRole("link").getAttribute("data-url")).toContain(
-            "engaging.engineering"
+          expect(NextLink).toHaveBeenNthCalledWith(
+            1,
+            expect.objectContaining({
+              "data-url": expect.stringContaining("engaging.engineering"),
+            }),
+            {}
           );
         });
       });
 
       describe("when it's a phone number or email address", () => {
-        it("doesn't add url class", () => {
+        it("doesn't add 'url' class", () => {
           setup({
             link: mockCV.contactLinks[0],
           });

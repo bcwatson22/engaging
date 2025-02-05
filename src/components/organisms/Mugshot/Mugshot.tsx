@@ -57,7 +57,6 @@ const Mugshot = ({
               (min-width: 480px) ${imageSize}px, 
               calc(100vw - 3rem)
             `}
-            quality={100}
             priority
           />
         </figure>

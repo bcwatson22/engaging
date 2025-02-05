@@ -1,5 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import Layout, { type LayoutProps } from "@/app/layout";
 
 vi.mock(import("next/font/google"), async (importOriginal: Function) => {
@@ -9,6 +12,25 @@ vi.mock(import("next/font/google"), async (importOriginal: Function) => {
     Nunito: vi.fn().mockReturnValue({ className: "mockClassName" }),
   };
 });
+
+vi.mock(import("@vercel/analytics/next"), async (importOriginal: Function) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    Analytics: vi.fn(),
+  };
+});
+
+vi.mock(
+  import("@vercel/speed-insights/next"),
+  async (importOriginal: Function) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      SpeedInsights: vi.fn(),
+    };
+  }
+);
 
 const mockText = "mockText";
 const mockChildren = <button>{mockText}</button>;
@@ -36,5 +58,23 @@ describe("Layout", () => {
     setup();
 
     expect(screen.getByRole("button", { name: mockText })).toBeInTheDocument();
+  });
+
+  it("renders children", () => {
+    setup();
+
+    expect(screen.getByRole("button", { name: mockText })).toBeInTheDocument();
+  });
+
+  it("renders an Analytics component", () => {
+    setup();
+
+    expect(Analytics).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders a SpeedInsights component", () => {
+    setup();
+
+    expect(SpeedInsights).toHaveBeenCalledTimes(1);
   });
 });

@@ -51,6 +51,36 @@ describe("Technology", () => {
 
       expect(screen.getByText(name)).toBeInTheDocument();
     });
+
+    it("renders multiple spans if value contains '//'", () => {
+      const { name } = mockHome.technologies[2];
+      const split = name.split(" // ");
+
+      setup({ name });
+
+      expect(screen.getByText(`${split[0]} //`)).toBeInTheDocument();
+      expect(screen.getByText(split[1])).toBeInTheDocument();
+    });
+
+    it("adds 'white' class if value is Next", () => {
+      setup();
+
+      expect(screen.getByRole("img", { name: `${name} logo` })).toHaveClass(
+        "white"
+      );
+    });
+
+    it("doesn't add 'white' class if value is not Next", () => {
+      const { name } = mockHome.technologies[1];
+
+      setup({
+        name,
+      });
+
+      expect(screen.getByRole("img", { name: `${name} logo` })).not.toHaveClass(
+        "white"
+      );
+    });
   });
 });
 

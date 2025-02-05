@@ -40,13 +40,12 @@ const Technology = ({ id, icon, name }: Props) => {
               (min-width: 480px) calc(25vw - 2rem), 
               calc(33vw - 3rem)
             `}
-            quality={100}
             priority
           />
         )}
       </figure>
       <span className="name">
-        {numOfSplitNames > 0
+        {numOfSplitNames > 1
           ? splitNames.map((chunk, index) => (
               <span key={chunk.slice(0, 10)} className="chunk">
                 {chunk}
