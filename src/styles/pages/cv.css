@@ -1,14 +1,14 @@
 @layer components {
   .wrapper {
     @apply min-h-screen p-6 border-3 border-brand-blue overflow-clip;
-    @apply sm:m-6 lg:p-16;
+    @apply sm:m-6 xl:max-w-[70rem] xl:p-16 xl:mx-auto;
     @apply dark:border-brand-yellow;
     @apply print:m-0;
   }
 
   .inner {
     @apply mx-auto;
-    @apply lg:max-w-[60rem] lg:pl-16 xl:pl-32;
+    @apply lg:max-w-[60rem] lg:pl-16;
   }
 
   .sections {
