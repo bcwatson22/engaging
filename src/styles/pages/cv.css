@@ -8,7 +8,7 @@
 
   .inner {
     @apply mx-auto;
-    @apply lg:max-w-[60rem] lg:pl-16;
+    @apply lg:max-w-[62rem] lg:pl-16;
   }
 
   .sections {
