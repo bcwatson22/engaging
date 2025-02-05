@@ -2,7 +2,7 @@
   .bullet {
     @apply relative;
   
-    span {
+    & span {
       @apply block w-3 h-3 absolute top-1.5 -left-6 rounded-full indent-full;
       @apply print:w-2.5 print:h-2.5 print:top-0.5 print:-left-5 print:!transform-none motion-reduce:!transform-none;
     }
@@ -25,7 +25,7 @@
   }
 
   .bullet-skeleton {
-    span {
+    & span {
       @apply top-1/2 -translate-y-1/2;
     }
 

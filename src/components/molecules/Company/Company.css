@@ -23,7 +23,7 @@
     @apply dark:shadow-zinc-700;
     @apply print:w-[4rem] print:h-[4rem] print:shadow-none print:border-2 print:border-zinc-300;
 
-    img {
+    & img {
       @apply w-[3.75rem] h-[3.75rem] object-contain;
       @apply md:w-[5rem] md:h-[5rem];
       @apply print:w-[2.5rem] print:h-[2.5rem];

@@ -31,7 +31,7 @@
   .skeleton-paragraph {
     @apply flex flex-col items-start gap-2;
 
-    > div {
+    & > div {
       &:nth-of-type(3n + 1) {
         @apply w-11/12;
       }

@@ -3,22 +3,13 @@
     @apply not-italic;
     @apply print:mb-4;
 
-    /* ul {
+    & ul {
       @apply flex flex-wrap;
     }
 
-    li:not(:last-of-type):after {
+    & li:not(:last-of-type):after {
       content: "//";
       @apply mx-3;
-    } */
-  }
-
-  .address ul {
-    @apply flex flex-wrap;
-  } 
-
-  .address li:not(:last-of-type):after {
-    content: "//";
-    @apply mx-3;
+    }
   }
 }

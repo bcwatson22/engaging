@@ -33,22 +33,22 @@
     @apply md:z-20;
     @apply print:grid print:grid-cols-2 print:gap-8 print:aspect-auto print:h-auto print:max-h-none print:w-auto print:max-w-none print:mb-8;
 
-    h2,
-    p,
-    li {
+    & h2,
+    & p,
+    & li {
       @apply opacity-0 translate-y-2 transition-all duration-300;
       @apply motion-reduce:opacity-100 motion-reduce:translate-y-0;
     }
 
-    h2 {
+    & h2 {
       @apply delay-50;
     }
     
-    p {
+    & p {
       @apply delay-75;
     }
 
-    li {
+    & li {
       &:nth-of-type(1) {
         @apply delay-100;
       }
@@ -71,17 +71,17 @@
     }
 
     &:hover {
-      .coupon {
+      & .coupon {
         @apply opacity-30;
       }
 
-      .info {
+      & .info {
         @apply opacity-100;
       }
 
-      h2,
-      p,
-      li {
+      & h2,
+      & p,
+      & li {
         @apply opacity-100 translate-y-0;
       }
     }
@@ -89,22 +89,22 @@
 
   .overview-error {
     &:hover {
-      .coupon {
+      & .coupon {
         @apply opacity-100;
       }
     }
 
-    .info {
+    & .info {
       @apply opacity-100 z-20;
 
-      h2,
-      p,
-      li {
+      & h2,
+      & p,
+      & li {
         @apply opacity-100 translate-y-0;
       }
     }
 
-    .technologies {
+    & .technologies {
       @apply hidden animate-none;
     }
   }
@@ -113,7 +113,7 @@
     @apply absolute top-0 left-0 w-full h-full object-cover;
     @apply print:relative;
 
-    img {
+    & img {
       @apply rounded-full shadow-[0_0_5px_1px] shadow-white;
     }
   }
@@ -126,7 +126,7 @@
   .links {
     @apply mt-4 text-start;
 
-    li {
+    & li {
       @apply mt-1;
     }
   }
@@ -136,7 +136,7 @@
     @apply max-md:animate-none xs:grid-cols-4 sm:grid-cols-6 md:z-10 md:pt-0 md:block md:absolute md:top-0 md:left-0 md:w-full md:h-full;
     @apply print:relative print:grid print:animate-none print:w-auto print:h-auto motion-reduce:animate-none;
 
-    li {
+    & li {
       @apply transform-gpu;
       @apply md:absolute md:top-[42%] md:left-[42%] md:w-24 md:min-h-24;
       @apply print:relative print:top-0 print:left-0;
@@ -201,7 +201,7 @@
         --delay: 5.5s;
       }
 
-      div {
+      & div {
         @apply animate-[throb_5s_linear_infinite];
         animation-delay: var(--delay);
       }
@@ -211,7 +211,7 @@
           translateY(300%)
           rotateZ(calc((var(--n) + 6) * calc(360 / 12) * -1deg));
 
-        div {
+        & div {
           @apply animate-[tech_240s_linear_infinite];
           animation-delay: 0s;
           @apply max-md:animate-none;

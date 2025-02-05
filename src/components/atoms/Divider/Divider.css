@@ -4,14 +4,10 @@
     @apply dark:text-brand-yellow;
     @apply print:!opacity-100 print:!transform-none motion-reduce:!opacity-100 motion-reduce:!transform-none;
 
-    > span {
+    & > span {
       @apply absolute bottom-[-12px] right-0 w-screen h-0 border-b-3 border-brand-blue indent-full;
       @apply dark:border-brand-yellow;
       @apply print:!transform-none motion-reduce:!transform-none;
     }
   }
-
-  /* .static {
-    @apply !opacity-100 !transform-none;
-  } */
 }

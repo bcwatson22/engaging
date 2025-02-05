@@ -26,7 +26,7 @@
     @apply mt-4;
     @apply lg:mt-8;
 
-    h4 {
+    & h4 {
       @apply print:font-bold;
     }
   }

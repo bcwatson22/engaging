@@ -24,7 +24,7 @@
       @apply print:inline-block;
     }
 
-    span {
+    & span {
       @apply print:sr-only;
     }
   }

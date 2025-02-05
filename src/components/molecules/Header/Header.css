@@ -4,7 +4,7 @@
     @apply md:grid-cols-2 lg:grid-cols-[22rem_minmax(1rem,_1fr)] lg:items-center lg:gap-24;
     @apply print:grid-cols-2 print:gap-8;
 
-    p {
+    & p {
       @apply md:inline;
     }
   }

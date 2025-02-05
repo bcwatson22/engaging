@@ -7,12 +7,12 @@
     @apply md:mt-1 md:mb-0;
     @apply print:mb-0;
 
-    h3:first-child {
+    & h3:first-child {
       @apply print:pt-0.5;
     }
 
-    > p:first-child,
-    > address:first-child {
+    & > p:first-child,
+    & > address:first-child {
       @apply print:pt-1.5;
     }
   }
