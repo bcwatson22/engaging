@@ -2,8 +2,8 @@
   body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    @apply text-base text-zinc-950  bg-gray-50 selection:bg-brand-blue selection:text-gray-50;
-    @apply dark:text-gray-50 dark:bg-zinc-950;
+    @apply text-base text-brand-dark  bg-brand-light selection:bg-brand-blue selection:text-brand-light;
+    @apply dark:text-brand-light dark:bg-brand-dark;
     @apply print:text-xs;
   }
 

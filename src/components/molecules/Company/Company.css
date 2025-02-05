@@ -6,8 +6,8 @@
 
     &:before {
       content: "";
-      @apply bg-gray-50 block absolute -top-2 -left-2 w-[calc(100%+1rem)] h-[calc(100%+1rem)] shadow-[0_3px_5px_3px] shadow-gray-50;
-      @apply dark:bg-zinc-950 dark:shadow-zinc-950;
+      @apply bg-brand-light block absolute -top-2 -left-2 w-[calc(100%+1rem)] h-[calc(100%+1rem)] shadow-[0_3px_5px_3px] shadow-brand-light;
+      @apply dark:bg-brand-dark dark:shadow-brand-dark;
       @apply print:content-none;
     }
   }

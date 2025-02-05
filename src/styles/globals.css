@@ -26,3 +26,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --brand-light: #f9fafb;
+  --brand-grey: #e5e7eb;
+  --brand-dark: #09090b;
+  --brand-yellow: #f9a828;
+  --brand-green: #458c25;
+  --brand-blue: #245385;
+  --brand-red: #740a01;
+  --transparent: rgba(0, 0, 0, 0);
+}

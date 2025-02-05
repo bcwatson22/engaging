@@ -1,10 +1,31 @@
 @layer components {
   .link {
-    text-decoration: underline;
+    /* text-decoration: underline;
     @apply underline-offset-4 decoration-2 decoration-brand-blue;
-    @apply dark:decoration-brand-yellow;
+    @apply dark:decoration-brand-yellow; */
+
+    & span {
+      background-image: linear-gradient(var(--brand-yellow), var(--brand-yellow)), linear-gradient(var(--brand-light), var(--brand-light)), linear-gradient(var(--brand-yellow), var(--brand-yellow));
+      background-size: 0 2px, 0 2px, 100% 2px;
+      background-position: 0 100%, 0 100%, 0 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.1s ease-out;
+    }
 
     &:hover,
+    &:focus-visible {
+      & span {
+        background-size: 0 2px, 100% 2px, 100% 2px;
+      }
+    }
+
+    &:active {
+      & span {
+        background-size: 100% 2px, 100% 2px, 100% 2px;
+      }
+    }
+
+    /* &:hover,
     &:focus-visible {
       @apply decoration-transparent;
     }
@@ -12,7 +33,7 @@
     &:active {
       @apply decoration-brand-blue;
       @apply dark:decoration-brand-yellow;
-    }
+    } */
   }
 
   .url {
