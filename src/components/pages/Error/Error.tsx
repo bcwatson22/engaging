@@ -8,10 +8,9 @@ import { cacheHome } from "@/data/cache/home";
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-import {
-  imageSize,
-  type TMugshot,
-} from "@/components/organisms/Mugshot/Mugshot";
+import { type TMugshot } from "@/components/organisms/Mugshot/Mugshot";
+
+import { mugshotDimensions } from "@/constants/dimensions";
 
 type Props = {
   heading?: string;
@@ -19,6 +18,8 @@ type Props = {
   content?: TMugshot;
   reset?: () => void;
 };
+
+const { width, height } = mugshotDimensions;
 
 const Error = ({
   heading = "Oops",
@@ -38,8 +39,12 @@ const Error = ({
           <Image
             src={image.url}
             alt={`Portrait of ${name}`}
-            width={imageSize}
-            height={imageSize}
+            width={width}
+            height={height}
+            sizes={`
+              (min-width: 480px) ${width}px, 
+              calc(100vw - 3rem)
+            `}
             className="opacity-30"
             priority
           />

@@ -10,6 +10,7 @@ import {
   TechnologySkeleton,
   type TTechnology,
 } from "@/components/molecules/Technology/Technology";
+import { mugshotDimensions } from "@/constants/dimensions";
 
 type TMugshot = TID & {
   image: TAsset;
@@ -36,7 +37,7 @@ const MugshotSkeleton = () => (
   </div>
 );
 
-const imageSize = 384;
+const { width, height } = mugshotDimensions;
 
 const Mugshot = ({
   mugshot: { heading, description, image, links },
@@ -51,10 +52,10 @@ const Mugshot = ({
           <Image
             src={image.url}
             alt={`Portrait of ${heading}`}
-            width={imageSize}
-            height={imageSize}
+            width={width}
+            height={height}
             sizes={`
-              (min-width: 480px) ${imageSize}px, 
+              (min-width: 480px) ${width}px, 
               calc(100vw - 3rem)
             `}
             priority
@@ -77,5 +78,5 @@ const Mugshot = ({
   );
 };
 
-export { Mugshot, MugshotSkeleton, imageSize };
+export { Mugshot, MugshotSkeleton };
 export type { TMugshot, Props as MugshotProps };

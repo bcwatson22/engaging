@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import type { AppleWebApp } from "next/dist/lib/metadata/types/extra-types";
 
-import { domainName, ogImageUrl } from "./common";
+import { domainName } from "./common";
+
+const ogImageUrl = "/api/og";
 
 const appleWebApp: AppleWebApp = {
   statusBarStyle: "black-translucent",

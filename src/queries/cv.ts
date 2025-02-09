@@ -1,12 +1,14 @@
 import { gql } from "urql";
 
-import { imageWidth as singleDensityImageSize } from "@/components/atoms/Logo/Logo";
-import { logoSize as singleDensityLogoSize } from "@/components/molecules/Company/Company";
+import {
+  personalLogoDimensions,
+  companyLogoDimensions,
+} from "@/constants/dimensions";
 
 import { multiplyToString } from "@/utils/multiplyToString";
 
-const imageSize = multiplyToString(singleDensityImageSize);
-const logoSize = multiplyToString(singleDensityLogoSize);
+const personalLogoWidth = multiplyToString(personalLogoDimensions.width);
+const companyLogoWidth = multiplyToString(companyLogoDimensions.width);
 
 export const queryCV = gql`
   query CV {
@@ -19,7 +21,7 @@ export const queryCV = gql`
         id
         url(
           transformation: {
-            image: { resize: { width: ${imageSize}, fit: scale } }
+            image: { resize: { width: ${personalLogoWidth}, fit: scale } }
             document: { output: { format: webp } }
           }
         )
@@ -28,7 +30,7 @@ export const queryCV = gql`
         id
         url(
           transformation: {
-            image: { resize: { width: ${imageSize}, fit: scale } }
+            image: { resize: { width: ${personalLogoWidth}, fit: scale } }
             document: { output: { format: webp } }
           }
         )
@@ -54,7 +56,7 @@ export const queryCV = gql`
           id
           url(
             transformation: {
-              image: { resize: { width: ${logoSize}, fit: scale } }
+              image: { resize: { width: ${companyLogoWidth}, fit: scale } }
               document: { output: { format: webp } }
             }
           )

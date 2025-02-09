@@ -12,6 +12,8 @@ import {
   SkeletonLine,
 } from "@/components/atoms/Skeleton/Skeleton";
 
+import { companyLogoDimensions } from "@/constants/dimensions";
+
 type TCompany = TScroll &
   Pick<TPosition, "company"> & {
     city: string;
@@ -20,6 +22,8 @@ type TCompany = TScroll &
   };
 
 type Props = TCompany;
+
+const { width, height } = companyLogoDimensions;
 
 const CompanySkeleton = () => (
   <div className="company">
@@ -30,8 +34,6 @@ const CompanySkeleton = () => (
     </div>
   </div>
 );
-
-const logoSize = 80;
 
 const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -44,9 +46,9 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
           <Image
             src={logo.url}
             alt={`${company} logo`}
-            width={logoSize}
-            height={logoSize}
-            sizes={`(min-width: 768px) ${logoSize}px, 60px`}
+            width={width}
+            height={height}
+            sizes={`(min-width: 768px) ${width}px, 60px`}
             loading="lazy"
           />
         </figure>
@@ -59,5 +61,5 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   );
 };
 
-export { Company, CompanySkeleton, logoSize };
+export { Company, CompanySkeleton };
 export type { TCompany, Props as CompanyProps };

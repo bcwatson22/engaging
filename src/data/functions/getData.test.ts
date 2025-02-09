@@ -37,8 +37,26 @@ describe("getData", () => {
   });
 
   it("returns fallback if data doesn't exist", async () => {
-    const result = await setup({});
+    const result = await setup({
+      data: null,
+    });
 
     expect(result).toBe(mockFallbackData);
+  });
+
+  it("logs an error message if an error exists", async () => {
+    const consoleErrorSpy = vi.spyOn(console, "error");
+    const mockErrorMessage = "Something went wrong";
+
+    await setup({
+      data: null,
+      error: mockErrorMessage,
+    });
+
+    expect(consoleErrorSpy).toHaveBeenNthCalledWith(
+      1,
+      "Error trying to fetch page data:",
+      mockErrorMessage
+    );
   });
 });

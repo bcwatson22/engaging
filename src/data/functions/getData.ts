@@ -7,7 +7,9 @@ const getData = async <Data>(
   key: string,
   fallback: Data
 ): Promise<Data> => {
-  const { data } = await client(query, {});
+  const { data, error } = await client(query, {});
+
+  if (error) console.error("Error trying to fetch page data:", error);
 
   return data?.[key]?.[0] ? data[key][0] : fallback;
 };

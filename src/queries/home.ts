@@ -1,12 +1,11 @@
 import { gql } from "urql";
 
-import { iconSize as singleDensityIconSize } from "@/components/molecules/Technology/Technology";
-import { imageSize as singleDensityImageSize } from "@/components/organisms/Mugshot/Mugshot";
+import { mugshotDimensions, techIconDimensions } from "@/constants/dimensions";
 
 import { multiplyToString } from "@/utils/multiplyToString";
 
-const imageSize = multiplyToString(singleDensityImageSize);
-const iconSize = multiplyToString(singleDensityIconSize);
+const mugshotWidth = multiplyToString(mugshotDimensions.width);
+const techIconWidth = multiplyToString(techIconDimensions.width);
 
 export const queryHome = gql`
   query Home {
@@ -21,7 +20,7 @@ export const queryHome = gql`
           id
           url(
             transformation: {
-              image: { resize: { width: ${imageSize}, height: ${imageSize}, fit: scale } }
+              image: { resize: { width: ${mugshotWidth}, fit: scale } }
               document: { output: { format: webp } }
             }
           )
@@ -45,7 +44,7 @@ export const queryHome = gql`
           id
           url(
             transformation: {
-              image: { resize: { width: ${iconSize}, fit: scale } }
+              image: { resize: { width: ${techIconWidth}, fit: scale } }
               document: { output: { format: webp } }
             }
           )

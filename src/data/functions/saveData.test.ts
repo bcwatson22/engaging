@@ -1,16 +1,21 @@
 import { saveData } from "./saveData";
 
 import promises from "fs/promises";
+import path from "path";
 
 import { mockHome } from "@/data/mock/home";
 
 const mockPageName = "Home";
 const mockPath = `/src/data/cache/${mockPageName.toLowerCase()}`;
 
-const setup = async () => await saveData(mockHome, mockPageName, 3);
+const setup = async (levels?: number) =>
+  await saveData(mockHome, mockPageName, levels);
 
 describe("saveData", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.unstubAllEnvs();
+  });
 
   it("calls readFile", async () => {
     const readFileSpy = vi.spyOn(promises, "readFile");
@@ -20,6 +25,19 @@ describe("saveData", () => {
     expect(readFileSpy).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockPath)
+    );
+  });
+
+  it("defaults to a file path four levels deep in local env", async () => {
+    const pathJoinSpy = vi.spyOn(path, "join");
+    vi.stubEnv("NODE_ENV", "development");
+
+    await setup(undefined);
+
+    expect(pathJoinSpy).toHaveBeenNthCalledWith(
+      1,
+      expect.any(String),
+      expect.stringContaining("../../../../")
     );
   });
 
@@ -63,5 +81,20 @@ describe("saveData", () => {
     );
 
     expect(result).toBe(false);
+  });
+
+  it("logs a warning message if the file doesn't exist", async () => {
+    const consoleLogSpy = vi.spyOn(console, "log");
+
+    vi.spyOn(promises, "readFile").mockResolvedValue("");
+
+    const result = await setup();
+
+    expect(consoleLogSpy).toHaveBeenNthCalledWith(
+      1,
+      `Couldn't read ${mockPageName} page data file.`
+    );
+
+    expect(result).toBe(true);
   });
 });

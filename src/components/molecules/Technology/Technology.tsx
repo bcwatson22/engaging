@@ -3,6 +3,8 @@ import Image from "next/image";
 import type { TLink } from "@/components/atoms/Link/Link";
 import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
 
+import { techIconDimensions } from "@/constants/dimensions";
+
 type TTechnology = TID & {
   name: string;
   icon: TAsset;
@@ -17,8 +19,8 @@ const TechnologySkeleton = () => (
   </div>
 );
 
+const { width, height } = techIconDimensions;
 const split = "//";
-const iconSize = 136;
 
 const Technology = ({ id, icon, name }: Props) => {
   const splitNames = name.split(` ${split} `);
@@ -32,8 +34,8 @@ const Technology = ({ id, icon, name }: Props) => {
             className={name === "Next" ? "white" : ""}
             src={icon.url}
             alt={`${name} logo`}
-            width={iconSize}
-            height={iconSize}
+            width={width}
+            height={height}
             sizes={`
               (min-width: 768px) 72px, 
               (min-width: 640px) calc(16.67vw - 1rem), 
@@ -58,5 +60,5 @@ const Technology = ({ id, icon, name }: Props) => {
   );
 };
 
-export { Technology, TechnologySkeleton, iconSize };
+export { Technology, TechnologySkeleton };
 export type { TTechnology, Props as TechnologyProps };
