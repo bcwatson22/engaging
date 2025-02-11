@@ -1,6 +1,6 @@
 @layer components {
   .home {
-    @apply flex flex-col justify-center p-6 bg-black text-white animate-fade-in;
+    @apply flex flex-col justify-center p-6 pb-footer bg-black text-white animate-fade-in;
     @apply md:items-center;
     @apply print:justify-start print:bg-white print:text-black;
 

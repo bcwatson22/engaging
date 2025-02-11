@@ -37,4 +37,9 @@
   --brand-blue: #245385;
   --brand-red: #740a01;
   --transparent: rgba(0, 0, 0, 0);
+  --footer: 2.5rem;
+
+  @screen sm {
+    --footer: 3.5rem;
+  }
 }
