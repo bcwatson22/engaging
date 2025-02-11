@@ -34,7 +34,7 @@ const LinkSkeleton = () => (
 
 const Inner = ({ text, icon }: TInner) => (
   <>
-    <Icon icon={icon} className="vector" isHidden />
+    <Icon icon={icon} className="vector" />
     <span>{text}</span>
   </>
 );

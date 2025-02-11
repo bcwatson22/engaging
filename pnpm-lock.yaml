@@ -43,6 +43,9 @@ devDependencies:
   '@heroicons/react':
     specifier: 2.1.5
     version: 2.1.5(react@18.3.1)
+  '@sidekickicons/react':
+    specifier: ^0.12.0
+    version: 0.12.0(react@18.3.1)
   '@testing-library/jest-dom':
     specifier: 6.6.3
     version: 6.6.3
@@ -1154,6 +1157,14 @@ packages:
 
   /@rushstack/eslint-patch@1.10.5:
     resolution: {integrity: sha512-kkKUDVlII2DQiKy7UstOR1ErJP8kUKAQ4oa+SQtM0K+lPdmmjj0YnnxBgtTVYH7mUKtbsxeFC9y0AmK7Yb78/A==}
+    dev: true
+
+  /@sidekickicons/react@0.12.0(react@18.3.1):
+    resolution: {integrity: sha512-cwl76tv4cSXoqGuPb5WpOCSLhS6Wsm90YeFqlVzR0Gwna+q6BbD414UalLfX/1fhsz+jDIPDs3E94BpZNAiMvA==}
+    peerDependencies:
+      react: '>= 16 || ^19.0.0-rc'
+    dependencies:
+      react: 18.3.1
     dev: true
 
   /@swc/counter@0.1.3:

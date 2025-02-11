@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@heroicons/react": "2.1.5",
+    "@sidekickicons/react": "0.12.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.0.1",
     "@testing-library/user-event": "14.5.2",

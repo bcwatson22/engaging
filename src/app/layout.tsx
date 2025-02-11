@@ -1,8 +1,10 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { CssVariable } from "next/dist/compiled/@next/font";
 import { Nunito } from "next/font/google";
+
+import { Cookie } from "@/components/molecules/Cookie/Cookie";
 
 import "@/styles/globals.css";
 
@@ -22,6 +24,9 @@ const Layout = ({ children }: Props) => (
   <html lang="en">
     <body className={nunito.className} suppressHydrationWarning>
       {children}
+      <Suspense>
+        <Cookie />
+      </Suspense>
       <Analytics />
       <SpeedInsights />
     </body>

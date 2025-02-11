@@ -10,6 +10,7 @@
 @import "../components/atoms/Skeleton/Skeleton.css";
 
 @import "../components/molecules/Company/Company.css";
+@import "../components/molecules/Cookie/Cookie.css";
 @import "../components/molecules/Details/Details.css";
 @import "../components/molecules/Header/Header.css";
 @import "../components/molecules/Qualification/Qualification.css";

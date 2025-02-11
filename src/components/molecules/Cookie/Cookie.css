@@ -1,0 +1,33 @@
+@layer components {
+  .cookie {
+    @apply fixed bottom-0 right-0 p-2 w-full flex items-center gap-2 z-20 bg-white bg-opacity-5 text-xs;
+    @apply sm:w-auto sm:p-4 sm:text-sm;;
+    @apply print:hidden; 
+
+    & svg {
+      @apply w-6 h-6;
+    }
+  }
+
+  .dismiss {
+    @apply block w-6 h-6 relative ml-auto;
+    @apply hover:fill-brand-yellow;
+    @apply sm:ml-4;
+
+    &:before {
+      content: '';
+      @apply absolute w-[2.75rem] h-[2.75rem] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+    }
+
+    &:hover,
+    &:focus-visible {
+      svg {
+        @apply stroke-brand-yellow;
+      }
+    }
+
+    &:active {
+      @apply scale-90;
+    }
+  }
+}
