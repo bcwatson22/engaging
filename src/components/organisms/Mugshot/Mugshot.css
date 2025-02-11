@@ -206,7 +206,7 @@
         animation-delay: var(--delay);
       }
 
-      @screen md {
+      @media screen and (min-width: 768px) {
         transform: rotateZ(calc((var(--n) + 6) * calc(360 / 12) * 1deg))
           translateY(300%)
           rotateZ(calc((var(--n) + 6) * calc(360 / 12) * -1deg));

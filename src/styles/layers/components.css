@@ -1,5 +1,5 @@
 @layer components {
   .main {
-    min-height: calc(100vh - var(--footer));
+    @apply min-h-screen;
   }
 }

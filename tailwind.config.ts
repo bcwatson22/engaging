@@ -41,9 +41,6 @@ const config: Config = {
         "1/6": "16.67%",
         "5/6": "83.33%",
       },
-      padding: {
-        footer: "var(--footer)",
-      },
       textIndent: {
         full: "-99999rem",
       },

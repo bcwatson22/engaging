@@ -1,25 +1,9 @@
 @layer components {
-  .footer,
   .cookie {
-    @apply flex items-center gap-2 z-20;
-  }
+    @apply fixed bottom-0 right-0 p-2 w-full flex items-center gap-2 z-20 bg-white bg-opacity-5 text-xs;
+    @apply sm:w-auto sm:p-4 sm:text-sm;;
+    @apply print:hidden; 
 
-  .footer {
-    @apply fixed bottom-0 right-0 w-full p-2 justify-between bg-black bg-opacity-50;
-    @apply sm:relative sm:w-auto sm:px-6 sm:py-4 sm:text-sm sm:bg-transparent;
-    @apply print:hidden;
-
-    & p {
-      @apply text-xs;
-      @apply sm:text-sm;
-    }
-  }
-
-  .copy {
-    transform-origin: left center;
-  }
-
-  .cookie {
     & svg {
       @apply w-6 h-6;
     }
@@ -28,7 +12,7 @@
   .dismiss {
     @apply block w-6 h-6 relative ml-auto;
     @apply hover:fill-brand-yellow;
-    /* @apply sm:ml-4; */
+    @apply sm:ml-4;
 
     &:before {
       content: '';
