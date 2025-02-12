@@ -24,9 +24,6 @@ const Layout = ({ children }: Props) => (
   <html lang="en">
     <body className={nunito.className} suppressHydrationWarning>
       {children}
-      <Suspense>
-        <Cookie />
-      </Suspense>
       <Analytics />
       <SpeedInsights />
     </body>

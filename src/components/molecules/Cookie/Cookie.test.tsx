@@ -1,11 +1,21 @@
-import type { Mock } from "vitest";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-
-import { Cookie } from "./Cookie";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { cookieName } from "@/constants/common";
 
-const setup = () => render(<Cookie />);
+import { Cookie, CookieProps } from "./Cookie";
+
+import { Copyright } from "@/components/atoms/Copyright/Copyright";
+
+vi.mock("@/components/atoms/Copyright/Copyright", () => ({
+  Copyright: vi.fn(),
+}));
+
+const defaultProps: CookieProps = {
+  message: "Test message",
+};
+
+const setup = (props?: Partial<CookieProps>) =>
+  render(<Cookie {...defaultProps} {...props} />);
 
 describe("Cookie", () => {
   beforeEach(() => {
@@ -22,9 +32,7 @@ describe("Cookie", () => {
   it("renders text", () => {
     setup();
 
-    expect(
-      screen.getByText("This site uses cookies for a sweet user experience.")
-    ).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.message)).toBeInTheDocument();
   });
 
   it("renders a button", () => {
@@ -45,5 +53,13 @@ describe("Cookie", () => {
       cookieName,
       "dismissed"
     );
+  });
+
+  it("renders a Copyright component if hasCopyright is true", () => {
+    setup({
+      hasCopyright: true,
+    });
+
+    expect(Copyright).toHaveBeenNthCalledWith(1, { showRights: false }, {});
   });
 });

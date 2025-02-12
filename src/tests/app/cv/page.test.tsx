@@ -11,6 +11,8 @@ import { queryCV } from "@/queries/cv";
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 
+import { Copyright } from "@/components/atoms/Copyright/Copyright";
+import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Header } from "@/components/molecules/Header/Header";
 import { Details } from "@/components/molecules/Details/Details";
 import { Qualification } from "@/components/molecules/Qualification/Qualification";
@@ -54,14 +56,6 @@ vi.mock(
   }
 );
 
-vi.mock("@/components/molecules/Qualification/Qualification", () => ({
-  Qualification: vi.fn(),
-}));
-
-vi.mock("@/components/molecules/Reference/Reference", () => ({
-  Reference: vi.fn(),
-}));
-
 vi.mock(
   import("@/components/organisms/Gig/Gig"),
   async (importOriginal: Function) => {
@@ -77,9 +71,24 @@ vi.mock("@/components/organisms/Section/Section", () => ({
   Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),
 }));
 
+vi.mock("@/components/molecules/Qualification/Qualification", () => ({
+  Qualification: vi.fn(),
+}));
+
+vi.mock("@/components/molecules/Reference/Reference", () => ({
+  Reference: vi.fn(),
+}));
+
+vi.mock("@/components/atoms/Copyright/Copyright", () => ({
+  Copyright: vi.fn(),
+}));
+
+vi.mock("@/components/molecules/Cookie/Cookie", () => ({
+  Cookie: vi.fn(),
+}));
+
 const {
-  title,
-  description,
+  meta: { title, description, cookie },
   logoDarkBackground,
   logoLightBackground,
   intro,
@@ -206,6 +215,22 @@ describe("CVPage", () => {
 
     for (const [index, value] of references.entries())
       expect(Reference).toHaveBeenNthCalledWith(index + 1, value, {});
+  });
+
+  it("renders a Copyright component", async () => {
+    await setup();
+
+    expect(Copyright).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders a Cookie component", async () => {
+    await setup();
+
+    expect(Cookie).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ message: cookie }),
+      {}
+    );
   });
 
   it("generates metadata", async () => {

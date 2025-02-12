@@ -1,16 +1,24 @@
 @layer components {
   .home {
-    @apply flex flex-col justify-center p-6 bg-black text-white animate-fade-in;
-    @apply md:items-center;
+    @apply flex flex-col justify-center p-6 pb-[calc(var(--footer)+1.5rem)] bg-black text-white animate-fade-in overflow-hidden;
+    @apply sm:p-6 md:items-center;
     @apply print:justify-start print:bg-white print:text-black;
 
-    a {
+    & a {
       @apply decoration-brand-yellow;
       @apply print:decoration-brand-blue;
     }
 
     &.loaded {
       @apply animate-fade-in;
+    }
+
+    .banner {
+      @apply sm:relative sm:mt-auto sm:bg-transparent sm:bg-opacity-100;
+
+      & aside {
+        @apply ml-0;
+      }
     }
   }
 }

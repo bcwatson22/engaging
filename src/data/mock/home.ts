@@ -1,21 +1,24 @@
 import type { THome } from "../types/home";
 
 export const mockHome: THome = {
-  title: "Engaging Engineering",
-  description:
-    "Contract expertise for Next, Node, React Native and Typescript projects",
-  keywords: [
-    "Billy Watson",
-    "Engaging Engineering",
-    "Sheffield",
-    "Contract",
-    "Software Engineer",
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Next",
-    "Node",
-  ],
+  meta: {
+    title: "Engaging Engineering",
+    description:
+      "Contract expertise for Next, Node, React Native and Typescript projects",
+    keywords: [
+      "Billy Watson",
+      "Engaging Engineering",
+      "Sheffield",
+      "Contract",
+      "Software Engineer",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next",
+      "Node",
+    ],
+    cookie: "Cookies used for a sweet user experience.",
+  },
   mugshot: {
     image: {
       url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h7t43hbj9607l7ggon7yd6",

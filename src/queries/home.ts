@@ -11,9 +11,13 @@ export const queryHome = gql`
   query Home {
     homes(first: 1) {
       id
-      title
-      description
-      keywords
+      meta {
+        id
+        title
+        description
+        keywords
+        cookie
+      }
       mugshot {
         id
         image {

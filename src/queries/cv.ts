@@ -14,9 +14,13 @@ export const queryCV = gql`
   query CV {
     cvs(first: 1) {
       id
-      title
-      description
-      keywords
+      meta {
+        id
+        title
+        description
+        keywords
+        cookie
+      }
       logoLightBackground {
         id
         url(

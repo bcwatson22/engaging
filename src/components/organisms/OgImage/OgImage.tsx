@@ -4,7 +4,7 @@ import type { THome } from "@/data/types/home";
 type Props = THome;
 
 const OgImage = ({
-  title,
+  meta: { title },
   mugshot: {
     image: { url },
     heading,

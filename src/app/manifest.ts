@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import { cacheHome } from "@/data/cache/home";
 import { themeColor } from "@/constants/metadata";
 
-const { title, description } = cacheHome;
+const { title, description } = cacheHome.meta;
 
 const iconSizes = [192, 512];
 

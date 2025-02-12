@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 
 import { queryCV } from "@/queries/cv";
@@ -8,8 +9,10 @@ import { getData } from "@/data/functions/getData";
 import { saveData, type TPages } from "@/data/functions/saveData";
 import { cacheCV } from "@/data/cache/cv";
 
-import { Header } from "@/components/molecules/Header/Header";
+import { Copyright } from "@/components/atoms/Copyright/Copyright";
+import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Details } from "@/components/molecules/Details/Details";
+import { Header } from "@/components/molecules/Header/Header";
 import { Qualification } from "@/components/molecules/Qualification/Qualification";
 import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
@@ -28,11 +31,9 @@ const pageNameLower = pageName.toLowerCase();
 const pageNamePlural = "cvs";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description, keywords } = await getData<TCV>(
-    queryCV,
-    pageNamePlural,
-    cacheCV
-  );
+  const {
+    meta: { title, description, keywords },
+  } = await getData<TCV>(queryCV, pageNamePlural, cacheCV);
 
   return {
     title,
@@ -80,7 +81,7 @@ const CVPage = async () => {
   await saveData(data, pageName);
 
   const {
-    title,
+    meta: { title, cookie },
     logoDarkBackground,
     logoLightBackground,
     intro,
@@ -129,6 +130,12 @@ const CVPage = async () => {
               ))}
             </Section>
           </div>
+          <Suspense>
+            <Copyright />
+          </Suspense>
+          <Suspense>
+            <Cookie message={cookie} />
+          </Suspense>
         </div>
       </div>
     </main>

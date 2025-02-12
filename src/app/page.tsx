@@ -9,6 +9,7 @@ import { saveData, type TPages } from "@/data/functions/saveData";
 import { cacheHome } from "@/data/cache/home";
 
 import { Particles } from "@/components/atoms/Particles/Particles";
+import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 import { revalidate } from "@/constants/common";
@@ -19,11 +20,9 @@ const pageNameLower = pageName.toLowerCase();
 const pageNamePlural = "cvs";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const { title, description, keywords } = await getData<THome>(
-    queryHome,
-    pageNamePlural,
-    cacheHome
-  );
+  const {
+    meta: { title, description, keywords },
+  } = await getData<THome>(queryHome, pageNamePlural, cacheHome);
 
   return {
     title,
@@ -59,7 +58,11 @@ const HomePage = async () => {
 
   await saveData(data, "Home", 3);
 
-  const { title, mugshot, technologies } = data;
+  const {
+    meta: { title, cookie },
+    mugshot,
+    technologies,
+  } = data;
 
   return (
     <>
@@ -68,6 +71,9 @@ const HomePage = async () => {
         <Mugshot mugshot={mugshot} technologies={technologies} />
         <Suspense>
           <Particles />
+        </Suspense>
+        <Suspense>
+          <Cookie message={cookie} className="banner" hasCopyright />
         </Suspense>
       </main>
     </>

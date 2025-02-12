@@ -5,7 +5,7 @@ import { OgImage, type OgImageProps } from "./OgImage";
 import { mockHome } from "@/data/mock/home";
 
 const {
-  title,
+  meta: { title },
   mugshot: { heading },
   technologies,
 } = mockHome;

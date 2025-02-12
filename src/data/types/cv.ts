@@ -7,9 +7,9 @@ import type { TReference } from "@/components/molecules/Reference/Reference";
 import type { TGig } from "@/components/organisms/Gig/Gig";
 
 export type TCV = TID &
-  TMeta &
   TLogo &
   TIntro & {
+    meta: TMeta;
     address: TAddress;
     contactLinks: TLink[];
     gigs: TGig[];

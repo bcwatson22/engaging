@@ -15,7 +15,12 @@ vi.mock("@/components/atoms/Logo/Logo", () => ({
   Logo: vi.fn(),
 }));
 
-const { title, logoDarkBackground, logoLightBackground, intro } = mockCV;
+const {
+  meta: { title },
+  logoDarkBackground,
+  logoLightBackground,
+  intro,
+} = mockCV;
 
 const defaultProps: HeaderProps = {
   title,

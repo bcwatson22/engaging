@@ -5,8 +5,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Layout, { type LayoutProps } from "@/app/layout";
 
-import { Cookie } from "@/components/molecules/Cookie/Cookie";
-
 vi.mock(import("next/font/google"), async (importOriginal: Function) => {
   const actual = await importOriginal();
   return {
@@ -34,10 +32,6 @@ vi.mock(
   }
 );
 
-vi.mock("@/components/molecules/Cookie/Cookie", () => ({
-  Cookie: vi.fn(),
-}));
-
 const mockText = "mockText";
 const mockChildren = <button>{mockText}</button>;
 
@@ -64,12 +58,6 @@ describe("Layout", () => {
     setup();
 
     expect(screen.getByRole("button", { name: mockText })).toBeInTheDocument();
-  });
-
-  it("renders a Cookie component", () => {
-    setup();
-
-    expect(Cookie).toHaveBeenCalledTimes(1);
   });
 
   it("renders an Analytics component", () => {

@@ -3,7 +3,10 @@ import { cacheHome } from "@/data/cache/home";
 const fontFamily = "Nunito";
 const errorMessage = "Failed to load font data";
 
-const loadGoogleFont = async (font = fontFamily, text = cacheHome.title) => {
+const loadGoogleFont = async (
+  font = fontFamily,
+  text = cacheHome.meta.title
+) => {
   const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(
     text
   )}`;

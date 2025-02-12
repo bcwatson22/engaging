@@ -18,7 +18,7 @@
 @layer components {
   .mugshot {
     @apply relative;
-    @apply md:p-24;
+    @apply sm:flex-grow sm:flex sm:flex-col sm:justify-center md:p-24;
     @apply print:p-6;
   }
 
@@ -206,7 +206,7 @@
         animation-delay: var(--delay);
       }
 
-      @media screen and (min-width: 768px) {
+      @screen md {
         transform: rotateZ(calc((var(--n) + 6) * calc(360 / 12) * 1deg))
           translateY(300%)
           rotateZ(calc((var(--n) + 6) * calc(360 / 12) * -1deg));
