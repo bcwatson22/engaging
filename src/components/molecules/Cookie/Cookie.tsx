@@ -38,7 +38,9 @@ const Cookie = ({ message, hasCopyright = false, className }: Props) => {
       <motion.aside
         key="aside"
         initial={{ opacity: 0 }}
-        animate={showBanner ? { opacity: 1 } : slideDown}
+        animate={
+          showBanner ? { opacity: 1 } : { ...slideDown, position: "absolute" }
+        }
         className="cookie"
       >
         <Icon icon="Cookie" />

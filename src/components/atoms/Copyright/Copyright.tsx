@@ -16,7 +16,7 @@ const Copyright = ({ showRights = true }: Props) => (
     <motion.span
       key="rights"
       initial={growFromRight}
-      animate={showRights ? { width: "auto", opacity: 1 } : growFromRight}
+      animate={showRights ? { width: "auto", opacity: 1 } : {}}
       className="rights"
     >
       . All rights reserved

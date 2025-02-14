@@ -23,18 +23,9 @@
     }
   }
 
-  .copy {
-    @apply ml-auto flex items-center;
-  }
-
-  .rights {
-    @apply whitespace-pre inline-block overflow-hidden;
-  }
-
   .dismiss {
     @apply block w-6 h-6 relative ml-auto;
     @apply hover:fill-brand-yellow;
-    /* @apply sm:ml-4; */
 
     &:before {
       content: '';

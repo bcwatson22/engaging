@@ -1,0 +1,9 @@
+@layer components {
+  .copy {
+    @apply ml-auto flex items-center shrink-0;
+  }
+
+  .rights {
+    @apply whitespace-pre inline-block overflow-hidden;
+  }
+}
