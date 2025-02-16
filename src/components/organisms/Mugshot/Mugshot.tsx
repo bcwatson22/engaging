@@ -27,7 +27,7 @@ type Props = {
 const MugshotSkeleton = () => (
   <div className="mugshot w-full">
     <Skeleton className="overview rounded-full" />
-    <ul className="technologies">
+    <ul className="technologies loading">
       {[...Array(12).keys()].map((key) => (
         <li key={key}>
           <TechnologySkeleton />

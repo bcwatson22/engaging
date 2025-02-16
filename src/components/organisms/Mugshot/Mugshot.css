@@ -136,6 +136,10 @@
     @apply max-md:animate-none xs:grid-cols-4 sm:grid-cols-6 md:z-10 md:pt-0 md:block md:absolute md:top-0 md:left-0 md:w-full md:h-full;
     @apply print:relative print:grid print:animate-none print:w-auto print:h-auto motion-reduce:animate-none;
 
+    &.loading li {
+      @apply md:left-[44%] lg:left-[46%];
+    }
+
     & li {
       @apply transform-gpu;
       @apply md:absolute md:top-[42%] md:left-[42%] md:w-24 md:min-h-24;

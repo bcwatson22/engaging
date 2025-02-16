@@ -32,7 +32,7 @@ const Error = ({
   const { image, heading: name } = content;
 
   return (
-    <main className="home main">
+    <main className="home loading main">
       <h1 className="sr-only">Engaging Engineering</h1>
       <section aria-labelledby={sectionId} className="overview overview-error">
         <figure className="coupon">
@@ -65,14 +65,14 @@ const Error = ({
             </button>
           )}
         </div>
-        <ul className="technologies">
-          {[...Array(12).keys()].map((key) => (
-            <li key={key}>
-              <TechnologySkeleton />
-            </li>
-          ))}
-        </ul>
       </section>
+      <ul className="technologies loading">
+        {[...Array(12).keys()].map((key) => (
+          <li key={key}>
+            <TechnologySkeleton />
+          </li>
+        ))}
+      </ul>
       <Particles />
     </main>
   );
