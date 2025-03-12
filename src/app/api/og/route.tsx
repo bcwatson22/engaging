@@ -6,9 +6,8 @@ import {
 } from "@/components/organisms/OgImage/OgImage";
 
 import { cacheHome } from "@/data/cache/home";
-import { loadGoogleFont } from "@/utils/loadGoogleFont";
+import { loadGoogleFont, fontFamily } from "@/utils/loadGoogleFont";
 
-const fontFamily = "Nunito";
 const replaceImageFormat = (
   value: string,
   current = "webp",

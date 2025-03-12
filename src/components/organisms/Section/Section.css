@@ -2,6 +2,7 @@
   .section {
     &:not(:last-of-type) {
       @apply mb-8;
+      @apply print:mb-3;
     }
 
     @apply md:mt-1 md:mb-0;

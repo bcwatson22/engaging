@@ -1,6 +1,7 @@
 @layer components {
   .copy {
     @apply ml-auto flex items-center shrink-0;
+    @apply print:hidden;
   }
 
   .rights {

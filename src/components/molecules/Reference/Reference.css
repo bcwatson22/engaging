@@ -1,0 +1,5 @@
+@layer components {
+  .reference:last-of-type {
+    @apply print:mb-2;
+  }
+}

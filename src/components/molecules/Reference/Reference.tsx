@@ -14,7 +14,7 @@ const Reference = ({ person, role, company, link }: Props) => {
   const sectionId = useId();
 
   return (
-    <section aria-labelledby={sectionId} className="qualification">
+    <section aria-labelledby={sectionId} className="qualification reference">
       <h3 id={sectionId}>{person}</h3>
       <p className="mt-0">
         {role}, {company}

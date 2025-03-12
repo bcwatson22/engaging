@@ -47,7 +47,7 @@ const Link = ({ link }: Props) => {
   let displayUrl =
     target.startsWith("tel:") || target.startsWith("mailto:") ? null : target;
 
-  if (isLocal) displayUrl = `engaging.engineering${target}`;
+  if (isLocal) displayUrl = "engaging.engineering";
 
   if (target.startsWith("https://")) displayUrl = target.split("https://")[1];
 

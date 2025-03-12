@@ -24,4 +24,4 @@ const loadGoogleFont = async (
   throw new Error(errorMessage);
 };
 
-export { loadGoogleFont, errorMessage };
+export { loadGoogleFont, errorMessage, fontFamily };
