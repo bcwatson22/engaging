@@ -1,0 +1,12 @@
+@layer components {
+  .screen-logo {
+    @apply mx-auto mb-auto;
+    @apply md:mx-0 lg:mb-0;
+    @apply print:hidden;
+  }
+
+  .print-logo {
+    @apply hidden;
+    @apply print:block print:indent-full print:aspect-logo print:bg-no-repeat print:bg-cover;
+  }
+}

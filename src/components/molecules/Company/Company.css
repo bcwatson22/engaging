@@ -29,4 +29,17 @@
       @apply print:w-[2.5rem] print:h-[2.5rem];
     }
   }
+
+  .screen-company-logo {
+    @apply print:hidden;
+  }
+
+  .print-company-logo {
+    @apply hidden;
+    @apply print:flex print:items-center print:justify-center;
+  }
+
+  .company-icon {
+    @apply indent-full aspect-square bg-no-repeat bg-contain bg-center w-[2.5rem] h-[2.5rem];
+  }
 }

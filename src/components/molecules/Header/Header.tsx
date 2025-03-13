@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 
-import { Intro, TIntro } from "@/components/atoms/Intro/Intro";
-import { Logo, TLogo } from "@/components/atoms/Logo/Logo";
+import { Intro, type TIntro } from "@/components/atoms/Intro/Intro";
+import { Logo, type TLogo } from "@/components/atoms/Logo/Logo";
+import { Link, type TLink } from "@/components/atoms/Link/Link";
 import { SkeletonParagraph } from "@/components/atoms/Skeleton/Skeleton";
 
 import { cacheCV } from "@/data/cache/cv";
@@ -23,6 +24,19 @@ const HeaderSkeleton = () => (
   </div>
 );
 
+const links: TLink[] = [
+  {
+    target: "/",
+    text: "Home",
+    icon: "Home",
+  },
+  {
+    target: "/cv/download",
+    text: "Download",
+    icon: "Download",
+  },
+];
+
 const Header = ({
   title,
   logoDarkBackground,
@@ -35,11 +49,20 @@ const Header = ({
       logoDarkBackground={logoDarkBackground}
       logoLightBackground={logoLightBackground}
     />
-    <div className="text-sm print:text-xs">
+    <div className="text-sm lg:row-span-2 print:text-xs">
       <Suspense>
         <Intro intro={intro} />
       </Suspense>
     </div>
+    <nav className="nav print:hidden">
+      <ul>
+        {links.map((link) => (
+          <li key={link?.target}>
+            <Link link={link} />
+          </li>
+        ))}
+      </ul>
+    </nav>
   </header>
 );
 

@@ -1,5 +1,6 @@
 import {
   ArrowPathIcon,
+  ArrowDownTrayIcon,
   AtSymbolIcon,
   DevicePhoneMobileIcon,
   DocumentTextIcon,
@@ -17,6 +18,7 @@ const iconOptions = [
   "Cookie",
   "Cross",
   "Document",
+  "Download",
   "Phone",
   "Email",
   "Home",
@@ -42,6 +44,7 @@ const iconMap: Record<
   Cookie: CookieIcon,
   Cross: XMarkIcon,
   Document: DocumentTextIcon,
+  Download: ArrowDownTrayIcon,
   Email: AtSymbolIcon,
   Home: HomeIcon,
   Phone: DevicePhoneMobileIcon,

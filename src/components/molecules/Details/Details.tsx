@@ -29,7 +29,7 @@ const DetailsSkeleton = ({
 const Details = ({ address, links }: Props) => (
   <>
     {address && <Address address={address} />}
-    <address className="address">
+    <address className="nav">
       <ul>
         {links?.map((link) => (
           <li key={link?.id}>

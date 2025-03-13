@@ -39,19 +39,33 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const triggerProps = useScrollTrigger({ ref, delay });
 
+  const alt = `${company} logo`;
+
   return (
     <motion.header ref={ref} className="company" {...triggerProps}>
       {logo?.url && (
-        <figure className="company-logo">
-          <Image
-            src={logo.url}
-            alt={`${company} logo`}
-            width={width}
-            height={height}
-            sizes={`(min-width: 768px) ${width}px, 60px`}
-            loading="lazy"
-          />
-        </figure>
+        <>
+          <figure className="company-logo screen-company-logo">
+            <Image
+              src={logo.url}
+              alt={alt}
+              width={width}
+              height={height}
+              sizes={`(min-width: 768px) ${width}px, 60px`}
+              loading="lazy"
+            />
+          </figure>
+          <div className="company-logo print-company-logo">
+            <div
+              className="company-icon"
+              style={{ backgroundImage: `url(${logo.url})` }}
+              role="figure"
+              aria-labelledby="caption"
+            >
+              <span id="caption">{alt}</span>
+            </div>
+          </div>
+        </>
       )}
       <div className="company-details">
         <h3 id={sectionId}>{company}</h3>

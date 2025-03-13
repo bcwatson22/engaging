@@ -16,7 +16,6 @@ const puppeteer = require("puppeteer");
   });
   const page = await browser.newPage();
 
-  // await page.setViewport({ width: 940, height: 800 });
   await page.setContent(htmlContent, {
     waitUntil: ["networkidle0"],
   });
@@ -25,17 +24,10 @@ const puppeteer = require("puppeteer");
     content:
       "@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400..700&display=swap');",
   });
-  // await page.evaluateHandle("document.fonts.ready");
-  // await page.waitForNetworkIdle({ idleTime: 30000 });
-  // await page.focus("body");
-  // await page.screenshot({ path: "public/cv.png" });
-  // await page.bringToFront();
 
   await page.pdf({
-    path: "./public/cv.pdf",
-    // waitForFonts: true,
+    path: "./public/billy-watson-cv.pdf",
     format: "A4",
-    // scale: 0.67,
     margin: {
       top: "5mm",
       left: "5mm",

@@ -18,6 +18,7 @@ type TLink =
 
 type Props = {
   link: TLink;
+  className?: string;
 };
 
 type TShared = Omit<ComponentPropsWithRef<"a">, "href"> & {
@@ -39,10 +40,10 @@ const Inner = ({ text, icon }: TInner) => (
   </>
 );
 
-const Link = ({ link }: Props) => {
+const Link = ({ link, className }: Props) => {
   const { target, text, icon } = link!;
 
-  const isLocal = target.startsWith("/");
+  const isLocal = target === "/";
 
   let displayUrl =
     target.startsWith("tel:") || target.startsWith("mailto:") ? null : target;
@@ -53,7 +54,9 @@ const Link = ({ link }: Props) => {
 
   const outerProps: TShared = {
     href: target,
-    className: `link icon${displayUrl ? " url" : ""}`,
+    className: `link icon${displayUrl ? " url" : ""}${
+      className ? " " + className : ""
+    }`,
     "data-url": displayUrl,
   };
 

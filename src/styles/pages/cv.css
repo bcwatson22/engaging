@@ -1,6 +1,6 @@
 @layer components {
   .wrapper {
-    @apply min-h-screen p-6 border-3 border-brand-blue overflow-clip;
+    @apply min-h-screen m-1 p-6 border-3 border-brand-blue overflow-clip;
     @apply sm:m-6 xl:max-w-[70rem] xl:p-16 xl:mx-auto;
     @apply dark:border-brand-yellow;
     @apply print:m-0;

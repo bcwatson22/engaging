@@ -1,5 +1,5 @@
 @layer components {
-  .address {
+  .nav {
     @apply not-italic;
     @apply print:mb-4;
 
