@@ -36,7 +36,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/utils/saveToPdf.mjs"  ],
   "exclude": [
     "node_modules"
   ]

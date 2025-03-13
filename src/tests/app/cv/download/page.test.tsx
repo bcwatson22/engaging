@@ -45,19 +45,19 @@ describe("Loading", () => {
   });
 
   it("creates an anchor", () => {
-    const createElementSpy = vi.spyOn(document, "createElement");
+    const spyCreateElement = vi.spyOn(document, "createElement");
 
     setup();
 
-    expect(createElementSpy).toHaveBeenNthCalledWith(1, "div");
+    expect(spyCreateElement).toHaveBeenNthCalledWith(1, "div");
   });
 
   it("appends the anchor to the body", () => {
-    const appendChildSpy = vi.spyOn(document.body, "appendChild");
+    const spyAppendChild = vi.spyOn(document.body, "appendChild");
 
     setup();
 
-    expect(appendChildSpy).toHaveBeenNthCalledWith(1, expect.any(Element));
+    expect(spyAppendChild).toHaveBeenNthCalledWith(1, expect.any(Element));
   });
 
   it("clicks the anchor", () => {
@@ -67,11 +67,11 @@ describe("Loading", () => {
   });
 
   it("removes the anchor from the body", () => {
-    const removeChildSpy = vi.spyOn(document.body, "removeChild");
+    const spyRemoveChild = vi.spyOn(document.body, "removeChild");
 
     setup();
 
-    expect(removeChildSpy).toHaveBeenCalledTimes(1);
+    expect(spyRemoveChild).toHaveBeenCalledTimes(1);
   });
 
   it("takes the user back to the cv page", () => {
@@ -85,7 +85,7 @@ describe("Loading", () => {
   //   //   new Error("Async error")
   //   // );
 
-  //   const consoleErrorSpy = vi.spyOn(console, "error");
+  //   const spyConsoleError = vi.spyOn(console, "error");
   //   const mockErrorMessage = "Something went wrong";
 
   //   setup();
@@ -94,7 +94,7 @@ describe("Loading", () => {
   //   //   push: vi.fn().mockResolvedValue(new Error("Async error")),
   //   // });
 
-  //   expect(consoleErrorSpy).toHaveBeenNthCalledWith(
+  //   expect(spyConsoleError).toHaveBeenNthCalledWith(
   //     1,
   //     "Error trying to fetch page data:",
   //     mockErrorMessage

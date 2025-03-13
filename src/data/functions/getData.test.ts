@@ -45,7 +45,7 @@ describe("getData", () => {
   });
 
   it("logs an error message if an error exists", async () => {
-    const consoleErrorSpy = vi.spyOn(console, "error");
+    const spyConsoleError = vi.spyOn(console, "error");
     const mockErrorMessage = "Something went wrong";
 
     await setup({
@@ -53,7 +53,7 @@ describe("getData", () => {
       error: mockErrorMessage,
     });
 
-    expect(consoleErrorSpy).toHaveBeenNthCalledWith(
+    expect(spyConsoleError).toHaveBeenNthCalledWith(
       1,
       "Error trying to fetch page data:",
       mockErrorMessage

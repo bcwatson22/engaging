@@ -1,14 +1,17 @@
-const fs = require("fs");
-const puppeteer = require("puppeteer");
+import fs from "fs";
+import puppeteer from "puppeteer";
 
-(async () => {
-  const htmlContent = fs.readFileSync(".next/server/app/cv.html", "utf8");
+const cssPath = ".next/static/css/";
+const htmlPath = ".next/server/app/cv.html";
+const encoding = "utf-8";
 
-  const cssPath = ".next/static/css/";
+const saveToPdf = async () => {
+  const htmlContent = fs.readFileSync(htmlPath, encoding);
+
   const cssFiles = fs
     .readdirSync(cssPath)
     .filter((filename) => filename.endsWith(".css"));
-  const cssContent = fs.readFileSync(cssPath + cssFiles[0], "utf8");
+  const cssContent = fs.readFileSync(cssPath + cssFiles[0], encoding);
 
   const browser = await puppeteer.launch({
     headless: true,
@@ -35,5 +38,10 @@ const puppeteer = require("puppeteer");
       bottom: "5mm",
     },
   });
+
   await browser.close();
-})();
+};
+
+(async () => saveToPdf())();
+
+export { cssPath, htmlPath, encoding, saveToPdf };

@@ -37,11 +37,11 @@ describe("Error", () => {
   });
 
   it("logs the error", () => {
-    const consoleErrorSpy = vi.spyOn(console, "error");
+    const spyConsoleError = vi.spyOn(console, "error");
 
     setup();
 
-    expect(consoleErrorSpy).toHaveBeenNthCalledWith(1, mockError);
+    expect(spyConsoleError).toHaveBeenNthCalledWith(1, mockError);
   });
 
   it("renders an Error component", () => {

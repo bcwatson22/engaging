@@ -1,12 +1,14 @@
-import { saveData } from "./saveData";
-
 import promises from "fs/promises";
 import path from "path";
+
+import { saveData } from "./saveData";
 
 import { mockHome } from "@/data/mock/home";
 
 const mockPageName = "Home";
 const mockPath = `/src/data/cache/${mockPageName.toLowerCase()}`;
+
+const spyConsoleLog = vi.spyOn(console, "log");
 
 const setup = async (levels?: number) =>
   await saveData(mockHome, mockPageName, levels);
@@ -18,23 +20,23 @@ describe("saveData", () => {
   });
 
   it("calls readFile", async () => {
-    const readFileSpy = vi.spyOn(promises, "readFile");
+    const spyReadFile = vi.spyOn(promises, "readFile");
 
     await setup();
 
-    expect(readFileSpy).toHaveBeenNthCalledWith(
+    expect(spyReadFile).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockPath)
     );
   });
 
   it("defaults to a file path four levels deep in local env", async () => {
-    const pathJoinSpy = vi.spyOn(path, "join");
+    const spyPathJoin = vi.spyOn(path, "join");
     vi.stubEnv("NODE_ENV", "development");
 
     await setup(undefined);
 
-    expect(pathJoinSpy).toHaveBeenNthCalledWith(
+    expect(spyPathJoin).toHaveBeenNthCalledWith(
       1,
       expect.any(String),
       expect.stringContaining("../../../../")
@@ -42,11 +44,11 @@ describe("saveData", () => {
   });
 
   it("calls writeFile", async () => {
-    const writeFileSpy = vi.spyOn(promises, "writeFile");
+    const spyWriteFile = vi.spyOn(promises, "writeFile");
 
     await setup();
 
-    expect(writeFileSpy).toHaveBeenNthCalledWith(
+    expect(spyWriteFile).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockPath),
       expect.stringContaining(`import type { T${mockPageName} }`)
@@ -54,11 +56,9 @@ describe("saveData", () => {
   });
 
   it("logs a success message and returns true on success", async () => {
-    const consoleLogSpy = vi.spyOn(console, "log");
-
     const result = await setup();
 
-    expect(consoleLogSpy).toHaveBeenNthCalledWith(
+    expect(spyConsoleLog).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(`${mockPageName} page data has been saved!`)
     );
@@ -67,14 +67,14 @@ describe("saveData", () => {
   });
 
   it("logs an error message and returns false on error", async () => {
-    const consoleErrorSpy = vi.spyOn(console, "error");
+    const spyConsoleError = vi.spyOn(console, "error");
     const mockRejectedValue = "Something went wrong";
 
     vi.spyOn(promises, "writeFile").mockRejectedValue(mockRejectedValue);
 
     const result = await setup();
 
-    expect(consoleErrorSpy).toHaveBeenNthCalledWith(
+    expect(spyConsoleError).toHaveBeenNthCalledWith(
       1,
       "Error trying to save page data:",
       mockRejectedValue
@@ -84,13 +84,11 @@ describe("saveData", () => {
   });
 
   it("logs a warning message if the file doesn't exist", async () => {
-    const consoleLogSpy = vi.spyOn(console, "log");
-
     vi.spyOn(promises, "readFile").mockResolvedValue("");
 
     const result = await setup();
 
-    expect(consoleLogSpy).toHaveBeenNthCalledWith(
+    expect(spyConsoleLog).toHaveBeenNthCalledWith(
       1,
       `Couldn't read ${mockPageName} page data file.`
     );
