@@ -6,7 +6,7 @@
   "homepage": "https://github.com/bcwatson22/engaging#readme",
   "scripts": {
     "dev": "NODE_ENV=development next dev",
-    "build": "NODE_ENV=production next build && node ./src/utils/saveToPdf.ts",
+    "build": "NODE_ENV=production next build && npx puppeteer browsers install chrome@133 && node ./src/utils/saveToPdf.ts",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
@@ -17,6 +17,7 @@
     "node": "^22"
   },
   "dependencies": {
+    "@sparticuz/chromium-min": "133.0.0",
     "@urql/core": "4.3.0",
     "@urql/next": "1.1.1",
     "@vercel/analytics": "1.4.1",
@@ -27,6 +28,7 @@
     "node": "23.10.0",
     "postcss-import": "16.1.0",
     "puppeteer": "24.4.0",
+    "puppeteer-core": "24.4.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "urql": "4.0.6"
