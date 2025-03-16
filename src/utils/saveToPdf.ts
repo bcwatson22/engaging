@@ -1,9 +1,36 @@
 import fs from "fs";
-import puppeteer from "puppeteer";
+import puppeteer, { type Browser } from "puppeteer";
+import puppeteerCore, { type Browser as BrowserCore } from "puppeteer-core";
+import chromium from "@sparticuz/chromium-min";
 
 const cssPath = ".next/static/css/";
 const htmlPath = ".next/server/app/cv.html";
 const encoding = "utf-8";
+
+const remoteExecutablePath =
+  "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar";
+
+let browser: Browser | BrowserCore;
+
+const getBrowser = async () => {
+  if (browser) return browser;
+
+  if (process.env.NODE_ENV === "production") {
+    browser = await puppeteerCore.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(remoteExecutablePath),
+      headless: true,
+    });
+  } else {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-web-security"],
+      ignoreDefaultArgs: ["--disable-extensions"],
+    });
+  }
+
+  return browser;
+};
 
 const saveToPdf = async () => {
   const htmlContent = fs.readFileSync(htmlPath, encoding);
@@ -13,11 +40,7 @@ const saveToPdf = async () => {
     .filter((filename) => filename.endsWith(".css"));
   const cssContent = fs.readFileSync(cssPath + cssFiles[0], encoding);
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-web-security"],
-    ignoreDefaultArgs: ["--disable-extensions"],
-  });
+  const browser = await getBrowser();
   const page = await browser.newPage();
 
   await page.setContent(htmlContent, {
