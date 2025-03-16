@@ -9,7 +9,6 @@ const client = async (query: string) => {
     };
     const requestBody = {
       query,
-      // variables: { email },
     };
     const options = {
       method: "POST",

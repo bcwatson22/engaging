@@ -49,7 +49,7 @@ const Header = ({
       logoDarkBackground={logoDarkBackground}
       logoLightBackground={logoLightBackground}
     />
-    <div className="text-sm lg:row-span-2 print:text-xs">
+    <div className="text-sm text-balance lg:row-span-2 print:text-xs">
       <Suspense>
         <Intro intro={intro} />
       </Suspense>
