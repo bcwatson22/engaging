@@ -13,9 +13,6 @@
     "coverage": "vitest run --coverage",
     "typecheck": "tsc --pretty --noEmit"
   },
-  "engines": {
-    "node": "^22"
-  },
   "dependencies": {
     "@sparticuz/chromium-min": "133.0.0",
     "@urql/core": "4.3.0",
