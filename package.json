@@ -13,6 +13,9 @@
     "coverage": "vitest run --coverage",
     "typecheck": "tsc --pretty --noEmit"
   },
+  "engines": {
+    "node": "^23"
+  },
   "dependencies": {
     "@urql/core": "4.3.0",
     "@urql/next": "1.1.1",
