@@ -14,7 +14,7 @@
     "typecheck": "tsc --pretty --noEmit"
   },
   "engines": {
-    "node": "^23"
+    "node": "^22"
   },
   "dependencies": {
     "@urql/core": "4.3.0",
