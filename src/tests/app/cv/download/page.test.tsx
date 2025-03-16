@@ -1,4 +1,4 @@
-import { Mock } from "vitest";
+import type { Mock } from "vitest";
 import { cleanup, render } from "@testing-library/react";
 
 import { useRouter } from "next/navigation";
@@ -11,22 +11,26 @@ vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
 }));
 
-// vi.mock(import("next/navigation"), async (importOriginal: Function) => {
-//   const actual = await importOriginal();
-//   return {
-//     ...actual,
-//     useRouter: vi.fn().mockReturnValue({ push: vi.fn() }),
-//   };
-// });
-
 vi.mock("@/components/pages/Loading/Loading", () => ({
   Loading: vi.fn(),
 }));
 
-const mockPush = vi.fn();
+type UseRouter = Partial<ReturnType<typeof useRouter>>;
 
-const setup = () => {
-  (useRouter as Mock).mockReturnValue({ push: mockPush });
+type SetupOptions = {
+  useRouter: UseRouter;
+};
+
+const mockPush = vi.fn();
+const defaultRouter: UseRouter = { push: mockPush };
+
+const setup = (options?: Partial<SetupOptions>) => {
+  const setupOptions: SetupOptions = {
+    useRouter: defaultRouter,
+    ...options,
+  };
+
+  (useRouter as Mock).mockReturnValue(setupOptions.useRouter);
 
   render(<DownloadPage />);
 };
@@ -80,24 +84,21 @@ describe("Loading", () => {
     expect(mockPush).toHaveBeenNthCalledWith(1, "/cv");
   });
 
-  // it("logs an error message if something went wrong", async () => {
-  //   // vi.spyOn(document, "createElement").mockRejectedValue(
-  //   //   new Error("Async error")
-  //   // );
+  it("logs an error message if something went wrong", async () => {
+    const spyConsoleError = vi.spyOn(console, "error");
 
-  //   const spyConsoleError = vi.spyOn(console, "error");
-  //   const mockErrorMessage = "Something went wrong";
+    setup({
+      useRouter: {
+        push: vi.fn().mockImplementation(() => {
+          throw new Error("Something went wrong");
+        }),
+      },
+    });
 
-  //   setup();
-
-  //   // (useRouter as Mock).mockReturnValue({
-  //   //   push: vi.fn().mockResolvedValue(new Error("Async error")),
-  //   // });
-
-  //   expect(spyConsoleError).toHaveBeenNthCalledWith(
-  //     1,
-  //     "Error trying to fetch page data:",
-  //     mockErrorMessage
-  //   );
-  // });
+    expect(spyConsoleError).toHaveBeenNthCalledWith(
+      1,
+      "Error downloading file:",
+      expect.any(Error)
+    );
+  });
 });

@@ -80,4 +80,14 @@ describe("DetailsSkeleton", () => {
       numOfPulses
     );
   });
+
+  it("renders an additional skeleton line if hasParagraph is true", () => {
+    render(<DetailsSkeleton hasParagraph />);
+
+    const numOfPulses = 5;
+
+    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+      numOfPulses
+    );
+  });
 });

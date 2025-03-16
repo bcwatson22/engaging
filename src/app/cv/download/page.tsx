@@ -18,14 +18,14 @@ const DownloadPage: NextPage = () => {
       link.click();
       document.body.removeChild(link);
 
-      void push("/cv");
+      push("/cv");
     } catch (error) {
       console.error("Error downloading file:", error);
     }
   }, [push]);
 
   useEffect(() => {
-    void downloadFile();
+    downloadFile();
   }, [downloadFile]);
 
   return <Loading />;

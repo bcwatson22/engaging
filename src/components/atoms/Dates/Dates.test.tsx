@@ -58,4 +58,18 @@ describe("Dates", () => {
       });
     });
   });
+
+  describe("className", () => {
+    it("renders if provided", () => {
+      const mockClassName = "mockClassName";
+
+      setup({ className: mockClassName });
+
+      expect(
+        screen
+          .getByText(mockDates[0].split("-")[0], { exact: false })
+          .closest("p")
+      ).toHaveClass(mockClassName);
+    });
+  });
 });

@@ -38,7 +38,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h843reblgj07l7ngxmszpx" alt="Node icon" width="32" />
     </td>
     <td>
-      Several custom Node functions are used to save and retrieve local versions of GraphQL query responses to ensure up-to-date backups.
+      Several custom Node functions are used to generate PDF version of the CV page, and also save and retrieve local versions of GraphQL query responses to ensure up-to-date backups.
     </td>
   </tr>
 </table>
@@ -51,7 +51,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
       <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm669n3dj0eki07l1ll2mj10q" alt="Node icon" width="32" />
     </td>
     <td>
-      Over 99% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
+      100% code coverage achieved with blazing fast test runner that also offers enhanced DX and watch mode compared to Jest.
     </td>
   </tr>
 </table>
@@ -65,6 +65,19 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
     </td>
     <td>
       Of course, everything is strongly typed! To do otherwise in this day and age should be unthinkable.
+    </td>
+  </tr>
+</table>
+
+## Puppeteer
+
+<table>
+  <tr>
+    <td width="58">
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm88p48y0vspy08mm4zpgwdvx" alt="Puppeteer icon" width="32" />
+    </td>
+    <td>
+      Puppeteer was combined with Node to spin up a headless version of the CV page to then create and save a PDF version for downloading.
     </td>
   </tr>
 </table>

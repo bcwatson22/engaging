@@ -49,4 +49,16 @@ describe("Section", () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe("className", () => {
+    it("renders if provided", () => {
+      const mockClassName = "mockClassName";
+
+      setup({
+        className: mockClassName,
+      });
+
+      expect(screen.getByRole("article")).toHaveClass(mockClassName);
+    });
+  });
 });

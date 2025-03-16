@@ -119,6 +119,18 @@ describe("Link", () => {
       });
     });
   });
+
+  describe("className", () => {
+    it("renders if provided", () => {
+      const mockClassName = "mockClassName";
+
+      setup({ className: mockClassName });
+
+      expect(screen.getByRole("link", { name: text })).toHaveClass(
+        mockClassName
+      );
+    });
+  });
 });
 
 describe("LinkSkeleton", () => {

@@ -62,4 +62,16 @@ describe("SkeletonParagraph", () => {
       numberOfLines
     );
   });
+
+  describe("className", () => {
+    it("renders if provided", () => {
+      const mockClassName = "mockClassName";
+
+      render(<SkeletonParagraph numOfLines={1} className={mockClassName} />);
+
+      expect(
+        screen.getByRole("status", { name: label }).parentElement
+      ).toHaveClass(mockClassName);
+    });
+  });
 });

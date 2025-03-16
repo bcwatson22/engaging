@@ -55,11 +55,25 @@ describe("Cookie", () => {
     );
   });
 
-  it("renders a Copyright component if hasCopyright is true", () => {
-    setup({
-      hasCopyright: true,
-    });
+  describe("hasCopyright", () => {
+    it("renders a Copyright component if it's true", () => {
+      setup({
+        hasCopyright: true,
+      });
 
-    expect(Copyright).toHaveBeenNthCalledWith(1, { showRights: false }, {});
+      expect(Copyright).toHaveBeenNthCalledWith(1, { showRights: false }, {});
+    });
+  });
+
+  describe("className", () => {
+    it("renders if provided", () => {
+      const mockClassName = "mockClassName";
+
+      setup({
+        className: mockClassName,
+      });
+
+      expect(screen.getByRole("contentinfo")).toHaveClass(mockClassName);
+    });
   });
 });
