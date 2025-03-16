@@ -16,6 +16,7 @@ const saveToPdf = async () => {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-web-security"],
+    ignoreDefaultArgs: ["--disable-extensions"],
   });
   const page = await browser.newPage();
 

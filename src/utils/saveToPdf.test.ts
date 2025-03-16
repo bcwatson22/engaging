@@ -74,6 +74,7 @@ describe("saveToPdf", () => {
     expect(puppeteer.launch).toHaveBeenNthCalledWith(1, {
       headless: true,
       args: ["--no-sandbox", "--disable-web-security"],
+      ignoreDefaultArgs: ["--disable-extensions"],
     });
 
     expect(mockPuppeteerBrowser.newPage).toHaveBeenCalledTimes(1);
