@@ -9,7 +9,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 <table>
   <tr>
     <td width="58">
-      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm3h83ncpbi5h07mpb71mbnfy" alt="Next icon" width="32" />
+      <img src="https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm88pkvdj7j9206mjbkrvrkk6" alt="Next icon" width="32" />
     </td>
     <td>
       It uses Next's app router, making use of modern features like Suspense streaming, server components and dynamic favicons (via code), manifest, robots and sitemap.

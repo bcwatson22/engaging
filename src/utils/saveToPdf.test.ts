@@ -1,9 +1,16 @@
 import fs from "fs";
 import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
 
 import type { Mock } from "vitest";
 
-import { saveToPdf, cssPath, htmlPath, encoding } from "./saveToPdf.js";
+import {
+  getBrowser,
+  saveToPdf,
+  headless,
+  cssPath,
+  encoding,
+} from "./saveToPdf.js";
 
 vi.mock("fs", () => ({
   default: {
@@ -25,6 +32,28 @@ vi.mock("puppeteer", () => ({
   },
 }));
 
+vi.mock("puppeteer-core", () => ({
+  default: {
+    launch: vi.fn().mockResolvedValue({
+      newPage: vi.fn().mockResolvedValue({
+        addStyleTag: vi.fn(),
+        pdf: vi.fn(),
+        setContent: vi.fn(),
+      }),
+      close: vi.fn(),
+    }),
+  },
+}));
+
+vi.mock("@sparticuz/chromium-min", () => ({
+  default: {
+    args: {
+      mockArgKey: "mockArgValue",
+    },
+    executablePath: vi.fn(),
+  },
+}));
+
 const mockPuppeteerPage = {
   addStyleTag: vi.fn(),
   pdf: vi.fn(),
@@ -43,13 +72,50 @@ const setup = async () => {
   await saveToPdf();
 };
 
+describe("getBrowser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.unstubAllEnvs();
+  });
+
+  it("creates a puppeteerCore instance in prod env", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+
+    await getBrowser();
+
+    expect(puppeteerCore.launch).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        headless,
+        args: { mockArgKey: "mockArgValue" },
+      })
+    );
+  });
+
+  it("creates a puppeteer instance in local env", async () => {
+    await getBrowser();
+
+    expect(puppeteer.launch).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        headless,
+        args: ["--no-sandbox", "--disable-web-security"],
+      })
+    );
+  });
+});
+
 describe("saveToPdf", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("calls readFileSync to get htmlContent", async () => {
     await setup();
 
-    expect(fs.readFileSync).toHaveBeenNthCalledWith(1, htmlPath, encoding);
+    expect(fs.readFileSync).toHaveBeenNthCalledWith(
+      1,
+      ".next/server/app/cv.html",
+      encoding
+    );
   });
 
   it("calls readdirSync to get CSS files", async () => {
@@ -68,14 +134,10 @@ describe("saveToPdf", () => {
     );
   });
 
-  it("launches a puppeteer browser and creates a new page", async () => {
+  it("calls getBrowser and creates a new page", async () => {
     await setup();
 
-    expect(puppeteer.launch).toHaveBeenNthCalledWith(1, {
-      headless: true,
-      args: ["--no-sandbox", "--disable-web-security"],
-      ignoreDefaultArgs: ["--disable-extensions"],
-    });
+    expect(puppeteer.launch).toHaveBeenCalledTimes(1);
 
     expect(mockPuppeteerBrowser.newPage).toHaveBeenCalledTimes(1);
   });
