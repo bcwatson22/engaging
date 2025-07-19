@@ -10,7 +10,6 @@ import { saveData, type TPages } from "@/data/functions/saveData";
 import { cacheCV } from "@/data/cache/cv";
 
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
-import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Details } from "@/components/molecules/Details/Details";
 import { Header } from "@/components/molecules/Header/Header";
 import { Qualification } from "@/components/molecules/Qualification/Qualification";
@@ -18,7 +17,7 @@ import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
 
-import { revalidate } from "@/constants/common";
+import { media, revalidate } from "@/constants/common";
 import {
   appleWebApp,
   metadata,
@@ -57,7 +56,7 @@ const generateMetadata = async (): Promise<Metadata> => {
         `/startup-${pageNameLower}.png`,
         {
           url: `/startup-${pageNameLower}-2x.png`,
-          media: "(device-width: 768px) and (device-height: 1024px)",
+          media,
         },
       ],
     },
@@ -81,7 +80,7 @@ const CVPage = async () => {
   await saveData(data, pageName);
 
   const {
-    meta: { title, cookie },
+    meta: { title },
     logoDarkBackground,
     logoLightBackground,
     intro,
@@ -132,9 +131,6 @@ const CVPage = async () => {
           </div>
           <Suspense>
             <Copyright />
-          </Suspense>
-          <Suspense>
-            <Cookie message={cookie} />
           </Suspense>
         </div>
       </div>

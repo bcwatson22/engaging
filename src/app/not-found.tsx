@@ -1,7 +1,7 @@
 import { Link } from "@/components/atoms/Link/Link";
 import { Error } from "@/components/pages/Error/Error";
 
-const NotFoundPage = () => (
+const NotFound = () => (
   <Error heading="Are you lost?">
     <p className="mb-4">
       We couldn&apos;t find what you were looking for. Maybe it&apos;s moved
@@ -11,4 +11,4 @@ const NotFoundPage = () => (
   </Error>
 );
 
-export default NotFoundPage;
+export default NotFound;

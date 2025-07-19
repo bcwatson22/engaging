@@ -11,7 +11,7 @@ const getData = async <Data>(
 
   if (error) console.error("Error trying to fetch page data:", error);
 
-  return data?.[key]?.[0] ? data[key][0] : fallback;
+  return data?.[key]?.[0] ?? fallback;
 };
 
 export { getData };

@@ -10,7 +10,7 @@
     @apply print:hidden;
 
     & p {
-      @apply text-xs;
+      @apply mx-auto text-xs;
       @apply sm:text-sm;
     }
   }

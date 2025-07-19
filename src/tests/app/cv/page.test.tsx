@@ -12,7 +12,6 @@ import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
-import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Header } from "@/components/molecules/Header/Header";
 import { Details } from "@/components/molecules/Details/Details";
 import { Qualification } from "@/components/molecules/Qualification/Qualification";
@@ -83,12 +82,8 @@ vi.mock("@/components/atoms/Copyright/Copyright", () => ({
   Copyright: vi.fn(),
 }));
 
-vi.mock("@/components/molecules/Cookie/Cookie", () => ({
-  Cookie: vi.fn(),
-}));
-
 const {
-  meta: { title, description, cookie },
+  meta: { title, description },
   logoDarkBackground,
   logoLightBackground,
   intro,
@@ -221,16 +216,6 @@ describe("CVPage", () => {
     await setup();
 
     expect(Copyright).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders a Cookie component", async () => {
-    await setup();
-
-    expect(Cookie).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({ message: cookie }),
-      {}
-    );
   });
 
   it("generates metadata", async () => {

@@ -11,7 +11,6 @@ import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 
 import { Particles } from "@/components/atoms/Particles/Particles";
-import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
 vi.mock("@/data/functions/getData", () => ({
@@ -37,12 +36,8 @@ vi.mock("@/components/atoms/Particles/Particles", () => ({
   Particles: vi.fn(),
 }));
 
-vi.mock("@/components/molecules/Cookie/Cookie", () => ({
-  Cookie: vi.fn(),
-}));
-
 const {
-  meta: { title, description, cookie },
+  meta: { title, description },
   mugshot,
   technologies,
 } = mockHome;
@@ -102,16 +97,6 @@ describe("HomePage", () => {
     await setup();
 
     expect(Particles).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders a Cookie component", async () => {
-    await setup();
-
-    expect(Cookie).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({ message: cookie }),
-      {}
-    );
   });
 
   it("generates metadata", async () => {

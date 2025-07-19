@@ -9,11 +9,11 @@ import { saveData, type TPages } from "@/data/functions/saveData";
 import { cacheHome } from "@/data/cache/home";
 
 import { Particles } from "@/components/atoms/Particles/Particles";
-import { Cookie } from "@/components/molecules/Cookie/Cookie";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
-import { revalidate } from "@/constants/common";
+import { revalidate, media } from "@/constants/common";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
+import { Copyright } from "@/components/atoms/Copyright/Copyright";
 
 const pageName: keyof TPages = "CV";
 const pageNameLower = pageName.toLowerCase();
@@ -46,7 +46,7 @@ const generateMetadata = async (): Promise<Metadata> => {
         `/startup-${pageNameLower}.png`,
         {
           url: `/startup-${pageNameLower}-2x.png`,
-          media: "(device-width: 768px) and (device-height: 1024px)",
+          media,
         },
       ],
     },
@@ -59,24 +59,24 @@ const HomePage = async () => {
   await saveData(data, "Home", 3);
 
   const {
-    meta: { title, cookie },
+    meta: { title },
     mugshot,
     technologies,
   } = data;
 
   return (
-    <>
-      <main className="home main">
-        <h1 className="sr-only">{title}</h1>
-        <Mugshot mugshot={mugshot} technologies={technologies} />
-        <Suspense>
-          <Particles />
-        </Suspense>
-        <Suspense>
-          <Cookie message={cookie} className="banner" hasCopyright />
-        </Suspense>
-      </main>
-    </>
+    <main className="home main">
+      <h1 className="sr-only">{title}</h1>
+      <Mugshot mugshot={mugshot} technologies={technologies} />
+      <Suspense>
+        <Particles />
+      </Suspense>
+      <Suspense>
+        <footer className="footer">
+          <Copyright />
+        </footer>
+      </Suspense>
+    </main>
   );
 };
 
