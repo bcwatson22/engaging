@@ -1,10 +1,4 @@
-"use client";
-
 import { Link, type TLink } from "@/components/atoms/Link/Link";
-
-import { detectOS } from "@/utils/detectOS";
-
-console.log(detectOS());
 
 const links: TLink[] = [
   {
