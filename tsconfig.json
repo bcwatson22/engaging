@@ -29,7 +29,7 @@
       ]
     },
     "target": "ES2017",
-    "types": ["vitest/globals", "user-agent-data-types"]
+    "types": ["vitest/globals"]
   },
   "include": [
     "next-env.d.ts",
