@@ -1,6 +1,7 @@
 {
   "name": "engaging",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
   "homepage": "https://github.com/bcwatson22/engaging#readme",
@@ -21,7 +22,7 @@
     "@vercel/speed-insights": "1.1.0",
     "framer-motion": "11.11.10",
     "graphql": "16.8.1",
-    "next": "15.1.5",
+    "next": "15.5.7",
     "node": "23.10.0",
     "postcss-import": "16.1.0",
     "puppeteer": "24.4.0",

@@ -7,7 +7,7 @@
     ],
     "strict": true,
     "noImplicitAny": true,
-    "alwaysStrict": true,  
+    "alwaysStrict": true,
     "allowJs": true,
     "skipLibCheck": true,
     "noEmit": true,
@@ -29,14 +29,18 @@
       ]
     },
     "target": "ES2017",
-    "types": ["vitest/globals"]
+    "types": [
+      "vitest/globals"
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/utils/saveToPdf.ts"  ],
+    ".next/types/**/*.ts",
+    "src/utils/saveToPdf.ts",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
