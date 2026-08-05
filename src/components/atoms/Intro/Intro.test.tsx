@@ -5,7 +5,7 @@ import { Intro, type TIntro } from "./Intro";
 import { mockCV } from "@/data/mock/cv";
 
 const mockSplit = mockCV.intro.split("\n\n");
-const mockToday = new Date(2024, 12, 8);
+const mockToday = new Date("2025-01-08");
 
 const defaultProps: TIntro = {
   intro: mockSplit[1],

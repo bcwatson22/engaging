@@ -70,7 +70,7 @@ describe("HomePage", () => {
   it("calls saveData", async () => {
     await setup();
 
-    expect(saveData).toHaveBeenNthCalledWith(1, mockHome, "Home", 3);
+    expect(saveData).toHaveBeenNthCalledWith(1, mockHome, "Home");
   });
 
   it("renders a main", async () => {

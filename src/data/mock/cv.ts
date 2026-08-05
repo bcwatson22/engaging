@@ -4,7 +4,7 @@ export const mockCV: TCV = {
   meta: {
     title: "Billy Watson",
     description:
-      "Creative, personable and collaborative Front End Engineer with over 12 years' experience including Next, Node, React (+ Native) and TypeScript.",
+      "Creative, personable and collaborative Front End Engineer with over {{experience}} years' experience including Next, Node, React (+ Native) and TypeScript.",
     keywords: [
       "Billy Watson",
       "Engaging Engineering",

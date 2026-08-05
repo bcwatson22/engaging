@@ -25,6 +25,8 @@ import {
   viewport,
 } from "@/constants/metadata";
 
+import { formatExperience } from "@/utils/formatExperience";
+
 const pageName: keyof TPages = "CV";
 const pageNameLower = pageName.toLowerCase();
 const pageNamePlural = "cvs";
@@ -34,21 +36,23 @@ const generateMetadata = async (): Promise<Metadata> => {
     meta: { title, description, keywords },
   } = await getData<TCV>(queryCV, pageNamePlural, cacheCV);
 
+  const formattedDescription = formatExperience(description);
+
   return {
     title,
-    description,
+    description: formattedDescription,
     keywords,
     ...metadata,
     openGraph: {
       ...metadata.openGraph,
       title,
-      description,
+      description: formattedDescription,
       siteName: title,
     },
     twitter: {
       ...metadata.twitter,
       title,
-      description,
+      description: formattedDescription,
     },
     appleWebApp: {
       ...appleWebApp,

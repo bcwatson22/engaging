@@ -6,6 +6,7 @@ import {
 } from "@/components/organisms/OgImage/OgImage";
 
 import { cacheHome } from "@/data/cache/home";
+import { formatExperience } from "@/utils/formatExperience";
 import { loadGoogleFont, fontFamily } from "@/utils/loadGoogleFont";
 
 const replaceImageFormat = (
@@ -16,6 +17,10 @@ const replaceImageFormat = (
 
 const imageProps: OgImageProps = {
   ...cacheHome,
+  meta: {
+    ...cacheHome.meta,
+    description: formatExperience(cacheHome.meta.description),
+  },
   mugshot: {
     ...cacheHome.mugshot,
     image: {

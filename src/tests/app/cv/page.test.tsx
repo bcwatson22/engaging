@@ -96,6 +96,9 @@ const {
   references,
 } = mockCV;
 
+const mockToday = new Date("2025-01-08");
+const expectedDescription = description.replace("{{experience}}", "12");
+
 const setup = async (mockedResolvedValue: TCV | {} = mockCV) => {
   (getData as Mock).mockResolvedValue(mockedResolvedValue);
 
@@ -105,7 +108,13 @@ const setup = async (mockedResolvedValue: TCV | {} = mockCV) => {
 describe("CVPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
+    vi.setSystemTime(mockToday);
     cleanup();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("calls getData", async () => {
@@ -221,7 +230,10 @@ describe("CVPage", () => {
   it("generates metadata", async () => {
     const result = await generateMetadata();
 
-    expect(result).toEqual(expect.objectContaining({ title, description }));
+    expect(result).toEqual(
+      expect.objectContaining({ title, description: expectedDescription })
+    );
+    expect(expectedDescription).toContain("over 12 years'");
   });
 
   it("generates viewport", async () => {

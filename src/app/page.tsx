@@ -15,30 +15,34 @@ import { revalidate, media } from "@/constants/common";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
 
-const pageName: keyof TPages = "CV";
+import { formatExperience } from "@/utils/formatExperience";
+
+const pageName: keyof TPages = "Home";
 const pageNameLower = pageName.toLowerCase();
-const pageNamePlural = "cvs";
+const pageNamePlural = "homes";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const {
     meta: { title, description, keywords },
   } = await getData<THome>(queryHome, pageNamePlural, cacheHome);
 
+  const formattedDescription = formatExperience(description);
+
   return {
     title,
-    description,
+    description: formattedDescription,
     keywords,
     ...metadata,
     openGraph: {
       ...metadata.openGraph,
       title,
-      description,
+      description: formattedDescription,
       siteName: title,
     },
     twitter: {
       ...metadata.twitter,
       title,
-      description,
+      description: formattedDescription,
     },
     appleWebApp: {
       ...appleWebApp,
@@ -54,9 +58,9 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const HomePage = async () => {
-  const data = await getData<THome>(queryHome, "homes", cacheHome);
+  const data = await getData<THome>(queryHome, pageNamePlural, cacheHome);
 
-  await saveData(data, "Home");
+  await saveData(data, pageName);
 
   const {
     meta: { title },
