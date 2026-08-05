@@ -8,6 +8,8 @@ import { mockCV } from "@/data/mock/cv";
 
 import { queryCV } from "@/queries/cv";
 
+import { getStartupImages } from "@/constants/startupImages";
+
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 
@@ -234,6 +236,16 @@ describe("CVPage", () => {
       expect.objectContaining({ title, description: expectedDescription })
     );
     expect(expectedDescription).toContain("over 12 years'");
+  });
+
+  it("generates a startup image per device", async () => {
+    const { appleWebApp } = await generateMetadata();
+
+    expect(appleWebApp).toEqual(
+      expect.objectContaining({
+        startupImage: getStartupImages("cv"),
+      })
+    );
   });
 
   it("generates viewport", async () => {

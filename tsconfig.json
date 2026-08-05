@@ -9,6 +9,7 @@
     "noImplicitAny": true,
     "alwaysStrict": true,
     "allowJs": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "noEmit": true,
     "esModuleInterop": true,

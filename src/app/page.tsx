@@ -11,8 +11,9 @@ import { cacheHome } from "@/data/cache/home";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 
-import { revalidate, media } from "@/constants/common";
+import { revalidate } from "@/constants/common";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
+import { getStartupImages } from "@/constants/startupImages";
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
 
 import { formatExperience } from "@/utils/formatExperience";
@@ -46,13 +47,7 @@ const generateMetadata = async (): Promise<Metadata> => {
     },
     appleWebApp: {
       ...appleWebApp,
-      startupImage: [
-        `/startup-${pageNameLower}.png`,
-        {
-          url: `/startup-${pageNameLower}-2x.png`,
-          media,
-        },
-      ],
+      startupImage: getStartupImages(pageNameLower),
     },
   };
 };

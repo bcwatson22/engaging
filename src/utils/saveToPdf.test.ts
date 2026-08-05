@@ -1,16 +1,9 @@
 import fs from "fs";
-import puppeteer from "puppeteer";
-import puppeteerCore from "puppeteer-core";
 
 import type { Mock } from "vitest";
 
-import {
-  getBrowser,
-  saveToPdf,
-  headless,
-  cssPath,
-  encoding,
-} from "./saveToPdf.js";
+import { getBrowser } from "./getBrowser.js";
+import { saveToPdf, cssPath, encoding } from "./saveToPdf.js";
 
 vi.mock("fs", () => ({
   default: {
@@ -19,39 +12,8 @@ vi.mock("fs", () => ({
   },
 }));
 
-vi.mock("puppeteer", () => ({
-  default: {
-    launch: vi.fn().mockResolvedValue({
-      newPage: vi.fn().mockResolvedValue({
-        addStyleTag: vi.fn(),
-        pdf: vi.fn(),
-        setContent: vi.fn(),
-      }),
-      close: vi.fn(),
-    }),
-  },
-}));
-
-vi.mock("puppeteer-core", () => ({
-  default: {
-    launch: vi.fn().mockResolvedValue({
-      newPage: vi.fn().mockResolvedValue({
-        addStyleTag: vi.fn(),
-        pdf: vi.fn(),
-        setContent: vi.fn(),
-      }),
-      close: vi.fn(),
-    }),
-  },
-}));
-
-vi.mock("@sparticuz/chromium-min", () => ({
-  default: {
-    args: {
-      mockArgKey: "mockArgValue",
-    },
-    executablePath: vi.fn(),
-  },
+vi.mock("./getBrowser.js", () => ({
+  getBrowser: vi.fn(),
 }));
 
 const mockPuppeteerPage = {
@@ -67,43 +29,10 @@ const mockPuppeteerBrowser = {
 const mockFile = "Mock file";
 
 const setup = async () => {
-  (puppeteer.launch as Mock).mockResolvedValue(mockPuppeteerBrowser);
+  (getBrowser as Mock).mockResolvedValue(mockPuppeteerBrowser);
 
   await saveToPdf();
 };
-
-describe("getBrowser", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.unstubAllEnvs();
-  });
-
-  it("creates a puppeteerCore instance in prod env", async () => {
-    vi.stubEnv("NODE_ENV", "production");
-
-    await getBrowser();
-
-    expect(puppeteerCore.launch).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        headless,
-        args: { mockArgKey: "mockArgValue" },
-      })
-    );
-  });
-
-  it("creates a puppeteer instance in local env", async () => {
-    await getBrowser();
-
-    expect(puppeteer.launch).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({
-        headless,
-        args: ["--no-sandbox", "--disable-web-security"],
-      })
-    );
-  });
-});
 
 describe("saveToPdf", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -137,7 +66,7 @@ describe("saveToPdf", () => {
   it("calls getBrowser and creates a new page", async () => {
     await setup();
 
-    expect(puppeteer.launch).toHaveBeenCalledTimes(1);
+    expect(getBrowser).toHaveBeenCalledTimes(1);
 
     expect(mockPuppeteerBrowser.newPage).toHaveBeenCalledTimes(1);
   });

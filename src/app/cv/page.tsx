@@ -17,13 +17,14 @@ import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
 
-import { media, revalidate } from "@/constants/common";
+import { revalidate } from "@/constants/common";
 import {
   appleWebApp,
   metadata,
   themeColor,
   viewport,
 } from "@/constants/metadata";
+import { getStartupImages } from "@/constants/startupImages";
 
 import { formatExperience } from "@/utils/formatExperience";
 
@@ -56,13 +57,7 @@ const generateMetadata = async (): Promise<Metadata> => {
     },
     appleWebApp: {
       ...appleWebApp,
-      startupImage: [
-        `/startup-${pageNameLower}.png`,
-        {
-          url: `/startup-${pageNameLower}-2x.png`,
-          media,
-        },
-      ],
+      startupImage: getStartupImages(pageNameLower),
     },
   };
 };

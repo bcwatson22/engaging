@@ -7,6 +7,8 @@ import { mockHome } from "@/data/mock/home";
 
 import { queryHome } from "@/queries/home";
 
+import { getStartupImages } from "@/constants/startupImages";
+
 import { getData } from "@/data/functions/getData";
 import { saveData } from "@/data/functions/saveData";
 
@@ -103,5 +105,15 @@ describe("HomePage", () => {
     const result = await generateMetadata();
 
     expect(result).toEqual(expect.objectContaining({ title, description }));
+  });
+
+  it("generates a startup image per device", async () => {
+    const { appleWebApp } = await generateMetadata();
+
+    expect(appleWebApp).toEqual(
+      expect.objectContaining({
+        startupImage: getStartupImages("home"),
+      })
+    );
   });
 });
