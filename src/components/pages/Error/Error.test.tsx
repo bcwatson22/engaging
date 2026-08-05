@@ -7,6 +7,7 @@ import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
 
+import { cacheHome } from "@/data/cache/home";
 import { mockHome } from "@/data/mock/home";
 
 vi.mock(
@@ -97,6 +98,20 @@ describe("Error", () => {
 
       expect(
         screen.getByRole("heading", { level: 2, name: "Oops" })
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("content", () => {
+    it("falls back to the cached mugshot if undefined", () => {
+      setup({
+        content: undefined,
+      });
+
+      expect(
+        screen.getByRole("img", {
+          name: `Portrait of ${cacheHome.mugshot.heading}`,
+        })
       ).toBeInTheDocument();
     });
   });

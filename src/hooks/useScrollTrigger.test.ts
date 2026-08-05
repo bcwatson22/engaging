@@ -101,5 +101,27 @@ describe("useScrollTrigger", () => {
 
       expect(transition?.delay).toBe(mockDelay);
     });
+
+    it("defaults to no delay when not provided", () => {
+      const {
+        result: {
+          current: { transition },
+        },
+      } = setup({}, { delay: undefined });
+
+      expect(transition?.delay).toBe(0);
+    });
+  });
+
+  describe("margin", () => {
+    it("defaults to -20px when not provided", () => {
+      setup({}, { margin: undefined });
+
+      expect(useInView).toHaveBeenNthCalledWith(
+        1,
+        { current: mockRef },
+        expect.objectContaining({ margin: "-20px" })
+      );
+    });
   });
 });

@@ -9,12 +9,13 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
     coverage: {
+      provider: "istanbul",
       reportsDirectory: "./src/tests/coverage",
       exclude: [
-        "./.next/**/*.*",
-        "./*.*",
-        "./src/data/types/**/*.*",
-        "./src/queries/**/*.*",
+        ".next/**",
+        "*.*",
+        "src/data/types/**",
+        "src/queries/**",
       ],
     },
   },

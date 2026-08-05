@@ -112,6 +112,10 @@ describe("getLinkClassNames", () => {
     expect(getLinkClassNames(0, 5, false)).toBe("");
   });
 
+  it("defaults hasMultiple to false when not provided", () => {
+    expect(getLinkClassNames(0, 5)).toBe("");
+  });
+
   it("returns 'linker' if index is 0'", () => {
     expect(getLinkClassNames(0, 10, true)).toBe(" linker");
   });

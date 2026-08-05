@@ -1,17 +1,13 @@
 import manifest from "@/app/manifest";
 
-const { mockTitle, mockDescription } = vi.hoisted(() => ({
-  mockTitle: "Engaging Engineering",
-  mockDescription: "Engineering with {{experience}} years' experience",
-}));
-
+const mockTitle = "Engaging Engineering";
 const mockToday = new Date("2025-01-08");
 
 vi.mock("@/data/cache/home", () => ({
   cacheHome: {
     meta: {
-      title: mockTitle,
-      description: mockDescription,
+      title: "Engaging Engineering",
+      description: "Engineering with {{experience}} years' experience",
     },
   },
 }));

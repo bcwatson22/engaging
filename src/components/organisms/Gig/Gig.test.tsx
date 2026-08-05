@@ -58,6 +58,16 @@ describe("Gig", () => {
         {}
       );
     });
+
+    it("defaults to no delay when not provided", () => {
+      setup({ delay: undefined });
+
+      expect(Company).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ delay: 0 }),
+        {}
+      );
+    });
   });
 
   describe("roles", () => {

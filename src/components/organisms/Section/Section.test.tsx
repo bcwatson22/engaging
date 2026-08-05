@@ -38,6 +38,16 @@ describe("Section", () => {
         {}
       );
     });
+
+    it("defaults to no delay when not provided", () => {
+      setup({ delay: undefined });
+
+      expect(Divider).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ delay: 0 }),
+        {}
+      );
+    });
   });
 
   describe("children", () => {
