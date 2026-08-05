@@ -3,7 +3,7 @@ import fs from "fs";
 import type { Mock } from "vitest";
 
 import { getBrowser } from "./getBrowser.js";
-import { saveToPdf, cssPath, encoding } from "./saveToPdf.js";
+import { saveToPdf, cssPath, encoding, pdfPath, fillerId } from "./saveToPdf.js";
 
 vi.mock("fs", () => ({
   default: {
@@ -18,6 +18,7 @@ vi.mock("./getBrowser.js", () => ({
 
 const mockPuppeteerPage = {
   addStyleTag: vi.fn(),
+  evaluate: vi.fn(),
   pdf: vi.fn(),
   setContent: vi.fn(),
 };
@@ -28,14 +29,44 @@ const mockPuppeteerBrowser = {
 
 const mockFile = "Mock file";
 
-const setup = async () => {
+/* Stands in for Chrome's A4 fragmentation: the content spans three pages and
+   leaves 855px of the last one empty. */
+const pageHeight = 1085;
+const contentHeight = 2400;
+const expectedFill = 855;
+
+const asPdf = (pageCount: number): Buffer =>
+  Buffer.from(`%PDF-1.4\n<</Type /Pages\n/Count ${pageCount}\n/Kids []>>`);
+
+const fragmented = (fillerHeight: number): Buffer =>
+  asPdf(Math.ceil((contentHeight + fillerHeight) / pageHeight));
+
+type Options = {
+  pdfContent?: (fillerHeight: number) => Buffer;
+};
+
+const setup = async ({ pdfContent = fragmented }: Options = {}) => {
+  let fillerHeight = 0;
+
   (getBrowser as Mock).mockResolvedValue(mockPuppeteerBrowser);
+
+  mockPuppeteerPage.evaluate.mockImplementation(
+    (_callback: unknown, _id: string, height: number) => {
+      fillerHeight = height;
+    }
+  );
+
+  mockPuppeteerPage.pdf.mockImplementation(() => pdfContent(fillerHeight));
 
   await saveToPdf();
 };
 
 describe("saveToPdf", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(console, "info").mockImplementation(() => undefined);
+    vi.spyOn(console, "warn").mockImplementation(() => undefined);
+  });
 
   it("calls readFileSync to get htmlContent", async () => {
     await setup();
@@ -93,12 +124,56 @@ describe("saveToPdf", () => {
     });
   });
 
-  it("saves a pdf of the new page", async () => {
+  it("grows the filler to fill the space left on the last page", async () => {
     await setup();
 
-    expect(mockPuppeteerPage.pdf).toHaveBeenNthCalledWith(
+    expect(mockPuppeteerPage.evaluate).toHaveBeenLastCalledWith(
+      expect.any(Function),
+      fillerId,
+      expectedFill
+    );
+  });
+
+  it("stops short of pushing the content onto another page", async () => {
+    await setup();
+
+    expect(fragmented(expectedFill)).toStrictEqual(asPdf(3));
+    expect(fragmented(expectedFill + 1)).toStrictEqual(asPdf(4));
+  });
+
+  it("saves the filled pdf of the new page", async () => {
+    await setup();
+
+    expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
+      expect.objectContaining({ format: "A4", path: pdfPath })
+    );
+  });
+
+  it("still saves a pdf when the page count cannot be read", async () => {
+    await setup({ pdfContent: () => Buffer.from("Not a pdf") });
+
+    expect(console.warn).toHaveBeenNthCalledWith(
       1,
-      expect.objectContaining({ format: "A4" })
+      expect.stringContaining("Could not fill"),
+      expect.any(Error)
+    );
+
+    expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
+      expect.objectContaining({ path: pdfPath })
+    );
+  });
+
+  it("still saves a pdf when the filler never spills onto a new page", async () => {
+    await setup({ pdfContent: () => asPdf(3) });
+
+    expect(console.warn).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("Could not fill"),
+      expect.any(Error)
+    );
+
+    expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
+      expect.objectContaining({ path: pdfPath })
     );
   });
 
