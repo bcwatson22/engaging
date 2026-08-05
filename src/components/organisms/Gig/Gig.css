@@ -12,7 +12,7 @@
     &:not(:last-of-type) {
       @apply mb-8 pb-4;
       @apply lg:mb-12;
-      @apply print:pb-0;
+      @apply print:pb-2;
     }
   }
 }
