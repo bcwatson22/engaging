@@ -34,45 +34,47 @@ const Error = ({
   return (
     <main className="home loading main">
       <h1 className="sr-only">Engaging Engineering</h1>
-      <section aria-labelledby={sectionId} className="overview overview-error">
-        <figure className="coupon">
-          <Image
-            src={image.url}
-            alt={`Portrait of ${name}`}
-            width={width}
-            height={height}
-            sizes={`
-              (min-width: 480px) ${width}px, 
+      <div className="mugshot w-full">
+        <section aria-labelledby={sectionId} className="overview overview-error">
+          <figure className="coupon">
+            <Image
+              src={image.url}
+              alt={`Portrait of ${name}`}
+              width={width}
+              height={height}
+              sizes={`
+              (min-width: 480px) ${width}px,
               calc(100vw - 3rem)
             `}
-            className="opacity-30"
-            priority
-          />
-        </figure>
-        <div className="info">
-          <h2 id={sectionId}>{heading}</h2>
-          {children ? (
-            children
-          ) : (
-            <p>
-              Something went wrong, but believe it or not you&apos;re not
-              actually reading this, so it&apos;s all ok.
-            </p>
-          )}
-          {reset && (
-            <button onClick={reset} className="link icon mt-4">
-              <Inner text="Try again" icon="Retry" />
-            </button>
-          )}
-        </div>
-      </section>
-      <ul className="technologies loading">
-        {[...Array(12).keys()].map((key) => (
-          <li key={key}>
-            <TechnologySkeleton />
-          </li>
-        ))}
-      </ul>
+              className="opacity-30"
+              priority
+            />
+          </figure>
+          <div className="info">
+            <h2 id={sectionId}>{heading}</h2>
+            {children ? (
+              children
+            ) : (
+              <p>
+                Something went wrong, but believe it or not you&apos;re not
+                actually reading this, so it&apos;s all ok.
+              </p>
+            )}
+            {reset && (
+              <button onClick={reset} className="link icon mt-4">
+                <Inner text="Try again" icon="Retry" />
+              </button>
+            )}
+          </div>
+        </section>
+        <ul className="technologies loading">
+          {[...Array(12).keys()].map((key) => (
+            <li key={key}>
+              <TechnologySkeleton />
+            </li>
+          ))}
+        </ul>
+      </div>
       <Particles />
     </main>
   );

@@ -16,6 +16,8 @@ export default defineConfig({
         "*.*",
         "src/data/types/**",
         "src/queries/**",
+        // build entry points — a single call each, with nothing to assert
+        "src/scripts/**",
       ],
     },
   },

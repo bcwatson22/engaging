@@ -3,12 +3,27 @@ import fs from "fs";
 import type { Mock } from "vitest";
 
 import { getBrowser } from "./getBrowser.js";
-import { saveToPdf, cssPath, encoding, pdfPath, fillerId } from "./saveToPdf.js";
+import {
+  saveToPdf,
+  applyFiller,
+  cssPath,
+  encoding,
+  pdfPath,
+  fillerId,
+} from "./saveToPdf.js";
+
+/* Unsorted, and with a non-stylesheet sibling, so the read order and the
+   filtering are both exercised. */
+const cssFilenames = ["second.css", "first.css"];
 
 vi.mock("fs", () => ({
   default: {
-    readFileSync: vi.fn().mockImplementation(() => "Mock file"),
-    readdirSync: vi.fn().mockImplementation(() => ["Mock directory"]),
+    readFileSync: vi
+      .fn()
+      .mockImplementation((path: string) => `Mock file: ${path}`),
+    readdirSync: vi
+      .fn()
+      .mockImplementation(() => [...cssFilenames, "not-a-stylesheet.js"]),
   },
 }));
 
@@ -84,14 +99,22 @@ describe("saveToPdf", () => {
     expect(fs.readdirSync).toHaveBeenNthCalledWith(1, cssPath);
   });
 
-  it("calls readFileSync to get cssContent", async () => {
+  it("calls readFileSync for every stylesheet, in a stable order", async () => {
     await setup();
 
     expect(fs.readFileSync).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining(cssPath),
+      `${cssPath}first.css`,
       encoding
     );
+
+    expect(fs.readFileSync).toHaveBeenNthCalledWith(
+      3,
+      `${cssPath}second.css`,
+      encoding
+    );
+
+    expect(fs.readFileSync).toHaveBeenCalledTimes(cssFilenames.length + 1);
   });
 
   it("calls getBrowser and creates a new page", async () => {
@@ -116,7 +139,7 @@ describe("saveToPdf", () => {
     await setup();
 
     expect(mockPuppeteerPage.addStyleTag).toHaveBeenNthCalledWith(1, {
-      content: expect.stringContaining(mockFile),
+      content: `Mock file: ${cssPath}first.css\nMock file: ${cssPath}second.css`,
     });
 
     expect(mockPuppeteerPage.addStyleTag).toHaveBeenNthCalledWith(2, {
@@ -181,5 +204,44 @@ describe("saveToPdf", () => {
     await setup();
 
     expect(mockPuppeteerBrowser.close).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("applyFiller", () => {
+  const setupFiller = (markup: string = '<div class="wrapper"></div>') => {
+    document.body.innerHTML = markup;
+
+    return {
+      wrapper: document.querySelector(".wrapper"),
+      filler: () => document.getElementById(fillerId),
+    };
+  };
+
+  it("appends a hidden filler of the given height to the wrapper", () => {
+    const { wrapper, filler } = setupFiller();
+
+    applyFiller(fillerId, 855);
+
+    expect(filler()).toBe(wrapper?.lastElementChild);
+    expect(filler()).toHaveAttribute("aria-hidden", "true");
+    expect(filler()).toHaveStyle({ height: "855px" });
+  });
+
+  it("resizes the existing filler rather than adding another", () => {
+    const { wrapper, filler } = setupFiller();
+
+    applyFiller(fillerId, 855);
+    applyFiller(fillerId, 170);
+
+    expect(wrapper?.children).toHaveLength(1);
+    expect(filler()).toHaveStyle({ height: "170px" });
+  });
+
+  it("does nothing when there is no wrapper to fill", () => {
+    const { filler } = setupFiller("<div></div>");
+
+    applyFiller(fillerId, 855);
+
+    expect(filler()).toBeNull();
   });
 });

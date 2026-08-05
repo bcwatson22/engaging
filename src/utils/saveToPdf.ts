@@ -37,21 +37,20 @@ const getPageCount = (pdf: Uint8Array): number => {
   return Number(match[1]);
 };
 
+/* Serialised into the browser by page.evaluate, so it can only reach its own
+   arguments — no module scope. */
+const applyFiller = (id: string, height: number): void => {
+  const filler = document.getElementById(id) ?? document.createElement("div");
+
+  filler.id = id;
+  filler.setAttribute("aria-hidden", "true");
+  filler.style.height = `${height}px`;
+
+  document.querySelector(".wrapper")?.append(filler);
+};
+
 const setFillerHeight = async (page: Page, height: number): Promise<void> => {
-  await page.evaluate(
-    (id, fillerHeight) => {
-      const filler =
-        document.getElementById(id) ?? document.createElement("div");
-
-      filler.id = id;
-      filler.setAttribute("aria-hidden", "true");
-      filler.style.height = `${fillerHeight}px`;
-
-      document.querySelector(".wrapper")?.append(filler);
-    },
-    fillerId,
-    height
-  );
+  await page.evaluate(applyFiller, fillerId, height);
 };
 
 const countPagesWithFill = async (
@@ -96,10 +95,14 @@ const fillLastPage = async (page: Page): Promise<void> => {
 const saveToPdf = async () => {
   const htmlContent = fs.readFileSync(".next/server/app/cv.html", encoding);
 
-  const cssFiles = fs
+  /* Next only splits CSS into more than one chunk once a route needs it, but
+     taking a single file would silently drop styles the day that happens. */
+  const cssContent = fs
     .readdirSync(cssPath)
-    .filter((filename) => filename.endsWith(".css"));
-  const cssContent = fs.readFileSync(cssPath + cssFiles[0], encoding);
+    .filter((filename) => filename.endsWith(".css"))
+    .sort()
+    .map((filename) => fs.readFileSync(cssPath + filename, encoding))
+    .join("\n");
 
   const browser = await getBrowser();
   const page = (await browser.newPage()) as Page;
@@ -125,6 +128,4 @@ const saveToPdf = async () => {
   await browser.close();
 };
 
-(async () => saveToPdf())();
-
-export { saveToPdf, cssPath, encoding, pdfPath, fillerId, maxFill };
+export { saveToPdf, applyFiller, cssPath, encoding, pdfPath, fillerId, maxFill };

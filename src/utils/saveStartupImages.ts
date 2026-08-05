@@ -87,8 +87,6 @@ const saveStartupImages = async (): Promise<void> => {
   }
 };
 
-(async () => saveStartupImages())();
-
 export {
   saveStartupImages,
   captureStartupImages,
