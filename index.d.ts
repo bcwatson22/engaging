@@ -11,7 +11,6 @@ type TMeta = TID & {
   title: string;
   description: string;
   keywords: string[];
-  cookie: string;
 };
 
 type TPosition = {

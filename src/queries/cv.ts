@@ -19,7 +19,6 @@ export const queryCV = gql`
         title
         description
         keywords
-        cookie
       }
       logoLightBackground {
         id

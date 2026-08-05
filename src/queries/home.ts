@@ -16,7 +16,6 @@ export const queryHome = gql`
         title
         description
         keywords
-        cookie
       }
       mugshot {
         id

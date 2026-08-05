@@ -17,7 +17,6 @@ export const mockHome: THome = {
       "Next",
       "Node",
     ],
-    cookie: "Cookies used for a sweet user experience.",
   },
   mugshot: {
     image: {

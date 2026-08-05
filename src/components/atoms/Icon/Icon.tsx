@@ -11,11 +11,9 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { CookieIcon } from "@sidekickicons/react/24/outline";
 import { ForwardRefExoticComponent, SVGProps } from "react";
 
 const iconOptions = [
-  "Cookie",
   "Cross",
   "Document",
   "Download",
@@ -41,7 +39,6 @@ const iconMap: Record<
   TIcon,
   ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref">>
 > = {
-  Cookie: CookieIcon,
   Cross: XMarkIcon,
   Document: DocumentTextIcon,
   Download: ArrowDownTrayIcon,

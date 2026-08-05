@@ -17,7 +17,6 @@ export const mockCV: TCV = {
       "Next",
       "Node",
     ],
-    cookie: "Cookies used for a sweet user experience.",
   },
   logoLightBackground: {
     url: "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/cm2lwg36w435n08l6stxnouwg",
