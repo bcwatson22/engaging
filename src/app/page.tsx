@@ -56,7 +56,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 const HomePage = async () => {
   const data = await getData<THome>(queryHome, "homes", cacheHome);
 
-  await saveData(data, "Home", 3);
+  await saveData(data, "Home");
 
   const {
     meta: { title },

@@ -9,20 +9,13 @@ type TPages = {
   Home: THome;
 };
 
-const saveData = async (
-  data: TPages[keyof TPages],
-  page: keyof TPages,
-  levels = process.env.NODE_ENV === "development" ? 4 : 3
-) => {
+const saveData = async (data: TPages[keyof TPages], page: keyof TPages) => {
   const { readFile, writeFile } = promises;
 
   const pageLower = page.toLowerCase();
   const pathToFile = path.join(
-    __dirname,
-    `/${Array(levels)
-      .fill("")
-      .map(() => "../")
-      .join("")}src/data/cache/${pageLower}.ts`
+    process.cwd(),
+    `src/data/cache/${pageLower}.ts`
   );
 
   try {

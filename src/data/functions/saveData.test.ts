@@ -10,8 +10,7 @@ const mockPath = `/src/data/cache/${mockPageName.toLowerCase()}`;
 
 const spyConsoleLog = vi.spyOn(console, "log");
 
-const setup = async (levels?: number) =>
-  await saveData(mockHome, mockPageName, levels);
+const setup = async () => await saveData(mockHome, mockPageName);
 
 describe("saveData", () => {
   beforeEach(() => {
@@ -30,16 +29,15 @@ describe("saveData", () => {
     );
   });
 
-  it("defaults to a file path four levels deep in local env", async () => {
+  it("resolves the file path from the project root", async () => {
     const spyPathJoin = vi.spyOn(path, "join");
-    vi.stubEnv("NODE_ENV", "development");
 
-    await setup(undefined);
+    await setup();
 
     expect(spyPathJoin).toHaveBeenNthCalledWith(
       1,
-      expect.any(String),
-      expect.stringContaining("../../../../")
+      process.cwd(),
+      `src/data/cache/${mockPageName.toLowerCase()}.ts`
     );
   });
 
