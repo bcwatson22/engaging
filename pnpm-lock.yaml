@@ -16,11 +16,11 @@ importers:
         specifier: 133.0.0
         version: 133.0.0
       '@urql/core':
-        specifier: 4.3.0
-        version: 4.3.0(graphql@16.8.1)
+        specifier: 6.0.3
+        version: 6.0.3(graphql@16.8.1)
       '@urql/next':
-        specifier: 1.1.1
-        version: 1.1.1(next@16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(urql@4.0.6(graphql@16.8.1)(react@19.2.8))
+        specifier: 2.0.1
+        version: 2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(urql@5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8))
       '@vercel/analytics':
         specifier: 1.4.1
         version: 1.4.1(next@16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
@@ -52,8 +52,8 @@ importers:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
       urql:
-        specifier: 4.0.6
-        version: 4.0.6(graphql@16.8.1)(react@19.2.8)
+        specifier: 5.0.3
+        version: 5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8)
     devDependencies:
       '@heroicons/react':
         specifier: 2.2.0
@@ -1252,15 +1252,15 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@urql/core@4.3.0':
-    resolution: {integrity: sha512-wT+FeL8DG4x5o6RfHEnONNFVDM3616ouzATMYUClB6CB+iIu2mwfBKd7xSUxYOZmwtxna5/hDRQdMl3nbQZlnw==}
+  '@urql/core@6.0.3':
+    resolution: {integrity: sha512-0F39XWR21+IVLJfsqBvLShvoSzxT6h6wWXwrDhN8j9J+IEVOpQIUNHwpgjsp+2ePzn9aCH+rpDonn3HOAUnn9A==}
 
-  '@urql/next@1.1.1':
-    resolution: {integrity: sha512-dLk4npLZeWDCevua3gM5f8WS1IyyJUsjOvUU9tnFRSjTSn2fQcgYAYZbLfpneLTg+1rYNCLgSMJMuBr95PofTQ==}
+  '@urql/next@2.0.1':
+    resolution: {integrity: sha512-ddALO9UcmkFKtEbuXK7+34EBGSVy5iPRU9G5R/F/tusLdc7rtFzg9lZj7yRGhDprVBUddfIMLjwrIlgrx0/QTg==}
     peerDependencies:
       next: '>=13.0.0'
       react: '>=18.0.0'
-      urql: ^4.0.0
+      urql: ^5.0.0
 
   '@vercel/analytics@1.4.1':
     resolution: {integrity: sha512-ekpL4ReX2TH3LnrRZTUKjHHNpNy9S1I7QmS+g/RQXoSUQ8ienzosuX7T9djZ/s8zPhBx1mpHP/Rw5875N+zQIQ==}
@@ -2525,9 +2525,10 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
-  urql@4.0.6:
-    resolution: {integrity: sha512-meXJ2puOd64uCGKh7Fse2R7gPa8+ZpBOoA62jN7CPXXUt7SVZSdeXWSpB3HvlfzLUkEqsWbvshwrgeWRYNNGaQ==}
+  urql@5.0.3:
+    resolution: {integrity: sha512-gWywgPjduTCUqWKofW6YLOy1auxe0uJN/vHa44eXGKn+f+QHNb308ZEZnKBLZ4F+jRrguaJy9CdtecTZJQWPCg==}
     peerDependencies:
+      '@urql/core': ^6.0.0
       react: '>= 16.8.0'
 
   vfile-message@4.0.2:
@@ -3619,18 +3620,18 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@urql/core@4.3.0(graphql@16.8.1)':
+  '@urql/core@6.0.3(graphql@16.8.1)':
     dependencies:
       '@0no-co/graphql.web': 1.1.2(graphql@16.8.1)
       wonka: 6.3.5
     transitivePeerDependencies:
       - graphql
 
-  '@urql/next@1.1.1(next@16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(urql@4.0.6(graphql@16.8.1)(react@19.2.8))':
+  '@urql/next@2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(urql@5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8))':
     dependencies:
       next: 16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react: 19.2.8
-      urql: 4.0.6(graphql@16.8.1)(react@19.2.8)
+      urql: 5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8)
 
   '@vercel/analytics@1.4.1(next@16.3.0(@babel/core@7.29.7)(@types/node@20.11.30)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
     optionalDependencies:
@@ -5025,13 +5026,11 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
-  urql@4.0.6(graphql@16.8.1)(react@19.2.8):
+  urql@5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8):
     dependencies:
-      '@urql/core': 4.3.0(graphql@16.8.1)
+      '@urql/core': 6.0.3(graphql@16.8.1)
       react: 19.2.8
       wonka: 6.3.5
-    transitivePeerDependencies:
-      - graphql
 
   vfile-message@4.0.2:
     dependencies:
