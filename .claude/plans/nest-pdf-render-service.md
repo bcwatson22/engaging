@@ -153,7 +153,21 @@ Then, in order:
 
 Step 6 last, so the build-time render stays as a fallback until the service is proven.
 
-**Do not invest further in `saveToPdf.ts` layout polish before the move.** The logic transfers largely intact, but iterating on print layout is far cheaper once it is behind a queue that can be re-triggered without a deploy.
+### Do the serve-and-navigate refactor first, in `engaging`
+
+`saveToPdf.ts` reads build output. A remote service cannot — it has no access to `.next/` — so its only possible mode is to navigate to a URL over HTTP. The migration therefore *forces* serve-and-navigate; the two are the same work.
+
+Do not wait for this service to get there. The refactor belongs in `engaging` now, following the pattern `saveStartupImages.ts` already uses:
+
+```
+next build → start a server → navigate to http://localhost:3000/cv → page.pdf()
+```
+
+That unblocks Turbopack immediately, and it is not throwaway work: the difference between the local version and the Nest version is **the base URL**. Page setup, print media handling, waits and `page.pdf()` options all transfer unchanged.
+
+**Watch the animation end-state.** Navigating to a served page renders the *hydrated* result, including Framer Motion and `fadeIn`. If an entrance animation has not completed when `page.pdf()` fires, elements can land at `opacity: 0`. Guard it explicitly — emulate `prefers-reduced-motion`, disable animations in print styles, or wait for completion. This is the classic failure mode for this refactor.
+
+**Layout polish is still better deferred.** Print spacing and border work (as in `gig spacing on print PDF`, `fix border in saveToPdf`) iterates far more cheaply once it is behind a queue that can be re-triggered without a deploy. Structural refactor now; visual iteration later.
 
 ## Open questions
 

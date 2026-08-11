@@ -27,8 +27,8 @@ const OgImage = ({
     <img
       src={url}
       alt={`Portrait of ${heading}`}
-      width="360"
-      height="360"
+      width={360}
+      height={360}
       style={{ borderRadius: 180, boxShadow: "0 0 5px 1px white" }}
     />
     <div
