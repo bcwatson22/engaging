@@ -1,11 +1,11 @@
 @utility divider {
-  @apply whitespace-nowrap inline-block relative text-brand-blue;
+  @apply text-brand-blue relative inline-block whitespace-nowrap;
   @apply dark:text-brand-yellow;
-  @apply print:opacity-100! print:transform-none! motion-reduce:opacity-100! motion-reduce:transform-none!;
+  @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:transform-none! print:opacity-100!;
 
   & > span {
-    @apply absolute bottom-[-12px] right-0 w-screen h-0 border-b-3 border-brand-blue indent-full;
+    @apply border-brand-blue indent-full absolute right-0 bottom-[-12px] h-0 w-screen border-b-3;
     @apply dark:border-brand-yellow;
-    @apply print:transform-none! motion-reduce:transform-none!;
+    @apply motion-reduce:transform-none! print:transform-none!;
   }
 }

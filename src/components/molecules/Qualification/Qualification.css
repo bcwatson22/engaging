@@ -6,6 +6,6 @@
   }
 
   & a {
-    @apply print:inline-block print:mt-0.5;
+    @apply print:mt-0.5 print:inline-block;
   }
 }

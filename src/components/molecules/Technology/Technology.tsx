@@ -14,7 +14,7 @@ type Props = TTechnology;
 
 const TechnologySkeleton = () => (
   <div className="technology p-3">
-    <Skeleton className="logo rounded-full w-full h-full aspect-square opacity-100" />
+    <Skeleton className="logo aspect-square h-full w-full rounded-full opacity-100" />
   </div>
 );
 

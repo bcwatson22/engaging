@@ -41,7 +41,7 @@ const getLinkClassNames = (
 const RoleSkeleton = () => (
   <div className="role mt-9">
     <SkeletonHeading level="h4" className="w-56" />
-    <SkeletonLine className="mt-2 w-68 mb-6" />
+    <SkeletonLine className="mt-2 mb-6 w-68" />
     {[...Array(7).keys()].map((key, index) => (
       <BulletSkeleton key={key} index={index} />
     ))}
@@ -61,7 +61,7 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
       >
         {role}
       </h4>
-      <div className="flex flex-wrap mb-4 print:mb-1">
+      <div className="mb-4 flex flex-wrap print:mb-1">
         <Suspense>
           <Dates dates={dates} className="mr-2" />
         </Suspense>

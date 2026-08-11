@@ -48,7 +48,7 @@
     content: attr(data-url);
     @apply hidden;
     text-decoration: underline;
-    @apply underline-offset-4 decoration-2 decoration-brand-blue;
+    @apply decoration-brand-blue decoration-2 underline-offset-4;
     @apply print:inline-block;
   }
 
@@ -63,6 +63,6 @@
 }
 
 @utility vector {
-  @apply w-6 h-6 absolute top-1/2 -translate-y-1/2 left-0;
-  @apply print:w-4 print:h-4;
+  @apply absolute top-1/2 left-0 h-6 w-6 -translate-y-1/2;
+  @apply print:h-4 print:w-4;
 }

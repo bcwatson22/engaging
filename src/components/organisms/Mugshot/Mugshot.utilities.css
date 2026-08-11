@@ -1,12 +1,12 @@
 @utility mugshot {
   @apply relative;
-  @apply sm:grow sm:flex sm:flex-col sm:justify-center md:p-24;
+  @apply sm:flex sm:grow sm:flex-col sm:justify-center md:p-24;
   @apply print:p-6;
 }
 
 @utility coupon {
   @apply transition-opacity duration-150;
-  @apply absolute top-0 left-0 w-full h-full object-cover;
+  @apply absolute top-0 left-0 h-full w-full object-cover;
   @apply print:relative;
 
   & img {
@@ -16,21 +16,21 @@
 
 @utility info {
   @apply transition-opacity duration-150;
-  @apply relative p-2 opacity-0 text-center flex flex-col items-center max-w-88;
-  @apply print:opacity-100 print:text-start;
+  @apply relative flex max-w-88 flex-col items-center p-2 text-center opacity-0;
+  @apply print:text-start print:opacity-100;
 }
 
 @utility overview {
-  @apply relative w-[calc(100vw-3rem)] h-[calc(100vw-3rem)] max-w-96 max-h-96 aspect-square flex justify-center items-center mx-auto;
+  @apply relative mx-auto flex aspect-square h-[calc(100vw-3rem)] max-h-96 w-[calc(100vw-3rem)] max-w-96 items-center justify-center;
   clip-path: circle(calc(50% + 5px));
   @apply md:z-20;
-  @apply print:grid print:grid-cols-2 print:gap-8 print:aspect-auto print:h-auto print:max-h-none print:w-auto print:max-w-none print:mb-8;
+  @apply print:mb-8 print:grid print:aspect-auto print:h-auto print:max-h-none print:w-auto print:max-w-none print:grid-cols-2 print:gap-8;
 
   & h2,
   & p,
   & li {
-    @apply opacity-0 translate-y-2 transition-all duration-300;
-    @apply motion-reduce:opacity-100 motion-reduce:translate-y-0;
+    @apply translate-y-2 opacity-0 transition-all duration-300;
+    @apply motion-reduce:translate-y-0 motion-reduce:opacity-100;
   }
 
   & h2 {
@@ -75,7 +75,7 @@
     & h2,
     & p,
     & li {
-      @apply opacity-100 translate-y-0;
+      @apply translate-y-0 opacity-100;
     }
   }
 }
@@ -88,12 +88,12 @@
   }
 
   & .info {
-    @apply opacity-100 z-20;
+    @apply z-20 opacity-100;
 
     & h2,
     & p,
     & li {
-      @apply opacity-100 translate-y-0;
+      @apply translate-y-0 opacity-100;
     }
   }
 
@@ -113,13 +113,13 @@
 @utility technologies {
   --radius: 18rem;
 
-  @apply pt-4 grid grid-cols-3 gap-4 animate-[spin_240s_linear_infinite];
-  @apply max-md:animate-none xs:grid-cols-4 sm:grid-cols-6 md:z-10 md:pt-0 md:block md:absolute md:top-0 md:left-0 md:w-full md:h-full;
-  @apply print:relative print:grid print:animate-none print:w-auto print:h-auto motion-reduce:animate-none;
+  @apply grid animate-[spin_240s_linear_infinite] grid-cols-3 gap-4 pt-4;
+  @apply xs:grid-cols-4 max-md:animate-none sm:grid-cols-6 md:absolute md:top-0 md:left-0 md:z-10 md:block md:h-full md:w-full md:pt-0;
+  @apply motion-reduce:animate-none print:relative print:grid print:h-auto print:w-auto print:animate-none;
 
   & li {
     @apply transform-gpu;
-    @apply md:absolute md:top-1/2 md:left-1/2 md:w-24 md:min-h-24;
+    @apply md:absolute md:top-1/2 md:left-1/2 md:min-h-24 md:w-24;
     @apply print:relative print:top-0 print:left-0;
 
     &:nth-of-type(1) {
@@ -197,7 +197,7 @@
         @apply animate-[tech_240s_linear_infinite];
         animation-delay: 0s;
         @apply max-md:animate-none;
-        @apply print:animate-none motion-reduce:animate-none;
+        @apply motion-reduce:animate-none print:animate-none;
       }
     }
   }

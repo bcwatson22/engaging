@@ -1,5 +1,5 @@
 @utility home {
-  @apply flex flex-col justify-center p-6 pb-[calc(var(--footer)+1.5rem)] bg-black text-white animate-fade-in overflow-hidden;
+  @apply animate-fade-in flex flex-col justify-center overflow-hidden bg-black p-6 pb-[calc(var(--footer)+1.5rem)] text-white;
   @apply sm:p-6 md:items-center;
   @apply print:justify-start print:bg-white print:text-black;
 

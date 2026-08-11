@@ -6,5 +6,5 @@
 
 @utility print-logo {
   @apply hidden;
-  @apply print:block print:indent-full print:aspect-logo print:bg-no-repeat print:bg-cover;
+  @apply print:indent-full print:aspect-logo print:block print:bg-cover print:bg-no-repeat;
 }
