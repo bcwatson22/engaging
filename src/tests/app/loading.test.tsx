@@ -9,7 +9,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      MugshotSkeleton: vi.fn(),
+      MugshotSkeleton:
+        vi.fn<
+          typeof import("@/components/organisms/Mugshot/Mugshot").MugshotSkeleton
+        >(),
     };
   },
 );

@@ -9,12 +9,12 @@ vi.mock(import("@tsparticles/react"), async (importOriginal: Function) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    Particles: vi.fn(),
+    Particles: vi.fn<typeof import("@tsparticles/react").Particles>(),
   };
 });
 
 vi.mock("@tsparticles/slim", () => ({
-  loadSlim: vi.fn(),
+  loadSlim: vi.fn<typeof import("@tsparticles/slim").loadSlim>(),
 }));
 
 (TSParticles as Mock).mockImplementation(() => <div>Test particles</div>);

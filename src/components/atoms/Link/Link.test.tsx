@@ -7,11 +7,13 @@ import { mockCV } from "@/data/mock/cv";
 import { Link, LinkSkeleton, type LinkProps } from "./Link";
 
 vi.mock("@/components/atoms/Icon/Icon", () => ({
-  Icon: vi.fn(),
+  Icon: vi.fn<typeof import("@/components/atoms/Icon/Icon").Icon>(),
 }));
 
 vi.mock("next/link", () => ({
-  default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  default: vi
+    .fn<typeof import("next/link").default>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 const mockLink = mockCV.onlineLinks[1];

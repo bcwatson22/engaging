@@ -6,7 +6,7 @@ import { mockCV } from "@/data/mock/cv";
 import { Reference, type ReferenceProps } from "./Reference";
 
 vi.mock("@/components/atoms/Link/Link", () => ({
-  Link: vi.fn(),
+  Link: vi.fn<typeof import("@/components/atoms/Link/Link").Link>(),
 }));
 
 const { person, role, company, link } = mockCV.references[0];

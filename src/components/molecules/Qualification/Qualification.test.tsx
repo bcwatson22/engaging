@@ -6,7 +6,7 @@ import { mockCV } from "@/data/mock/cv";
 import { Qualification, type QualificationProps } from "./Qualification";
 
 vi.mock("@/components/atoms/Dates/Dates", () => ({
-  Dates: vi.fn(),
+  Dates: vi.fn<typeof import("@/components/atoms/Dates/Dates").Dates>(),
 }));
 
 const { institution, location, dates, description } = mockCV.qualifications[0];

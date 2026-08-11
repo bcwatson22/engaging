@@ -8,7 +8,7 @@ import { TData } from "../types/data";
 import { getData } from "./getData";
 
 vi.mock("@/queries/client", () => ({
-  client: vi.fn(),
+  client: vi.fn<typeof import("@/queries/client").client>(),
 }));
 
 const mockData: TData = {

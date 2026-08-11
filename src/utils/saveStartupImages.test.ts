@@ -1,5 +1,7 @@
 import { spawn } from "child_process";
+import type { ChildProcess } from "child_process";
 
+import type { Browser, Page } from "puppeteer";
 import type { Mock } from "vitest";
 
 import { startupDevices } from "../constants/startupImages.js";
@@ -14,34 +16,36 @@ import {
 } from "./saveStartupImages.js";
 
 vi.mock("child_process", () => {
-  const spawn = vi.fn();
+  const spawn = vi.fn<typeof import("child_process").spawn>();
 
   return { default: { spawn }, spawn };
 });
 
 vi.mock("./getBrowser.js", () => ({
-  getBrowser: vi.fn(),
+  getBrowser: vi.fn<typeof import("./getBrowser.js").getBrowser>(),
 }));
 
 const mockPage = {
-  setViewport: vi.fn(),
-  goto: vi.fn(),
-  screenshot: vi.fn(),
+  setViewport: vi.fn<Page["setViewport"]>(),
+  goto: vi.fn<Page["goto"]>(),
+  screenshot: vi.fn<Page["screenshot"]>(),
 };
 
 const mockBrowser = {
-  newPage: vi.fn().mockResolvedValue(mockPage),
-  close: vi.fn(),
+  newPage: vi
+    .fn<Browser["newPage"]>()
+    .mockResolvedValue(mockPage as unknown as Page),
+  close: vi.fn<Browser["close"]>(),
 };
 
-const mockServer = { kill: vi.fn() };
+const mockServer = { kill: vi.fn<ChildProcess["kill"]>() };
 
 const totalCaptures = pages.length * startupDevices.length;
 
 const setup = () => {
   (spawn as Mock).mockReturnValue(mockServer);
   (getBrowser as Mock).mockResolvedValue(mockBrowser);
-  mockBrowser.newPage.mockResolvedValue(mockPage);
+  mockBrowser.newPage.mockResolvedValue(mockPage as unknown as Page);
 
   return saveStartupImages();
 };
@@ -57,7 +61,9 @@ describe("waitForServer", () => {
   });
 
   it("resolves once the server responds", async () => {
-    global.fetch = vi.fn().mockResolvedValue({ ok: true } as Response);
+    global.fetch = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue({ ok: true } as Response);
 
     await expect(waitForServer()).resolves.toBeUndefined();
 
@@ -66,7 +72,7 @@ describe("waitForServer", () => {
 
   it("keeps polling while the server is not reachable", async () => {
     global.fetch = vi
-      .fn()
+      .fn<typeof fetch>()
       .mockRejectedValueOnce(new Error("ECONNREFUSED"))
       .mockResolvedValue({ ok: true } as Response);
 
@@ -80,7 +86,7 @@ describe("waitForServer", () => {
 
   it("keeps polling while the server responds not ok", async () => {
     global.fetch = vi
-      .fn()
+      .fn<typeof fetch>()
       .mockResolvedValueOnce({ ok: false } as Response)
       .mockResolvedValue({ ok: true } as Response);
 
@@ -93,9 +99,13 @@ describe("waitForServer", () => {
   });
 
   it("throws once the timeout elapses", async () => {
-    global.fetch = vi.fn().mockResolvedValue({ ok: false } as Response);
+    global.fetch = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue({ ok: false } as Response);
 
     const pending = waitForServer();
+    /* oxlint-disable-next-line vitest/valid-expect -- awaited below, after the
+       timers advance; awaiting here would hang before the timeout fires. */
     const assertion = expect(pending).rejects.toThrowError(timeoutMessage);
 
     await vi.advanceTimersByTimeAsync(61000);
@@ -108,7 +118,7 @@ describe("captureStartupImages", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    mockBrowser.newPage.mockResolvedValue(mockPage);
+    mockBrowser.newPage.mockResolvedValue(mockPage as unknown as Page);
   });
 
   afterEach(() => {
@@ -170,7 +180,9 @@ describe("saveStartupImages", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    global.fetch = vi.fn().mockResolvedValue({ ok: true } as Response);
+    global.fetch = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue({ ok: true } as Response);
   });
 
   afterEach(() => {
@@ -199,6 +211,8 @@ describe("saveStartupImages", () => {
     (getBrowser as Mock).mockRejectedValue(new Error("no chrome"));
 
     const pending = saveStartupImages();
+    /* oxlint-disable-next-line vitest/valid-expect -- awaited below, after the
+       timers run; awaiting here would hang before the rejection surfaces. */
     const assertion = expect(pending).rejects.toThrowError("no chrome");
 
     await vi.runAllTimersAsync();

@@ -7,11 +7,11 @@ import { mockCV } from "@/data/mock/cv";
 import { Header, HeaderSkeleton, type HeaderProps } from "./Header";
 
 vi.mock("@/components/atoms/Intro/Intro", () => ({
-  Intro: vi.fn(),
+  Intro: vi.fn<typeof import("@/components/atoms/Intro/Intro").Intro>(),
 }));
 
 vi.mock("@/components/atoms/Logo/Logo", () => ({
-  Logo: vi.fn(),
+  Logo: vi.fn<typeof import("@/components/atoms/Logo/Logo").Logo>(),
 }));
 
 const {

@@ -5,7 +5,7 @@ import { Divider } from "@/components/atoms/Divider/Divider";
 import { Section, type SectionProps } from "./Section";
 
 vi.mock("@/components/atoms/Divider/Divider", () => ({
-  Divider: vi.fn(),
+  Divider: vi.fn<typeof import("@/components/atoms/Divider/Divider").Divider>(),
 }));
 
 const mockHeading = "mockHeading";

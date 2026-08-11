@@ -8,7 +8,8 @@ import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 import { Company, CompanySkeleton, type CompanyProps } from "./Company";
 
 vi.mock("@/hooks/useScrollTrigger", () => ({
-  useScrollTrigger: vi.fn(),
+  useScrollTrigger:
+    vi.fn<typeof import("@/hooks/useScrollTrigger").useScrollTrigger>(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;

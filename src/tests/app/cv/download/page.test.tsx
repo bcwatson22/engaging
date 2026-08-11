@@ -6,11 +6,11 @@ import DownloadPage from "@/app/cv/download/page";
 import { Loading } from "@/components/pages/Loading/Loading";
 
 vi.mock("next/navigation", () => ({
-  useRouter: vi.fn(),
+  useRouter: vi.fn<typeof import("next/navigation").useRouter>(),
 }));
 
 vi.mock("@/components/pages/Loading/Loading", () => ({
-  Loading: vi.fn(),
+  Loading: vi.fn<typeof import("@/components/pages/Loading/Loading").Loading>(),
 }));
 
 type UseRouter = Partial<ReturnType<typeof useRouter>>;
@@ -19,7 +19,7 @@ type SetupOptions = {
   useRouter: UseRouter;
 };
 
-const mockPush = vi.fn();
+const mockPush = vi.fn<NonNullable<UseRouter["push"]>>();
 const defaultRouter: UseRouter = { push: mockPush };
 
 const setup = (options?: Partial<SetupOptions>) => {
@@ -35,7 +35,8 @@ const setup = (options?: Partial<SetupOptions>) => {
 
 describe("Loading", () => {
   beforeEach(() => {
-    HTMLAnchorElement.prototype.click = vi.fn();
+    HTMLAnchorElement.prototype.click =
+      vi.fn<typeof HTMLAnchorElement.prototype.click>();
     vi.clearAllMocks();
     cleanup();
   });
@@ -87,7 +88,7 @@ describe("Loading", () => {
 
     setup({
       useRouter: {
-        push: vi.fn().mockImplementation(() => {
+        push: vi.fn<NonNullable<UseRouter["push"]>>().mockImplementation(() => {
           throw new Error("Something went wrong");
         }),
       },

@@ -12,7 +12,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Details: vi.fn(),
+      Details:
+        vi.fn<
+          typeof import("@/components/molecules/Details/Details").Details
+        >(),
     };
   },
 );
@@ -23,7 +26,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Technology: vi.fn(),
+      Technology:
+        vi.fn<
+          typeof import("@/components/molecules/Technology/Technology").Technology
+        >(),
     };
   },
 );

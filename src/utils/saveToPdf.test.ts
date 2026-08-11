@@ -1,5 +1,6 @@
 import fs from "fs";
 
+import type { Browser, Page } from "puppeteer";
 import type { Mock } from "vitest";
 
 import { getBrowser } from "./getBrowser.js";
@@ -19,27 +20,34 @@ const cssFilenames = ["second.css", "first.css"];
 vi.mock("fs", () => ({
   default: {
     readFileSync: vi
-      .fn()
-      .mockImplementation((path: string) => `Mock file: ${path}`),
+      .fn<typeof import("fs").readFileSync>()
+      .mockImplementation((path) => `Mock file: ${String(path)}`),
     readdirSync: vi
-      .fn()
-      .mockImplementation(() => [...cssFilenames, "not-a-stylesheet.js"]),
+      .fn<typeof import("fs").readdirSync>()
+      .mockImplementation(
+        () =>
+          [...cssFilenames, "not-a-stylesheet.js"] as unknown as ReturnType<
+            typeof import("fs").readdirSync
+          >,
+      ),
   },
 }));
 
 vi.mock("./getBrowser.js", () => ({
-  getBrowser: vi.fn(),
+  getBrowser: vi.fn<typeof import("./getBrowser.js").getBrowser>(),
 }));
 
 const mockPuppeteerPage = {
-  addStyleTag: vi.fn(),
-  evaluate: vi.fn(),
-  pdf: vi.fn(),
-  setContent: vi.fn(),
+  addStyleTag: vi.fn<Page["addStyleTag"]>(),
+  evaluate: vi.fn<Page["evaluate"]>(),
+  pdf: vi.fn<Page["pdf"]>(),
+  setContent: vi.fn<Page["setContent"]>(),
 };
 const mockPuppeteerBrowser = {
-  newPage: vi.fn().mockResolvedValue(mockPuppeteerPage),
-  close: vi.fn(),
+  newPage: vi
+    .fn<Browser["newPage"]>()
+    .mockResolvedValue(mockPuppeteerPage as unknown as Page),
+  close: vi.fn<Browser["close"]>(),
 };
 
 const mockFile = "Mock file";
@@ -65,13 +73,17 @@ const setup = async ({ pdfContent = fragmented }: Options = {}) => {
 
   (getBrowser as Mock).mockResolvedValue(mockPuppeteerBrowser);
 
-  mockPuppeteerPage.evaluate.mockImplementation(
-    (_callback: unknown, _id: string, height: number) => {
-      fillerHeight = height;
-    },
-  );
+  mockPuppeteerPage.evaluate.mockImplementation(((
+    _callback: unknown,
+    _id: string,
+    height: number,
+  ) => {
+    fillerHeight = height;
+  }) as unknown as Page["evaluate"]);
 
-  mockPuppeteerPage.pdf.mockImplementation(() => pdfContent(fillerHeight));
+  mockPuppeteerPage.pdf.mockImplementation(
+    () => pdfContent(fillerHeight) as unknown as ReturnType<Page["pdf"]>,
+  );
 
   await saveToPdf();
 };

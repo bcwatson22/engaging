@@ -12,11 +12,11 @@ import type { THome } from "@/data/types/home";
 import { queryHome } from "@/queries/home";
 
 vi.mock("@/data/functions/getData", () => ({
-  getData: vi.fn(),
+  getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
 }));
 
 vi.mock("@/data/functions/saveData", () => ({
-  saveData: vi.fn(),
+  saveData: vi.fn<typeof import("@/data/functions/saveData").saveData>(),
 }));
 
 vi.mock(
@@ -25,13 +25,17 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Mugshot: vi.fn(),
+      Mugshot:
+        vi.fn<
+          typeof import("@/components/organisms/Mugshot/Mugshot").Mugshot
+        >(),
     };
   },
 );
 
 vi.mock("@/components/atoms/Particles/Particles", () => ({
-  Particles: vi.fn(),
+  Particles:
+    vi.fn<typeof import("@/components/atoms/Particles/Particles").Particles>(),
 }));
 
 const {

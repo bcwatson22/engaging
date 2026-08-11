@@ -7,7 +7,7 @@ import { mockCV } from "@/data/mock/cv";
 import { Details, DetailsSkeleton, type DetailsProps } from "./Details";
 
 vi.mock("@/components/atoms/Address/Address", () => ({
-  Address: vi.fn(),
+  Address: vi.fn<typeof import("@/components/atoms/Address/Address").Address>(),
 }));
 
 vi.mock(
@@ -16,7 +16,7 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Link: vi.fn(),
+      Link: vi.fn<typeof import("@/components/atoms/Link/Link").Link>(),
     };
   },
 );

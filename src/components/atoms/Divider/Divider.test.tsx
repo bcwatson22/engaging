@@ -7,7 +7,8 @@ import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 import { Divider, type DividerProps } from "./Divider";
 
 vi.mock("@/hooks/useScrollTrigger", () => ({
-  useScrollTrigger: vi.fn(),
+  useScrollTrigger:
+    vi.fn<typeof import("@/hooks/useScrollTrigger").useScrollTrigger>(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;

@@ -12,13 +12,13 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Bullet: vi.fn(),
+      Bullet: vi.fn<typeof import("@/components/atoms/Bullet/Bullet").Bullet>(),
     };
   },
 );
 
 vi.mock("@/components/atoms/Dates/Dates", () => ({
-  Dates: vi.fn(),
+  Dates: vi.fn<typeof import("@/components/atoms/Dates/Dates").Dates>(),
 }));
 
 const { role, dates, capacity, bullets } = mockCV.gigs[0].roles[0];

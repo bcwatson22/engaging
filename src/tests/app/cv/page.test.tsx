@@ -19,15 +19,17 @@ import type { TCV } from "@/data/types/cv";
 import { queryCV } from "@/queries/cv";
 
 vi.mock("react-markdown", () => ({
-  default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  default: vi
+    .fn<typeof import("react-markdown").default>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 vi.mock("@/data/functions/getData", () => ({
-  getData: vi.fn(),
+  getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
 }));
 
 vi.mock("@/data/functions/saveData", () => ({
-  saveData: vi.fn(),
+  saveData: vi.fn<typeof import("@/data/functions/saveData").saveData>(),
 }));
 
 vi.mock(
@@ -36,7 +38,8 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Header: vi.fn(),
+      Header:
+        vi.fn<typeof import("@/components/molecules/Header/Header").Header>(),
     };
   },
 );
@@ -47,7 +50,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Details: vi.fn(),
+      Details:
+        vi.fn<
+          typeof import("@/components/molecules/Details/Details").Details
+        >(),
     };
   },
 );
@@ -58,25 +64,34 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Gig: vi.fn(),
+      Gig: vi.fn<typeof import("@/components/organisms/Gig/Gig").Gig>(),
     };
   },
 );
 
 vi.mock("@/components/organisms/Section/Section", () => ({
-  Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  Section: vi
+    .fn<typeof import("@/components/organisms/Section/Section").Section>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 vi.mock("@/components/molecules/Qualification/Qualification", () => ({
-  Qualification: vi.fn(),
+  Qualification:
+    vi.fn<
+      typeof import("@/components/molecules/Qualification/Qualification").Qualification
+    >(),
 }));
 
 vi.mock("@/components/molecules/Reference/Reference", () => ({
-  Reference: vi.fn(),
+  Reference:
+    vi.fn<
+      typeof import("@/components/molecules/Reference/Reference").Reference
+    >(),
 }));
 
 vi.mock("@/components/atoms/Copyright/Copyright", () => ({
-  Copyright: vi.fn(),
+  Copyright:
+    vi.fn<typeof import("@/components/atoms/Copyright/Copyright").Copyright>(),
 }));
 
 const {

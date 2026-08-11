@@ -15,13 +15,14 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Inner: vi.fn(),
+      Inner: vi.fn<typeof import("@/components/atoms/Link/Link").Inner>(),
     };
   },
 );
 
 vi.mock("@/components/atoms/Particles/Particles", () => ({
-  Particles: vi.fn(),
+  Particles:
+    vi.fn<typeof import("@/components/atoms/Particles/Particles").Particles>(),
 }));
 
 vi.mock(
@@ -30,16 +31,19 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      TechnologySkeleton: vi.fn(),
+      TechnologySkeleton:
+        vi.fn<
+          typeof import("@/components/molecules/Technology/Technology").TechnologySkeleton
+        >(),
     };
   },
 );
 
 const mockHeading = "mockHeading";
 const mockText = "mockText";
-const mockChildren = <a href="/mock-location">{mockText}</a>;
+const mockChildren = <a href="https://example.com/mock-location">{mockText}</a>;
 const mockContent = mockHome.mugshot;
-const mockReset = vi.fn();
+const mockReset = vi.fn<NonNullable<ErrorProps["reset"]>>();
 
 const { image, heading } = mockContent;
 
@@ -116,7 +120,7 @@ describe("Error", () => {
   });
 
   describe("children", () => {
-    it("renders children if defined ", () => {
+    it("renders children if defined", () => {
       setup();
 
       expect(screen.getByRole("link", { name: mockText })).toBeInTheDocument();

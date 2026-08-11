@@ -4,7 +4,7 @@ import LoadingPage from "@/app/cv/loading";
 import { Loading } from "@/components/pages/Loading/Loading";
 
 vi.mock("@/components/pages/Loading/Loading", () => ({
-  Loading: vi.fn(),
+  Loading: vi.fn<typeof import("@/components/pages/Loading/Loading").Loading>(),
 }));
 
 const setup = () => render(<LoadingPage />);

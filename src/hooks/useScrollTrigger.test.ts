@@ -5,7 +5,7 @@ import type { Mock } from "vitest";
 import { useScrollTrigger, type Params } from "./useScrollTrigger";
 
 vi.mock("framer-motion", () => ({
-  useInView: vi.fn(),
+  useInView: vi.fn<typeof import("framer-motion").useInView>(),
 }));
 
 type UseInView = Partial<ReturnType<typeof useInView>>;

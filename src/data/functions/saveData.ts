@@ -18,7 +18,7 @@ const saveData = async (data: TPages[keyof TPages], page: keyof TPages) => {
   try {
     const file = await readFile(pathToFile);
 
-    if (!!file) {
+    if (file) {
       await writeFile(
         pathToFile,
         `import type { T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(

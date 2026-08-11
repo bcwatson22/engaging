@@ -42,14 +42,12 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
           `}
         />
       </picture>
-      <div
+      <figure
         className="print-logo"
         style={{ backgroundImage: `url(${logoLightBackground?.url})` }}
-        role="figure"
-        aria-labelledby="caption"
       >
-        <span id="caption">{alt}</span>
-      </div>
+        <figcaption>{alt}</figcaption>
+      </figure>
     </>
   );
 };

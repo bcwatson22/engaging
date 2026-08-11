@@ -9,7 +9,7 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Error: vi.fn(),
+      Error: vi.fn<typeof import("@/components/pages/Error/Error").Error>(),
     };
   },
 );
@@ -19,7 +19,7 @@ const mockError: Error = {
   message: "mockMessage",
   cause: "mockCause",
 };
-const mockReset = vi.fn();
+const mockReset = vi.fn<NonNullable<ErrorPageProps["reset"]>>();
 
 const defaultProps: ErrorPageProps = {
   error: mockError,

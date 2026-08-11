@@ -12,7 +12,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Company: vi.fn(),
+      Company:
+        vi.fn<
+          typeof import("@/components/molecules/Company/Company").Company
+        >(),
     };
   },
 );
@@ -23,7 +26,7 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Role: vi.fn(),
+      Role: vi.fn<typeof import("@/components/molecules/Role/Role").Role>(),
     };
   },
 );

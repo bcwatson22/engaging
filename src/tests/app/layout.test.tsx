@@ -8,7 +8,12 @@ vi.mock(import("next/font/google"), async (importOriginal: Function) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    Nunito: vi.fn().mockReturnValue({ className: "mockClassName" }),
+    Nunito: vi
+      .fn<typeof import("next/font/google").Nunito>()
+      /* The layout only reads className off the font object. */
+      .mockReturnValue({ className: "mockClassName" } as ReturnType<
+        typeof import("next/font/google").Nunito
+      >),
   };
 });
 
@@ -16,7 +21,7 @@ vi.mock(import("@vercel/analytics/next"), async (importOriginal: Function) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    Analytics: vi.fn(),
+    Analytics: vi.fn<typeof import("@vercel/analytics/next").Analytics>(),
   };
 });
 
@@ -26,7 +31,8 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      SpeedInsights: vi.fn(),
+      SpeedInsights:
+        vi.fn<typeof import("@vercel/speed-insights/next").SpeedInsights>(),
     };
   },
 );

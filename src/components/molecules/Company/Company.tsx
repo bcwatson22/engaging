@@ -54,14 +54,12 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
             />
           </figure>
           <div className="company-logo print-company-logo">
-            <div
+            <figure
               className="company-icon"
               style={{ backgroundImage: `url(${logo.url})` }}
-              role="figure"
-              aria-labelledby="caption"
             >
-              <span id="caption">{alt}</span>
-            </div>
+              <figcaption>{alt}</figcaption>
+            </figure>
           </div>
         </>
       )}

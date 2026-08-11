@@ -13,7 +13,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      DetailsSkeleton: vi.fn(),
+      DetailsSkeleton:
+        vi.fn<
+          typeof import("@/components/molecules/Details/Details").DetailsSkeleton
+        >(),
     };
   },
 );
@@ -24,7 +27,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      HeaderSkeleton: vi.fn(),
+      HeaderSkeleton:
+        vi.fn<
+          typeof import("@/components/molecules/Header/Header").HeaderSkeleton
+        >(),
     };
   },
 );
@@ -35,13 +41,16 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      GigSkeleton: vi.fn(),
+      GigSkeleton:
+        vi.fn<typeof import("@/components/organisms/Gig/Gig").GigSkeleton>(),
     };
   },
 );
 
 vi.mock("@/components/organisms/Section/Section", () => ({
-  Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  Section: vi
+    .fn<typeof import("@/components/organisms/Section/Section").Section>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 const setup = () => render(<Loading />);

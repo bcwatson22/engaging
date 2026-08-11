@@ -1,3 +1,7 @@
+/* oxlint-disable jsx-a11y/prefer-tag-over-role -- the suggested `output` is
+   form-associated and renders inline, so it would drop the h-* heights and
+   stop matching the `& > div` width rules in Skeleton.css. */
+
 const label = "Loading...";
 
 type Props = {
