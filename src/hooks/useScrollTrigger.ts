@@ -1,11 +1,13 @@
-import { type AnimationProps, useInView } from "framer-motion";
+import { type MotionProps, useInView } from "motion/react";
 import type { RefObject } from "react";
 
 type Params = TScroll & {
   ref: RefObject<HTMLDivElement | null>;
 };
 
-type Return = AnimationProps;
+/* motion 13 dropped AnimationProps. These are the three props the hook
+   actually returns, so name them rather than take the whole surface. */
+type Return = Pick<MotionProps, "initial" | "animate" | "transition">;
 
 const useScrollTrigger = ({
   ref,

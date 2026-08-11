@@ -1,7 +1,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { motion, type Target } from "framer-motion";
+import { motion, type Target } from "motion/react";
 
 type Props = {
   showRights?: boolean;

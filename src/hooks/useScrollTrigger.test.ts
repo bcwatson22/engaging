@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
-import { useInView } from "framer-motion";
+import { useInView } from "motion/react";
 import type { Mock } from "vitest";
 
 import { useScrollTrigger, type Params } from "./useScrollTrigger";
 
-vi.mock("framer-motion", () => ({
-  useInView: vi.fn<typeof import("framer-motion").useInView>(),
+vi.mock("motion/react", () => ({
+  useInView: vi.fn<typeof import("motion/react").useInView>(),
 }));
 
 type UseInView = Partial<ReturnType<typeof useInView>>;
