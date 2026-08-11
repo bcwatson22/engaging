@@ -1,6 +1,43 @@
 @import "tailwindcss";
 
-@config '../../tailwind.config.ts';
+/* Ported from tailwind.config.ts. Only what the codebase actually uses:
+   v4 provides top-1.5, border-3 and decoration-2 natively, and the unused
+   entries (top-2.5, the 1/6 and 5/6 inset fractions, p-footer, min-h-footer,
+   border-12/16/20/24, decoration-3, both gradients and fade-out) are dropped
+   rather than carried over. */
+@theme {
+  --breakpoint-xs: 480px;
+
+  --aspect-logo: 320 / 111;
+
+  --color-brand-light: var(--brand-light);
+  --color-brand-grey: var(--brand-grey);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-green: var(--brand-green);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-red: var(--brand-red);
+
+  /* next/font sets --font-nunito; naming it --font-sans on both sides would
+     make this self-referential. */
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* No text-indent namespace in v4, so the named utility is declared directly. */
+@utility indent-full {
+  text-indent: -99999rem;
+}
 
 @import "./layers/base.css";
 @import "./layers/components.css";
