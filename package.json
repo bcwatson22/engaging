@@ -5,8 +5,8 @@
   "homepage": "https://github.com/bcwatson22/engaging#readme",
   "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
   "scripts": {
-    "dev": "NODE_ENV=development next dev --webpack",
-    "build": "NODE_ENV=production next build --webpack && npx puppeteer browsers install chrome && node ./src/scripts/saveToPdf.ts && node ./src/scripts/saveStartupImages.ts",
+    "dev": "NODE_ENV=development next dev",
+    "build": "NODE_ENV=production next build && npx puppeteer browsers install chrome && node ./src/scripts/saveToPdf.ts && node ./src/scripts/saveStartupImages.ts",
     "start": "next start",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
