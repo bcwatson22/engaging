@@ -33,8 +33,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude — plans and local config stay private
+# claude — plans, local config and agent instructions stay private
 .claude/
+CLAUDE.md
+AGENTS.md
 
 # typescript
 *.tsbuildinfo
