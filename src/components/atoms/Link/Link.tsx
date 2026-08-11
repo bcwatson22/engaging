@@ -29,7 +29,7 @@ type TShared = Omit<ComponentPropsWithRef<"a">, "href"> & {
 const LinkSkeleton = () => (
   <div className="link icon relative">
     <Skeleton className="vector rounded-full" />
-    <SkeletonLine className="w-[6.75rem]" />
+    <SkeletonLine className="w-27" />
   </div>
 );
 

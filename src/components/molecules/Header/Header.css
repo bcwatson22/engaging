@@ -1,18 +1,16 @@
-@layer components {
-  .header {
-    @apply grid grid-cols-1 gap-6 items-center;
-    @apply md:grid-cols-2 lg:grid-cols-[22rem_minmax(1rem,_1fr)] lg:items-start lg:gap-x-24;
-    @apply print:grid-cols-2 print:gap-8;
-  }
+@utility header {
+  @apply grid grid-cols-1 gap-6 items-center;
+  @apply md:grid-cols-2 lg:grid-cols-[22rem_minmax(1rem,1fr)] lg:items-start lg:gap-x-24;
+  @apply print:grid-cols-2 print:gap-8;
+}
 
-  .screen-logo {
-    @apply mx-auto mb-auto;
-    @apply md:mx-0 lg:mb-0;
-    @apply print:hidden;
-  }
+@utility screen-logo {
+  @apply mx-auto mb-auto;
+  @apply md:mx-0 lg:mb-0;
+  @apply print:hidden;
+}
 
-  .print-logo {
-    @apply hidden indent-full aspect-logo bg-no-repeat bg-cover;
-    @apply print:block;
-  }
+@utility print-logo {
+  @apply hidden indent-full aspect-logo bg-no-repeat bg-cover;
+  @apply print:block;
 }

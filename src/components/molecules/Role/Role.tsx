@@ -40,8 +40,8 @@ const getLinkClassNames = (
 
 const RoleSkeleton = () => (
   <div className="role mt-9">
-    <SkeletonHeading level="h4" className="w-[14rem]" />
-    <SkeletonLine className="mt-2 w-[17rem] mb-6" />
+    <SkeletonHeading level="h4" className="w-56" />
+    <SkeletonLine className="mt-2 w-68 mb-6" />
     {[...Array(7).keys()].map((key, index) => (
       <BulletSkeleton key={key} index={index} />
     ))}

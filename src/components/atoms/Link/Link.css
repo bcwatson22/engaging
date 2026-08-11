@@ -1,70 +1,68 @@
-@layer components {
-  .link {
-    & span {
+@utility link {
+  & span {
+    background-image:
+      linear-gradient(var(--brand-blue), var(--brand-blue)),
+      linear-gradient(var(--brand-dark), var(--brand-dark)),
+      linear-gradient(var(--brand-blue), var(--brand-blue));
+    background-size:
+      0 0.125rem,
+      0 0.125rem,
+      100% 0.125rem;
+    background-position:
+      0 100%,
+      0 100%,
+      0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.1s ease-out;
+
+    @media (prefers-color-scheme: dark) {
       background-image:
-        linear-gradient(var(--brand-blue), var(--brand-blue)),
-        linear-gradient(var(--brand-dark), var(--brand-dark)),
-        linear-gradient(var(--brand-blue), var(--brand-blue));
+        linear-gradient(var(--brand-yellow), var(--brand-yellow)),
+        linear-gradient(var(--brand-light), var(--brand-light)),
+        linear-gradient(var(--brand-yellow), var(--brand-yellow));
+    }
+  }
+
+  &:hover,
+  &:focus-visible {
+    & span {
       background-size:
         0 0.125rem,
-        0 0.125rem,
+        100% 0.125rem,
         100% 0.125rem;
-      background-position:
-        0 100%,
-        0 100%,
-        0 100%;
-      background-repeat: no-repeat;
-      transition: background-size 0.1s ease-out;
-
-      @media (prefers-color-scheme: dark) {
-        background-image:
-          linear-gradient(var(--brand-yellow), var(--brand-yellow)),
-          linear-gradient(var(--brand-light), var(--brand-light)),
-          linear-gradient(var(--brand-yellow), var(--brand-yellow));
-      }
-    }
-
-    &:hover,
-    &:focus-visible {
-      & span {
-        background-size:
-          0 0.125rem,
-          100% 0.125rem,
-          100% 0.125rem;
-      }
-    }
-
-    &:active {
-      & span {
-        background-size:
-          100% 0.125rem,
-          100% 0.125rem,
-          100% 0.125rem;
-      }
     }
   }
 
-  .url {
-    &:after {
-      content: attr(data-url);
-      @apply hidden;
-      text-decoration: underline;
-      @apply underline-offset-4 decoration-2 decoration-brand-blue;
-      @apply print:inline-block;
-    }
-
+  &:active {
     & span {
-      @apply print:sr-only;
+      background-size:
+        100% 0.125rem,
+        100% 0.125rem,
+        100% 0.125rem;
     }
   }
+}
 
-  .icon {
-    @apply relative pl-8;
-    @apply print:pl-5;
+@utility url {
+  &:after {
+    content: attr(data-url);
+    @apply hidden;
+    text-decoration: underline;
+    @apply underline-offset-4 decoration-2 decoration-brand-blue;
+    @apply print:inline-block;
   }
 
-  .vector {
-    @apply w-6 h-6 absolute top-1/2 -translate-y-1/2 left-0;
-    @apply print:w-4 print:h-4;
+  & span {
+    @apply print:sr-only;
   }
+}
+
+@utility icon {
+  @apply relative pl-8;
+  @apply print:pl-5;
+}
+
+@utility vector {
+  @apply w-6 h-6 absolute top-1/2 -translate-y-1/2 left-0;
+  @apply print:w-4 print:h-4;
 }

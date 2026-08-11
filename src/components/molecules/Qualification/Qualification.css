@@ -1,13 +1,11 @@
-@layer components {
-  .qualification {
-    &:not(:last-of-type) {
-      @apply mb-6;
-      @apply md:mb-12;
-      @apply print:mb-4;
-    }
+@utility qualification {
+  &:not(:last-of-type) {
+    @apply mb-6;
+    @apply md:mb-12;
+    @apply print:mb-4;
+  }
 
-    & a {
-      @apply print:inline-block print:mt-0.5;
-    }
+  & a {
+    @apply print:inline-block print:mt-0.5;
   }
 }

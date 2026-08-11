@@ -1,44 +1,42 @@
-@layer components {
-  .technology {
-    @apply relative w-full aspect-square flex justify-center items-center text-center;
-    @apply print:aspect-auto print:grid;
+@utility technology {
+  @apply relative w-full aspect-square flex justify-center items-center text-center;
+  @apply print:aspect-auto print:grid;
 
-    & .logo,
-    & .name {
-      @apply transition-opacity duration-150;
-    }
+  & .logo,
+  & .name {
+    @apply transition-opacity duration-150;
+  }
 
+  & .logo {
+    @apply flex justify-center items-center print:w-24 print:h-24;
+  }
+
+  & img {
+    @apply absolute top-0 left-0 w-full h-full p-3 object-contain flex justify-center items-center;
+    @apply print:relative print:block print:w-full print:h-full;
+  }
+
+  & .name {
+    @apply relative opacity-0 text-sm px-1;
+    @apply print:opacity-100;
+  }
+
+  & .chunk {
+    @apply block;
+  }
+
+  &:hover {
     & .logo {
-      @apply flex justify-center items-center print:w-24 print:h-24;
-    }
-
-    & img {
-      @apply absolute top-0 left-0 w-full h-full p-3 object-contain flex justify-center items-center;
-      @apply print:relative print:block print:w-full print:h-full;
+      @apply opacity-30;
     }
 
     & .name {
-      @apply relative opacity-0 text-sm px-1;
-      @apply print:opacity-100;
+      @apply opacity-100;
     }
+  }
 
-    & .chunk {
-      @apply block;
-    }
-
-    &:hover {
-      & .logo {
-        @apply opacity-30;
-      }
-
-      & .name {
-        @apply opacity-100;
-      }
-    }
-
-    & .white {
-      @apply brightness-0 invert;
-      @apply print:brightness-100 print:invert-0;
-    }
+  & .white {
+    @apply brightness-0 invert;
+    @apply print:brightness-100 print:invert-0;
   }
 }

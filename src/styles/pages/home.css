@@ -1,28 +1,26 @@
-@layer components {
-  .home {
-    @apply flex flex-col justify-center p-6 pb-[calc(var(--footer)+1.5rem)] bg-black text-white animate-fade-in overflow-hidden;
-    @apply sm:p-6 md:items-center;
-    @apply print:justify-start print:bg-white print:text-black;
+@utility home {
+  @apply flex flex-col justify-center p-6 pb-[calc(var(--footer)+1.5rem)] bg-black text-white animate-fade-in overflow-hidden;
+  @apply sm:p-6 md:items-center;
+  @apply print:justify-start print:bg-white print:text-black;
 
-    &.loading {
-      @apply sm:pb-[calc(var(--footer)+1.5rem)];
-    }
+  &.loading {
+    @apply sm:pb-[calc(var(--footer)+1.5rem)];
+  }
 
-    &.loaded {
-      @apply animate-fade-in;
-    }
+  &.loaded {
+    @apply animate-fade-in;
+  }
 
-    & a {
-      @apply decoration-brand-yellow;
-      @apply print:decoration-brand-blue;
-    }
+  & a {
+    @apply decoration-brand-yellow;
+    @apply print:decoration-brand-blue;
+  }
 
-    .banner {
-      @apply sm:relative sm:mt-auto sm:bg-transparent sm:bg-opacity-100;
+  .banner {
+    @apply sm:relative sm:mt-auto sm:bg-transparent;
 
-      & aside {
-        @apply ml-0;
-      }
+    & aside {
+      @apply ml-0;
     }
   }
 }

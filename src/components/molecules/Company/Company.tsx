@@ -27,8 +27,8 @@ const CompanySkeleton = () => (
   <div className="company">
     <Skeleton className="company-logo bg-zinc-300 dark:bg-zinc-700" />
     <div className="company-details">
-      <SkeletonHeading level="h3" className="w-[8rem]" />
-      <SkeletonLine className="mt-2 w-[5rem]" />
+      <SkeletonHeading level="h3" className="w-32" />
+      <SkeletonLine className="mt-2 w-20" />
     </div>
   </div>
 );
