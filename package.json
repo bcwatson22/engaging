@@ -1,6 +1,6 @@
 {
   "name": "engaging",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "homepage": "https://github.com/bcwatson22/engaging#readme",
   "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
@@ -59,7 +59,7 @@
     "vitest": "4.1.10"
   },
   "engines": {
-    "node": ">=22"
+    "node": "^22.18.0"
   },
   "packageManager": "pnpm@10.20.0",
   "pnpm": {
