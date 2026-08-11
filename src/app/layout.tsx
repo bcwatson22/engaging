@@ -1,8 +1,8 @@
-import { type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { CssVariable } from "next/dist/compiled/@next/font";
 import { Nunito } from "next/font/google";
+import { type ReactNode } from "react";
 
 import "@/styles/globals.css";
 

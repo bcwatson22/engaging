@@ -4,7 +4,6 @@ import {
   OgImage,
   type OgImageProps,
 } from "@/components/organisms/OgImage/OgImage";
-
 import { cacheHome } from "@/data/cache/home";
 import { formatExperience } from "@/utils/formatExperience";
 import { loadGoogleFont, fontFamily } from "@/utils/loadGoogleFont";
@@ -12,7 +11,7 @@ import { loadGoogleFont, fontFamily } from "@/utils/loadGoogleFont";
 const replaceImageFormat = (
   value: string,
   current = "webp",
-  target = "png"
+  target = "png",
 ): string => value.replace(current, target);
 
 const imageProps: OgImageProps = {

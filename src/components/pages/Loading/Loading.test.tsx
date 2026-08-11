@@ -1,11 +1,11 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Loading } from "./Loading";
-
 import { DetailsSkeleton } from "@/components/molecules/Details/Details";
 import { HeaderSkeleton } from "@/components/molecules/Header/Header";
 import { GigSkeleton } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
+
+import { Loading } from "./Loading";
 
 vi.mock(
   import("@/components/molecules/Details/Details"),
@@ -13,9 +13,12 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      DetailsSkeleton: vi.fn(),
+      DetailsSkeleton:
+        vi.fn<
+          typeof import("@/components/molecules/Details/Details").DetailsSkeleton
+        >(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -24,9 +27,12 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      HeaderSkeleton: vi.fn(),
+      HeaderSkeleton:
+        vi.fn<
+          typeof import("@/components/molecules/Header/Header").HeaderSkeleton
+        >(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -35,13 +41,16 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      GigSkeleton: vi.fn(),
+      GigSkeleton:
+        vi.fn<typeof import("@/components/organisms/Gig/Gig").GigSkeleton>(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/organisms/Section/Section", () => ({
-  Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  Section: vi
+    .fn<typeof import("@/components/organisms/Section/Section").Section>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 const setup = () => render(<Loading />);
@@ -73,7 +82,7 @@ describe("Loading", () => {
       expect(Section).toHaveBeenNthCalledWith(
         index + 1,
         expect.objectContaining({ heading: value }),
-        {}
+        undefined,
       );
   });
 
@@ -83,7 +92,7 @@ describe("Loading", () => {
     expect(DetailsSkeleton).toHaveBeenNthCalledWith(
       1,
       { hasParagraph: true },
-      {}
+      undefined,
     );
   });
 

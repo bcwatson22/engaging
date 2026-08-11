@@ -1,24 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import type { Engine, ISourceOptions } from "@tsparticles/engine";
 import {
   Particles as TSParticles,
-  initParticlesEngine,
+  ParticlesProvider,
 } from "@tsparticles/react";
-import type { ISourceOptions } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
+import { useCallback, useMemo } from "react";
 
 const Particles = () => {
-  const [init, setInit] = useState<boolean>(false);
-
-  useEffect(() => {
-    (async () => {
-      await initParticlesEngine(async (engine) => {
-        await loadSlim(engine);
-      });
-
-      setInit(true);
-    })();
+  /* v4 replaced initParticlesEngine with a provider. TSParticles reads the
+     loaded flag off its context, so it no longer needs a render gate here. */
+  const init = useCallback(async (engine: Engine): Promise<void> => {
+    await loadSlim(engine);
   }, []);
 
   const options: ISourceOptions = useMemo(
@@ -82,12 +76,14 @@ const Particles = () => {
       },
       detectRetina: true,
     }),
-    []
+    [],
   );
 
-  return init ? (
-    <TSParticles id="tsparticles" options={options} className="particles" />
-  ) : null;
+  return (
+    <ParticlesProvider init={init}>
+      <TSParticles id="tsparticles" options={options} className="particles" />
+    </ParticlesProvider>
+  );
 };
 
 export { Particles };

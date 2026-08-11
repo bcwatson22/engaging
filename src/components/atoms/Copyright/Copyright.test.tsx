@@ -1,5 +1,4 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 
 import { Copyright, type CopyrightProps } from "./Copyright";
 
@@ -29,7 +28,7 @@ describe("Copyright", () => {
       await waitFor(() =>
         expect(screen.getByText(/All rights reserved/i)).toHaveStyle({
           opacity: 1,
-        })
+        }),
       );
     });
 
@@ -41,7 +40,7 @@ describe("Copyright", () => {
       await waitFor(() =>
         expect(screen.getByText(/All rights reserved/i)).not.toHaveStyle({
           opacity: 1,
-        })
+        }),
       );
     });
   });

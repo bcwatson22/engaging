@@ -1,7 +1,6 @@
 import { cleanup, render } from "@testing-library/react";
 
 import ErrorPage, { type ErrorPageProps } from "@/app/error";
-
 import { Error } from "@/components/pages/Error/Error";
 
 vi.mock(
@@ -10,9 +9,9 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Error: vi.fn(),
+      Error: vi.fn<typeof import("@/components/pages/Error/Error").Error>(),
     };
-  }
+  },
 );
 
 const mockError: Error = {
@@ -20,7 +19,7 @@ const mockError: Error = {
   message: "mockMessage",
   cause: "mockCause",
 };
-const mockReset = vi.fn();
+const mockReset = vi.fn<NonNullable<ErrorPageProps["reset"]>>();
 
 const defaultProps: ErrorPageProps = {
   error: mockError,
@@ -50,7 +49,7 @@ describe("Error", () => {
     expect(Error).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ reset: mockReset }),
-      {}
+      undefined,
     );
   });
 });

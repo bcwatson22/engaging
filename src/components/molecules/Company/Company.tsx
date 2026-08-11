@@ -1,18 +1,16 @@
 "use client";
 
+import { motion } from "motion/react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { useRef } from "react";
-
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 import {
   Skeleton,
   SkeletonHeading,
   SkeletonLine,
 } from "@/components/atoms/Skeleton/Skeleton";
-
 import { companyLogoDimensions } from "@/constants/dimensions";
+import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 type TCompany = TScroll &
   Pick<TPosition, "company"> & {
@@ -29,8 +27,8 @@ const CompanySkeleton = () => (
   <div className="company">
     <Skeleton className="company-logo bg-zinc-300 dark:bg-zinc-700" />
     <div className="company-details">
-      <SkeletonHeading level="h3" className="w-[8rem]" />
-      <SkeletonLine className="mt-2 w-[5rem]" />
+      <SkeletonHeading level="h3" className="w-32" />
+      <SkeletonLine className="mt-2 w-20" />
     </div>
   </div>
 );
@@ -56,14 +54,12 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
             />
           </figure>
           <div className="company-logo print-company-logo">
-            <div
+            <figure
               className="company-icon"
               style={{ backgroundImage: `url(${logo.url})` }}
-              role="figure"
-              aria-labelledby="caption"
             >
-              <span id="caption">{alt}</span>
-            </div>
+              <figcaption>{alt}</figcaption>
+            </figure>
           </div>
         </>
       )}

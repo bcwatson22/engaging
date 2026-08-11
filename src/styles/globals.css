@@ -1,6 +1,10 @@
-@import "layers/base.css";
-@import "layers/components.css";
-@import "layers/utilities.css";
+@import "tailwindcss";
+
+@config '../../tailwind.config.ts';
+
+@import "./layers/base.css";
+@import "./layers/components.css";
+@import "./layers/utilities.css";
 
 @import "../components/atoms/Address/Address.css";
 @import "../components/atoms/Bullet/Bullet.css";
@@ -21,14 +25,29 @@
 
 @import "../components/organisms/Gig/Gig.css";
 @import "../components/organisms/Mugshot/Mugshot.css";
+@import "../components/organisms/Mugshot/Mugshot.utilities.css";
 @import "../components/organisms/Section/Section.css";
 
-@import "pages/home.css";
-@import "pages/cv.css";
+@import "./pages/home.css";
+@import "./pages/cv.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 :root {
   --brand-light: #f9fafb;
@@ -40,8 +59,8 @@
   --brand-red: #740a01;
   --transparent: rgba(0, 0, 0, 0);
   --footer: 2.5rem;
-  
-  @screen sm {
+
+  @media (width >= theme(--breakpoint-sm)) {
     --footer: 3.5rem;
   }
 }

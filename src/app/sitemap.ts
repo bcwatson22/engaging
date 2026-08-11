@@ -1,5 +1,5 @@
-import type { MetadataRoute } from "next";
 import dayjs from "dayjs";
+import type { MetadataRoute } from "next";
 
 import { domainName } from "@/constants/common";
 

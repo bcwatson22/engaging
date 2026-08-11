@@ -1,83 +1,110 @@
-@layer components {
-  .role,
-  .multiple,
-  .linker,
-  .linkee {
-    @apply relative;
+@utility role {
+  @apply relative;
 
-    &:before,
-    &:after {
-      @apply block absolute bg-zinc-300;
-      @apply dark:bg-zinc-800;
-    }
+  &:before,
+  &:after {
+    @apply absolute block bg-zinc-300;
+    @apply dark:bg-zinc-800;
   }
-
-  .role,
-  .multiple,
-  .linker {
-    &:before,
-    &:after {
-      @apply top-2;
-      @apply print:top-1.5;
-    }
+  &:before,
+  &:after {
+    @apply top-2;
+    @apply print:top-1.5;
   }
+  @apply mt-4;
+  @apply lg:mt-8;
 
-  .role {
-    @apply mt-4;
-    @apply lg:mt-8;
-
-    & h4 {
-      @apply print:font-bold;
-    }
+  & h4 {
+    @apply print:font-bold;
   }
+}
 
-  .multiple,
-  .linker {
-    &:before {
-      content: "";
-    }
+@utility multiple {
+  @apply relative;
+
+  &:before,
+  &:after {
+    @apply absolute block bg-zinc-300;
+    @apply dark:bg-zinc-800;
   }
-
-  .multiple {
-    &:before {
-      @apply w-3 h-3 -left-12 rounded-full;
-      @apply print:w-2.5 print:h-2.5 print:-left-10;
-    }
+  &:before,
+  &:after {
+    @apply top-2;
+    @apply print:top-1.5;
   }
-
-  .linker,
-  .linkee {
-    &:before,
-    &:after {
-      content: "";
-      @apply w-0.5 -left-[43px] z-0;
-      @apply print:-left-[36px];
-    }
+  &:before {
+    content: "";
   }
-
-  .linker {
-    &:before {
-      @apply h-full;
-    }
+  &:before {
+    @apply -left-12 h-3 w-3 rounded-full;
+    @apply print:-left-10 print:h-2.5 print:w-2.5;
   }
+}
 
-  .linkee {
-    &:after {
-      @apply -top-6 h-8;
-      @apply lg:h-8;
-    }
+@utility linker {
+  @apply relative;
+
+  &:before,
+  &:after {
+    @apply absolute block bg-zinc-300;
+    @apply dark:bg-zinc-800;
   }
-
-  .capacity {
-    @apply mt-0;
-
-    &:before {
-      content: "\2022";
-      @apply mr-2;
-    }
+  &:before,
+  &:after {
+    @apply top-2;
+    @apply print:top-1.5;
   }
-
-  .bullets {
-    @apply z-10;
+  &:before {
+    content: "";
   }
+  &:before,
+  &:after {
+    content: "";
+    @apply left-[-43px] z-0 w-0.5;
+    @apply print:left-[-36px];
+  }
+  &:before {
+    @apply h-full;
+  }
+}
+
+@utility linkee {
+  @apply relative;
+
+  &:before,
+  &:after {
+    @apply absolute block bg-zinc-300;
+    @apply dark:bg-zinc-800;
+  }
+  &:before,
+  &:after {
+    content: "";
+    @apply left-[-43px] z-0 w-0.5;
+    @apply print:left-[-36px];
+  }
+  &:after {
+    @apply -top-6 h-8;
+    @apply lg:h-8;
+  }
+}
+
+/* @utility rules are emitted in Tailwind's sort order, not source order, so
+   .role:after (top-2) can land after .linkee:after (-top-6) and win at equal
+   specificity — which left the promotion connector 32px out of place. Pin it
+   with a selector that outranks .role whatever the order. */
+.role.linkee:after {
+  @apply -top-6;
+}
+
+@utility capacity {
+  @apply mt-0;
+
+  &:before {
+    content: "\2022";
+    @apply mr-2;
+  }
+}
+
+@utility bullets {
+  @apply z-10;
 }

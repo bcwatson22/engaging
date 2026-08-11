@@ -1,48 +1,42 @@
-import fs from "fs";
-
+import type { Browser, Page } from "puppeteer";
 import type { Mock } from "vitest";
 
 import { getBrowser } from "./getBrowser.js";
 import {
   saveToPdf,
   applyFiller,
-  cssPath,
-  encoding,
+  cvUrl,
   pdfPath,
   fillerId,
 } from "./saveToPdf.js";
 
-/* Unsorted, and with a non-stylesheet sibling, so the read order and the
-   filtering are both exercised. */
-const cssFilenames = ["second.css", "first.css"];
-
-vi.mock("fs", () => ({
-  default: {
-    readFileSync: vi
-      .fn()
-      .mockImplementation((path: string) => `Mock file: ${path}`),
-    readdirSync: vi
-      .fn()
-      .mockImplementation(() => [...cssFilenames, "not-a-stylesheet.js"]),
-  },
-}));
-
 vi.mock("./getBrowser.js", () => ({
-  getBrowser: vi.fn(),
+  getBrowser: vi.fn<typeof import("./getBrowser.js").getBrowser>(),
 }));
+
+/* withServer owns the spawn/kill lifecycle and is covered in server.test.ts;
+   here it just runs the callback so the PDF logic can be asserted. */
+vi.mock("./server.js", async (importOriginal: Function) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    withServer: vi
+      .fn<typeof import("./server.js").withServer>()
+      .mockImplementation((run) => run()),
+  };
+});
 
 const mockPuppeteerPage = {
-  addStyleTag: vi.fn(),
-  evaluate: vi.fn(),
-  pdf: vi.fn(),
-  setContent: vi.fn(),
+  goto: vi.fn<Page["goto"]>(),
+  evaluate: vi.fn<Page["evaluate"]>(),
+  pdf: vi.fn<Page["pdf"]>(),
 };
 const mockPuppeteerBrowser = {
-  newPage: vi.fn().mockResolvedValue(mockPuppeteerPage),
-  close: vi.fn(),
+  newPage: vi
+    .fn<Browser["newPage"]>()
+    .mockResolvedValue(mockPuppeteerPage as unknown as Page),
+  close: vi.fn<Browser["close"]>(),
 };
-
-const mockFile = "Mock file";
 
 /* Stands in for Chrome's A4 fragmentation: the content spans three pages and
    leaves 855px of the last one empty. */
@@ -65,13 +59,17 @@ const setup = async ({ pdfContent = fragmented }: Options = {}) => {
 
   (getBrowser as Mock).mockResolvedValue(mockPuppeteerBrowser);
 
-  mockPuppeteerPage.evaluate.mockImplementation(
-    (_callback: unknown, _id: string, height: number) => {
-      fillerHeight = height;
-    }
-  );
+  mockPuppeteerPage.evaluate.mockImplementation(((
+    _callback: unknown,
+    _id: string,
+    height: number,
+  ) => {
+    fillerHeight = height;
+  }) as unknown as Page["evaluate"]);
 
-  mockPuppeteerPage.pdf.mockImplementation(() => pdfContent(fillerHeight));
+  mockPuppeteerPage.pdf.mockImplementation(
+    () => pdfContent(fillerHeight) as unknown as ReturnType<Page["pdf"]>,
+  );
 
   await saveToPdf();
 };
@@ -83,40 +81,6 @@ describe("saveToPdf", () => {
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
   });
 
-  it("calls readFileSync to get htmlContent", async () => {
-    await setup();
-
-    expect(fs.readFileSync).toHaveBeenNthCalledWith(
-      1,
-      ".next/server/app/cv.html",
-      encoding
-    );
-  });
-
-  it("calls readdirSync to get CSS files", async () => {
-    await setup();
-
-    expect(fs.readdirSync).toHaveBeenNthCalledWith(1, cssPath);
-  });
-
-  it("calls readFileSync for every stylesheet, in a stable order", async () => {
-    await setup();
-
-    expect(fs.readFileSync).toHaveBeenNthCalledWith(
-      2,
-      `${cssPath}first.css`,
-      encoding
-    );
-
-    expect(fs.readFileSync).toHaveBeenNthCalledWith(
-      3,
-      `${cssPath}second.css`,
-      encoding
-    );
-
-    expect(fs.readFileSync).toHaveBeenCalledTimes(cssFilenames.length + 1);
-  });
-
   it("calls getBrowser and creates a new page", async () => {
     await setup();
 
@@ -125,25 +89,11 @@ describe("saveToPdf", () => {
     expect(mockPuppeteerBrowser.newPage).toHaveBeenCalledTimes(1);
   });
 
-  it("injects the htmlContent to the new page", async () => {
+  it("navigates to the CV page on the running server", async () => {
     await setup();
 
-    expect(mockPuppeteerPage.setContent).toHaveBeenNthCalledWith(
-      1,
-      expect.stringContaining(mockFile),
-      { waitUntil: ["networkidle0"] }
-    );
-  });
-
-  it("adds cssContent and fonts to the new page", async () => {
-    await setup();
-
-    expect(mockPuppeteerPage.addStyleTag).toHaveBeenNthCalledWith(1, {
-      content: `Mock file: ${cssPath}first.css\nMock file: ${cssPath}second.css`,
-    });
-
-    expect(mockPuppeteerPage.addStyleTag).toHaveBeenNthCalledWith(2, {
-      content: expect.stringContaining("fonts"),
+    expect(mockPuppeteerPage.goto).toHaveBeenNthCalledWith(1, cvUrl, {
+      waitUntil: "networkidle0",
     });
   });
 
@@ -153,7 +103,7 @@ describe("saveToPdf", () => {
     expect(mockPuppeteerPage.evaluate).toHaveBeenLastCalledWith(
       expect.any(Function),
       fillerId,
-      expectedFill
+      expectedFill,
     );
   });
 
@@ -168,7 +118,7 @@ describe("saveToPdf", () => {
     await setup();
 
     expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
-      expect.objectContaining({ format: "A4", path: pdfPath })
+      expect.objectContaining({ format: "A4", path: pdfPath }),
     );
   });
 
@@ -178,11 +128,11 @@ describe("saveToPdf", () => {
     expect(console.warn).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("Could not fill"),
-      expect.any(Error)
+      expect.any(Error),
     );
 
     expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
-      expect.objectContaining({ path: pdfPath })
+      expect.objectContaining({ path: pdfPath }),
     );
   });
 
@@ -192,11 +142,11 @@ describe("saveToPdf", () => {
     expect(console.warn).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("Could not fill"),
-      expect.any(Error)
+      expect.any(Error),
     );
 
     expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
-      expect.objectContaining({ path: pdfPath })
+      expect.objectContaining({ path: pdfPath }),
     );
   });
 

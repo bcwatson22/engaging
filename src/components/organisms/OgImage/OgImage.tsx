@@ -1,4 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
+/* oxlint-disable next/no-img-element -- rendered by next/og's ImageResponse
+   via satori, which resolves plain <img> only; next/image cannot run there. */
+
 import type { THome } from "@/data/types/home";
 
 type Props = THome;
@@ -25,8 +27,8 @@ const OgImage = ({
     <img
       src={url}
       alt={`Portrait of ${heading}`}
-      width="360"
-      height="360"
+      width={360}
+      height={360}
       style={{ borderRadius: 180, boxShadow: "0 0 5px 1px white" }}
     />
     <div

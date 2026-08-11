@@ -1,11 +1,10 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Mugshot, MugshotSkeleton, type MugshotProps } from "./Mugshot";
-
 import { Details } from "@/components/molecules/Details/Details";
 import { Technology } from "@/components/molecules/Technology/Technology";
-
 import { mockHome } from "@/data/mock/home";
+
+import { Mugshot, MugshotSkeleton, type MugshotProps } from "./Mugshot";
 
 vi.mock(
   import("@/components/molecules/Details/Details"),
@@ -13,9 +12,12 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Details: vi.fn(),
+      Details:
+        vi.fn<
+          typeof import("@/components/molecules/Details/Details").Details
+        >(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -24,9 +26,12 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Technology: vi.fn(),
+      Technology:
+        vi.fn<
+          typeof import("@/components/molecules/Technology/Technology").Technology
+        >(),
     };
-  }
+  },
 );
 
 const { mugshot, technologies } = mockHome;
@@ -55,10 +60,10 @@ describe("Mugshot", () => {
         setup();
 
         expect(
-          screen.getByRole("img", { name: `Portrait of ${heading}` })
+          screen.getByRole("img", { name: `Portrait of ${heading}` }),
         ).toHaveAttribute(
           "src",
-          expect.stringContaining(encodeURIComponent(image.url))
+          expect.stringContaining(encodeURIComponent(image.url)),
         );
       });
     });
@@ -68,7 +73,7 @@ describe("Mugshot", () => {
         setup();
 
         expect(
-          screen.getByRole("heading", { level: 2, name: heading })
+          screen.getByRole("heading", { level: 2, name: heading }),
         ).toBeInTheDocument();
       });
     });
@@ -85,7 +90,7 @@ describe("Mugshot", () => {
       it("renders a Details component", () => {
         setup();
 
-        expect(Details).toHaveBeenNthCalledWith(1, { links }, {});
+        expect(Details).toHaveBeenNthCalledWith(1, { links }, undefined);
       });
     });
   });
@@ -106,7 +111,7 @@ describe("MugshotSkeleton", () => {
     const numOfPulses = 13;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

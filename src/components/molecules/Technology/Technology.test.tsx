@@ -1,12 +1,12 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
+import { mockHome } from "@/data/mock/home";
+
 import {
   Technology,
   TechnologySkeleton,
   type TechnologyProps,
 } from "./Technology";
-
-import { mockHome } from "@/data/mock/home";
 
 const { name, icon } = mockHome.technologies[0];
 
@@ -30,7 +30,7 @@ describe("Technology", () => {
 
       expect(screen.getByRole("img", { name: `${name} logo` })).toHaveAttribute(
         "src",
-        expect.stringContaining(encodeURIComponent(icon.url))
+        expect.stringContaining(encodeURIComponent(icon.url)),
       );
     });
 
@@ -40,7 +40,7 @@ describe("Technology", () => {
       });
 
       expect(
-        screen.queryByRole("img", { name: `${name} logo` })
+        screen.queryByRole("img", { name: `${name} logo` }),
       ).not.toBeInTheDocument();
     });
   });
@@ -66,7 +66,7 @@ describe("Technology", () => {
       setup();
 
       expect(screen.getByRole("img", { name: `${name} logo` })).toHaveClass(
-        "white"
+        "white",
       );
     });
 
@@ -78,7 +78,7 @@ describe("Technology", () => {
       });
 
       expect(screen.getByRole("img", { name: `${name} logo` })).not.toHaveClass(
-        "white"
+        "white",
       );
     });
   });
@@ -91,7 +91,7 @@ describe("TechnologySkeleton", () => {
     const numOfPulses = 1;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

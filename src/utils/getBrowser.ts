@@ -1,11 +1,13 @@
+import chromium from "@sparticuz/chromium-min";
 import puppeteer, { type Browser } from "puppeteer";
 import puppeteerCore, { type Browser as BrowserCore } from "puppeteer-core";
-import chromium from "@sparticuz/chromium-min";
 
 const headless = true;
 
+/* From v149 the release packs are split by architecture — there is no longer
+   a single chromium-vNNN-pack.tar. Vercel's Node runtime is x64. */
 const remoteExecutablePath =
-  "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar";
+  "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.x64.tar";
 
 type BrowserUnion = Browser | BrowserCore;
 

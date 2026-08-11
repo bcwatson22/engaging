@@ -1,19 +1,19 @@
 import { cleanup, render, screen } from "@testing-library/react";
-
 import NextLink from "next/link";
+
+import { Icon } from "@/components/atoms/Icon/Icon";
+import { mockCV } from "@/data/mock/cv";
 
 import { Link, LinkSkeleton, type LinkProps } from "./Link";
 
-import { Icon } from "@/components/atoms/Icon/Icon";
-
-import { mockCV } from "@/data/mock/cv";
-
 vi.mock("@/components/atoms/Icon/Icon", () => ({
-  Icon: vi.fn(),
+  Icon: vi.fn<typeof import("@/components/atoms/Icon/Icon").Icon>(),
 }));
 
 vi.mock("next/link", () => ({
-  default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  default: vi
+    .fn<typeof import("next/link").default>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 const mockLink = mockCV.onlineLinks[1];
@@ -45,7 +45,7 @@ describe("Link", () => {
       expect(Icon).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ icon }),
-        {}
+        undefined,
       );
     });
 
@@ -81,7 +81,7 @@ describe("Link", () => {
           setup();
 
           expect(
-            screen.getByRole("link").getAttribute("data-url")
+            screen.getByRole("link").getAttribute("data-url"),
           ).not.toContain("http");
         });
 
@@ -95,7 +95,7 @@ describe("Link", () => {
             expect.objectContaining({
               "data-url": expect.stringContaining("engaging.engineering"),
             }),
-            {}
+            undefined,
           );
         });
       });
@@ -127,7 +127,7 @@ describe("Link", () => {
       setup({ className: mockClassName });
 
       expect(screen.getByRole("link", { name: text })).toHaveClass(
-        mockClassName
+        mockClassName,
       );
     });
   });
@@ -140,7 +140,7 @@ describe("LinkSkeleton", () => {
     const numOfPulses = 2;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

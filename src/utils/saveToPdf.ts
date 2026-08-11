@@ -1,11 +1,9 @@
-import fs from "fs";
-
 import type { Page } from "puppeteer";
 
 import { getBrowser } from "./getBrowser.ts";
+import { baseUrl, withServer } from "./server.ts";
 
-const cssPath = ".next/static/css/";
-const encoding = "utf-8";
+const cvUrl = `${baseUrl}/cv`;
 const margin = "5mm";
 const pdfPath = "./public/billy-watson-cv.pdf";
 
@@ -55,7 +53,7 @@ const setFillerHeight = async (page: Page, height: number): Promise<void> => {
 
 const countPagesWithFill = async (
   page: Page,
-  height: number
+  height: number,
 ): Promise<number> => {
   await setFillerHeight(page, height);
 
@@ -92,40 +90,25 @@ const fillLastPage = async (page: Page): Promise<void> => {
   console.info(`Filled the last of ${pageCount} PDF pages with ${fits}px`);
 };
 
-const saveToPdf = async () => {
-  const htmlContent = fs.readFileSync(".next/server/app/cv.html", encoding);
+const saveToPdf = async () =>
+  await withServer(async () => {
+    const browser = await getBrowser();
+    const page = (await browser.newPage()) as Page;
 
-  /* Next only splits CSS into more than one chunk once a route needs it, but
-     taking a single file would silently drop styles the day that happens. */
-  const cssContent = fs
-    .readdirSync(cssPath)
-    .filter((filename) => filename.endsWith(".css"))
-    .sort()
-    .map((filename) => fs.readFileSync(cssPath + filename, encoding))
-    .join("\n");
+    try {
+      await page.goto(cvUrl, { waitUntil: "networkidle0" });
 
-  const browser = await getBrowser();
-  const page = (await browser.newPage()) as Page;
+      try {
+        await fillLastPage(page);
+      } catch (error) {
+        /* Cosmetic only — a short border beats a failed build. */
+        console.warn("Could not fill the last PDF page:", error);
+      }
 
-  await page.setContent(htmlContent, {
-    waitUntil: ["networkidle0"],
-  });
-  await page.addStyleTag({ content: cssContent });
-  await page.addStyleTag({
-    content:
-      "@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400..700&display=swap');",
+      await page.pdf({ ...pdfOptions, path: pdfPath });
+    } finally {
+      await browser.close();
+    }
   });
 
-  try {
-    await fillLastPage(page);
-  } catch (error) {
-    /* Cosmetic only — a short border beats a failed build. */
-    console.warn("Could not fill the last PDF page:", error);
-  }
-
-  await page.pdf({ ...pdfOptions, path: pdfPath });
-
-  await browser.close();
-};
-
-export { saveToPdf, applyFiller, cssPath, encoding, pdfPath, fillerId, maxFill };
+export { saveToPdf, applyFiller, cvUrl, pdfPath, fillerId, maxFill };

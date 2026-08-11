@@ -1,12 +1,11 @@
-import type { Mock } from "vitest";
 import { renderHook } from "@testing-library/react";
-
-import { useInView } from "framer-motion";
+import { useInView } from "motion/react";
+import type { Mock } from "vitest";
 
 import { useScrollTrigger, type Params } from "./useScrollTrigger";
 
-vi.mock("framer-motion", () => ({
-  useInView: vi.fn(),
+vi.mock("motion/react", () => ({
+  useInView: vi.fn<typeof import("motion/react").useInView>(),
 }));
 
 type UseInView = Partial<ReturnType<typeof useInView>>;
@@ -40,7 +39,7 @@ const setup = (options?: Partial<SetupOptions>, params?: Partial<Params>) => {
         ...defaultParams,
         ...params,
       },
-    }
+    },
   );
 };
 
@@ -84,7 +83,7 @@ describe("useScrollTrigger", () => {
       expect(useInView).toHaveBeenNthCalledWith(
         1,
         { current: mockRef },
-        expect.objectContaining({ margin: defaultParams.margin })
+        expect.objectContaining({ margin: defaultParams.margin }),
       );
     });
   });
@@ -120,7 +119,7 @@ describe("useScrollTrigger", () => {
       expect(useInView).toHaveBeenNthCalledWith(
         1,
         { current: mockRef },
-        expect.objectContaining({ margin: "-20px" })
+        expect.objectContaining({ margin: "-20px" }),
       );
     });
   });

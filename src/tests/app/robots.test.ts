@@ -8,7 +8,7 @@ describe("robots", () => {
     const result = robots();
 
     expect(result).toEqual(
-      expect.objectContaining({ sitemap: expect.stringContaining(domainName) })
+      expect.objectContaining({ sitemap: expect.stringContaining(domainName) }),
     );
   });
 });

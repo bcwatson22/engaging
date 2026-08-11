@@ -7,7 +7,7 @@ describe("sitemap", () => {
     const result = sitemap();
 
     expect(result).toEqual(
-      expect.arrayContaining([expect.objectContaining({ changeFrequency })])
+      expect.arrayContaining([expect.objectContaining({ changeFrequency })]),
     );
   });
 });

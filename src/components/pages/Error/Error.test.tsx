@@ -1,14 +1,13 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { Error, type ErrorProps } from "./Error";
-
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-
 import { cacheHome } from "@/data/cache/home";
 import { mockHome } from "@/data/mock/home";
+
+import { Error, type ErrorProps } from "./Error";
 
 vi.mock(
   import("@/components/atoms/Link/Link"),
@@ -16,13 +15,14 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Inner: vi.fn(),
+      Inner: vi.fn<typeof import("@/components/atoms/Link/Link").Inner>(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/atoms/Particles/Particles", () => ({
-  Particles: vi.fn(),
+  Particles:
+    vi.fn<typeof import("@/components/atoms/Particles/Particles").Particles>(),
 }));
 
 vi.mock(
@@ -31,16 +31,19 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      TechnologySkeleton: vi.fn(),
+      TechnologySkeleton:
+        vi.fn<
+          typeof import("@/components/molecules/Technology/Technology").TechnologySkeleton
+        >(),
     };
-  }
+  },
 );
 
 const mockHeading = "mockHeading";
 const mockText = "mockText";
-const mockChildren = <a href="/mock-location">{mockText}</a>;
+const mockChildren = <a href="https://example.com/mock-location">{mockText}</a>;
 const mockContent = mockHome.mugshot;
-const mockReset = vi.fn();
+const mockReset = vi.fn<NonNullable<ErrorProps["reset"]>>();
 
 const { image, heading } = mockContent;
 
@@ -70,7 +73,7 @@ describe("Error", () => {
     setup();
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Engaging Engineering" })
+      screen.getByRole("heading", { level: 1, name: "Engaging Engineering" }),
     ).toBeInTheDocument();
   });
 
@@ -78,7 +81,7 @@ describe("Error", () => {
     setup();
 
     expect(
-      screen.getByRole("region", { name: mockHeading })
+      screen.getByRole("region", { name: mockHeading }),
     ).toBeInTheDocument();
   });
 
@@ -87,7 +90,7 @@ describe("Error", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 2, name: mockHeading })
+        screen.getByRole("heading", { level: 2, name: mockHeading }),
       ).toBeInTheDocument();
     });
 
@@ -97,7 +100,7 @@ describe("Error", () => {
       });
 
       expect(
-        screen.getByRole("heading", { level: 2, name: "Oops" })
+        screen.getByRole("heading", { level: 2, name: "Oops" }),
       ).toBeInTheDocument();
     });
   });
@@ -111,13 +114,13 @@ describe("Error", () => {
       expect(
         screen.getByRole("img", {
           name: `Portrait of ${cacheHome.mugshot.heading}`,
-        })
+        }),
       ).toBeInTheDocument();
     });
   });
 
   describe("children", () => {
-    it("renders children if defined ", () => {
+    it("renders children if defined", () => {
       setup();
 
       expect(screen.getByRole("link", { name: mockText })).toBeInTheDocument();
@@ -130,8 +133,8 @@ describe("Error", () => {
 
       expect(
         screen.getByText(
-          "Something went wrong, but believe it or not you're not actually reading this, so it's all ok."
-        )
+          "Something went wrong, but believe it or not you're not actually reading this, so it's all ok.",
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -142,10 +145,10 @@ describe("Error", () => {
         setup();
 
         expect(
-          screen.getByRole("img", { name: `Portrait of ${heading}` })
+          screen.getByRole("img", { name: `Portrait of ${heading}` }),
         ).toHaveAttribute(
           "src",
-          expect.stringContaining(encodeURIComponent(image.url))
+          expect.stringContaining(encodeURIComponent(image.url)),
         );
       });
     });
@@ -158,7 +161,7 @@ describe("Error", () => {
       expect(Inner).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ text: "Try again" }),
-        {}
+        undefined,
       );
     });
 

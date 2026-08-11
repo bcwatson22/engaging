@@ -1,11 +1,11 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Section, type SectionProps } from "./Section";
-
 import { Divider } from "@/components/atoms/Divider/Divider";
 
+import { Section, type SectionProps } from "./Section";
+
 vi.mock("@/components/atoms/Divider/Divider", () => ({
-  Divider: vi.fn(),
+  Divider: vi.fn<typeof import("@/components/atoms/Divider/Divider").Divider>(),
 }));
 
 const mockHeading = "mockHeading";
@@ -35,7 +35,7 @@ describe("Section", () => {
       expect(Divider).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ heading: mockHeading, delay: mockDelay }),
-        {}
+        undefined,
       );
     });
 
@@ -45,7 +45,7 @@ describe("Section", () => {
       expect(Divider).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ delay: 0 }),
-        {}
+        undefined,
       );
     });
   });
@@ -55,7 +55,7 @@ describe("Section", () => {
       setup();
 
       expect(
-        screen.getByRole("button", { name: mockText })
+        screen.getByRole("button", { name: mockText }),
       ).toBeInTheDocument();
     });
   });

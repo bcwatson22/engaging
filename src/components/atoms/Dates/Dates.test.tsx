@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Dates, type DatesProps } from "./Dates";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Dates, type DatesProps } from "./Dates";
 
 const mockDates = mockCV.gigs[1].roles[0].dates;
 
@@ -53,7 +53,7 @@ describe("Dates", () => {
 
         expect(screen.getByRole("time")).toHaveAttribute("datetime", mockDate);
         expect(
-          screen.getByText("present", { exact: false })
+          screen.getByText("present", { exact: false }),
         ).toBeInTheDocument();
       });
     });
@@ -68,7 +68,7 @@ describe("Dates", () => {
       expect(
         screen
           .getByText(mockDates[0].split("-")[0], { exact: false })
-          .closest("p")
+          .closest("p"),
       ).toHaveClass(mockClassName);
     });
   });

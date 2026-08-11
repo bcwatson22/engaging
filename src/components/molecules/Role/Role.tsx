@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
-import { Dates } from "@/components/atoms/Dates/Dates";
 import { Bullet, BulletSkeleton } from "@/components/atoms/Bullet/Bullet";
+import { Dates } from "@/components/atoms/Dates/Dates";
 import {
   SkeletonHeading,
   SkeletonLine,
@@ -22,7 +22,7 @@ type Props = TRole & {
 const getLinkClassNames = (
   index: number,
   total: number,
-  hasMultiple = false
+  hasMultiple = false,
 ): string => {
   switch (true) {
     case !hasMultiple:
@@ -40,8 +40,8 @@ const getLinkClassNames = (
 
 const RoleSkeleton = () => (
   <div className="role mt-9">
-    <SkeletonHeading level="h4" className="w-[14rem]" />
-    <SkeletonLine className="mt-2 w-[17rem] mb-6" />
+    <SkeletonHeading level="h4" className="w-56" />
+    <SkeletonLine className="mt-2 mb-6 w-68" />
     {[...Array(7).keys()].map((key, index) => (
       <BulletSkeleton key={key} index={index} />
     ))}
@@ -55,13 +55,16 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
   return (
     <div className={`role${linkClassNames}`}>
       <h4
-        className={`text-brand-blue dark:text-brand-yellow${
-          hasMultiple ? " multiple" : ""
+        /* Keep a space before the interpolation: Tailwind 4's scanner reads
+           the `$` as part of the candidate, so a class butted against `${`
+           is never generated. */
+        className={`text-brand-blue dark:text-brand-yellow ${
+          hasMultiple ? "multiple" : ""
         }`}
       >
         {role}
       </h4>
-      <div className="flex flex-wrap mb-4 print:mb-1">
+      <div className="mb-4 flex flex-wrap print:mb-1">
         <Suspense>
           <Dates dates={dates} className="mr-2" />
         </Suspense>

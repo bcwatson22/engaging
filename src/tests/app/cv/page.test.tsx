@@ -1,38 +1,35 @@
-import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import ReactMarkdown from "react-markdown";
+import type { Mock } from "vitest";
 
 import CVPage, { generateMetadata, generateViewport } from "@/app/cv/page";
-import type { TCV } from "@/data/types/cv";
-import { mockCV } from "@/data/mock/cv";
-
-import { queryCV } from "@/queries/cv";
-
-import { getStartupImages } from "@/constants/startupImages";
-
-import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
-
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
-import { Header } from "@/components/molecules/Header/Header";
 import { Details } from "@/components/molecules/Details/Details";
+import { Header } from "@/components/molecules/Header/Header";
 import { Qualification } from "@/components/molecules/Qualification/Qualification";
 import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
-
 import { themeColor } from "@/constants/metadata";
+import { getStartupImages } from "@/constants/startupImages";
+import { getData } from "@/data/functions/getData";
+import { saveData } from "@/data/functions/saveData";
+import { mockCV } from "@/data/mock/cv";
+import type { TCV } from "@/data/types/cv";
+import { queryCV } from "@/queries/cv";
 
 vi.mock("react-markdown", () => ({
-  default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  default: vi
+    .fn<typeof import("react-markdown").default>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 vi.mock("@/data/functions/getData", () => ({
-  getData: vi.fn(),
+  getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
 }));
 
 vi.mock("@/data/functions/saveData", () => ({
-  saveData: vi.fn(),
+  saveData: vi.fn<typeof import("@/data/functions/saveData").saveData>(),
 }));
 
 vi.mock(
@@ -41,9 +38,10 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Header: vi.fn(),
+      Header:
+        vi.fn<typeof import("@/components/molecules/Header/Header").Header>(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -52,9 +50,12 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Details: vi.fn(),
+      Details:
+        vi.fn<
+          typeof import("@/components/molecules/Details/Details").Details
+        >(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -63,25 +64,34 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Gig: vi.fn(),
+      Gig: vi.fn<typeof import("@/components/organisms/Gig/Gig").Gig>(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/organisms/Section/Section", () => ({
-  Section: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+  Section: vi
+    .fn<typeof import("@/components/organisms/Section/Section").Section>()
+    .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 vi.mock("@/components/molecules/Qualification/Qualification", () => ({
-  Qualification: vi.fn(),
+  Qualification:
+    vi.fn<
+      typeof import("@/components/molecules/Qualification/Qualification").Qualification
+    >(),
 }));
 
 vi.mock("@/components/molecules/Reference/Reference", () => ({
-  Reference: vi.fn(),
+  Reference:
+    vi.fn<
+      typeof import("@/components/molecules/Reference/Reference").Reference
+    >(),
 }));
 
 vi.mock("@/components/atoms/Copyright/Copyright", () => ({
-  Copyright: vi.fn(),
+  Copyright:
+    vi.fn<typeof import("@/components/atoms/Copyright/Copyright").Copyright>(),
 }));
 
 const {
@@ -130,7 +140,7 @@ describe("CVPage", () => {
         logoLightBackground: expect.objectContaining({
           url: expect.any(String),
         }),
-      })
+      }),
     );
   });
 
@@ -152,7 +162,7 @@ describe("CVPage", () => {
     expect(Header).toHaveBeenNthCalledWith(
       1,
       { title, logoDarkBackground, logoLightBackground, intro },
-      {}
+      undefined,
     );
   });
 
@@ -172,7 +182,7 @@ describe("CVPage", () => {
       expect(Section).toHaveBeenNthCalledWith(
         index + 1,
         expect.objectContaining({ heading: value }),
-        {}
+        undefined,
       );
   });
 
@@ -182,7 +192,7 @@ describe("CVPage", () => {
     expect(Details).toHaveBeenNthCalledWith(
       1,
       { address, links: contactLinks },
-      {}
+      undefined,
     );
   });
 
@@ -193,34 +203,46 @@ describe("CVPage", () => {
       expect(Gig).toHaveBeenNthCalledWith(
         index + 1,
         { ...value, delay: index === 0 ? 0.2 : 0 },
-        {}
+        undefined,
       );
   });
 
   it("marks up and renders skills", async () => {
     await setup();
 
-    expect(ReactMarkdown).toHaveBeenNthCalledWith(1, { children: skills }, {});
+    expect(ReactMarkdown).toHaveBeenNthCalledWith(
+      1,
+      { children: skills },
+      undefined,
+    );
   });
 
   it("renders Qualification components", async () => {
     await setup();
 
     for (const [index, value] of qualifications.entries())
-      expect(Qualification).toHaveBeenNthCalledWith(index + 1, value, {});
+      expect(Qualification).toHaveBeenNthCalledWith(
+        index + 1,
+        value,
+        undefined,
+      );
   });
 
   it("renders a Details component for online links", async () => {
     await setup();
 
-    expect(Details).toHaveBeenNthCalledWith(2, { links: onlineLinks }, {});
+    expect(Details).toHaveBeenNthCalledWith(
+      2,
+      { links: onlineLinks },
+      undefined,
+    );
   });
 
   it("renders Reference components", async () => {
     await setup();
 
     for (const [index, value] of references.entries())
-      expect(Reference).toHaveBeenNthCalledWith(index + 1, value, {});
+      expect(Reference).toHaveBeenNthCalledWith(index + 1, value, undefined);
   });
 
   it("renders a Copyright component", async () => {
@@ -233,7 +255,7 @@ describe("CVPage", () => {
     const result = await generateMetadata();
 
     expect(result).toEqual(
-      expect.objectContaining({ title, description: expectedDescription })
+      expect.objectContaining({ title, description: expectedDescription }),
     );
     expect(expectedDescription).toContain("over 12 years'");
   });
@@ -244,7 +266,7 @@ describe("CVPage", () => {
     expect(appleWebApp).toEqual(
       expect.objectContaining({
         startupImage: getStartupImages("cv"),
-      })
+      }),
     );
   });
 
@@ -259,7 +281,7 @@ describe("CVPage", () => {
             color: themeColor,
           },
         ]),
-      })
+      }),
     );
   });
 });

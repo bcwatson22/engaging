@@ -1,45 +1,43 @@
-@layer components {
-  .company {
-    @apply sticky top-2 -ml-9 flex items-center gap-4 z-20;
-    @apply md:-ml-12 lg:gap-6;
-    @apply print:relative print:top-0 print:-ml-8 print:!opacity-100 print:!transform-none motion-reduce:!opacity-100 motion-reduce:!transform-none;
+@utility company {
+  @apply sticky top-2 z-20 -ml-9 flex items-center gap-4;
+  @apply md:-ml-12 lg:gap-6;
+  @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:relative print:top-0 print:-ml-8 print:transform-none! print:opacity-100!;
 
-    &:before {
-      content: "";
-      @apply bg-brand-light block absolute -top-2 -left-2 w-[calc(100%+1rem)] h-[calc(100%+1rem)] shadow-[0_3px_5px_3px] shadow-brand-light;
-      @apply dark:bg-brand-dark dark:shadow-brand-dark;
-      @apply print:content-none;
-    }
+  &:before {
+    content: "";
+    @apply bg-brand-light shadow-brand-light absolute -top-2 -left-2 block h-[calc(100%+1rem)] w-[calc(100%+1rem)] shadow-[0_3px_5px_3px];
+    @apply dark:bg-brand-dark dark:shadow-brand-dark;
+    @apply print:content-none;
   }
+}
 
-  .company-logo,
-  .company-details {
-    @apply relative;
+@utility company-logo {
+  @apply relative;
+  @apply flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-white shadow-lg;
+  @apply md:h-25 md:w-25;
+  @apply dark:shadow-zinc-700;
+  @apply print:h-16 print:w-16 print:border-2 print:border-zinc-300 print:shadow-none;
+
+  & img {
+    @apply h-15 w-15 object-contain;
+    @apply md:h-20 md:w-20;
+    @apply print:h-10 print:w-10;
   }
+}
 
-  .company-logo {
-    @apply shrink-0 bg-white w-[5rem] h-[5rem] rounded-full flex items-center justify-center shadow-lg;
-    @apply md:w-[6.25rem] md:h-[6.25rem];
-    @apply dark:shadow-zinc-700;
-    @apply print:w-[4rem] print:h-[4rem] print:shadow-none print:border-2 print:border-zinc-300;
+@utility company-details {
+  @apply relative;
+}
 
-    & img {
-      @apply w-[3.75rem] h-[3.75rem] object-contain;
-      @apply md:w-[5rem] md:h-[5rem];
-      @apply print:w-[2.5rem] print:h-[2.5rem];
-    }
-  }
+@utility screen-company-logo {
+  @apply print:hidden;
+}
 
-  .screen-company-logo {
-    @apply print:hidden;
-  }
+@utility print-company-logo {
+  @apply hidden;
+  @apply print:flex print:items-center print:justify-center;
+}
 
-  .print-company-logo {
-    @apply hidden;
-    @apply print:flex print:items-center print:justify-center;
-  }
-
-  .company-icon {
-    @apply indent-full aspect-square bg-no-repeat bg-contain bg-center w-[2.5rem] h-[2.5rem];
-  }
+@utility company-icon {
+  @apply indent-full aspect-square h-10 w-10 bg-contain bg-center bg-no-repeat;
 }

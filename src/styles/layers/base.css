@@ -2,7 +2,7 @@
   body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    @apply text-base text-brand-dark  bg-brand-light selection:bg-brand-blue selection:text-brand-light;
+    @apply text-brand-dark bg-brand-light selection:bg-brand-blue selection:text-brand-light text-base;
     @apply dark:text-brand-light dark:bg-brand-dark;
     @apply print:text-xs;
   }

@@ -1,14 +1,14 @@
 import type { Mock } from "vitest";
-import { getData } from "./getData";
 
+import { mockHome } from "@/data/mock/home";
 import { client } from "@/queries/client";
 import { queryHome } from "@/queries/home";
-import { mockHome } from "@/data/mock/home";
 
 import { TData } from "../types/data";
+import { getData } from "./getData";
 
 vi.mock("@/queries/client", () => ({
-  client: vi.fn(),
+  client: vi.fn<typeof import("@/queries/client").client>(),
 }));
 
 const mockData: TData = {
@@ -56,7 +56,7 @@ describe("getData", () => {
     expect(spyConsoleError).toHaveBeenNthCalledWith(
       1,
       "Error trying to fetch page data:",
-      mockErrorMessage
+      mockErrorMessage,
     );
   });
 });

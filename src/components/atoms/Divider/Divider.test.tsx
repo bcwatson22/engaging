@@ -1,14 +1,14 @@
-import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
-
-import type { Target } from "framer-motion";
-
-import { Divider, type DividerProps } from "./Divider";
+import type { Target } from "motion/react";
+import type { Mock } from "vitest";
 
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
+import { Divider, type DividerProps } from "./Divider";
+
 vi.mock("@/hooks/useScrollTrigger", () => ({
-  useScrollTrigger: vi.fn(),
+  useScrollTrigger:
+    vi.fn<typeof import("@/hooks/useScrollTrigger").useScrollTrigger>(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;
@@ -31,7 +31,7 @@ const defaultProps: DividerProps = {
 
 const setup = (
   options?: Partial<SetupOptions>,
-  props?: Partial<DividerProps>
+  props?: Partial<DividerProps>,
 ) => {
   const setupOptions: SetupOptions = {
     useScrollTrigger: defaultScrollTrigger,
@@ -57,7 +57,7 @@ describe("Divider", () => {
         screen.getByRole("heading", {
           level: 2,
           name: new RegExp(mockHeading, "i"),
-        })
+        }),
       ).toBeInTheDocument();
     });
 

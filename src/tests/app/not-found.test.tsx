@@ -1,7 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
 import NotFoundPage from "@/app/not-found";
-
 import { Link } from "@/components/atoms/Link/Link";
 import { Error } from "@/components/pages/Error/Error";
 
@@ -11,9 +10,9 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Link: vi.fn(),
+      Link: vi.fn<typeof import("@/components/atoms/Link/Link").Link>(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -22,9 +21,11 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Error: vi.fn().mockImplementation(({ children }) => <>{children}</>),
+      Error: vi
+        .fn<typeof import("@/components/pages/Error/Error").Error>()
+        .mockImplementation(({ children }) => <>{children}</>),
     };
-  }
+  },
 );
 
 const setup = () => render(<NotFoundPage />);
@@ -41,7 +42,7 @@ describe("NotFoundPage", () => {
     expect(Error).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ heading: "Are you lost?" }),
-      {}
+      undefined,
     );
   });
 
@@ -49,7 +50,7 @@ describe("NotFoundPage", () => {
     setup();
 
     expect(
-      screen.getByText(/We couldn\'t find what you were looking for/i)
+      screen.getByText(/We couldn't find what you were looking for/i),
     ).toBeInTheDocument();
   });
 
@@ -59,7 +60,7 @@ describe("NotFoundPage", () => {
     expect(Link).toHaveBeenNthCalledWith(
       1,
       { link: { icon: "Home", target: "/", text: "Home" } },
-      {}
+      undefined,
     );
   });
 });

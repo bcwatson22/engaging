@@ -1,15 +1,15 @@
-import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
+import type { Target } from "motion/react";
+import type { Mock } from "vitest";
 
-import type { Target } from "framer-motion";
+import { mockCV } from "@/data/mock/cv";
+import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 import { Company, CompanySkeleton, type CompanyProps } from "./Company";
 
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
-import { mockCV } from "@/data/mock/cv";
-
 vi.mock("@/hooks/useScrollTrigger", () => ({
-  useScrollTrigger: vi.fn(),
+  useScrollTrigger:
+    vi.fn<typeof import("@/hooks/useScrollTrigger").useScrollTrigger>(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;
@@ -36,7 +36,7 @@ const defaultProps: CompanyProps = {
 
 const setup = (
   options?: Partial<SetupOptions>,
-  props?: Partial<CompanyProps>
+  props?: Partial<CompanyProps>,
 ) => {
   const setupOptions: SetupOptions = {
     useScrollTrigger: defaultScrollTrigger,
@@ -70,7 +70,7 @@ describe("Company", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 3, name: company })
+        screen.getByRole("heading", { level: 3, name: company }),
       ).toBeInTheDocument();
     });
   });
@@ -88,10 +88,10 @@ describe("Company", () => {
       setup();
 
       expect(
-        screen.getByRole("img", { name: `${company} logo` })
+        screen.getByRole("img", { name: `${company} logo` }),
       ).toHaveAttribute(
         "src",
-        expect.stringContaining(encodeURIComponent(logo.url))
+        expect.stringContaining(encodeURIComponent(logo.url)),
       );
     });
 
@@ -100,11 +100,11 @@ describe("Company", () => {
         {},
         {
           logo: undefined,
-        }
+        },
       );
 
       expect(
-        screen.queryByRole("img", { name: `${company} logo` })
+        screen.queryByRole("img", { name: `${company} logo` }),
       ).not.toBeInTheDocument();
     });
   });
@@ -114,7 +114,7 @@ describe("Company", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 3, name: company })
+        screen.getByRole("heading", { level: 3, name: company }),
       ).toHaveAttribute("id", mockSectionId);
     });
   });
@@ -127,7 +127,7 @@ describe("CompanySkeleton", () => {
     const numOfPulses = 3;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

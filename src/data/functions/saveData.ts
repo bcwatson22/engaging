@@ -13,20 +13,17 @@ const saveData = async (data: TPages[keyof TPages], page: keyof TPages) => {
   const { readFile, writeFile } = promises;
 
   const pageLower = page.toLowerCase();
-  const pathToFile = path.join(
-    process.cwd(),
-    `src/data/cache/${pageLower}.ts`
-  );
+  const pathToFile = path.join(process.cwd(), `src/data/cache/${pageLower}.ts`);
 
   try {
     const file = await readFile(pathToFile);
 
-    if (!!file) {
+    if (file) {
       await writeFile(
         pathToFile,
         `import type { T${page} } from "../types/${pageLower}";\n\nexport const cache${page}: T${page} = ${JSON.stringify(
-          data
-        )}`
+          data,
+        )}`,
       );
 
       console.log(`\n${page} page data has been saved!`);

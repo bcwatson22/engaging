@@ -1,5 +1,5 @@
-import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from "react";
 import NextLink from "next/link";
+import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from "react";
 
 import { Icon, type TIcon } from "@/components/atoms/Icon/Icon";
 import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
@@ -29,7 +29,7 @@ type TShared = Omit<ComponentPropsWithRef<"a">, "href"> & {
 const LinkSkeleton = () => (
   <div className="link icon relative">
     <Skeleton className="vector rounded-full" />
-    <SkeletonLine className="w-[6.75rem]" />
+    <SkeletonLine className="w-27" />
   </div>
 );
 

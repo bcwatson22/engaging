@@ -1,18 +1,17 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Header, HeaderSkeleton, type HeaderProps } from "./Header";
-
 import { Intro } from "@/components/atoms/Intro/Intro";
 import { Logo } from "@/components/atoms/Logo/Logo";
-
 import { mockCV } from "@/data/mock/cv";
 
+import { Header, HeaderSkeleton, type HeaderProps } from "./Header";
+
 vi.mock("@/components/atoms/Intro/Intro", () => ({
-  Intro: vi.fn(),
+  Intro: vi.fn<typeof import("@/components/atoms/Intro/Intro").Intro>(),
 }));
 
 vi.mock("@/components/atoms/Logo/Logo", () => ({
-  Logo: vi.fn(),
+  Logo: vi.fn<typeof import("@/components/atoms/Logo/Logo").Logo>(),
 }));
 
 const {
@@ -43,7 +42,7 @@ describe("Header", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 1, name: title })
+        screen.getByRole("heading", { level: 1, name: title }),
       ).toBeInTheDocument();
     });
   });
@@ -55,7 +54,7 @@ describe("Header", () => {
       expect(Logo).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ logoDarkBackground, logoLightBackground }),
-        {}
+        undefined,
       );
     });
   });
@@ -67,7 +66,7 @@ describe("Header", () => {
       expect(Intro).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ intro }),
-        {}
+        undefined,
       );
     });
   });
@@ -80,7 +79,7 @@ describe("HeaderSkeleton", () => {
     const numOfPulses = 4;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

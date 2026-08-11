@@ -1,14 +1,13 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Details, DetailsSkeleton, type DetailsProps } from "./Details";
-
 import { Address } from "@/components/atoms/Address/Address";
 import { Link } from "@/components/atoms/Link/Link";
-
 import { mockCV } from "@/data/mock/cv";
 
+import { Details, DetailsSkeleton, type DetailsProps } from "./Details";
+
 vi.mock("@/components/atoms/Address/Address", () => ({
-  Address: vi.fn(),
+  Address: vi.fn<typeof import("@/components/atoms/Address/Address").Address>(),
 }));
 
 vi.mock(
@@ -17,9 +16,9 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
-      Link: vi.fn(),
+      Link: vi.fn<typeof import("@/components/atoms/Link/Link").Link>(),
     };
-  }
+  },
 );
 
 const { address, contactLinks: links } = mockCV;
@@ -45,7 +44,7 @@ describe("Details", () => {
       expect(Address).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ address }),
-        {}
+        undefined,
       );
     });
 
@@ -77,7 +76,7 @@ describe("DetailsSkeleton", () => {
     const numOfPulses = 4;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 
@@ -87,7 +86,7 @@ describe("DetailsSkeleton", () => {
     const numOfPulses = 5;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });
