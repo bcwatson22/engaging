@@ -1,9 +1,10 @@
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [tsconfigPaths(), react()],
+  plugins: [react()],
+  // Vite 8 resolves tsconfig paths natively, replacing vite-tsconfig-paths
+  resolve: { tsconfigPaths: true },
   test: {
     globals: true,
     environment: "jsdom",
@@ -13,7 +14,6 @@ export default defineConfig({
       reportsDirectory: "./src/tests/coverage",
       exclude: [
         ".next/**",
-        "*.*",
         "src/data/types/**",
         "src/queries/**",
         // build entry points — a single call each, with nothing to assert
