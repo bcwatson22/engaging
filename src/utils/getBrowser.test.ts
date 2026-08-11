@@ -29,7 +29,7 @@ vi.mock("@sparticuz/chromium-min", () => ({
       mockArgKey: "mockArgValue",
     },
     executablePath:
-      vi.fn<typeof import("@sparticuz/chromium-min").executablePath>(),
+      vi.fn<typeof import("@sparticuz/chromium-min").default.executablePath>(),
   },
 }));
 

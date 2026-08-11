@@ -6,7 +6,7 @@
   "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
   "scripts": {
     "dev": "NODE_ENV=development next dev --webpack",
-    "build": "NODE_ENV=production next build --webpack && npx puppeteer browsers install chrome@133 && node ./src/scripts/saveToPdf.ts && node ./src/scripts/saveStartupImages.ts",
+    "build": "NODE_ENV=production next build --webpack && npx puppeteer browsers install chrome && node ./src/scripts/saveToPdf.ts && node ./src/scripts/saveStartupImages.ts",
     "start": "next start",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
@@ -17,17 +17,16 @@
     "typecheck": "tsc --pretty --noEmit"
   },
   "dependencies": {
-    "@sparticuz/chromium-min": "133.0.0",
+    "@sparticuz/chromium-min": "149.0.0",
     "@urql/core": "6.0.3",
     "@urql/next": "2.0.1",
-    "@vercel/analytics": "1.4.1",
-    "@vercel/speed-insights": "1.1.0",
+    "@vercel/analytics": "2.0.1",
+    "@vercel/speed-insights": "2.0.0",
     "graphql": "16.8.1",
     "motion": "13.1.0",
     "next": "16.3.0",
-    "node": "23.10.0",
-    "puppeteer": "24.4.0",
-    "puppeteer-core": "24.4.0",
+    "puppeteer": "25.5.0",
+    "puppeteer-core": "25.5.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "urql": "5.0.3"
@@ -35,14 +34,14 @@
   "devDependencies": {
     "@heroicons/react": "2.2.0",
     "@sidekickicons/react": "0.12.0",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/postcss": "4.3.3",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.3",
     "@tsparticles/engine": "4.3.2",
     "@tsparticles/react": "4.3.2",
     "@tsparticles/slim": "4.3.2",
-    "@types/node": "20.11.30",
+    "@types/node": "22.20.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
     "@vitejs/plugin-react": "6.0.5",
@@ -58,6 +57,9 @@
     "typescript": "5.7.2",
     "vite": "8.2.1",
     "vitest": "4.1.10"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "packageManager": "pnpm@10.20.0",
   "pnpm": {

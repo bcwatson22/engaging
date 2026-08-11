@@ -143,7 +143,7 @@ describe("saveToPdf", () => {
     expect(mockPuppeteerPage.setContent).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockFile),
-      { waitUntil: ["networkidle0"] },
+      { waitUntil: ["load"] },
     );
   });
 

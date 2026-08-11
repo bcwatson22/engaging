@@ -107,8 +107,10 @@ const saveToPdf = async () => {
   const browser = await getBrowser();
   const page = (await browser.newPage()) as Page;
 
+  /* puppeteer 25 dropped networkidle0 from setContent; load still waits for
+     subresources, which is what the PDF needs. */
   await page.setContent(htmlContent, {
-    waitUntil: ["networkidle0"],
+    waitUntil: ["load"],
   });
   await page.addStyleTag({ content: cssContent });
   await page.addStyleTag({
