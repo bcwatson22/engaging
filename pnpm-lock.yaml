@@ -119,8 +119,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       typescript:
-        specifier: 5.7.2
-        version: 5.7.2
+        specifier: 5.9.3
+        version: 5.9.3
       vite:
         specifier: 8.2.1
         version: 8.2.1(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.8.0)
@@ -2317,8 +2317,8 @@ packages:
   typed-query-selector@2.12.2:
     resolution: {integrity: sha512-EOPFbyIub4ngnEdqi2yOcNeDLaX/0jcE1JoAXQDDMIthap7FoN795lc/SHfIq2d416VufXpM8z/lD+WRm2gfOQ==}
 
-  typescript@5.7.2:
-    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -4613,7 +4613,7 @@ snapshots:
 
   typed-query-selector@2.12.2: {}
 
-  typescript@5.7.2: {}
+  typescript@5.9.3: {}
 
   undici-types@6.21.0: {}
 
