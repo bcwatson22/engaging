@@ -161,7 +161,7 @@ describe("Error", () => {
       expect(Inner).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ text: "Try again" }),
-        {},
+        undefined,
       );
     });
 

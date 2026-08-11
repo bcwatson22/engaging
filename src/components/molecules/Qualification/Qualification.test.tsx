@@ -52,7 +52,7 @@ describe("Qualification", () => {
       expect(Dates).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ dates }),
-        {},
+        undefined,
       );
     });
   });

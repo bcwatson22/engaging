@@ -42,7 +42,7 @@ describe("NotFoundPage", () => {
     expect(Error).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ heading: "Are you lost?" }),
-      {},
+      undefined,
     );
   });
 
@@ -60,7 +60,7 @@ describe("NotFoundPage", () => {
     expect(Link).toHaveBeenNthCalledWith(
       1,
       { link: { icon: "Home", target: "/", text: "Home" } },
-      {},
+      undefined,
     );
   });
 });

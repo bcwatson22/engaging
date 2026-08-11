@@ -90,7 +90,7 @@ describe("Mugshot", () => {
       it("renders a Details component", () => {
         setup();
 
-        expect(Details).toHaveBeenNthCalledWith(1, { links }, {});
+        expect(Details).toHaveBeenNthCalledWith(1, { links }, undefined);
       });
     });
   });

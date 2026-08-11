@@ -92,7 +92,11 @@ describe("HomePage", () => {
   it("renders a Mugshot component", async () => {
     await setup();
 
-    expect(Mugshot).toHaveBeenNthCalledWith(1, { mugshot, technologies }, {});
+    expect(Mugshot).toHaveBeenNthCalledWith(
+      1,
+      { mugshot, technologies },
+      undefined,
+    );
   });
 
   it("renders a Particles component", async () => {

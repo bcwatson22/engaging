@@ -45,7 +45,7 @@ describe("Link", () => {
       expect(Icon).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ icon }),
-        {},
+        undefined,
       );
     });
 
@@ -95,7 +95,7 @@ describe("Link", () => {
             expect.objectContaining({
               "data-url": expect.stringContaining("engaging.engineering"),
             }),
-            {},
+            undefined,
           );
         });
       });

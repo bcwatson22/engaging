@@ -53,10 +53,13 @@ describe("Layout", () => {
     cleanup();
   });
 
+  /* React 19 hoists <html> and <body> onto the real document rather than
+     nesting them in the container, so there is no "document" role to query. */
   it("renders a document", () => {
     setup();
 
-    expect(screen.getByRole("document")).toBeInTheDocument();
+    expect(document.documentElement).toHaveAttribute("lang", "en");
+    expect(document.body).toHaveClass("mockClassName");
   });
 
   it("renders children", () => {

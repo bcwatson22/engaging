@@ -49,7 +49,7 @@ describe("Error", () => {
     expect(Error).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ reset: mockReset }),
-      {},
+      undefined,
     );
   });
 });

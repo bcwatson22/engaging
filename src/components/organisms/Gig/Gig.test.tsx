@@ -57,7 +57,7 @@ describe("Gig", () => {
       expect(Company).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ company, logo, city }),
-        {},
+        undefined,
       );
     });
 
@@ -67,7 +67,7 @@ describe("Gig", () => {
       expect(Company).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ delay: 0 }),
-        {},
+        undefined,
       );
     });
   });

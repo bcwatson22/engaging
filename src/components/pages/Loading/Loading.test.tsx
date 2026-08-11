@@ -82,7 +82,7 @@ describe("Loading", () => {
       expect(Section).toHaveBeenNthCalledWith(
         index + 1,
         expect.objectContaining({ heading: value }),
-        {},
+        undefined,
       );
   });
 
@@ -92,7 +92,7 @@ describe("Loading", () => {
     expect(DetailsSkeleton).toHaveBeenNthCalledWith(
       1,
       { hasParagraph: true },
-      {},
+      undefined,
     );
   });
 

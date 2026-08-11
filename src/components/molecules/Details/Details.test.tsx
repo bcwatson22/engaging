@@ -44,7 +44,7 @@ describe("Details", () => {
       expect(Address).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ address }),
-        {},
+        undefined,
       );
     });
 

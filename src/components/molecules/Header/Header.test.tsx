@@ -54,7 +54,7 @@ describe("Header", () => {
       expect(Logo).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ logoDarkBackground, logoLightBackground }),
-        {},
+        undefined,
       );
     });
   });
@@ -66,7 +66,7 @@ describe("Header", () => {
       expect(Intro).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ intro }),
-        {},
+        undefined,
       );
     });
   });

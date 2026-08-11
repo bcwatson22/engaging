@@ -58,7 +58,7 @@ describe("Reference", () => {
       expect(Link).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ link }),
-        {},
+        undefined,
       );
     });
   });

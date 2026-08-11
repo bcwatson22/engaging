@@ -35,7 +35,7 @@ describe("Section", () => {
       expect(Divider).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ heading: mockHeading, delay: mockDelay }),
-        {},
+        undefined,
       );
     });
 
@@ -45,7 +45,7 @@ describe("Section", () => {
       expect(Divider).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ delay: 0 }),
-        {},
+        undefined,
       );
     });
   });

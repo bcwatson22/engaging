@@ -2,7 +2,7 @@ import { type AnimationProps, useInView } from "framer-motion";
 import type { RefObject } from "react";
 
 type Params = TScroll & {
-  ref: RefObject<HTMLDivElement>;
+  ref: RefObject<HTMLDivElement | null>;
 };
 
 type Return = AnimationProps;

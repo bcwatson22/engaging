@@ -162,7 +162,7 @@ describe("CVPage", () => {
     expect(Header).toHaveBeenNthCalledWith(
       1,
       { title, logoDarkBackground, logoLightBackground, intro },
-      {},
+      undefined,
     );
   });
 
@@ -182,7 +182,7 @@ describe("CVPage", () => {
       expect(Section).toHaveBeenNthCalledWith(
         index + 1,
         expect.objectContaining({ heading: value }),
-        {},
+        undefined,
       );
   });
 
@@ -192,7 +192,7 @@ describe("CVPage", () => {
     expect(Details).toHaveBeenNthCalledWith(
       1,
       { address, links: contactLinks },
-      {},
+      undefined,
     );
   });
 
@@ -203,34 +203,46 @@ describe("CVPage", () => {
       expect(Gig).toHaveBeenNthCalledWith(
         index + 1,
         { ...value, delay: index === 0 ? 0.2 : 0 },
-        {},
+        undefined,
       );
   });
 
   it("marks up and renders skills", async () => {
     await setup();
 
-    expect(ReactMarkdown).toHaveBeenNthCalledWith(1, { children: skills }, {});
+    expect(ReactMarkdown).toHaveBeenNthCalledWith(
+      1,
+      { children: skills },
+      undefined,
+    );
   });
 
   it("renders Qualification components", async () => {
     await setup();
 
     for (const [index, value] of qualifications.entries())
-      expect(Qualification).toHaveBeenNthCalledWith(index + 1, value, {});
+      expect(Qualification).toHaveBeenNthCalledWith(
+        index + 1,
+        value,
+        undefined,
+      );
   });
 
   it("renders a Details component for online links", async () => {
     await setup();
 
-    expect(Details).toHaveBeenNthCalledWith(2, { links: onlineLinks }, {});
+    expect(Details).toHaveBeenNthCalledWith(
+      2,
+      { links: onlineLinks },
+      undefined,
+    );
   });
 
   it("renders Reference components", async () => {
     await setup();
 
     for (const [index, value] of references.entries())
-      expect(Reference).toHaveBeenNthCalledWith(index + 1, value, {});
+      expect(Reference).toHaveBeenNthCalledWith(index + 1, value, undefined);
   });
 
   it("renders a Copyright component", async () => {
