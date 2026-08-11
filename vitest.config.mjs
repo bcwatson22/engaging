@@ -19,6 +19,8 @@ export default defineConfig({
         // build entry points — a single call each, with nothing to assert
         "src/scripts/**",
       ],
+      // the repo has sat at 100% by hand; make CI hold the line
+      thresholds: { 100: true },
     },
   },
 });
