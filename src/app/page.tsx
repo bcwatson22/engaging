@@ -65,11 +65,9 @@ const HomePage = async () => {
       <Suspense>
         <Particles />
       </Suspense>
-      <Suspense>
-        <footer className="footer">
-          <Copyright />
-        </footer>
-      </Suspense>
+      <footer className="footer">
+        <Copyright />
+      </footer>
     </main>
   );
 };

@@ -1,28 +1,11 @@
-"use client";
-
 import dayjs from "dayjs";
-import { motion, type Target } from "motion/react";
 
-type Props = {
-  showRights?: boolean;
-};
-
-const growFromRight: Target = { width: 0, opacity: 0 };
 const today = dayjs().year();
 
-const Copyright = ({ showRights = true }: Props) => (
+const Copyright = () => (
   <p className="copy" suppressHydrationWarning>
-    &copy; {today}
-    <motion.span
-      key="rights"
-      initial={growFromRight}
-      animate={showRights ? { width: "auto", opacity: 1 } : {}}
-      className="rights"
-    >
-      . All rights reserved
-    </motion.span>
+    &copy; {today}. All rights reserved
   </p>
 );
 
 export { Copyright };
-export type { Props as CopyrightProps };
