@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Intro, type TIntro } from "./Intro";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Intro, type TIntro } from "./Intro";
 
 const mockSplit = mockCV.intro.split("\n\n");
 const mockToday = new Date("2025-01-08");
@@ -39,7 +39,7 @@ describe("Intro", () => {
       });
 
       expect(
-        screen.getByText(/with 12 years' experience/i)
+        screen.getByText(/with 12 years' experience/i),
       ).toBeInTheDocument();
     });
   });

@@ -2,13 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 
-import { queryCV } from "@/queries/cv";
-
-import type { TCV } from "@/data/types/cv";
-import { getData } from "@/data/functions/getData";
-import { saveData, type TPages } from "@/data/functions/saveData";
-import { cacheCV } from "@/data/cache/cv";
-
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
 import { Details } from "@/components/molecules/Details/Details";
 import { Header } from "@/components/molecules/Header/Header";
@@ -16,7 +9,6 @@ import { Qualification } from "@/components/molecules/Qualification/Qualificatio
 import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
-
 import { revalidate } from "@/constants/common";
 import {
   appleWebApp,
@@ -25,7 +17,11 @@ import {
   viewport,
 } from "@/constants/metadata";
 import { getStartupImages } from "@/constants/startupImages";
-
+import { cacheCV } from "@/data/cache/cv";
+import { getData } from "@/data/functions/getData";
+import { saveData, type TPages } from "@/data/functions/saveData";
+import type { TCV } from "@/data/types/cv";
+import { queryCV } from "@/queries/cv";
 import { formatExperience } from "@/utils/formatExperience";
 
 const pageName: keyof TPages = "CV";

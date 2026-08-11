@@ -1,7 +1,6 @@
 import { gql } from "urql";
 
 import { mugshotDimensions, techIconDimensions } from "@/constants/dimensions";
-
 import { multiplyToString } from "@/utils/multiplyToString";
 
 const mugshotWidth = multiplyToString(mugshotDimensions.width);

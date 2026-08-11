@@ -27,7 +27,7 @@ describe("manifest", () => {
     const result = manifest();
 
     expect(result).toEqual(
-      expect.objectContaining({ start_url: "/", display: "standalone" })
+      expect.objectContaining({ start_url: "/", display: "standalone" }),
     );
   });
 
@@ -35,7 +35,7 @@ describe("manifest", () => {
     const result = manifest();
 
     expect(result).toEqual(
-      expect.objectContaining({ name: mockTitle, short_name: mockTitle })
+      expect.objectContaining({ name: mockTitle, short_name: mockTitle }),
     );
   });
 
@@ -45,7 +45,7 @@ describe("manifest", () => {
     expect(result).toEqual(
       expect.objectContaining({
         description: "Engineering with 12 years' experience",
-      })
+      }),
     );
   });
 });

@@ -5,14 +5,14 @@ const errorMessage = "Failed to load font data";
 
 const loadGoogleFont = async (
   font = fontFamily,
-  text = cacheHome.meta.title
+  text = cacheHome.meta.title,
 ) => {
   const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(
-    text
+    text,
   )}`;
   const css = await (await fetch(url)).text();
   const resource = css.match(
-    /src: url\((.+)\) format\('(opentype|truetype)'\)/
+    /src: url\((.+)\) format\('(opentype|truetype)'\)/,
   );
 
   if (resource) {

@@ -1,14 +1,13 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { Error, type ErrorProps } from "./Error";
-
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-
 import { cacheHome } from "@/data/cache/home";
 import { mockHome } from "@/data/mock/home";
+
+import { Error, type ErrorProps } from "./Error";
 
 vi.mock(
   import("@/components/atoms/Link/Link"),
@@ -18,7 +17,7 @@ vi.mock(
       ...actual,
       Inner: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/atoms/Particles/Particles", () => ({
@@ -33,7 +32,7 @@ vi.mock(
       ...actual,
       TechnologySkeleton: vi.fn(),
     };
-  }
+  },
 );
 
 const mockHeading = "mockHeading";
@@ -70,7 +69,7 @@ describe("Error", () => {
     setup();
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Engaging Engineering" })
+      screen.getByRole("heading", { level: 1, name: "Engaging Engineering" }),
     ).toBeInTheDocument();
   });
 
@@ -78,7 +77,7 @@ describe("Error", () => {
     setup();
 
     expect(
-      screen.getByRole("region", { name: mockHeading })
+      screen.getByRole("region", { name: mockHeading }),
     ).toBeInTheDocument();
   });
 
@@ -87,7 +86,7 @@ describe("Error", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 2, name: mockHeading })
+        screen.getByRole("heading", { level: 2, name: mockHeading }),
       ).toBeInTheDocument();
     });
 
@@ -97,7 +96,7 @@ describe("Error", () => {
       });
 
       expect(
-        screen.getByRole("heading", { level: 2, name: "Oops" })
+        screen.getByRole("heading", { level: 2, name: "Oops" }),
       ).toBeInTheDocument();
     });
   });
@@ -111,7 +110,7 @@ describe("Error", () => {
       expect(
         screen.getByRole("img", {
           name: `Portrait of ${cacheHome.mugshot.heading}`,
-        })
+        }),
       ).toBeInTheDocument();
     });
   });
@@ -130,8 +129,8 @@ describe("Error", () => {
 
       expect(
         screen.getByText(
-          "Something went wrong, but believe it or not you're not actually reading this, so it's all ok."
-        )
+          "Something went wrong, but believe it or not you're not actually reading this, so it's all ok.",
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -142,10 +141,10 @@ describe("Error", () => {
         setup();
 
         expect(
-          screen.getByRole("img", { name: `Portrait of ${heading}` })
+          screen.getByRole("img", { name: `Portrait of ${heading}` }),
         ).toHaveAttribute(
           "src",
-          expect.stringContaining(encodeURIComponent(image.url))
+          expect.stringContaining(encodeURIComponent(image.url)),
         );
       });
     });
@@ -158,7 +157,7 @@ describe("Error", () => {
       expect(Inner).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ text: "Try again" }),
-        {}
+        {},
       );
     });
 

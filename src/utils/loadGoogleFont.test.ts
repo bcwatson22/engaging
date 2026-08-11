@@ -15,12 +15,12 @@ describe("loadGoogleFont", () => {
               text: async () =>
                 "src: url(https://fonts.gstatic.com/font.ttf) format('truetype')",
             } as Response)
-          : ({ status: 404 } as Response)
-      )
+          : ({ status: 404 } as Response),
+      ),
     );
 
     await expect(async () => await loadGoogleFont()).rejects.toThrowError(
-      errorMessage
+      errorMessage,
     );
   });
 
@@ -28,11 +28,11 @@ describe("loadGoogleFont", () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         text: async () => "string not containing font data",
-      } as Response)
+      } as Response),
     );
 
     await expect(async () => await loadGoogleFont()).rejects.toThrowError(
-      errorMessage
+      errorMessage,
     );
   });
 });

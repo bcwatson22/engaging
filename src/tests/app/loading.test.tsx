@@ -1,7 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
 import LoadingPage from "@/app/loading";
-
 import { MugshotSkeleton } from "@/components/organisms/Mugshot/Mugshot";
 
 vi.mock(
@@ -12,7 +11,7 @@ vi.mock(
       ...actual,
       MugshotSkeleton: vi.fn(),
     };
-  }
+  },
 );
 
 const setup = () => render(<LoadingPage />);
@@ -33,7 +32,7 @@ describe("LoadingPage", () => {
     setup();
 
     expect(
-      screen.getByRole("heading", { name: "Engaging Engineering" })
+      screen.getByRole("heading", { name: "Engaging Engineering" }),
     ).toBeInTheDocument();
   });
 

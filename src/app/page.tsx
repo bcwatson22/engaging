@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { queryHome } from "@/queries/home";
-
-import type { THome } from "@/data/types/home";
-import { getData } from "@/data/functions/getData";
-import { saveData, type TPages } from "@/data/functions/saveData";
-import { cacheHome } from "@/data/cache/home";
-
+import { Copyright } from "@/components/atoms/Copyright/Copyright";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
-
 import { revalidate } from "@/constants/common";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
 import { getStartupImages } from "@/constants/startupImages";
-import { Copyright } from "@/components/atoms/Copyright/Copyright";
-
+import { cacheHome } from "@/data/cache/home";
+import { getData } from "@/data/functions/getData";
+import { saveData, type TPages } from "@/data/functions/saveData";
+import type { THome } from "@/data/types/home";
+import { queryHome } from "@/queries/home";
 import { formatExperience } from "@/utils/formatExperience";
 
 const pageName: keyof TPages = "Home";

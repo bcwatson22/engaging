@@ -43,7 +43,7 @@
     & h2 {
       @apply delay-50;
     }
-    
+
     & p {
       @apply delay-75;
     }

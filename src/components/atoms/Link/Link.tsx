@@ -1,5 +1,5 @@
-import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from "react";
 import NextLink from "next/link";
+import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from "react";
 
 import { Icon, type TIcon } from "@/components/atoms/Icon/Icon";
 import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";

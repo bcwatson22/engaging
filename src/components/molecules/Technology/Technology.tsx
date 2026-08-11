@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import type { TLink } from "@/components/atoms/Link/Link";
 import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
-
 import { techIconDimensions } from "@/constants/dimensions";
 
 type TTechnology = TID & {

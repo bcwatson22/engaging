@@ -1,10 +1,9 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Qualification, type QualificationProps } from "./Qualification";
-
 import { Dates } from "@/components/atoms/Dates/Dates";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Qualification, type QualificationProps } from "./Qualification";
 
 vi.mock("@/components/atoms/Dates/Dates", () => ({
   Dates: vi.fn(),
@@ -32,7 +31,7 @@ describe("Qualification", () => {
     setup();
 
     expect(
-      screen.getByRole("region", { name: institution })
+      screen.getByRole("region", { name: institution }),
     ).toBeInTheDocument();
   });
 
@@ -41,7 +40,7 @@ describe("Qualification", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 3, name: institution })
+        screen.getByRole("heading", { level: 3, name: institution }),
       ).toBeInTheDocument();
     });
   });
@@ -53,7 +52,7 @@ describe("Qualification", () => {
       expect(Dates).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ dates }),
-        {}
+        {},
       );
     });
   });

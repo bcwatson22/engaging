@@ -68,7 +68,7 @@ const setup = async ({ pdfContent = fragmented }: Options = {}) => {
   mockPuppeteerPage.evaluate.mockImplementation(
     (_callback: unknown, _id: string, height: number) => {
       fillerHeight = height;
-    }
+    },
   );
 
   mockPuppeteerPage.pdf.mockImplementation(() => pdfContent(fillerHeight));
@@ -89,7 +89,7 @@ describe("saveToPdf", () => {
     expect(fs.readFileSync).toHaveBeenNthCalledWith(
       1,
       ".next/server/app/cv.html",
-      encoding
+      encoding,
     );
   });
 
@@ -105,13 +105,13 @@ describe("saveToPdf", () => {
     expect(fs.readFileSync).toHaveBeenNthCalledWith(
       2,
       `${cssPath}first.css`,
-      encoding
+      encoding,
     );
 
     expect(fs.readFileSync).toHaveBeenNthCalledWith(
       3,
       `${cssPath}second.css`,
-      encoding
+      encoding,
     );
 
     expect(fs.readFileSync).toHaveBeenCalledTimes(cssFilenames.length + 1);
@@ -131,7 +131,7 @@ describe("saveToPdf", () => {
     expect(mockPuppeteerPage.setContent).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockFile),
-      { waitUntil: ["networkidle0"] }
+      { waitUntil: ["networkidle0"] },
     );
   });
 
@@ -153,7 +153,7 @@ describe("saveToPdf", () => {
     expect(mockPuppeteerPage.evaluate).toHaveBeenLastCalledWith(
       expect.any(Function),
       fillerId,
-      expectedFill
+      expectedFill,
     );
   });
 
@@ -168,7 +168,7 @@ describe("saveToPdf", () => {
     await setup();
 
     expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
-      expect.objectContaining({ format: "A4", path: pdfPath })
+      expect.objectContaining({ format: "A4", path: pdfPath }),
     );
   });
 
@@ -178,11 +178,11 @@ describe("saveToPdf", () => {
     expect(console.warn).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("Could not fill"),
-      expect.any(Error)
+      expect.any(Error),
     );
 
     expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
-      expect.objectContaining({ path: pdfPath })
+      expect.objectContaining({ path: pdfPath }),
     );
   });
 
@@ -192,11 +192,11 @@ describe("saveToPdf", () => {
     expect(console.warn).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining("Could not fill"),
-      expect.any(Error)
+      expect.any(Error),
     );
 
     expect(mockPuppeteerPage.pdf).toHaveBeenLastCalledWith(
-      expect.objectContaining({ path: pdfPath })
+      expect.objectContaining({ path: pdfPath }),
     );
   });
 

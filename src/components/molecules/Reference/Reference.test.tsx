@@ -1,10 +1,9 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Reference, type ReferenceProps } from "./Reference";
-
 import { Link } from "@/components/atoms/Link/Link";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Reference, type ReferenceProps } from "./Reference";
 
 vi.mock("@/components/atoms/Link/Link", () => ({
   Link: vi.fn(),
@@ -39,7 +38,7 @@ describe("Reference", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 3, name: person })
+        screen.getByRole("heading", { level: 3, name: person }),
       ).toBeInTheDocument();
     });
   });
@@ -59,7 +58,7 @@ describe("Reference", () => {
       expect(Link).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ link }),
-        {}
+        {},
       );
     });
   });

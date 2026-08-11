@@ -25,13 +25,14 @@ const startupDevices: StartupDevice[] = [
   { width: 768, height: 1024, ratio: 2 }, // iPad 9.7", iPad mini
 ];
 
-const getStartupImageName = ({
+const getStartupImageName = ({ width, height, ratio }: StartupDevice): string =>
+  `${width * ratio}x${height * ratio}`;
+
+const getStartupImageMedia = ({
   width,
   height,
   ratio,
-}: StartupDevice): string => `${width * ratio}x${height * ratio}`;
-
-const getStartupImageMedia = ({ width, height, ratio }: StartupDevice): string =>
+}: StartupDevice): string =>
   `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${ratio}) and (orientation: portrait)`;
 
 const getStartupImages = (page: string): StartupImage[] =>

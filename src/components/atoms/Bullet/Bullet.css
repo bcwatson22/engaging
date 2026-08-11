@@ -1,25 +1,25 @@
 @layer components {
   .bullet {
     @apply relative;
-  
+
     & span {
       @apply block w-3 h-3 absolute top-1.5 -left-6 rounded-full indent-full;
       @apply print:w-2.5 print:h-2.5 print:top-0.5 print:-left-5 print:!transform-none motion-reduce:!transform-none;
     }
 
-    &:nth-of-type(4n+1) span {
+    &:nth-of-type(4n + 1) span {
       @apply bg-brand-yellow;
     }
 
-    &:nth-of-type(4n+2) span {
+    &:nth-of-type(4n + 2) span {
       @apply bg-brand-green;
     }
 
-    &:nth-of-type(4n+3) span {
+    &:nth-of-type(4n + 3) span {
       @apply bg-brand-blue;
     }
 
-    &:nth-of-type(4n+4) span {
+    &:nth-of-type(4n + 4) span {
       @apply bg-brand-red;
     }
   }
@@ -29,19 +29,19 @@
       @apply top-1/2 -translate-y-1/2;
     }
 
-    &:nth-of-type(4n+1) span {
+    &:nth-of-type(4n + 1) span {
       @apply bg-brand-blue;
     }
 
-    &:nth-of-type(4n+2) span {
+    &:nth-of-type(4n + 2) span {
       @apply bg-brand-red;
     }
 
-    &:nth-of-type(4n+3) span {
+    &:nth-of-type(4n + 3) span {
       @apply bg-brand-yellow;
     }
 
-    &:nth-of-type(4n+4) span {
+    &:nth-of-type(4n + 4) span {
       @apply bg-brand-green;
     }
   }

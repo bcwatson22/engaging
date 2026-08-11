@@ -1,8 +1,7 @@
-import type { Mock } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
-
 import { Particles as TSParticles } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import type { Mock } from "vitest";
 
 import { Particles } from "./Particles";
 
@@ -34,7 +33,7 @@ describe("Particles", () => {
     expect(loadSlim).toHaveBeenCalledTimes(1);
 
     await waitFor(() =>
-      expect(screen.getByText("Test particles")).toBeInTheDocument()
+      expect(screen.getByText("Test particles")).toBeInTheDocument(),
     );
   });
 });

@@ -1,16 +1,14 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
 import Image from "next/image";
-
-import { cacheHome } from "@/data/cache/home";
+import { useId, type ReactNode } from "react";
 
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
 import { type TMugshot } from "@/components/organisms/Mugshot/Mugshot";
-
 import { mugshotDimensions } from "@/constants/dimensions";
+import { cacheHome } from "@/data/cache/home";
 
 type Props = {
   heading?: string;
@@ -35,7 +33,10 @@ const Error = ({
     <main className="home loading main">
       <h1 className="sr-only">Engaging Engineering</h1>
       <div className="mugshot w-full">
-        <section aria-labelledby={sectionId} className="overview overview-error">
+        <section
+          aria-labelledby={sectionId}
+          className="overview overview-error"
+        >
           <figure className="coupon">
             <Image
               src={image.url}

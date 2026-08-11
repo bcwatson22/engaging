@@ -1,10 +1,10 @@
 import { spawn } from "child_process";
 
-import { getBrowser, type BrowserUnion } from "./getBrowser.ts";
 import {
   startupDevices,
   getStartupImageName,
 } from "../constants/startupImages.ts";
+import { getBrowser, type BrowserUnion } from "./getBrowser.ts";
 
 const port = 3000;
 const baseUrl = `http://127.0.0.1:${port}`;

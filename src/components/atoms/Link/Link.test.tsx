@@ -1,12 +1,10 @@
 import { cleanup, render, screen } from "@testing-library/react";
-
 import NextLink from "next/link";
 
-import { Link, LinkSkeleton, type LinkProps } from "./Link";
-
 import { Icon } from "@/components/atoms/Icon/Icon";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Link, LinkSkeleton, type LinkProps } from "./Link";
 
 vi.mock("@/components/atoms/Icon/Icon", () => ({
   Icon: vi.fn(),
@@ -45,7 +43,7 @@ describe("Link", () => {
       expect(Icon).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ icon }),
-        {}
+        {},
       );
     });
 
@@ -81,7 +79,7 @@ describe("Link", () => {
           setup();
 
           expect(
-            screen.getByRole("link").getAttribute("data-url")
+            screen.getByRole("link").getAttribute("data-url"),
           ).not.toContain("http");
         });
 
@@ -95,7 +93,7 @@ describe("Link", () => {
             expect.objectContaining({
               "data-url": expect.stringContaining("engaging.engineering"),
             }),
-            {}
+            {},
           );
         });
       });
@@ -127,7 +125,7 @@ describe("Link", () => {
       setup({ className: mockClassName });
 
       expect(screen.getByRole("link", { name: text })).toHaveClass(
-        mockClassName
+        mockClassName,
       );
     });
   });
@@ -140,7 +138,7 @@ describe("LinkSkeleton", () => {
     const numOfPulses = 2;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

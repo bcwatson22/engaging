@@ -55,7 +55,7 @@ const setFillerHeight = async (page: Page, height: number): Promise<void> => {
 
 const countPagesWithFill = async (
   page: Page,
-  height: number
+  height: number,
 ): Promise<number> => {
   await setFillerHeight(page, height);
 
@@ -128,4 +128,12 @@ const saveToPdf = async () => {
   await browser.close();
 };
 
-export { saveToPdf, applyFiller, cssPath, encoding, pdfPath, fillerId, maxFill };
+export {
+  saveToPdf,
+  applyFiller,
+  cssPath,
+  encoding,
+  pdfPath,
+  fillerId,
+  maxFill,
+};

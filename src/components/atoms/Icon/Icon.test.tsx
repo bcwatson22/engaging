@@ -21,7 +21,7 @@ describe("Icon", () => {
       setup({ icon });
 
       expect(
-        screen.getByRole("graphics-symbol", { name: icon })
+        screen.getByRole("graphics-symbol", { name: icon }),
       ).toBeInTheDocument();
     });
   });

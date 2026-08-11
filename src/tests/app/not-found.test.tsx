@@ -1,7 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
 import NotFoundPage from "@/app/not-found";
-
 import { Link } from "@/components/atoms/Link/Link";
 import { Error } from "@/components/pages/Error/Error";
 
@@ -13,7 +12,7 @@ vi.mock(
       ...actual,
       Link: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -24,7 +23,7 @@ vi.mock(
       ...actual,
       Error: vi.fn().mockImplementation(({ children }) => <>{children}</>),
     };
-  }
+  },
 );
 
 const setup = () => render(<NotFoundPage />);
@@ -41,7 +40,7 @@ describe("NotFoundPage", () => {
     expect(Error).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ heading: "Are you lost?" }),
-      {}
+      {},
     );
   });
 
@@ -49,7 +48,7 @@ describe("NotFoundPage", () => {
     setup();
 
     expect(
-      screen.getByText(/We couldn\'t find what you were looking for/i)
+      screen.getByText(/We couldn\'t find what you were looking for/i),
     ).toBeInTheDocument();
   });
 
@@ -59,7 +58,7 @@ describe("NotFoundPage", () => {
     expect(Link).toHaveBeenNthCalledWith(
       1,
       { link: { icon: "Home", target: "/", text: "Home" } },
-      {}
+      {},
     );
   });
 });

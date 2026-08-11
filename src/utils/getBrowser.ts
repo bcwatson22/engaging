@@ -1,6 +1,6 @@
+import chromium from "@sparticuz/chromium-min";
 import puppeteer, { type Browser } from "puppeteer";
 import puppeteerCore, { type Browser as BrowserCore } from "puppeteer-core";
-import chromium from "@sparticuz/chromium-min";
 
 const headless = true;
 

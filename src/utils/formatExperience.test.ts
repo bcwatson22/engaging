@@ -18,14 +18,12 @@ describe("formatExperience", () => {
   });
 
   it("replaces the placeholder with the year value", () => {
-    expect(formatExperience("with {{experience}} years")).toBe(
-      "with 12 years"
-    );
+    expect(formatExperience("with {{experience}} years")).toBe("with 12 years");
   });
 
   it("replaces every occurrence of the placeholder", () => {
     expect(
-      formatExperience("{{experience}} years, yes {{experience}} years")
+      formatExperience("{{experience}} years, yes {{experience}} years"),
     ).toBe("12 years, yes 12 years");
   });
 

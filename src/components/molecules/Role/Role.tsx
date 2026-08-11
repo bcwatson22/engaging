@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
-import { Dates } from "@/components/atoms/Dates/Dates";
 import { Bullet, BulletSkeleton } from "@/components/atoms/Bullet/Bullet";
+import { Dates } from "@/components/atoms/Dates/Dates";
 import {
   SkeletonHeading,
   SkeletonLine,
@@ -22,7 +22,7 @@ type Props = TRole & {
 const getLinkClassNames = (
   index: number,
   total: number,
-  hasMultiple = false
+  hasMultiple = false,
 ): string => {
   switch (true) {
     case !hasMultiple:

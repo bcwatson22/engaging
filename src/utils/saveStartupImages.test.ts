@@ -2,6 +2,7 @@ import { spawn } from "child_process";
 
 import type { Mock } from "vitest";
 
+import { startupDevices } from "../constants/startupImages.js";
 import { getBrowser } from "./getBrowser.js";
 import {
   saveStartupImages,
@@ -11,7 +12,6 @@ import {
   baseUrl,
   timeoutMessage,
 } from "./saveStartupImages.js";
-import { startupDevices } from "../constants/startupImages.js";
 
 vi.mock("child_process", () => {
   const spawn = vi.fn();
@@ -187,7 +187,7 @@ describe("saveStartupImages", () => {
       1,
       "npx",
       ["next", "start", "--port", "3000"],
-      { stdio: "ignore" }
+      { stdio: "ignore" },
     );
     expect(mockPage.screenshot).toHaveBeenCalledTimes(totalCaptures);
     expect(mockBrowser.close).toHaveBeenCalledTimes(1);

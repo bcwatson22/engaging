@@ -1,11 +1,10 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Role, RoleSkeleton, type RoleProps, getLinkClassNames } from "./Role";
-
 import { Bullet } from "@/components/atoms/Bullet/Bullet";
 import { Dates } from "@/components/atoms/Dates/Dates";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Role, RoleSkeleton, type RoleProps, getLinkClassNames } from "./Role";
 
 vi.mock(
   import("@/components/atoms/Bullet/Bullet"),
@@ -15,7 +14,7 @@ vi.mock(
       ...actual,
       Bullet: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/atoms/Dates/Dates", () => ({
@@ -47,7 +46,7 @@ describe("Role", () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 4, name: role })
+        screen.getByRole("heading", { level: 4, name: role }),
       ).toBeInTheDocument();
     });
   });
@@ -59,7 +58,7 @@ describe("Role", () => {
       expect(Dates).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ dates }),
-        {}
+        {},
       );
     });
   });
@@ -87,7 +86,7 @@ describe("Role", () => {
       });
 
       expect(screen.getByRole("heading", { level: 4, name: role })).toHaveClass(
-        "multiple"
+        "multiple",
       );
     });
   });
@@ -100,7 +99,7 @@ describe("RoleSkeleton", () => {
     const numOfPulses = 9;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

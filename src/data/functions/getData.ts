@@ -5,7 +5,7 @@ import { client } from "@/queries/client";
 const getData = async <Data>(
   query: TypedDocumentNode,
   key: string,
-  fallback: Data
+  fallback: Data,
 ): Promise<Data> => {
   const { data, error } = await client(query, {});
 

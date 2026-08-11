@@ -1,19 +1,15 @@
-import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
+import type { Mock } from "vitest";
 
 import HomePage, { generateMetadata } from "@/app/page";
-import type { THome } from "@/data/types/home";
-import { mockHome } from "@/data/mock/home";
-
-import { queryHome } from "@/queries/home";
-
-import { getStartupImages } from "@/constants/startupImages";
-
-import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
-
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
+import { getStartupImages } from "@/constants/startupImages";
+import { getData } from "@/data/functions/getData";
+import { saveData } from "@/data/functions/saveData";
+import { mockHome } from "@/data/mock/home";
+import type { THome } from "@/data/types/home";
+import { queryHome } from "@/queries/home";
 
 vi.mock("@/data/functions/getData", () => ({
   getData: vi.fn(),
@@ -31,7 +27,7 @@ vi.mock(
       ...actual,
       Mugshot: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/atoms/Particles/Particles", () => ({
@@ -65,7 +61,7 @@ describe("HomePage", () => {
       "homes",
       expect.objectContaining({
         technologies: expect.any(Array),
-      })
+      }),
     );
   });
 
@@ -85,7 +81,7 @@ describe("HomePage", () => {
     await setup();
 
     expect(
-      screen.getByRole("heading", { name: "Engaging Engineering" })
+      screen.getByRole("heading", { name: "Engaging Engineering" }),
     ).toBeInTheDocument();
   });
 
@@ -113,7 +109,7 @@ describe("HomePage", () => {
     expect(appleWebApp).toEqual(
       expect.objectContaining({
         startupImage: getStartupImages("home"),
-      })
+      }),
     );
   });
 });

@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { OgImage, type OgImageProps } from "./OgImage";
-
 import { mockHome } from "@/data/mock/home";
+
+import { OgImage, type OgImageProps } from "./OgImage";
 
 const {
   meta: { title },
@@ -24,10 +24,10 @@ describe("OgImage", () => {
 
     expect(screen.getByRole("article")).toBeInTheDocument();
     expect(
-      screen.getByRole("img", { name: `Portrait of ${heading}` })
+      screen.getByRole("img", { name: `Portrait of ${heading}` }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 1, name: title })
+      screen.getByRole("heading", { level: 1, name: title }),
     ).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(technologies.length);
 

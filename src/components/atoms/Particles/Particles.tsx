@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import type { ISourceOptions } from "@tsparticles/engine";
 import {
   Particles as TSParticles,
   initParticlesEngine,
 } from "@tsparticles/react";
-import type { ISourceOptions } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
+import { useEffect, useMemo, useState } from "react";
 
 const Particles = () => {
   const [init, setInit] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const Particles = () => {
       },
       detectRetina: true,
     }),
-    []
+    [],
   );
 
   return init ? (

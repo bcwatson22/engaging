@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
+
 import { Loading } from "@/components/pages/Loading/Loading";
 
 const DownloadPage: NextPage = () => {

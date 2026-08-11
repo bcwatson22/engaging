@@ -1,11 +1,11 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Loading } from "./Loading";
-
 import { DetailsSkeleton } from "@/components/molecules/Details/Details";
 import { HeaderSkeleton } from "@/components/molecules/Header/Header";
 import { GigSkeleton } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
+
+import { Loading } from "./Loading";
 
 vi.mock(
   import("@/components/molecules/Details/Details"),
@@ -15,7 +15,7 @@ vi.mock(
       ...actual,
       DetailsSkeleton: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -26,7 +26,7 @@ vi.mock(
       ...actual,
       HeaderSkeleton: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -37,7 +37,7 @@ vi.mock(
       ...actual,
       GigSkeleton: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/organisms/Section/Section", () => ({
@@ -73,7 +73,7 @@ describe("Loading", () => {
       expect(Section).toHaveBeenNthCalledWith(
         index + 1,
         expect.objectContaining({ heading: value }),
-        {}
+        {},
       );
   });
 
@@ -83,7 +83,7 @@ describe("Loading", () => {
     expect(DetailsSkeleton).toHaveBeenNthCalledWith(
       1,
       { hasParagraph: true },
-      {}
+      {},
     );
   });
 

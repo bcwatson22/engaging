@@ -1,18 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
-
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 import {
   Skeleton,
   SkeletonHeading,
   SkeletonLine,
 } from "@/components/atoms/Skeleton/Skeleton";
-
 import { companyLogoDimensions } from "@/constants/dimensions";
+import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 
 type TCompany = TScroll &
   Pick<TPosition, "company"> & {

@@ -46,7 +46,7 @@ describe("getBrowser", () => {
       expect.objectContaining({
         headless,
         args: { mockArgKey: "mockArgValue" },
-      })
+      }),
     );
   });
 
@@ -58,7 +58,7 @@ describe("getBrowser", () => {
       expect.objectContaining({
         headless,
         args: ["--no-sandbox", "--disable-web-security"],
-      })
+      }),
     );
   });
 });

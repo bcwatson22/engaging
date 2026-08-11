@@ -1,9 +1,9 @@
 import promises from "fs/promises";
 import path from "path";
 
-import { saveData } from "./saveData";
-
 import { mockHome } from "@/data/mock/home";
+
+import { saveData } from "./saveData";
 
 const mockPageName = "Home";
 const mockPath = `/src/data/cache/${mockPageName.toLowerCase()}`;
@@ -25,7 +25,7 @@ describe("saveData", () => {
 
     expect(spyReadFile).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining(mockPath)
+      expect.stringContaining(mockPath),
     );
   });
 
@@ -37,7 +37,7 @@ describe("saveData", () => {
     expect(spyPathJoin).toHaveBeenNthCalledWith(
       1,
       process.cwd(),
-      `src/data/cache/${mockPageName.toLowerCase()}.ts`
+      `src/data/cache/${mockPageName.toLowerCase()}.ts`,
     );
   });
 
@@ -49,7 +49,7 @@ describe("saveData", () => {
     expect(spyWriteFile).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining(mockPath),
-      expect.stringContaining(`import type { T${mockPageName} }`)
+      expect.stringContaining(`import type { T${mockPageName} }`),
     );
   });
 
@@ -58,7 +58,7 @@ describe("saveData", () => {
 
     expect(spyConsoleLog).toHaveBeenNthCalledWith(
       1,
-      expect.stringContaining(`${mockPageName} page data has been saved!`)
+      expect.stringContaining(`${mockPageName} page data has been saved!`),
     );
 
     expect(result).toBe(true);
@@ -75,7 +75,7 @@ describe("saveData", () => {
     expect(spyConsoleError).toHaveBeenNthCalledWith(
       1,
       "Error trying to save page data:",
-      mockRejectedValue
+      mockRejectedValue,
     );
 
     expect(result).toBe(false);
@@ -88,7 +88,7 @@ describe("saveData", () => {
 
     expect(spyConsoleLog).toHaveBeenNthCalledWith(
       1,
-      `Couldn't read ${mockPageName} page data file.`
+      `Couldn't read ${mockPageName} page data file.`,
     );
 
     expect(result).toBe(true);

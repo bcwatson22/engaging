@@ -18,7 +18,7 @@ describe("Bullet", () => {
     expect(
       within(screen.getByRole("listitem")).getByRole("button", {
         name: mockChildren,
-      })
+      }),
     ).toBeInTheDocument();
   });
 });

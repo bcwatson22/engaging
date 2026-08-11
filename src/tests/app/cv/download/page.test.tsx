@@ -1,10 +1,8 @@
-import type { Mock } from "vitest";
 import { cleanup, render } from "@testing-library/react";
-
 import { useRouter } from "next/navigation";
+import type { Mock } from "vitest";
 
 import DownloadPage from "@/app/cv/download/page";
-
 import { Loading } from "@/components/pages/Loading/Loading";
 
 vi.mock("next/navigation", () => ({
@@ -98,7 +96,7 @@ describe("Loading", () => {
     expect(spyConsoleError).toHaveBeenNthCalledWith(
       1,
       "Error downloading file:",
-      expect.any(Error)
+      expect.any(Error),
     );
   });
 });

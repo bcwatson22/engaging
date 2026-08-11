@@ -59,7 +59,7 @@ describe("SkeletonParagraph", () => {
     render(<SkeletonParagraph numOfLines={numberOfLines} />);
 
     expect(screen.getAllByRole("status", { name: label })).toHaveLength(
-      numberOfLines
+      numberOfLines,
     );
   });
 
@@ -70,7 +70,7 @@ describe("SkeletonParagraph", () => {
       render(<SkeletonParagraph numOfLines={1} className={mockClassName} />);
 
       expect(
-        screen.getByRole("status", { name: label }).parentElement
+        screen.getByRole("status", { name: label }).parentElement,
       ).toHaveClass(mockClassName);
     });
   });

@@ -17,7 +17,7 @@ describe("getStartupImageName", () => {
 describe("getStartupImageMedia", () => {
   it("builds a portrait media query from the device", () => {
     expect(getStartupImageMedia(mockDevice)).toBe(
-      "(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+      "(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)",
     );
   });
 });
@@ -52,7 +52,7 @@ describe("getStartupImages", () => {
 describe("startupDevices", () => {
   it("only describes portrait devices", () => {
     const landscape = startupDevices.filter(
-      ({ width, height }) => width >= height
+      ({ width, height }) => width >= height,
     );
 
     expect(landscape).toEqual([]);

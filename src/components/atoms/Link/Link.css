@@ -1,27 +1,45 @@
 @layer components {
   .link {
     & span {
-      background-image: linear-gradient(var(--brand-blue), var(--brand-blue)), linear-gradient(var(--brand-dark), var(--brand-dark)), linear-gradient(var(--brand-blue), var(--brand-blue));
-      background-size: 0 0.125rem, 0 0.125rem, 100% 0.125rem;
-      background-position: 0 100%, 0 100%, 0 100%;
+      background-image:
+        linear-gradient(var(--brand-blue), var(--brand-blue)),
+        linear-gradient(var(--brand-dark), var(--brand-dark)),
+        linear-gradient(var(--brand-blue), var(--brand-blue));
+      background-size:
+        0 0.125rem,
+        0 0.125rem,
+        100% 0.125rem;
+      background-position:
+        0 100%,
+        0 100%,
+        0 100%;
       background-repeat: no-repeat;
       transition: background-size 0.1s ease-out;
 
       @media (prefers-color-scheme: dark) {
-        background-image: linear-gradient(var(--brand-yellow), var(--brand-yellow)), linear-gradient(var(--brand-light), var(--brand-light)), linear-gradient(var(--brand-yellow), var(--brand-yellow));
+        background-image:
+          linear-gradient(var(--brand-yellow), var(--brand-yellow)),
+          linear-gradient(var(--brand-light), var(--brand-light)),
+          linear-gradient(var(--brand-yellow), var(--brand-yellow));
       }
     }
 
     &:hover,
     &:focus-visible {
       & span {
-        background-size: 0 0.125rem, 100% 0.125rem, 100% 0.125rem;
+        background-size:
+          0 0.125rem,
+          100% 0.125rem,
+          100% 0.125rem;
       }
     }
 
     &:active {
       & span {
-        background-size: 100% 0.125rem, 100% 0.125rem, 100% 0.125rem;
+        background-size:
+          100% 0.125rem,
+          100% 0.125rem,
+          100% 0.125rem;
       }
     }
   }

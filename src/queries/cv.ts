@@ -4,7 +4,6 @@ import {
   personalLogoDimensions,
   companyLogoDimensions,
 } from "@/constants/dimensions";
-
 import { multiplyToString } from "@/utils/multiplyToString";
 
 const personalLogoWidth = multiplyToString(personalLogoDimensions.width);

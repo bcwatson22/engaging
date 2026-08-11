@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Logo, type TLogo, alt } from "./Logo";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Logo, type TLogo, alt } from "./Logo";
 
 const { logoLightBackground, logoDarkBackground } = mockCV;
 
@@ -25,7 +25,7 @@ describe("Logo", () => {
 
     expect(screen.getByRole("img", { name: alt })).toHaveAttribute(
       "src",
-      expect.stringContaining(encodeURIComponent(logoLightBackground.url))
+      expect.stringContaining(encodeURIComponent(logoLightBackground.url)),
     );
   });
 
@@ -34,7 +34,7 @@ describe("Logo", () => {
 
     expect(screen.getByRole("figure", { name: alt })).toHaveAttribute(
       "style",
-      expect.stringContaining(logoLightBackground.url)
+      expect.stringContaining(logoLightBackground.url),
     );
   });
 });

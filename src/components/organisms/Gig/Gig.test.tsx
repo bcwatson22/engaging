@@ -1,11 +1,10 @@
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { Gig, GigSkeleton, type GigProps } from "./Gig";
-
 import { Company } from "@/components/molecules/Company/Company";
 import { Role } from "@/components/molecules/Role/Role";
-
 import { mockCV } from "@/data/mock/cv";
+
+import { Gig, GigSkeleton, type GigProps } from "./Gig";
 
 vi.mock(
   import("@/components/molecules/Company/Company"),
@@ -15,7 +14,7 @@ vi.mock(
       ...actual,
       Company: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -26,7 +25,7 @@ vi.mock(
       ...actual,
       Role: vi.fn(),
     };
-  }
+  },
 );
 
 const { company, logo, city, roles } = mockCV.gigs[0];
@@ -55,7 +54,7 @@ describe("Gig", () => {
       expect(Company).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ company, logo, city }),
-        {}
+        {},
       );
     });
 
@@ -65,7 +64,7 @@ describe("Gig", () => {
       expect(Company).toHaveBeenNthCalledWith(
         1,
         expect.objectContaining({ delay: 0 }),
-        {}
+        {},
       );
     });
   });
@@ -86,7 +85,7 @@ describe("GigSkeleton", () => {
     const numOfPulses = 12;
 
     expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
-      numOfPulses
+      numOfPulses,
     );
   });
 });

@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { cacheHome } from "@/data/cache/home";
 import { themeColor } from "@/constants/metadata";
-
+import { cacheHome } from "@/data/cache/home";
 import { formatExperience } from "@/utils/formatExperience";
 
 const iconSizes = [192, 512];

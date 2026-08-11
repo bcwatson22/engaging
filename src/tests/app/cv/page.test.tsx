@@ -1,27 +1,22 @@
-import type { Mock } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import ReactMarkdown from "react-markdown";
+import type { Mock } from "vitest";
 
 import CVPage, { generateMetadata, generateViewport } from "@/app/cv/page";
-import type { TCV } from "@/data/types/cv";
-import { mockCV } from "@/data/mock/cv";
-
-import { queryCV } from "@/queries/cv";
-
-import { getStartupImages } from "@/constants/startupImages";
-
-import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
-
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
-import { Header } from "@/components/molecules/Header/Header";
 import { Details } from "@/components/molecules/Details/Details";
+import { Header } from "@/components/molecules/Header/Header";
 import { Qualification } from "@/components/molecules/Qualification/Qualification";
 import { Reference } from "@/components/molecules/Reference/Reference";
 import { Gig } from "@/components/organisms/Gig/Gig";
 import { Section } from "@/components/organisms/Section/Section";
-
 import { themeColor } from "@/constants/metadata";
+import { getStartupImages } from "@/constants/startupImages";
+import { getData } from "@/data/functions/getData";
+import { saveData } from "@/data/functions/saveData";
+import { mockCV } from "@/data/mock/cv";
+import type { TCV } from "@/data/types/cv";
+import { queryCV } from "@/queries/cv";
 
 vi.mock("react-markdown", () => ({
   default: vi.fn().mockImplementation(({ children }) => <>{children}</>),
@@ -43,7 +38,7 @@ vi.mock(
       ...actual,
       Header: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -54,7 +49,7 @@ vi.mock(
       ...actual,
       Details: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock(
@@ -65,7 +60,7 @@ vi.mock(
       ...actual,
       Gig: vi.fn(),
     };
-  }
+  },
 );
 
 vi.mock("@/components/organisms/Section/Section", () => ({
@@ -130,7 +125,7 @@ describe("CVPage", () => {
         logoLightBackground: expect.objectContaining({
           url: expect.any(String),
         }),
-      })
+      }),
     );
   });
 
@@ -152,7 +147,7 @@ describe("CVPage", () => {
     expect(Header).toHaveBeenNthCalledWith(
       1,
       { title, logoDarkBackground, logoLightBackground, intro },
-      {}
+      {},
     );
   });
 
@@ -172,7 +167,7 @@ describe("CVPage", () => {
       expect(Section).toHaveBeenNthCalledWith(
         index + 1,
         expect.objectContaining({ heading: value }),
-        {}
+        {},
       );
   });
 
@@ -182,7 +177,7 @@ describe("CVPage", () => {
     expect(Details).toHaveBeenNthCalledWith(
       1,
       { address, links: contactLinks },
-      {}
+      {},
     );
   });
 
@@ -193,7 +188,7 @@ describe("CVPage", () => {
       expect(Gig).toHaveBeenNthCalledWith(
         index + 1,
         { ...value, delay: index === 0 ? 0.2 : 0 },
-        {}
+        {},
       );
   });
 
@@ -233,7 +228,7 @@ describe("CVPage", () => {
     const result = await generateMetadata();
 
     expect(result).toEqual(
-      expect.objectContaining({ title, description: expectedDescription })
+      expect.objectContaining({ title, description: expectedDescription }),
     );
     expect(expectedDescription).toContain("over 12 years'");
   });
@@ -244,7 +239,7 @@ describe("CVPage", () => {
     expect(appleWebApp).toEqual(
       expect.objectContaining({
         startupImage: getStartupImages("cv"),
-      })
+      }),
     );
   });
 
@@ -259,7 +254,7 @@ describe("CVPage", () => {
             color: themeColor,
           },
         ]),
-      })
+      }),
     );
   });
 });
