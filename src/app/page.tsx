@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { Copyright } from "@/components/atoms/Copyright/Copyright";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
-import { revalidate } from "@/constants/common";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
 import { getStartupImages } from "@/constants/startupImages";
 import { cacheHome } from "@/data/cache/home";
@@ -76,4 +75,9 @@ const HomePage = async () => {
 };
 
 export default HomePage;
-export { generateMetadata, viewport, revalidate };
+export { generateMetadata, viewport };
+
+/* Next parses route segment config statically, so this has to be a plain
+   numeric literal here — not an import, a re-export, or arithmetic.
+   86400 = one day in seconds. */
+export const revalidate = 86400;
