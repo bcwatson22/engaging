@@ -55,8 +55,11 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
   return (
     <div className={`role${linkClassNames}`}>
       <h4
-        className={`text-brand-blue dark:text-brand-yellow${
-          hasMultiple ? " multiple" : ""
+        /* Keep a space before the interpolation: Tailwind 4's scanner reads
+           the `$` as part of the candidate, so a class butted against `${`
+           is never generated. */
+        className={`text-brand-blue dark:text-brand-yellow ${
+          hasMultiple ? "multiple" : ""
         }`}
       >
         {role}

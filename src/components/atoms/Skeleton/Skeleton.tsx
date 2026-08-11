@@ -38,7 +38,7 @@ const SkeletonParagraph = ({
   numOfLines = 4,
   size = "base",
 }: Props) => (
-  <div className={`skeleton-paragraph${className ? " " + className : ""}`}>
+  <div className={`skeleton-paragraph ${className ?? ""}`}>
     {[...Array(numOfLines - 1).keys()].map((key) => (
       <SkeletonLine key={key} size={size} />
     ))}

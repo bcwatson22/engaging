@@ -88,6 +88,14 @@
   }
 }
 
+/* @utility rules are emitted in Tailwind's sort order, not source order, so
+   .role:after (top-2) can land after .linkee:after (-top-6) and win at equal
+   specificity — which left the promotion connector 32px out of place. Pin it
+   with a selector that outranks .role whatever the order. */
+.role.linkee:after {
+  @apply -top-6;
+}
+
 @utility capacity {
   @apply mt-0;
 
