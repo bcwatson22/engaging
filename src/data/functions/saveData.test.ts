@@ -16,6 +16,10 @@ describe("saveData", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.unstubAllEnvs();
+
+    /* Spying without an implementation runs the real writeFile, which
+       overwrites the committed Hygraph cache with mockHome. */
+    vi.spyOn(promises, "writeFile").mockResolvedValue(undefined);
   });
 
   it("calls readFile", async () => {
