@@ -18,7 +18,7 @@ const POST = async (request: Request): Promise<Response> => {
     return new Response(null, { status: 401 });
 
   revalidateTag(cmsTag, cacheProfile);
-  paths.forEach((path) => revalidatePath(path));
+  for (const path of paths) revalidatePath(path);
 
   return Response.json({ revalidated: true });
 };

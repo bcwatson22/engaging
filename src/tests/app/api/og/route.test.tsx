@@ -41,8 +41,8 @@ describe("dynamic Open Graph image", () => {
     const expected = webpUrl.replace("webp", "png");
 
     expect(mugshot.image.url).toBe(expected);
-    technologies.forEach(({ icon }) => {
+    for (const { icon } of technologies) {
       expect(icon.url).toBe(expected);
-    });
+    }
   });
 });
