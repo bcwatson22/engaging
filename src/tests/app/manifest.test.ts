@@ -1,16 +1,25 @@
+import type { Mock } from "vitest";
+
 import manifest from "@/app/manifest";
+import { getData } from "@/data/functions/getData";
 
 const mockTitle = "Engaging Engineering";
 const mockToday = new Date("2025-01-08");
 
-vi.mock("@/data/cache/home", () => ({
-  cacheHome: {
+vi.mock("@/data/functions/getData", () => ({
+  getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
+}));
+
+const setup = async () => {
+  (getData as Mock).mockResolvedValue({
     meta: {
-      title: "Engaging Engineering",
+      title: mockTitle,
       description: "Engineering with {{experience}} years' experience",
     },
-  },
-}));
+  });
+
+  return await manifest();
+};
 
 describe("manifest", () => {
   beforeEach(() => {
@@ -23,24 +32,24 @@ describe("manifest", () => {
     vi.useRealTimers();
   });
 
-  it("returns a manifest", () => {
-    const result = manifest();
+  it("returns a manifest", async () => {
+    const result = await setup();
 
     expect(result).toEqual(
       expect.objectContaining({ start_url: "/", display: "standalone" }),
     );
   });
 
-  it("uses the cached title", () => {
-    const result = manifest();
+  it("uses the title from the CMS", async () => {
+    const result = await setup();
 
     expect(result).toEqual(
       expect.objectContaining({ name: mockTitle, short_name: mockTitle }),
     );
   });
 
-  it("replaces the experience placeholder in the description", () => {
-    const result = manifest();
+  it("replaces the experience placeholder in the description", async () => {
+    const result = await setup();
 
     expect(result).toEqual(
       expect.objectContaining({
