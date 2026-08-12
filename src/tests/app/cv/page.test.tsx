@@ -13,7 +13,6 @@ import { Section } from "@/components/organisms/Section/Section";
 import { themeColor } from "@/constants/metadata";
 import { getStartupImages } from "@/constants/startupImages";
 import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
 import { mockCV } from "@/data/mock/cv";
 import type { TCV } from "@/data/types/cv";
 import { queryCV } from "@/queries/cv";
@@ -26,10 +25,6 @@ vi.mock("react-markdown", () => ({
 
 vi.mock("@/data/functions/getData", () => ({
   getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
-}));
-
-vi.mock("@/data/functions/saveData", () => ({
-  saveData: vi.fn<typeof import("@/data/functions/saveData").saveData>(),
 }));
 
 vi.mock(
@@ -142,12 +137,6 @@ describe("CVPage", () => {
         }),
       }),
     );
-  });
-
-  it("calls saveData", async () => {
-    await setup();
-
-    expect(saveData).toHaveBeenNthCalledWith(1, mockCV, "CV");
   });
 
   it("renders a main", async () => {

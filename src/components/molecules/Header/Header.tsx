@@ -3,13 +3,11 @@ import { Suspense } from "react";
 import { Intro, type TIntro } from "@/components/atoms/Intro/Intro";
 import { Logo, type TLogo } from "@/components/atoms/Logo/Logo";
 import { SkeletonParagraph } from "@/components/atoms/Skeleton/Skeleton";
-import { cacheCV } from "@/data/cache/cv";
+import { logoDarkBackground, logoLightBackground } from "@/constants/assets";
 
 import { Nav } from "../Nav/Nav";
 
 type Props = Pick<TMeta, "title"> & TLogo & TIntro;
-
-const { logoDarkBackground, logoLightBackground } = cacheCV;
 
 const HeaderSkeleton = () => (
   <div className="header">

@@ -6,17 +6,12 @@ import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 import { getStartupImages } from "@/constants/startupImages";
 import { getData } from "@/data/functions/getData";
-import { saveData } from "@/data/functions/saveData";
 import { mockHome } from "@/data/mock/home";
 import type { THome } from "@/data/types/home";
 import { queryHome } from "@/queries/home";
 
 vi.mock("@/data/functions/getData", () => ({
   getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
-}));
-
-vi.mock("@/data/functions/saveData", () => ({
-  saveData: vi.fn<typeof import("@/data/functions/saveData").saveData>(),
 }));
 
 vi.mock(
@@ -67,12 +62,6 @@ describe("HomePage", () => {
         technologies: expect.any(Array),
       }),
     );
-  });
-
-  it("calls saveData", async () => {
-    await setup();
-
-    expect(saveData).toHaveBeenNthCalledWith(1, mockHome, "Home");
   });
 
   it("renders a main", async () => {
