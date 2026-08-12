@@ -1,6 +1,6 @@
 import chromium from "@sparticuz/chromium-min";
 import puppeteer, { type Browser } from "puppeteer";
-import puppeteerCore, { type Browser as BrowserCore } from "puppeteer-core";
+import puppeteerCore from "puppeteer-core";
 
 const headless = true;
 
@@ -9,7 +9,8 @@ const headless = true;
 const remoteExecutablePath =
   "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.x64.tar";
 
-type BrowserUnion = Browser | BrowserCore;
+/* puppeteer re-exports puppeteer-core's Browser, so the two are one type. */
+type BrowserUnion = Browser;
 
 const getBrowser = async (): Promise<BrowserUnion> => {
   let browser: BrowserUnion;

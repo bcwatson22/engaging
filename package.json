@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
+    "lint:types": "oxlint --type-aware",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test": "vitest",
@@ -51,15 +52,16 @@
     "jsdom": "30.0.1",
     "oxfmt": "0.63.0",
     "oxlint": "1.78.0",
+    "oxlint-tsgolint": "7.0.2001",
     "postcss": "8.5.26",
     "react-markdown": "9.0.1",
     "tailwindcss": "4.3.3",
-    "typescript": "5.7.2",
+    "typescript": "7.0.2",
     "vite": "8.2.1",
     "vitest": "4.1.10"
   },
   "engines": {
-    "node": "^22.18.0"
+    "node": "^24.0.0"
   },
   "packageManager": "pnpm@10.20.0",
   "pnpm": {
