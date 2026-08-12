@@ -15,6 +15,8 @@ export default defineConfig({
       exclude: [
         ".next/**",
         "src/data/types/**",
+        // generated CMS fallback — data, not code
+        "src/data/snapshot/**",
         "src/queries/**",
         // build entry points — a single call each, with nothing to assert
         "src/scripts/**",

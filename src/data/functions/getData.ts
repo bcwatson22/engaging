@@ -1,9 +1,7 @@
-import type { TypedDocumentNode } from "@urql/core";
-
 import { client } from "@/queries/client";
 
 const getData = async <Data>(
-  query: TypedDocumentNode,
+  query: string,
   key: string,
   fallback: Data,
 ): Promise<Data> => {

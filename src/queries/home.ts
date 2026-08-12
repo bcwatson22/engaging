@@ -1,12 +1,13 @@
-import { gql } from "urql";
-
-import { mugshotDimensions, techIconDimensions } from "@/constants/dimensions";
-import { multiplyToString } from "@/utils/multiplyToString";
+import {
+  mugshotDimensions,
+  techIconDimensions,
+} from "../constants/dimensions.ts";
+import { multiplyToString } from "../utils/multiplyToString.ts";
 
 const mugshotWidth = multiplyToString(mugshotDimensions.width);
 const techIconWidth = multiplyToString(techIconDimensions.width);
 
-export const queryHome = gql`
+export const queryHome = `
   query Home {
     homes(first: 1) {
       id
