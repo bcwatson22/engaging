@@ -24,6 +24,9 @@ jobs:
 
       - run: pnpm format:check
 
+      # type-aware rules; slower than pnpm lint, so kept as its own step
+      - run: pnpm lint:types
+
       - run: pnpm typecheck
 
       # --coverage, so the 100% thresholds in vitest.config.mjs are enforced

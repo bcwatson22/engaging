@@ -7,6 +7,10 @@ const makeClient = () =>
     exchanges: [cacheExchange, fetchExchange],
   });
 
-const client = registerUrql(makeClient).getClient().query;
+/* Bound to its client: pulling `query` off unbound leaves `this` undefined if
+   urql ever reaches for it. */
+const { getClient } = registerUrql(makeClient);
+const client: ReturnType<typeof getClient>["query"] = (...args) =>
+  getClient().query(...args);
 
 export { client };

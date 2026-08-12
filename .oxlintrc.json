@@ -20,5 +20,18 @@
     "browser": true,
     "node": true
   },
-  "ignorePatterns": [".claude/**", "src/data/cache/**", "src/tests/coverage/**"]
+  "ignorePatterns": [
+    ".claude/**",
+    "src/data/cache/**",
+    "src/tests/coverage/**"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "typescript/unbound-method": "off",
+        "typescript/restrict-template-expressions": "off"
+      }
+    }
+  ]
 }
