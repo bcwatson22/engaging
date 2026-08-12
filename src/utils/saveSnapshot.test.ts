@@ -80,6 +80,7 @@ describe("saveSnapshot", () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ query: queryHome }),
+        cache: "no-store",
       });
       expect(fetchMock).toHaveBeenNthCalledWith(
         2,

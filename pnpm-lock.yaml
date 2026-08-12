@@ -15,21 +15,12 @@ importers:
       '@sparticuz/chromium-min':
         specifier: 149.0.0
         version: 149.0.0
-      '@urql/core':
-        specifier: 6.0.3
-        version: 6.0.3(graphql@16.8.1)
-      '@urql/next':
-        specifier: 2.0.1
-        version: 2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(urql@5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8))
       '@vercel/analytics':
         specifier: 2.0.1
         version: 2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
       '@vercel/speed-insights':
         specifier: 2.0.0
         version: 2.0.0(next@16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
-      graphql:
-        specifier: 16.8.1
-        version: 16.8.1
       motion:
         specifier: 13.1.0
         version: 13.1.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -48,9 +39,6 @@ importers:
       react-dom:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
-      urql:
-        specifier: 5.0.3
-        version: 5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8)
     devDependencies:
       '@heroicons/react':
         specifier: 2.2.0
@@ -132,14 +120,6 @@ importers:
         version: 4.1.10(@types/node@22.20.1)(@vitest/coverage-istanbul@4.1.10)(@vitest/coverage-v8@4.1.10)(jsdom@30.0.1)(vite@8.2.1(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.8.0))
 
 packages:
-
-  '@0no-co/graphql.web@1.1.2':
-    resolution: {integrity: sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    peerDependenciesMeta:
-      graphql:
-        optional: true
 
   '@adobe/css-tools@4.4.3':
     resolution: {integrity: sha512-VQKMkwriZbaOgVCby1UDY/LDk5fIjhQicCvVPFqfe+69fWaPWydbWJ3wRt59/YzIwda1I81loas3oCoHxnqvdA==}
@@ -1396,16 +1376,6 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@urql/core@6.0.3':
-    resolution: {integrity: sha512-0F39XWR21+IVLJfsqBvLShvoSzxT6h6wWXwrDhN8j9J+IEVOpQIUNHwpgjsp+2ePzn9aCH+rpDonn3HOAUnn9A==}
-
-  '@urql/next@2.0.1':
-    resolution: {integrity: sha512-ddALO9UcmkFKtEbuXK7+34EBGSVy5iPRU9G5R/F/tusLdc7rtFzg9lZj7yRGhDprVBUddfIMLjwrIlgrx0/QTg==}
-    peerDependencies:
-      next: '>=13.0.0'
-      react: '>=18.0.0'
-      urql: ^5.0.0
-
   '@vercel/analytics@2.0.1':
     resolution: {integrity: sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==}
     peerDependencies:
@@ -1789,10 +1759,6 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
-
-  graphql@16.8.1:
-    resolution: {integrity: sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==}
-    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -2510,12 +2476,6 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
-  urql@5.0.3:
-    resolution: {integrity: sha512-gWywgPjduTCUqWKofW6YLOy1auxe0uJN/vHa44eXGKn+f+QHNb308ZEZnKBLZ4F+jRrguaJy9CdtecTZJQWPCg==}
-    peerDependencies:
-      '@urql/core': ^6.0.0
-      react: '>= 16.8.0'
-
   vfile-message@4.0.2:
     resolution: {integrity: sha512-jRDZ1IMLttGj41KcZvlrYAaI3CfqpLpfpf+Mfig13viT6NKvRzWZ+lXz0Y5D60w6uJIBAOGq9mSHf0gktF0duw==}
 
@@ -2634,9 +2594,6 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
-  wonka@6.3.5:
-    resolution: {integrity: sha512-SSil+ecw6B4/Dm7Pf2sAshKQ5hWFvfyGlfPbEd6A14dOH6VDjrmbY86u6nZvy9omGwwIPFR8V41+of1EezgoUw==}
-
   wrap-ansi@9.0.2:
     resolution: {integrity: sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==}
     engines: {node: '>=18'}
@@ -2693,10 +2650,6 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
-
-  '@0no-co/graphql.web@1.1.2(graphql@16.8.1)':
-    optionalDependencies:
-      graphql: 16.8.1
 
   '@adobe/css-tools@4.4.3': {}
 
@@ -3663,19 +3616,6 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@urql/core@6.0.3(graphql@16.8.1)':
-    dependencies:
-      '@0no-co/graphql.web': 1.1.2(graphql@16.8.1)
-      wonka: 6.3.5
-    transitivePeerDependencies:
-      - graphql
-
-  '@urql/next@2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(urql@5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8))':
-    dependencies:
-      next: 16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      react: 19.2.8
-      urql: 5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8)
-
   '@vercel/analytics@2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
     optionalDependencies:
       next: 16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -3977,8 +3917,6 @@ snapshots:
   get-east-asian-width@1.6.0: {}
 
   graceful-fs@4.2.11: {}
-
-  graphql@16.8.1: {}
 
   has-flag@4.0.0: {}
 
@@ -4924,12 +4862,6 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
-  urql@5.0.3(@urql/core@6.0.3(graphql@16.8.1))(react@19.2.8):
-    dependencies:
-      '@urql/core': 6.0.3(graphql@16.8.1)
-      react: 19.2.8
-      wonka: 6.3.5
-
   vfile-message@4.0.2:
     dependencies:
       '@types/unist': 3.0.3
@@ -5013,8 +4945,6 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
-
-  wonka@6.3.5: {}
 
   wrap-ansi@9.0.2:
     dependencies:

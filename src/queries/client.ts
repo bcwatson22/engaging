@@ -1,16 +1,29 @@
-import { cacheExchange, createClient, fetchExchange } from "@urql/core";
-import { registerUrql } from "@urql/next/rsc";
+type TResponse<Data> = {
+  data?: Record<string, Data[]>;
+  errors?: { message: string }[];
+};
 
-const makeClient = () =>
-  createClient({
-    url: process.env.HYGRAPH_ENDPOINT!,
-    exchanges: [cacheExchange, fetchExchange],
+/* `no-store` is deliberate. Next's autoNoCache is tripped by an Authorization
+   header or a POST whenever the segment's revalidate is 0 — which is the case
+   in the dynamic /api/og route. Rather than depend on that resolving
+   favourably, caching is left entirely to unstable_cache in getData, which
+   caches the result and so is transport- and context-independent. */
+const fetchCms = async <Data>(query: string): Promise<TResponse<Data>> => {
+  const response = await fetch(process.env.HYGRAPH_ENDPOINT!, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
+    },
+    body: JSON.stringify({ query }),
+    cache: "no-store",
   });
 
-/* Bound to its client: pulling `query` off unbound leaves `this` undefined if
-   urql ever reaches for it. */
-const { getClient } = registerUrql(makeClient);
-const client: ReturnType<typeof getClient>["query"] = (...args) =>
-  getClient().query(...args);
+  if (!response.ok)
+    throw new Error(`${response.status} ${response.statusText}`);
 
-export { client };
+  return await response.json();
+};
+
+export { fetchCms };
+export type { TResponse };

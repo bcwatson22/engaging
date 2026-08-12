@@ -1,6 +1,7 @@
 import { writeFile } from "fs/promises";
 import path from "path";
 
+import { fetchCms } from "../queries/client.ts";
 import { queryCV } from "../queries/cv.ts";
 import { queryHome } from "../queries/home.ts";
 
@@ -19,25 +20,8 @@ const pages = [
 
 const errorMessage = "Could not refresh the CMS snapshot:";
 
-type TResponse = {
-  data?: Record<string, unknown[]>;
-  errors?: { message: string }[];
-};
-
 const fetchQuery = async (query: string, key: string): Promise<unknown> => {
-  const response = await fetch(process.env.HYGRAPH_ENDPOINT!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
-    },
-    body: JSON.stringify({ query }),
-  });
-
-  if (!response.ok)
-    throw new Error(`${response.status} ${response.statusText}`);
-
-  const { data, errors }: TResponse = await response.json();
+  const { data, errors } = await fetchCms<unknown>(query);
 
   if (errors) throw new Error(errors.map(({ message }) => message).join(", "));
 
