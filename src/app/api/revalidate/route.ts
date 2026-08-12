@@ -8,10 +8,13 @@ import { cmsTag } from "@/data/functions/getData";
 const secretHeader = "x-revalidate-secret";
 const paths = ["/", "/cv"];
 
-/* Next 16 requires a cacheLife profile here. updateTag would expire the entry
-   immediately but throws outside a Server Action, so "max" is the form Next's
-   own deprecation notice points route handlers at. */
-const cacheProfile = "max";
+/* Next 16 requires a cacheLife profile here, and it must be `{ expire: 0 }`.
+   Next only performs a hard invalidation when the profile's expire is 0 —
+   anything else, including the "max" its deprecation notice suggests, is
+   treated as a stale-while-revalidate update that keeps serving the old value.
+   ("max" is a one-year expire.) updateTag would expire immediately but throws
+   outside a Server Action, so this is the form route handlers need. */
+const cacheProfile = { expire: 0 };
 
 const POST = async (request: Request): Promise<Response> => {
   if (request.headers.get(secretHeader) !== process.env.REVALIDATE_SECRET)

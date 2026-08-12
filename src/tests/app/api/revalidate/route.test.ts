@@ -1,11 +1,6 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import {
-  POST,
-  secretHeader,
-  paths,
-  cacheProfile,
-} from "@/app/api/revalidate/route";
+import { POST, secretHeader, paths } from "@/app/api/revalidate/route";
 import { cmsTag } from "@/data/functions/getData";
 
 vi.mock("next/cache", () => ({
@@ -40,7 +35,10 @@ describe("revalidate", () => {
     it("invalidates the CMS tag and both prerendered paths", async () => {
       await setup();
 
-      expect(revalidateTag).toHaveBeenNthCalledWith(1, cmsTag, cacheProfile);
+      /* expire must be 0: Next only hard-invalidates on a zero expire, and
+         treats any other profile as stale-while-revalidate that keeps serving
+         the old value. */
+      expect(revalidateTag).toHaveBeenNthCalledWith(1, cmsTag, { expire: 0 });
       expect(revalidatePath).toHaveBeenNthCalledWith(1, paths[0]);
       expect(revalidatePath).toHaveBeenNthCalledWith(2, paths[1]);
     });
