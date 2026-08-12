@@ -16,21 +16,19 @@ import {
   viewport,
 } from "@/constants/metadata";
 import { getStartupImages } from "@/constants/startupImages";
-import { cacheCV } from "@/data/cache/cv";
 import { getData } from "@/data/functions/getData";
-import { saveData, type TPages } from "@/data/functions/saveData";
+import { snapshotCV } from "@/data/snapshot/snapshot";
 import type { TCV } from "@/data/types/cv";
 import { queryCV } from "@/queries/cv";
 import { formatExperience } from "@/utils/formatExperience";
 
-const pageName: keyof TPages = "CV";
-const pageNameLower = pageName.toLowerCase();
+const pageNameLower = "cv";
 const pageNamePlural = "cvs";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const {
     meta: { title, description, keywords },
-  } = await getData<TCV>(queryCV, pageNamePlural, cacheCV);
+  } = await getData<TCV>(queryCV, pageNamePlural, snapshotCV);
 
   const formattedDescription = formatExperience(description);
 
@@ -69,9 +67,7 @@ const generateViewport = async (): Promise<Viewport> => ({
 });
 
 const CVPage = async () => {
-  const data = await getData<TCV>(queryCV, pageNamePlural, cacheCV);
-
-  await saveData(data, pageName);
+  const data = await getData<TCV>(queryCV, pageNamePlural, snapshotCV);
 
   const {
     meta: { title },

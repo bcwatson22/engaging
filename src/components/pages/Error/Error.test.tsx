@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-import { cacheHome } from "@/data/cache/home";
+import { mugshot } from "@/constants/assets";
 import { mockHome } from "@/data/mock/home";
 
 import { Error, type ErrorProps } from "./Error";
@@ -106,14 +106,14 @@ describe("Error", () => {
   });
 
   describe("content", () => {
-    it("falls back to the cached mugshot if undefined", () => {
+    it("falls back to the constant mugshot if undefined", () => {
       setup({
         content: undefined,
       });
 
       expect(
         screen.getByRole("img", {
-          name: `Portrait of ${cacheHome.mugshot.heading}`,
+          name: `Portrait of ${mugshot.heading}`,
         }),
       ).toBeInTheDocument();
     });

@@ -6,21 +6,19 @@ import { Particles } from "@/components/atoms/Particles/Particles";
 import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
 import { appleWebApp, metadata, viewport } from "@/constants/metadata";
 import { getStartupImages } from "@/constants/startupImages";
-import { cacheHome } from "@/data/cache/home";
 import { getData } from "@/data/functions/getData";
-import { saveData, type TPages } from "@/data/functions/saveData";
+import { snapshotHome } from "@/data/snapshot/snapshot";
 import type { THome } from "@/data/types/home";
 import { queryHome } from "@/queries/home";
 import { formatExperience } from "@/utils/formatExperience";
 
-const pageName: keyof TPages = "Home";
-const pageNameLower = pageName.toLowerCase();
+const pageNameLower = "home";
 const pageNamePlural = "homes";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const {
     meta: { title, description, keywords },
-  } = await getData<THome>(queryHome, pageNamePlural, cacheHome);
+  } = await getData<THome>(queryHome, pageNamePlural, snapshotHome);
 
   const formattedDescription = formatExperience(description);
 
@@ -48,9 +46,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const HomePage = async () => {
-  const data = await getData<THome>(queryHome, pageNamePlural, cacheHome);
-
-  await saveData(data, pageName);
+  const data = await getData<THome>(queryHome, pageNamePlural, snapshotHome);
 
   const {
     meta: { title },

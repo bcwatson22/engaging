@@ -7,13 +7,13 @@ import { Inner } from "@/components/atoms/Link/Link";
 import { Particles } from "@/components/atoms/Particles/Particles";
 import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
 import { type TMugshot } from "@/components/organisms/Mugshot/Mugshot";
+import { mugshot } from "@/constants/assets";
 import { mugshotDimensions } from "@/constants/dimensions";
-import { cacheHome } from "@/data/cache/home";
 
 type Props = {
   heading?: string;
   children?: ReactNode;
-  content?: TMugshot;
+  content?: Pick<TMugshot, "image" | "heading">;
   reset?: () => void;
 };
 
@@ -22,7 +22,7 @@ const { width, height } = mugshotDimensions;
 const Error = ({
   heading = "Oops",
   children,
-  content = cacheHome.mugshot,
+  content = mugshot,
   reset,
 }: Props) => {
   const sectionId = useId();

@@ -1,15 +1,13 @@
-import { gql } from "urql";
-
 import {
   personalLogoDimensions,
   companyLogoDimensions,
-} from "@/constants/dimensions";
-import { multiplyToString } from "@/utils/multiplyToString";
+} from "../constants/dimensions.ts";
+import { multiplyToString } from "../utils/multiplyToString.ts";
 
 const personalLogoWidth = multiplyToString(personalLogoDimensions.width);
 const companyLogoWidth = multiplyToString(companyLogoDimensions.width);
 
-export const queryCV = gql`
+export const queryCV = `
   query CV {
     cvs(first: 1) {
       id
