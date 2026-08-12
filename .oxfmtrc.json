@@ -4,7 +4,7 @@
   "sortImports": true,
   "ignorePatterns": [
     ".claude/**",
-    "src/data/cache/**",
+    "src/data/snapshot/**",
     "src/tests/coverage/**"
   ],
   "sortTailwindcss": true

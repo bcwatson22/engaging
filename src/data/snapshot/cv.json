@@ -60,7 +60,9 @@
         {
           "id": "cm2neqkizi0ju06mh04a040bx",
           "role": "Principal Front End Engineer",
-          "dates": ["2024-10-01"],
+          "dates": [
+            "2024-10-01"
+          ],
           "capacity": "Contract",
           "bullets": [
             "Promoted to lead 15 engineers on complex e-commerce platform with 7M+ monthly visitors",
@@ -75,7 +77,10 @@
         {
           "id": "cm2nemw5ai1xk07mlpvfdtuy4",
           "role": "Technical Lead",
-          "dates": ["2023-04-01", "2024-10-01"],
+          "dates": [
+            "2023-04-01",
+            "2024-10-01"
+          ],
           "capacity": "Contract",
           "bullets": [
             "7x extended contract at FTSE250 retailer, supporting a major digital transformation",
@@ -101,7 +106,10 @@
         {
           "id": "cm2nfy4pyie4s06mhz6yt546z",
           "role": "Senior Software Engineer",
-          "dates": ["2022-09-01", "2023-04-01"],
+          "dates": [
+            "2022-09-01",
+            "2023-04-01"
+          ],
           "capacity": "Contract",
           "bullets": [
             "Developed software UI used by thousands of companies and millions of customers",
@@ -127,7 +135,10 @@
         {
           "id": "cm2ng0po7iere06mhpzkxlzwe",
           "role": "Senior Software Engineer",
-          "dates": ["2022-04-01", "2022-08-01"],
+          "dates": [
+            "2022-04-01",
+            "2022-08-01"
+          ],
           "capacity": "Permanent",
           "bullets": [
             "Led and mentored development team of 4 as a T-shaped engineer at travel company",
@@ -153,7 +164,10 @@
         {
           "id": "cm2ng4tbail0v08l6c6htoy3c",
           "role": "Lead Front End Developer",
-          "dates": ["2021-07-01", "2022-04-01"],
+          "dates": [
+            "2021-07-01",
+            "2022-04-01"
+          ],
           "capacity": "Permanent",
           "bullets": [
             "Promoted to lead role after building out multi-faceted team of different seniority",
@@ -168,7 +182,10 @@
         {
           "id": "cm2ng4tbail0w08l6s72j8nf2",
           "role": "Senior Front End Developer",
-          "dates": ["2018-09-01", "2021-07-01"],
+          "dates": [
+            "2018-09-01",
+            "2021-07-01"
+          ],
           "capacity": "Permanent",
           "bullets": [
             "Headhunted for senior role at service design agency after relocation to Manchester",
@@ -194,7 +211,10 @@
         {
           "id": "cm2ng6uj5ilo608l6oykjts0i",
           "role": "Front End Developer",
-          "dates": ["2016-05-01", "2017-12-01"],
+          "dates": [
+            "2016-05-01",
+            "2017-12-01"
+          ],
           "capacity": "Permanent",
           "bullets": [
             "In-house JavaScript expert at major ISP whose site receives millions of hits per year",
@@ -219,7 +239,10 @@
         {
           "id": "cm2ngaf8oijma06mhisdczw1k",
           "role": "Front End Developer",
-          "dates": ["2014-03-01", "2015-08-01"],
+          "dates": [
+            "2014-03-01",
+            "2015-08-01"
+          ],
           "capacity": "Permanent",
           "bullets": [
             "Promoted to mid-weight following advancement of skills and knowledge as a junior",
@@ -233,7 +256,10 @@
         {
           "id": "cm2ngaf8oijm906mhlcrbblvp",
           "role": "Junior Front End Developer",
-          "dates": ["2012-07-01", "2014-03-01"],
+          "dates": [
+            "2012-07-01",
+            "2014-03-01"
+          ],
           "capacity": "Permanent",
           "bullets": [
             "Given full time role as a junior developer after impressing during placement",
@@ -247,7 +273,10 @@
         {
           "id": "cm2ngaf8oijm806mhsz3mv1cl",
           "role": "Placement Developer",
-          "dates": ["2012-07-01", "2012-07-01"],
+          "dates": [
+            "2012-07-01",
+            "2012-07-01"
+          ],
           "capacity": "Placement",
           "bullets": [
             "Offered placement after being headhunted at university Creative Showcase",
@@ -264,14 +293,20 @@
       "id": "club67ocb13nw08mjxerotjn8",
       "institution": "Leeds Metropolitan University",
       "location": "West Yorkshire",
-      "dates": ["2009-09-01", "2012-05-31"],
+      "dates": [
+        "2009-09-01",
+        "2012-05-31"
+      ],
       "description": "First Class BSc (Hons) in Multimedia Technology"
     },
     {
       "id": "club67oca13nu08mjn809p351",
       "institution": "Lady Manners School",
       "location": "Derbyshire",
-      "dates": ["2001-09-01", "2008-05-31"],
+      "dates": [
+        "2001-09-01",
+        "2008-05-31"
+      ],
       "description": "12 GCSEs and 3 A-Levels"
     }
   ],
