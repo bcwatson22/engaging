@@ -31,7 +31,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/utils/saveToPdf.ts",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
