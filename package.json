@@ -6,7 +6,7 @@
   "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
   "scripts": {
     "dev": "NODE_ENV=development next dev",
-    "build": "pnpm snapshot && NODE_ENV=production next build && npx puppeteer browsers install chrome && node ./src/scripts/saveStartupImages.ts",
+    "build": "pnpm snapshot && NODE_ENV=production next build",
     "snapshot": "node --env-file-if-exists=.env.local ./src/scripts/saveSnapshot.ts",
     "start": "next start",
     "lint": "oxlint",
@@ -19,13 +19,10 @@
     "typecheck": "tsc --pretty --noEmit"
   },
   "dependencies": {
-    "@sparticuz/chromium-min": "149.0.0",
     "@vercel/analytics": "2.0.1",
     "@vercel/speed-insights": "2.0.0",
     "motion": "13.1.0",
     "next": "16.3.0",
-    "puppeteer": "25.5.0",
-    "puppeteer-core": "25.5.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
