@@ -10,12 +10,12 @@ type Props = Readonly<{
   children: ReactNode;
 }>;
 
-const variable = "--font-sans" as const satisfies CssVariable;
+const variable = "--font-nunito" as const satisfies CssVariable;
 
 const nunito = Nunito({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
-  variable: "--font-sans" satisfies typeof variable,
+  variable: "--font-nunito" satisfies typeof variable,
 });
 
 const Layout = ({ children }: Props) => (
