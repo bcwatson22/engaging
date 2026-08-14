@@ -31,6 +31,12 @@ const nextConfig = {
         source: "/billy-watson-cv.pdf",
         destination: `${artifacts}/billy-watson-cv.pdf`,
       },
+      /* The PWA splash screens, one per device profile per page. Their paths
+         are unchanged, so getStartupImages still builds them the same way. */
+      {
+        source: "/startup-:name.png",
+        destination: `${artifacts}/startup-:name.png`,
+      },
     ],
     afterFiles: [],
     fallback: [],
