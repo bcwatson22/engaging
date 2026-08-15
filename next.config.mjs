@@ -24,6 +24,12 @@ const cspHeader = `
 const artifacts = "https://pub-53c526b0d6a84a57afc0b459064235fd.r2.dev";
 
 const nextConfig = {
+  /* The OG route reads this at runtime with fs, which the bundler cannot see,
+     so it has to be traced in explicitly. Without it the route throws only
+     once deployed. */
+  outputFileTracingIncludes: {
+    "/api/og": ["./src/assets/fonts/**"],
+  },
   /* beforeFiles, so the proxy wins over anything left in public/. */
   rewrites: async () => ({
     beforeFiles: [

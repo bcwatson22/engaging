@@ -9,7 +9,7 @@ import { snapshotHome } from "@/data/snapshot/snapshot";
 import type { THome } from "@/data/types/home";
 import { queryHome } from "@/queries/home";
 import { formatExperience } from "@/utils/formatExperience";
-import { loadGoogleFont, fontFamily } from "@/utils/loadGoogleFont";
+import { fontFamily, loadFont } from "@/utils/loadFont";
 
 const replaceImageFormat = (
   value: string,
@@ -43,20 +43,28 @@ const getImageProps = async (): Promise<OgImageProps> => {
   };
 };
 
+/* Vercel serves this from the ISR cache, but its default response headers
+   are max-age=0, must-revalidate — so every crawler fetch, and every rescrape,
+   has to reach the edge. An explicit policy lets them keep a copy, which is
+   what matters when a link is shared and many crawlers arrive at once. */
+const cacheControl =
+  "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
+
 const GET = async () =>
   new ImageResponse(<OgImage {...await getImageProps()} />, {
     width: 1200,
     height: 630,
+    headers: { "cache-control": cacheControl },
     fonts: [
       {
         name: fontFamily,
-        data: await loadGoogleFont(),
+        data: await loadFont(),
         style: "normal",
       },
     ],
   });
 
-export { GET, getImageProps };
+export { GET, getImageProps, cacheControl };
 
 /* Next parses route segment config statically, so this has to be a plain
    numeric literal here — not an import, a re-export, or arithmetic.
