@@ -1,8 +1,8 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import type { TLink } from "@/components/atoms/Link/Link";
-import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
-import { techIconDimensions } from "@/constants/dimensions";
+import type { TLink } from '@/components/atoms/Link/Link';
+import { Skeleton } from '@/components/atoms/Skeleton/Skeleton';
+import { techIconDimensions } from '@/constants/dimensions';
 
 type TTechnology = TID & {
   name: string;
@@ -19,7 +19,7 @@ const TechnologySkeleton = () => (
 );
 
 const { width, height } = techIconDimensions;
-const split = "//";
+const split = '//';
 
 const Technology = ({ id, icon, name }: Props) => {
   const splitNames = name.split(` ${split} `);
@@ -30,7 +30,7 @@ const Technology = ({ id, icon, name }: Props) => {
       <figure className="logo">
         {icon?.url && (
           <Image
-            className={name === "Next" ? "white" : ""}
+            className={name === 'Next' ? 'white' : ''}
             src={icon.url}
             alt={`${name} logo`}
             width={width}
@@ -50,7 +50,7 @@ const Technology = ({ id, icon, name }: Props) => {
           ? splitNames.map((chunk, index) => (
               <span key={chunk.slice(0, 10)} className="chunk">
                 {chunk}
-                {index !== numOfSplitNames - 1 ? ` ${split}` : ""}
+                {index !== numOfSplitNames - 1 ? ` ${split}` : ''}
               </span>
             ))
           : name}

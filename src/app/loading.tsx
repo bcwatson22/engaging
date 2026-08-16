@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
-import { MugshotSkeleton } from "@/components/organisms/Mugshot/Mugshot";
+import { MugshotSkeleton } from '@/components/organisms/Mugshot/Mugshot';
 
 const LoadingPage: NextPage = () => (
   <main className="home main">

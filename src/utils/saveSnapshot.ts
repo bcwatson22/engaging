@@ -1,29 +1,29 @@
-import { writeFile } from "fs/promises";
-import path from "path";
+import { writeFile } from 'fs/promises';
+import path from 'path';
 
-import { fetchCms } from "../queries/client.ts";
-import { queryCV } from "../queries/cv.ts";
-import { queryHome } from "../queries/home.ts";
+import { fetchCms } from '../queries/client.ts';
+import { queryCV } from '../queries/cv.ts';
+import { queryHome } from '../queries/home.ts';
 
 /* Writes the committed fallback that getData serves when Hygraph is
    unreachable. Run before `next build` so the snapshot compiled into the
    bundle is the one this build fetched, which is what the old render-time
    write-back could never achieve. */
 
-const snapshotDir = "src/data/snapshot";
+const snapshotDir = 'src/data/snapshot';
 const indent = 2;
 
 const pages = [
-  { key: "homes", name: "home", query: queryHome },
-  { key: "cvs", name: "cv", query: queryCV },
+  { key: 'homes', name: 'home', query: queryHome },
+  { key: 'cvs', name: 'cv', query: queryCV },
 ];
 
-const errorMessage = "Could not refresh the CMS snapshot:";
+const errorMessage = 'Could not refresh the CMS snapshot:';
 
 const fetchQuery = async (query: string, key: string): Promise<unknown> => {
   const { data, errors } = await fetchCms<unknown>(query);
 
-  if (errors) throw new Error(errors.map(({ message }) => message).join(", "));
+  if (errors) throw new Error(errors.map(({ message }) => message).join(', '));
 
   const item = data?.[key]?.[0];
 

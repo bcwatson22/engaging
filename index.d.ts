@@ -19,6 +19,6 @@ type TPosition = {
 };
 
 type TScroll = {
-  delay?: Orchestration["delay"];
-  margin?: UseInViewOptions["margin"];
+  delay?: Orchestration['delay'];
+  margin?: UseInViewOptions['margin'];
 };

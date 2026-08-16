@@ -1,16 +1,16 @@
-import { cleanup, render } from "@testing-library/react";
-import { useRouter } from "next/navigation";
-import type { Mock } from "vitest";
+import { cleanup, render } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
+import type { Mock } from 'vitest';
 
-import DownloadPage from "@/app/cv/download/page";
-import { Loading } from "@/components/pages/Loading/Loading";
+import DownloadPage from '@/app/cv/download/page';
+import { Loading } from '@/components/pages/Loading/Loading';
 
-vi.mock("next/navigation", () => ({
-  useRouter: vi.fn<typeof import("next/navigation").useRouter>(),
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn<typeof import('next/navigation').useRouter>(),
 }));
 
-vi.mock("@/components/pages/Loading/Loading", () => ({
-  Loading: vi.fn<typeof import("@/components/pages/Loading/Loading").Loading>(),
+vi.mock('@/components/pages/Loading/Loading', () => ({
+  Loading: vi.fn<typeof import('@/components/pages/Loading/Loading').Loading>(),
 }));
 
 type UseRouter = Partial<ReturnType<typeof useRouter>>;
@@ -19,7 +19,7 @@ type SetupOptions = {
   useRouter: UseRouter;
 };
 
-const mockPush = vi.fn<NonNullable<UseRouter["push"]>>();
+const mockPush = vi.fn<NonNullable<UseRouter['push']>>();
 const defaultRouter: UseRouter = { push: mockPush };
 
 const setup = (options?: Partial<SetupOptions>) => {
@@ -33,7 +33,7 @@ const setup = (options?: Partial<SetupOptions>) => {
   render(<DownloadPage />);
 };
 
-describe("Loading", () => {
+describe('Loading', () => {
   beforeEach(() => {
     HTMLAnchorElement.prototype.click =
       vi.fn<typeof HTMLAnchorElement.prototype.click>();
@@ -41,62 +41,62 @@ describe("Loading", () => {
     cleanup();
   });
 
-  it("renders a Loading component", () => {
+  it('renders a Loading component', () => {
     setup();
 
     expect(Loading).toHaveBeenCalledTimes(1);
   });
 
-  it("creates an anchor", () => {
-    const spyCreateElement = vi.spyOn(document, "createElement");
+  it('creates an anchor', () => {
+    const spyCreateElement = vi.spyOn(document, 'createElement');
 
     setup();
 
-    expect(spyCreateElement).toHaveBeenNthCalledWith(1, "div");
+    expect(spyCreateElement).toHaveBeenNthCalledWith(1, 'div');
   });
 
-  it("appends the anchor to the body", () => {
-    const spyAppendChild = vi.spyOn(document.body, "appendChild");
+  it('appends the anchor to the body', () => {
+    const spyAppendChild = vi.spyOn(document.body, 'appendChild');
 
     setup();
 
     expect(spyAppendChild).toHaveBeenNthCalledWith(1, expect.any(Element));
   });
 
-  it("clicks the anchor", () => {
+  it('clicks the anchor', () => {
     setup();
 
     expect(HTMLAnchorElement.prototype.click).toHaveBeenCalledTimes(1);
   });
 
-  it("removes the anchor from the body", () => {
-    const spyRemoveChild = vi.spyOn(document.body, "removeChild");
+  it('removes the anchor from the body', () => {
+    const spyRemoveChild = vi.spyOn(document.body, 'removeChild');
 
     setup();
 
     expect(spyRemoveChild).toHaveBeenCalledTimes(1);
   });
 
-  it("takes the user back to the cv page", () => {
+  it('takes the user back to the cv page', () => {
     setup();
 
-    expect(mockPush).toHaveBeenNthCalledWith(1, "/cv");
+    expect(mockPush).toHaveBeenNthCalledWith(1, '/cv');
   });
 
-  it("logs an error message if something went wrong", async () => {
-    const spyConsoleError = vi.spyOn(console, "error");
+  it('logs an error message if something went wrong', async () => {
+    const spyConsoleError = vi.spyOn(console, 'error');
 
     setup({
       useRouter: {
-        push: vi.fn<NonNullable<UseRouter["push"]>>().mockImplementation(() => {
-          throw new Error("Something went wrong");
+        push: vi.fn<NonNullable<UseRouter['push']>>().mockImplementation(() => {
+          throw new Error('Something went wrong');
         }),
       },
     });
 
     expect(spyConsoleError).toHaveBeenNthCalledWith(
       1,
-      "Error downloading file:",
+      'Error downloading file:',
       expect.any(Error),
     );
   });

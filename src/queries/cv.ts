@@ -1,8 +1,8 @@
 import {
   personalLogoDimensions,
   companyLogoDimensions,
-} from "../constants/dimensions.ts";
-import { multiplyToString } from "../utils/multiplyToString.ts";
+} from '../constants/dimensions.ts';
+import { multiplyToString } from '../utils/multiplyToString.ts';
 
 const personalLogoWidth = multiplyToString(personalLogoDimensions.width);
 const companyLogoWidth = multiplyToString(companyLogoDimensions.width);

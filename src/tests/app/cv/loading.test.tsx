@@ -1,21 +1,21 @@
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render } from '@testing-library/react';
 
-import LoadingPage from "@/app/cv/loading";
-import { Loading } from "@/components/pages/Loading/Loading";
+import LoadingPage from '@/app/cv/loading';
+import { Loading } from '@/components/pages/Loading/Loading';
 
-vi.mock("@/components/pages/Loading/Loading", () => ({
-  Loading: vi.fn<typeof import("@/components/pages/Loading/Loading").Loading>(),
+vi.mock('@/components/pages/Loading/Loading', () => ({
+  Loading: vi.fn<typeof import('@/components/pages/Loading/Loading').Loading>(),
 }));
 
 const setup = () => render(<LoadingPage />);
 
-describe("Loading", () => {
+describe('Loading', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("renders a Loading component", () => {
+  it('renders a Loading component', () => {
     setup();
 
     expect(Loading).toHaveBeenCalledTimes(1);

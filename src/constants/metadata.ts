@@ -1,24 +1,24 @@
-import type { Metadata, Viewport } from "next";
-import type { AppleWebApp } from "next/dist/lib/metadata/types/extra-types";
+import type { Metadata, Viewport } from 'next';
+import type { AppleWebApp } from 'next/dist/lib/metadata/types/extra-types';
 
-import { domainName } from "./common";
+import { domainName } from './common';
 
-const ogImageUrl = "/api/og";
+const ogImageUrl = '/api/og';
 
 const appleWebApp: AppleWebApp = {
-  statusBarStyle: "black-translucent",
+  statusBarStyle: 'black-translucent',
 };
 
 const metadata: Metadata = {
   metadataBase: new URL(domainName),
   openGraph: {
     images: [{ url: ogImageUrl, width: 1200, height: 630 }],
-    type: "website",
-    locale: "en_GB",
+    type: 'website',
+    locale: 'en_GB',
     url: domainName,
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     images: [ogImageUrl],
   },
   robots: {
@@ -27,15 +27,15 @@ const metadata: Metadata = {
     nocache: true,
   },
   appleWebApp,
-  manifest: "/manifest.webmanifest",
+  manifest: '/manifest.webmanifest',
 };
 
-const themeColor = "#09090b";
+const themeColor = '#09090b';
 
 const viewport: Viewport = {
-  colorScheme: "dark light",
+  colorScheme: 'dark light',
   themeColor,
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,

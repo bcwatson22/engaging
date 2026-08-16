@@ -1,17 +1,17 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import { Intro } from "@/components/atoms/Intro/Intro";
-import { Logo } from "@/components/atoms/Logo/Logo";
-import { mockCV } from "@/data/mock/cv";
+import { Intro } from '@/components/atoms/Intro/Intro';
+import { Logo } from '@/components/atoms/Logo/Logo';
+import { mockCV } from '@/data/mock/cv';
 
-import { Header, HeaderSkeleton, type HeaderProps } from "./Header";
+import { Header, HeaderSkeleton, type HeaderProps } from './Header';
 
-vi.mock("@/components/atoms/Intro/Intro", () => ({
-  Intro: vi.fn<typeof import("@/components/atoms/Intro/Intro").Intro>(),
+vi.mock('@/components/atoms/Intro/Intro', () => ({
+  Intro: vi.fn<typeof import('@/components/atoms/Intro/Intro').Intro>(),
 }));
 
-vi.mock("@/components/atoms/Logo/Logo", () => ({
-  Logo: vi.fn<typeof import("@/components/atoms/Logo/Logo").Logo>(),
+vi.mock('@/components/atoms/Logo/Logo', () => ({
+  Logo: vi.fn<typeof import('@/components/atoms/Logo/Logo').Logo>(),
 }));
 
 const {
@@ -31,24 +31,24 @@ const defaultProps: HeaderProps = {
 const setup = (props?: Partial<HeaderProps>) =>
   render(<Header {...defaultProps} {...props} />);
 
-describe("Header", () => {
+describe('Header', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  describe("title", () => {
-    it("renders a heading", () => {
+  describe('title', () => {
+    it('renders a heading', () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 1, name: title }),
+        screen.getByRole('heading', { level: 1, name: title }),
       ).toBeInTheDocument();
     });
   });
 
-  describe("logoDarkBackground // logoLightBackground", () => {
-    it("renders a Logo", () => {
+  describe('logoDarkBackground // logoLightBackground', () => {
+    it('renders a Logo', () => {
       setup();
 
       expect(Logo).toHaveBeenNthCalledWith(
@@ -59,8 +59,8 @@ describe("Header", () => {
     });
   });
 
-  describe("intro", () => {
-    it("renders an Intro", () => {
+  describe('intro', () => {
+    it('renders an Intro', () => {
       setup();
 
       expect(Intro).toHaveBeenNthCalledWith(
@@ -72,13 +72,13 @@ describe("Header", () => {
   });
 });
 
-describe("HeaderSkeleton", () => {
-  it("renders a skeleton state", () => {
+describe('HeaderSkeleton', () => {
+  it('renders a skeleton state', () => {
     render(<HeaderSkeleton />);
 
     const numOfPulses = 4;
 
-    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
   });

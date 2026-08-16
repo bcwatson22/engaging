@@ -1,15 +1,15 @@
-import Image from "next/image";
-import { useId } from "react";
+import Image from 'next/image';
+import { useId } from 'react';
 
-import type { TLink } from "@/components/atoms/Link/Link";
-import { Skeleton } from "@/components/atoms/Skeleton/Skeleton";
-import { Details } from "@/components/molecules/Details/Details";
+import type { TLink } from '@/components/atoms/Link/Link';
+import { Skeleton } from '@/components/atoms/Skeleton/Skeleton';
+import { Details } from '@/components/molecules/Details/Details';
 import {
   Technology,
   TechnologySkeleton,
   type TTechnology,
-} from "@/components/molecules/Technology/Technology";
-import { mugshotDimensions } from "@/constants/dimensions";
+} from '@/components/molecules/Technology/Technology';
+import { mugshotDimensions } from '@/constants/dimensions';
 
 type TMugshot = TID & {
   image: TAsset;

@@ -10,13 +10,13 @@ type TResponse<Data> = {
    caches the result and so is transport- and context-independent. */
 const fetchCms = async <Data>(query: string): Promise<TResponse<Data>> => {
   const response = await fetch(process.env.HYGRAPH_ENDPOINT!, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.HYGRAPH_TOKEN}`,
     },
     body: JSON.stringify({ query }),
-    cache: "no-store",
+    cache: 'no-store',
   });
 
   if (!response.ok)

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import { Error, type ErrorProps } from "@/components/pages/Error/Error";
+import { Error, type ErrorProps } from '@/components/pages/Error/Error';
 
-type Props = Pick<ErrorProps, "reset"> & {
+type Props = Pick<ErrorProps, 'reset'> & {
   error: Error & { digest?: string };
 };
 

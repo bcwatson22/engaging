@@ -1,82 +1,82 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import { DetailsSkeleton } from "@/components/molecules/Details/Details";
-import { HeaderSkeleton } from "@/components/molecules/Header/Header";
-import { GigSkeleton } from "@/components/organisms/Gig/Gig";
-import { Section } from "@/components/organisms/Section/Section";
+import { DetailsSkeleton } from '@/components/molecules/Details/Details';
+import { HeaderSkeleton } from '@/components/molecules/Header/Header';
+import { GigSkeleton } from '@/components/organisms/Gig/Gig';
+import { Section } from '@/components/organisms/Section/Section';
 
-import { Loading } from "./Loading";
+import { Loading } from './Loading';
 
 vi.mock(
-  import("@/components/molecules/Details/Details"),
+  import('@/components/molecules/Details/Details'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       DetailsSkeleton:
         vi.fn<
-          typeof import("@/components/molecules/Details/Details").DetailsSkeleton
+          typeof import('@/components/molecules/Details/Details').DetailsSkeleton
         >(),
     };
   },
 );
 
 vi.mock(
-  import("@/components/molecules/Header/Header"),
+  import('@/components/molecules/Header/Header'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       HeaderSkeleton:
         vi.fn<
-          typeof import("@/components/molecules/Header/Header").HeaderSkeleton
+          typeof import('@/components/molecules/Header/Header').HeaderSkeleton
         >(),
     };
   },
 );
 
 vi.mock(
-  import("@/components/organisms/Gig/Gig"),
+  import('@/components/organisms/Gig/Gig'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       GigSkeleton:
-        vi.fn<typeof import("@/components/organisms/Gig/Gig").GigSkeleton>(),
+        vi.fn<typeof import('@/components/organisms/Gig/Gig').GigSkeleton>(),
     };
   },
 );
 
-vi.mock("@/components/organisms/Section/Section", () => ({
+vi.mock('@/components/organisms/Section/Section', () => ({
   Section: vi
-    .fn<typeof import("@/components/organisms/Section/Section").Section>()
+    .fn<typeof import('@/components/organisms/Section/Section').Section>()
     .mockImplementation(({ children }) => <>{children}</>),
 }));
 
 const setup = () => render(<Loading />);
 
-describe("Loading", () => {
+describe('Loading', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("renders a main", () => {
+  it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
-  it("renders a HeaderSkeleton component", () => {
+  it('renders a HeaderSkeleton component', () => {
     setup();
 
     expect(HeaderSkeleton).toHaveBeenCalledTimes(1);
   });
 
-  it("renders sections", () => {
+  it('renders sections', () => {
     setup();
 
-    const sections = ["Digits", "Experience"];
+    const sections = ['Digits', 'Experience'];
 
     for (const [index, value] of sections.entries())
       expect(Section).toHaveBeenNthCalledWith(
@@ -86,7 +86,7 @@ describe("Loading", () => {
       );
   });
 
-  it("renders a DetailsSkeleton component", () => {
+  it('renders a DetailsSkeleton component', () => {
     setup();
 
     expect(DetailsSkeleton).toHaveBeenNthCalledWith(
@@ -96,7 +96,7 @@ describe("Loading", () => {
     );
   });
 
-  it("renders GigSkeleton components", () => {
+  it('renders GigSkeleton components', () => {
     setup();
 
     expect(GigSkeleton).toHaveBeenCalledTimes(3);

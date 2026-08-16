@@ -10,21 +10,21 @@ import {
   RocketLaunchIcon,
   UserIcon,
   XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { ForwardRefExoticComponent, SVGProps } from "react";
+} from '@heroicons/react/24/outline';
+import { ForwardRefExoticComponent, SVGProps } from 'react';
 
 const iconOptions = [
-  "Cross",
-  "Document",
-  "Download",
-  "Phone",
-  "Email",
-  "Home",
-  "Profile",
-  "Repo",
-  "Retry",
-  "User",
-  "Website",
+  'Cross',
+  'Document',
+  'Download',
+  'Phone',
+  'Email',
+  'Home',
+  'Profile',
+  'Repo',
+  'Retry',
+  'User',
+  'Website',
 ] as const;
 
 type TIcon = (typeof iconOptions)[number];
@@ -37,7 +37,7 @@ type Props = {
 
 const iconMap: Record<
   TIcon,
-  ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, "ref">>
+  ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, 'ref'>>
 > = {
   Cross: XMarkIcon,
   Document: DocumentTextIcon,

@@ -1,11 +1,11 @@
-import { renderHook } from "@testing-library/react";
-import { useInView } from "motion/react";
-import type { Mock } from "vitest";
+import { renderHook } from '@testing-library/react';
+import { useInView } from 'motion/react';
+import type { Mock } from 'vitest';
 
-import { useScrollTrigger, type Params } from "./useScrollTrigger";
+import { useScrollTrigger, type Params } from './useScrollTrigger';
 
-vi.mock("motion/react", () => ({
-  useInView: vi.fn<typeof import("motion/react").useInView>(),
+vi.mock('motion/react', () => ({
+  useInView: vi.fn<typeof import('motion/react').useInView>(),
 }));
 
 type UseInView = Partial<ReturnType<typeof useInView>>;
@@ -14,14 +14,14 @@ type SetupOptions = {
   useInView: UseInView;
 };
 
-const mockRef = "mockRef";
+const mockRef = 'mockRef';
 
 const defaultParams: Params = {
   ref: {
     current: mockRef as unknown as HTMLDivElement,
   },
   delay: 2,
-  margin: "-40px",
+  margin: '-40px',
 };
 
 const setup = (options?: Partial<SetupOptions>, params?: Partial<Params>) => {
@@ -43,10 +43,10 @@ const setup = (options?: Partial<SetupOptions>, params?: Partial<Params>) => {
   );
 };
 
-describe("useScrollTrigger", () => {
+describe('useScrollTrigger', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("returns animation props", () => {
+  it('returns animation props', () => {
     const {
       result: { current },
     } = setup();
@@ -58,7 +58,7 @@ describe("useScrollTrigger", () => {
       },
       initial: {
         opacity: 0,
-        y: "10px",
+        y: '10px',
       },
       transition: {
         delay: defaultParams.delay,
@@ -66,7 +66,7 @@ describe("useScrollTrigger", () => {
     });
   });
 
-  it("returns an empty animate object if useInView returns false", () => {
+  it('returns an empty animate object if useInView returns false', () => {
     const {
       result: {
         current: { animate },
@@ -76,8 +76,8 @@ describe("useScrollTrigger", () => {
     expect(animate).toEqual({});
   });
 
-  describe("ref // margin", () => {
-    it("is passed to useInView call", () => {
+  describe('ref // margin', () => {
+    it('is passed to useInView call', () => {
       setup();
 
       expect(useInView).toHaveBeenNthCalledWith(
@@ -88,8 +88,8 @@ describe("useScrollTrigger", () => {
     });
   });
 
-  describe("delay", () => {
-    it("is returned in transition object", () => {
+  describe('delay', () => {
+    it('is returned in transition object', () => {
       const mockDelay = 22;
 
       const {
@@ -101,7 +101,7 @@ describe("useScrollTrigger", () => {
       expect(transition?.delay).toBe(mockDelay);
     });
 
-    it("defaults to no delay when not provided", () => {
+    it('defaults to no delay when not provided', () => {
       const {
         result: {
           current: { transition },
@@ -112,14 +112,14 @@ describe("useScrollTrigger", () => {
     });
   });
 
-  describe("margin", () => {
-    it("defaults to -20px when not provided", () => {
+  describe('margin', () => {
+    it('defaults to -20px when not provided', () => {
       setup({}, { margin: undefined });
 
       expect(useInView).toHaveBeenNthCalledWith(
         1,
         { current: mockRef },
-        expect.objectContaining({ margin: "-20px" }),
+        expect.objectContaining({ margin: '-20px' }),
       );
     });
   });

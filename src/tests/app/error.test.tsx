@@ -1,25 +1,25 @@
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render } from '@testing-library/react';
 
-import ErrorPage, { type ErrorPageProps } from "@/app/error";
-import { Error } from "@/components/pages/Error/Error";
+import ErrorPage, { type ErrorPageProps } from '@/app/error';
+import { Error } from '@/components/pages/Error/Error';
 
 vi.mock(
-  import("@/components/pages/Error/Error"),
+  import('@/components/pages/Error/Error'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
-      Error: vi.fn<typeof import("@/components/pages/Error/Error").Error>(),
+      Error: vi.fn<typeof import('@/components/pages/Error/Error').Error>(),
     };
   },
 );
 
 const mockError: Error = {
-  name: "mockName",
-  message: "mockMessage",
-  cause: "mockCause",
+  name: 'mockName',
+  message: 'mockMessage',
+  cause: 'mockCause',
 };
-const mockReset = vi.fn<NonNullable<ErrorPageProps["reset"]>>();
+const mockReset = vi.fn<NonNullable<ErrorPageProps['reset']>>();
 
 const defaultProps: ErrorPageProps = {
   error: mockError,
@@ -29,21 +29,21 @@ const defaultProps: ErrorPageProps = {
 const setup = (props?: Partial<ErrorPageProps>) =>
   render(<ErrorPage {...defaultProps} {...props} />);
 
-describe("Error", () => {
+describe('Error', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("logs the error", () => {
-    const spyConsoleError = vi.spyOn(console, "error");
+  it('logs the error', () => {
+    const spyConsoleError = vi.spyOn(console, 'error');
 
     setup();
 
     expect(spyConsoleError).toHaveBeenNthCalledWith(1, mockError);
   });
 
-  it("renders an Error component", () => {
+  it('renders an Error component', () => {
     setup();
 
     expect(Error).toHaveBeenNthCalledWith(

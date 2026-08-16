@@ -21,26 +21,26 @@ const cspHeader = `
 
    Not a secret: this is a public bucket URL. It lives here rather than in an
    env var so the config is self-contained and cannot half-work. */
-const artifacts = "https://pub-53c526b0d6a84a57afc0b459064235fd.r2.dev";
+const artifacts = 'https://pub-53c526b0d6a84a57afc0b459064235fd.r2.dev';
 
 const nextConfig = {
   /* The OG route reads this at runtime with fs, which the bundler cannot see,
      so it has to be traced in explicitly. Without it the route throws only
      once deployed. */
   outputFileTracingIncludes: {
-    "/api/og": ["./src/assets/fonts/**"],
+    '/api/og': ['./src/assets/fonts/**'],
   },
   /* beforeFiles, so the proxy wins over anything left in public/. */
   rewrites: async () => ({
     beforeFiles: [
       {
-        source: "/billy-watson-cv.pdf",
+        source: '/billy-watson-cv.pdf',
         destination: `${artifacts}/billy-watson-cv.pdf`,
       },
       /* The PWA splash screens, one per device profile per page. Their paths
          are unchanged, so getStartupImages still builds them the same way. */
       {
-        source: "/startup-:name.png",
+        source: '/startup-:name.png',
         destination: `${artifacts}/startup-:name.png`,
       },
     ],
@@ -49,11 +49,11 @@ const nextConfig = {
   }),
   headers: async () => [
     {
-      source: "/(.*)",
+      source: '/(.*)',
       headers: [
         {
-          key: "Content-Security-Policy",
-          value: cspHeader.replace(/\n/g, ""),
+          key: 'Content-Security-Policy',
+          value: cspHeader.replace(/\n/g, ''),
         },
       ],
     },
@@ -62,8 +62,8 @@ const nextConfig = {
     imageSizes: [120, 144, 160, 200, 240, 280, 320, 360],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "eu-west-2.graphassets.com",
+        protocol: 'https',
+        hostname: 'eu-west-2.graphassets.com',
       },
     ],
   },

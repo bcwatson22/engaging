@@ -1,10 +1,10 @@
-import dayjs from "dayjs";
-import type { MetadataRoute } from "next";
+import dayjs from 'dayjs';
+import type { MetadataRoute } from 'next';
 
-import { domainName } from "@/constants/common";
+import { domainName } from '@/constants/common';
 
 const lastModified = dayjs().toISOString();
-const changeFrequency = "monthly";
+const changeFrequency = 'monthly';
 
 const sitemap = (): MetadataRoute.Sitemap => [
   {

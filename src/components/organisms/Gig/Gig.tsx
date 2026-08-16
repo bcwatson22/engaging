@@ -1,18 +1,18 @@
-import { Suspense, useId } from "react";
+import { Suspense, useId } from 'react';
 
 import {
   Company,
   CompanySkeleton,
   type TCompany,
-} from "@/components/molecules/Company/Company";
+} from '@/components/molecules/Company/Company';
 import {
   Role,
   RoleSkeleton,
   type TRole,
-} from "@/components/molecules/Role/Role";
+} from '@/components/molecules/Role/Role';
 
 type TGig = TID &
-  Pick<TCompany, "company" | "city" | "logo"> & {
+  Pick<TCompany, 'company' | 'city' | 'logo'> & {
     roles: TRole[];
   };
 

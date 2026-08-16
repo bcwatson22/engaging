@@ -1,6 +1,6 @@
-import { Suspense, useId } from "react";
+import { Suspense, useId } from 'react';
 
-import { Dates } from "@/components/atoms/Dates/Dates";
+import { Dates } from '@/components/atoms/Dates/Dates';
 
 type TQualification = TID & {
   institution: string;

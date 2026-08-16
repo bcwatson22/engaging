@@ -1,36 +1,36 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import type { Mock } from "vitest";
+import { cleanup, render, screen } from '@testing-library/react';
+import type { Mock } from 'vitest';
 
-import HomePage, { generateMetadata } from "@/app/page";
-import { Particles } from "@/components/atoms/Particles/Particles";
-import { Mugshot } from "@/components/organisms/Mugshot/Mugshot";
-import { getStartupImages } from "@/constants/startupImages";
-import { getData } from "@/data/functions/getData";
-import { mockHome } from "@/data/mock/home";
-import type { THome } from "@/data/types/home";
-import { queryHome } from "@/queries/home";
+import HomePage, { generateMetadata } from '@/app/page';
+import { Particles } from '@/components/atoms/Particles/Particles';
+import { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
+import { getStartupImages } from '@/constants/startupImages';
+import { getData } from '@/data/functions/getData';
+import { mockHome } from '@/data/mock/home';
+import type { THome } from '@/data/types/home';
+import { queryHome } from '@/queries/home';
 
-vi.mock("@/data/functions/getData", () => ({
-  getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
+vi.mock('@/data/functions/getData', () => ({
+  getData: vi.fn<typeof import('@/data/functions/getData').getData>(),
 }));
 
 vi.mock(
-  import("@/components/organisms/Mugshot/Mugshot"),
+  import('@/components/organisms/Mugshot/Mugshot'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       Mugshot:
         vi.fn<
-          typeof import("@/components/organisms/Mugshot/Mugshot").Mugshot
+          typeof import('@/components/organisms/Mugshot/Mugshot').Mugshot
         >(),
     };
   },
 );
 
-vi.mock("@/components/atoms/Particles/Particles", () => ({
+vi.mock('@/components/atoms/Particles/Particles', () => ({
   Particles:
-    vi.fn<typeof import("@/components/atoms/Particles/Particles").Particles>(),
+    vi.fn<typeof import('@/components/atoms/Particles/Particles').Particles>(),
 }));
 
 const {
@@ -45,40 +45,40 @@ const setup = async (mockedResolvedValue: THome | {} = mockHome) => {
   return render(await (async () => await HomePage())());
 };
 
-describe("HomePage", () => {
+describe('HomePage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("calls getData", async () => {
+  it('calls getData', async () => {
     await setup();
 
     expect(getData).toHaveBeenNthCalledWith(
       1,
       queryHome,
-      "homes",
+      'homes',
       expect.objectContaining({
         technologies: expect.any(Array),
       }),
     );
   });
 
-  it("renders a main", async () => {
+  it('renders a main', async () => {
     await setup();
 
-    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
-  it("renders a heading", async () => {
+  it('renders a heading', async () => {
     await setup();
 
     expect(
-      screen.getByRole("heading", { name: "Engaging Engineering" }),
+      screen.getByRole('heading', { name: 'Engaging Engineering' }),
     ).toBeInTheDocument();
   });
 
-  it("renders a Mugshot component", async () => {
+  it('renders a Mugshot component', async () => {
     await setup();
 
     expect(Mugshot).toHaveBeenNthCalledWith(
@@ -88,24 +88,24 @@ describe("HomePage", () => {
     );
   });
 
-  it("renders a Particles component", async () => {
+  it('renders a Particles component', async () => {
     await setup();
 
     expect(Particles).toHaveBeenCalledTimes(1);
   });
 
-  it("generates metadata", async () => {
+  it('generates metadata', async () => {
     const result = await generateMetadata();
 
     expect(result).toEqual(expect.objectContaining({ title, description }));
   });
 
-  it("generates a startup image per device", async () => {
+  it('generates a startup image per device', async () => {
     const { appleWebApp } = await generateMetadata();
 
     expect(appleWebApp).toEqual(
       expect.objectContaining({
-        startupImage: getStartupImages("home"),
+        startupImage: getStartupImages('home'),
       }),
     );
   });

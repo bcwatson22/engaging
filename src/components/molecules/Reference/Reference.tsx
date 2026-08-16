@@ -1,6 +1,6 @@
-import { useId } from "react";
+import { useId } from 'react';
 
-import { Link, type TLink } from "@/components/atoms/Link/Link";
+import { Link, type TLink } from '@/components/atoms/Link/Link';
 
 type TReference = TID &
   TPosition & {

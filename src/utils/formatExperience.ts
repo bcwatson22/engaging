@@ -1,11 +1,11 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
-import { careerStartDate } from "@/constants/common";
+import { careerStartDate } from '@/constants/common';
 
 const experiencePlaceholder = /\{\{experience\}\}/g;
 
 const getYearsOfExperience = (): string =>
-  dayjs().diff(careerStartDate, "year").toString();
+  dayjs().diff(careerStartDate, 'year').toString();
 
 const formatExperience = (value: string): string =>
   value.replace(experiencePlaceholder, getYearsOfExperience());

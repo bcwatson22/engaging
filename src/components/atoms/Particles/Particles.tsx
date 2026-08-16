@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import type { Engine, ISourceOptions } from "@tsparticles/engine";
+import type { Engine, ISourceOptions } from '@tsparticles/engine';
 import {
   Particles as TSParticles,
   ParticlesProvider,
-} from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-import { useCallback, useMemo } from "react";
+} from '@tsparticles/react';
+import { loadSlim } from '@tsparticles/slim';
+import { useCallback, useMemo } from 'react';
 
 const Particles = () => {
   /* v4 replaced initParticlesEngine with a provider. TSParticles reads the
@@ -25,10 +25,10 @@ const Particles = () => {
           },
         },
         color: {
-          value: "#ffffff",
+          value: '#ffffff',
         },
         shape: {
-          type: "circle",
+          type: 'circle',
           polygon: {
             nb_sides: 5,
           },
@@ -47,10 +47,10 @@ const Particles = () => {
         move: {
           enable: true,
           speed: 0.25,
-          direction: "none",
+          direction: 'none',
           random: false,
           straight: false,
-          out_mode: "out",
+          out_mode: 'out',
           bounce: false,
           attract: {
             enable: false,
@@ -61,7 +61,7 @@ const Particles = () => {
         events: {
           onHover: {
             enable: true,
-            mode: "bubble",
+            mode: 'bubble',
           },
         },
         modes: {

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import type { NextPage } from "next";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
 
-import { Loading } from "@/components/pages/Loading/Loading";
+import { Loading } from '@/components/pages/Loading/Loading';
 
 const DownloadPage: NextPage = () => {
   /* oxlint-disable-next-line typescript/unbound-method -- destructuring the
@@ -13,17 +13,17 @@ const DownloadPage: NextPage = () => {
 
   const downloadFile = useCallback(() => {
     try {
-      const link = document.createElement("a");
-      link.setAttribute("href", "/billy-watson-cv.pdf");
-      link.setAttribute("download", "");
+      const link = document.createElement('a');
+      link.setAttribute('href', '/billy-watson-cv.pdf');
+      link.setAttribute('download', '');
 
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      push("/cv");
+      push('/cv');
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error('Error downloading file:', error);
     }
   }, [push]);
 

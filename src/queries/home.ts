@@ -1,8 +1,8 @@
 import {
   mugshotDimensions,
   techIconDimensions,
-} from "../constants/dimensions.ts";
-import { multiplyToString } from "../utils/multiplyToString.ts";
+} from '../constants/dimensions.ts';
+import { multiplyToString } from '../utils/multiplyToString.ts';
 
 const mugshotWidth = multiplyToString(mugshotDimensions.width);
 const techIconWidth = multiplyToString(techIconDimensions.width);

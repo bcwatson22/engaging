@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen } from '@testing-library/react';
 
-import { mockCV } from "@/data/mock/cv";
+import { mockCV } from '@/data/mock/cv';
 
-import { Address, type AddressProps } from "./Address";
+import { Address, type AddressProps } from './Address';
 
 const defaultProps: AddressProps = {
   address: mockCV.address,
@@ -11,8 +11,8 @@ const defaultProps: AddressProps = {
 const setup = (props?: Partial<AddressProps>) =>
   render(<Address {...defaultProps} {...props} />);
 
-describe("Address", () => {
-  it("renders an address", () => {
+describe('Address', () => {
+  it('renders an address', () => {
     setup();
 
     for (const value of Object.values(mockCV.address))

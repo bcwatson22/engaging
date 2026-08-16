@@ -1,12 +1,12 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import { mockHome } from "@/data/mock/home";
+import { mockHome } from '@/data/mock/home';
 
 import {
   Technology,
   TechnologySkeleton,
   type TechnologyProps,
-} from "./Technology";
+} from './Technology';
 
 const { name, icon } = mockHome.technologies[0];
 
@@ -18,18 +18,18 @@ const defaultProps: TechnologyProps = {
 const setup = (props?: Partial<TechnologyProps>) =>
   render(<Technology {...defaultProps} {...props} />);
 
-describe("Technology", () => {
+describe('Technology', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  describe("icon", () => {
-    it("renders an image if defined", () => {
+  describe('icon', () => {
+    it('renders an image if defined', () => {
       setup();
 
-      expect(screen.getByRole("img", { name: `${name} logo` })).toHaveAttribute(
-        "src",
+      expect(screen.getByRole('img', { name: `${name} logo` })).toHaveAttribute(
+        'src',
         expect.stringContaining(encodeURIComponent(icon.url)),
       );
     });
@@ -40,13 +40,13 @@ describe("Technology", () => {
       });
 
       expect(
-        screen.queryByRole("img", { name: `${name} logo` }),
+        screen.queryByRole('img', { name: `${name} logo` }),
       ).not.toBeInTheDocument();
     });
   });
 
-  describe("name", () => {
-    it("renders a span", () => {
+  describe('name', () => {
+    it('renders a span', () => {
       setup();
 
       expect(screen.getByText(name)).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("Technology", () => {
 
     it("renders multiple spans if value contains '//'", () => {
       const { name } = mockHome.technologies[2];
-      const split = name.split(" // ");
+      const split = name.split(' // ');
 
       setup({ name });
 
@@ -65,8 +65,8 @@ describe("Technology", () => {
     it("adds 'white' class if value is Next", () => {
       setup();
 
-      expect(screen.getByRole("img", { name: `${name} logo` })).toHaveClass(
-        "white",
+      expect(screen.getByRole('img', { name: `${name} logo` })).toHaveClass(
+        'white',
       );
     });
 
@@ -77,20 +77,20 @@ describe("Technology", () => {
         name,
       });
 
-      expect(screen.getByRole("img", { name: `${name} logo` })).not.toHaveClass(
-        "white",
+      expect(screen.getByRole('img', { name: `${name} logo` })).not.toHaveClass(
+        'white',
       );
     });
   });
 });
 
-describe("TechnologySkeleton", () => {
-  it("renders a skeleton state", () => {
+describe('TechnologySkeleton', () => {
+  it('renders a skeleton state', () => {
     render(<TechnologySkeleton />);
 
     const numOfPulses = 1;
 
-    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
   });

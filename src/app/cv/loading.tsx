@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
-import { Loading } from "@/components/pages/Loading/Loading";
+import { Loading } from '@/components/pages/Loading/Loading';
 
 const LoadingPage: NextPage = () => <Loading />;
 

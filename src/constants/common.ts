@@ -1,6 +1,6 @@
-export const siteName = "Engaging Engineering";
-export const domainName = "https://www.engaging.engineering";
-export const careerStartDate = "2012-06-01";
+export const siteName = 'Engaging Engineering';
+export const domainName = 'https://www.engaging.engineering';
+export const careerStartDate = '2012-06-01';
 
 /* One day in seconds. Route segments cannot import this — Next parses their
    `revalidate` statically, so each page declares the literal itself — but
