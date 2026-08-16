@@ -19,6 +19,12 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency,
     priority: 0.8,
   },
+  {
+    url: `${domainName}/contact`,
+    lastModified,
+    changeFrequency,
+    priority: 0.5,
+  },
 ];
 
 export default sitemap;
