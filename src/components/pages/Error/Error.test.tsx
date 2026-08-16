@@ -1,49 +1,49 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import { Inner } from "@/components/atoms/Link/Link";
-import { Particles } from "@/components/atoms/Particles/Particles";
-import { TechnologySkeleton } from "@/components/molecules/Technology/Technology";
-import { mugshot } from "@/constants/assets";
-import { mockHome } from "@/data/mock/home";
+import { Inner } from '@/components/atoms/Link/Link';
+import { Particles } from '@/components/atoms/Particles/Particles';
+import { TechnologySkeleton } from '@/components/molecules/Technology/Technology';
+import { mugshot } from '@/constants/assets';
+import { mockHome } from '@/data/mock/home';
 
-import { Error, type ErrorProps } from "./Error";
+import { Error, type ErrorProps } from './Error';
 
 vi.mock(
-  import("@/components/atoms/Link/Link"),
+  import('@/components/atoms/Link/Link'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
-      Inner: vi.fn<typeof import("@/components/atoms/Link/Link").Inner>(),
+      Inner: vi.fn<typeof import('@/components/atoms/Link/Link').Inner>(),
     };
   },
 );
 
-vi.mock("@/components/atoms/Particles/Particles", () => ({
+vi.mock('@/components/atoms/Particles/Particles', () => ({
   Particles:
-    vi.fn<typeof import("@/components/atoms/Particles/Particles").Particles>(),
+    vi.fn<typeof import('@/components/atoms/Particles/Particles').Particles>(),
 }));
 
 vi.mock(
-  import("@/components/molecules/Technology/Technology"),
+  import('@/components/molecules/Technology/Technology'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       TechnologySkeleton:
         vi.fn<
-          typeof import("@/components/molecules/Technology/Technology").TechnologySkeleton
+          typeof import('@/components/molecules/Technology/Technology').TechnologySkeleton
         >(),
     };
   },
 );
 
-const mockHeading = "mockHeading";
-const mockText = "mockText";
+const mockHeading = 'mockHeading';
+const mockText = 'mockText';
 const mockChildren = <a href="https://example.com/mock-location">{mockText}</a>;
 const mockContent = mockHome.mugshot;
-const mockReset = vi.fn<NonNullable<ErrorProps["reset"]>>();
+const mockReset = vi.fn<NonNullable<ErrorProps['reset']>>();
 
 const { image, heading } = mockContent;
 
@@ -57,76 +57,76 @@ const defaultProps: ErrorProps = {
 const setup = (props?: Partial<ErrorProps>) =>
   render(<Error {...defaultProps} {...props} />);
 
-describe("Error", () => {
+describe('Error', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("renders a main", () => {
+  it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
-  it("renders a heading", () => {
-    setup();
-
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Engaging Engineering" }),
-    ).toBeInTheDocument();
-  });
-
-  it("renders a section", () => {
+  it('renders a heading', () => {
     setup();
 
     expect(
-      screen.getByRole("region", { name: mockHeading }),
+      screen.getByRole('heading', { level: 1, name: 'Engaging Engineering' }),
     ).toBeInTheDocument();
   });
 
-  describe("heading", () => {
-    it("renders a heading if defined", () => {
+  it('renders a section', () => {
+    setup();
+
+    expect(
+      screen.getByRole('region', { name: mockHeading }),
+    ).toBeInTheDocument();
+  });
+
+  describe('heading', () => {
+    it('renders a heading if defined', () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 2, name: mockHeading }),
+        screen.getByRole('heading', { level: 2, name: mockHeading }),
       ).toBeInTheDocument();
     });
 
-    it("renders fallback if undefined", () => {
+    it('renders fallback if undefined', () => {
       setup({
         heading: undefined,
       });
 
       expect(
-        screen.getByRole("heading", { level: 2, name: "Oops" }),
+        screen.getByRole('heading', { level: 2, name: 'Oops' }),
       ).toBeInTheDocument();
     });
   });
 
-  describe("content", () => {
-    it("falls back to the constant mugshot if undefined", () => {
+  describe('content', () => {
+    it('falls back to the constant mugshot if undefined', () => {
       setup({
         content: undefined,
       });
 
       expect(
-        screen.getByRole("img", {
+        screen.getByRole('img', {
           name: `Portrait of ${mugshot.heading}`,
         }),
       ).toBeInTheDocument();
     });
   });
 
-  describe("children", () => {
-    it("renders children if defined", () => {
+  describe('children', () => {
+    it('renders children if defined', () => {
       setup();
 
-      expect(screen.getByRole("link", { name: mockText })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: mockText })).toBeInTheDocument();
     });
 
-    it("renders fallback if undefined", () => {
+    it('renders fallback if undefined', () => {
       setup({
         children: undefined,
       });
@@ -139,36 +139,36 @@ describe("Error", () => {
     });
   });
 
-  describe("content", () => {
-    describe("image // name", () => {
-      it("renders an image", () => {
+  describe('content', () => {
+    describe('image // name', () => {
+      it('renders an image', () => {
         setup();
 
         expect(
-          screen.getByRole("img", { name: `Portrait of ${heading}` }),
+          screen.getByRole('img', { name: `Portrait of ${heading}` }),
         ).toHaveAttribute(
-          "src",
+          'src',
           expect.stringContaining(encodeURIComponent(image.url)),
         );
       });
     });
   });
 
-  describe("reset", () => {
-    it("renders a button if defined", () => {
+  describe('reset', () => {
+    it('renders a button if defined', () => {
       setup();
 
       expect(Inner).toHaveBeenNthCalledWith(
         1,
-        expect.objectContaining({ text: "Try again" }),
+        expect.objectContaining({ text: 'Try again' }),
         undefined,
       );
     });
 
-    it("is called when the button is clicked", async () => {
+    it('is called when the button is clicked', async () => {
       setup();
 
-      await userEvent.click(screen.getByRole("button"));
+      await userEvent.click(screen.getByRole('button'));
 
       expect(mockReset).toHaveBeenCalledTimes(1);
     });
@@ -180,7 +180,7 @@ describe("Error", () => {
     });
   });
 
-  it("renders TechnologySkeleton components", () => {
+  it('renders TechnologySkeleton components', () => {
     setup();
 
     const numberOfTechnologies = 12;
@@ -188,7 +188,7 @@ describe("Error", () => {
     expect(TechnologySkeleton).toHaveBeenCalledTimes(numberOfTechnologies);
   });
 
-  it("renders a Particles component", () => {
+  it('renders a Particles component', () => {
     setup();
 
     expect(Particles).toHaveBeenCalledTimes(1);

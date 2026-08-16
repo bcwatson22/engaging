@@ -2,18 +2,18 @@
    form-associated and renders inline, so it would drop the h-* heights and
    stop matching the `& > div` width rules in Skeleton.css. */
 
-const label = "Loading...";
+const label = 'Loading...';
 
 type Props = {
   className?: string;
-  level?: "h1" | "h2" | "h3" | "h4";
+  level?: 'h1' | 'h2' | 'h3' | 'h4';
   numOfLines?: number;
-  size?: "base" | "small";
+  size?: 'base' | 'small';
 };
 
 const Skeleton = ({ className }: Props) => (
   <div
-    className={`skeleton${className ? " " + className : ""}`}
+    className={`skeleton${className ? ' ' + className : ''}`}
     role="status"
     aria-label={label}
   >
@@ -21,24 +21,24 @@ const Skeleton = ({ className }: Props) => (
   </div>
 );
 
-const SkeletonLine = ({ className, size = "base" }: Props) => (
+const SkeletonLine = ({ className, size = 'base' }: Props) => (
   <Skeleton
     className={`${
-      size === "small" ? "skeleton-line-small" : "skeleton-line-base"
-    }${className ? " " + className : ""}`}
+      size === 'small' ? 'skeleton-line-small' : 'skeleton-line-base'
+    }${className ? ' ' + className : ''}`}
   />
 );
 
-const SkeletonHeading = ({ className, level = "h2" }: Props) => (
-  <Skeleton className={`${level}${className ? " " + className : ""}`} />
+const SkeletonHeading = ({ className, level = 'h2' }: Props) => (
+  <Skeleton className={`${level}${className ? ' ' + className : ''}`} />
 );
 
 const SkeletonParagraph = ({
   className,
   numOfLines = 4,
-  size = "base",
+  size = 'base',
 }: Props) => (
-  <div className={`skeleton-paragraph ${className ?? ""}`}>
+  <div className={`skeleton-paragraph ${className ?? ''}`}>
     {[...Array(numOfLines - 1).keys()].map((key) => (
       <SkeletonLine key={key} size={size} />
     ))}

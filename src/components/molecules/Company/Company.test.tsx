@@ -1,15 +1,15 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import type { Target } from "motion/react";
-import type { Mock } from "vitest";
+import { cleanup, render, screen } from '@testing-library/react';
+import type { Target } from 'motion/react';
+import type { Mock } from 'vitest';
 
-import { mockCV } from "@/data/mock/cv";
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
+import { mockCV } from '@/data/mock/cv';
+import { useScrollTrigger } from '@/hooks/useScrollTrigger';
 
-import { Company, CompanySkeleton, type CompanyProps } from "./Company";
+import { Company, CompanySkeleton, type CompanyProps } from './Company';
 
-vi.mock("@/hooks/useScrollTrigger", () => ({
+vi.mock('@/hooks/useScrollTrigger', () => ({
   useScrollTrigger:
-    vi.fn<typeof import("@/hooks/useScrollTrigger").useScrollTrigger>(),
+    vi.fn<typeof import('@/hooks/useScrollTrigger').useScrollTrigger>(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;
@@ -19,13 +19,13 @@ type SetupOptions = {
 };
 
 const defaultScrollTrigger: UseScrollTrigger = {
-  initial: { opacity: 0, y: "10px" },
+  initial: { opacity: 0, y: '10px' },
   animate: { opacity: 1, y: 0 },
   transition: { delay: 0 },
 };
 
 const { company, logo, city } = mockCV.gigs[0];
-const mockSectionId = "mockSectionId";
+const mockSectionId = 'mockSectionId';
 
 const defaultProps: CompanyProps = {
   company,
@@ -48,49 +48,49 @@ const setup = (
   render(<Company {...defaultProps} {...props} />);
 };
 
-describe("Company", () => {
+describe('Company', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("uses the initial values returned from useScrollTrigger for the header style", () => {
+  it('uses the initial values returned from useScrollTrigger for the header style', () => {
     setup();
 
     const { opacity, y } = defaultScrollTrigger.initial as Target;
 
-    expect(screen.getByRole("banner")).toHaveStyle({
+    expect(screen.getByRole('banner')).toHaveStyle({
       opacity,
       transform: `translateY(${y})`,
     });
   });
 
-  describe("company", () => {
-    it("renders a heading", () => {
+  describe('company', () => {
+    it('renders a heading', () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 3, name: company }),
+        screen.getByRole('heading', { level: 3, name: company }),
       ).toBeInTheDocument();
     });
   });
 
-  describe("city", () => {
-    it("renders a paragraph", () => {
+  describe('city', () => {
+    it('renders a paragraph', () => {
       setup();
 
       expect(screen.getByText(city)).toBeInTheDocument();
     });
   });
 
-  describe("logo", () => {
-    it("renders an image if defined", () => {
+  describe('logo', () => {
+    it('renders an image if defined', () => {
       setup();
 
       expect(
-        screen.getByRole("img", { name: `${company} logo` }),
+        screen.getByRole('img', { name: `${company} logo` }),
       ).toHaveAttribute(
-        "src",
+        'src',
         expect.stringContaining(encodeURIComponent(logo.url)),
       );
     });
@@ -104,29 +104,29 @@ describe("Company", () => {
       );
 
       expect(
-        screen.queryByRole("img", { name: `${company} logo` }),
+        screen.queryByRole('img', { name: `${company} logo` }),
       ).not.toBeInTheDocument();
     });
   });
 
-  describe("sectionId", () => {
-    it("is used for the heading id value", () => {
+  describe('sectionId', () => {
+    it('is used for the heading id value', () => {
       setup();
 
       expect(
-        screen.getByRole("heading", { level: 3, name: company }),
-      ).toHaveAttribute("id", mockSectionId);
+        screen.getByRole('heading', { level: 3, name: company }),
+      ).toHaveAttribute('id', mockSectionId);
     });
   });
 });
 
-describe("CompanySkeleton", () => {
-  it("renders a skeleton state", () => {
+describe('CompanySkeleton', () => {
+  it('renders a skeleton state', () => {
     render(<CompanySkeleton />);
 
     const numOfPulses = 3;
 
-    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
   });

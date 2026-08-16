@@ -1,3 +1,3 @@
-import { saveSnapshot } from "../utils/saveSnapshot.ts";
+import { saveSnapshot } from '../utils/saveSnapshot.ts';
 
 await saveSnapshot();

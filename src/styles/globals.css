@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Ported from tailwind.config.ts. Only what the codebase actually uses:
    v4 provides top-1.5, border-3 and decoration-2 natively, and the unused
@@ -39,34 +39,34 @@
   text-indent: -99999rem;
 }
 
-@import "./layers/base.css";
-@import "./layers/components.css";
-@import "./layers/utilities.css";
+@import './layers/base.css';
+@import './layers/components.css';
+@import './layers/utilities.css';
 
-@import "../components/atoms/Address/Address.css";
-@import "../components/atoms/Bullet/Bullet.css";
-@import "../components/atoms/Copyright/Copyright.css";
-@import "../components/atoms/Divider/Divider.css";
-@import "../components/atoms/Link/Link.css";
-@import "../components/atoms/Logo/Logo.css";
-@import "../components/atoms/Particles/Particles.css";
-@import "../components/atoms/Skeleton/Skeleton.css";
+@import '../components/atoms/Address/Address.css';
+@import '../components/atoms/Bullet/Bullet.css';
+@import '../components/atoms/Copyright/Copyright.css';
+@import '../components/atoms/Divider/Divider.css';
+@import '../components/atoms/Link/Link.css';
+@import '../components/atoms/Logo/Logo.css';
+@import '../components/atoms/Particles/Particles.css';
+@import '../components/atoms/Skeleton/Skeleton.css';
 
-@import "../components/molecules/Company/Company.css";
-@import "../components/molecules/Details/Details.css";
-@import "../components/molecules/Header/Header.css";
-@import "../components/molecules/Qualification/Qualification.css";
-@import "../components/molecules/Reference/Reference.css";
-@import "../components/molecules/Role/Role.css";
-@import "../components/molecules/Technology/Technology.css";
+@import '../components/molecules/Company/Company.css';
+@import '../components/molecules/Details/Details.css';
+@import '../components/molecules/Header/Header.css';
+@import '../components/molecules/Qualification/Qualification.css';
+@import '../components/molecules/Reference/Reference.css';
+@import '../components/molecules/Role/Role.css';
+@import '../components/molecules/Technology/Technology.css';
 
-@import "../components/organisms/Gig/Gig.css";
-@import "../components/organisms/Mugshot/Mugshot.css";
-@import "../components/organisms/Mugshot/Mugshot.utilities.css";
-@import "../components/organisms/Section/Section.css";
+@import '../components/organisms/Gig/Gig.css';
+@import '../components/organisms/Mugshot/Mugshot.css';
+@import '../components/organisms/Mugshot/Mugshot.utilities.css';
+@import '../components/organisms/Section/Section.css';
 
-@import "./pages/home.css";
-@import "./pages/cv.css";
+@import './pages/home.css';
+@import './pages/cv.css';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,

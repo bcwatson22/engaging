@@ -1,21 +1,21 @@
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { CssVariable } from "next/dist/compiled/@next/font";
-import { Nunito } from "next/font/google";
-import { type ReactNode } from "react";
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { CssVariable } from 'next/dist/compiled/@next/font';
+import { Nunito } from 'next/font/google';
+import { type ReactNode } from 'react';
 
-import "@/styles/globals.css";
+import '@/styles/globals.css';
 
 type Props = Readonly<{
   children: ReactNode;
 }>;
 
-const variable = "--font-nunito" as const satisfies CssVariable;
+const variable = '--font-nunito' as const satisfies CssVariable;
 
 const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-nunito" satisfies typeof variable,
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-nunito' satisfies typeof variable,
 });
 
 const Layout = ({ children }: Props) => (

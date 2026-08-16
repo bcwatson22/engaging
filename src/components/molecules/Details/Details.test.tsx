@@ -1,22 +1,22 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import { Address } from "@/components/atoms/Address/Address";
-import { Link } from "@/components/atoms/Link/Link";
-import { mockCV } from "@/data/mock/cv";
+import { Address } from '@/components/atoms/Address/Address';
+import { Link } from '@/components/atoms/Link/Link';
+import { mockCV } from '@/data/mock/cv';
 
-import { Details, DetailsSkeleton, type DetailsProps } from "./Details";
+import { Details, DetailsSkeleton, type DetailsProps } from './Details';
 
-vi.mock("@/components/atoms/Address/Address", () => ({
-  Address: vi.fn<typeof import("@/components/atoms/Address/Address").Address>(),
+vi.mock('@/components/atoms/Address/Address', () => ({
+  Address: vi.fn<typeof import('@/components/atoms/Address/Address').Address>(),
 }));
 
 vi.mock(
-  import("@/components/atoms/Link/Link"),
+  import('@/components/atoms/Link/Link'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
-      Link: vi.fn<typeof import("@/components/atoms/Link/Link").Link>(),
+      Link: vi.fn<typeof import('@/components/atoms/Link/Link').Link>(),
     };
   },
 );
@@ -31,14 +31,14 @@ const defaultProps: DetailsProps = {
 const setup = (props?: Partial<DetailsProps>) =>
   render(<Details {...defaultProps} {...props} />);
 
-describe("Details", () => {
+describe('Details', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  describe("address", () => {
-    it("renders an Address component if defined", () => {
+  describe('address', () => {
+    it('renders an Address component if defined', () => {
       setup();
 
       expect(Address).toHaveBeenNthCalledWith(
@@ -57,35 +57,35 @@ describe("Details", () => {
     });
   });
 
-  describe("links", () => {
-    it("renders a listitem and Link component for each item", () => {
+  describe('links', () => {
+    it('renders a listitem and Link component for each item', () => {
       setup();
 
       const numberOfLinks = links.length;
 
-      expect(screen.getAllByRole("listitem")).toHaveLength(numberOfLinks);
+      expect(screen.getAllByRole('listitem')).toHaveLength(numberOfLinks);
       expect(Link).toHaveBeenCalledTimes(numberOfLinks);
     });
   });
 });
 
-describe("DetailsSkeleton", () => {
-  it("renders a skeleton state", () => {
+describe('DetailsSkeleton', () => {
+  it('renders a skeleton state', () => {
     render(<DetailsSkeleton />);
 
     const numOfPulses = 4;
 
-    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
   });
 
-  it("renders an additional skeleton line if hasParagraph is true", () => {
+  it('renders an additional skeleton line if hasParagraph is true', () => {
     render(<DetailsSkeleton hasParagraph />);
 
     const numOfPulses = 5;
 
-    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
   });

@@ -1,5 +1,5 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vitest/config";
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
@@ -7,19 +7,19 @@ export default defineConfig({
   resolve: { tsconfigPaths: true },
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: ["./vitest.setup.ts"],
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
     coverage: {
-      provider: "istanbul",
-      reportsDirectory: "./src/tests/coverage",
+      provider: 'istanbul',
+      reportsDirectory: './src/tests/coverage',
       exclude: [
-        ".next/**",
-        "src/data/types/**",
+        '.next/**',
+        'src/data/types/**',
         // generated CMS fallback — data, not code
-        "src/data/snapshot/**",
-        "src/queries/**",
+        'src/data/snapshot/**',
+        'src/queries/**',
         // build entry points — a single call each, with nothing to assert
-        "src/scripts/**",
+        'src/scripts/**',
       ],
       // the repo has sat at 100% by hand; make CI hold the line
       thresholds: { 100: true },

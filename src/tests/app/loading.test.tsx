@@ -1,17 +1,17 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import LoadingPage from "@/app/loading";
-import { MugshotSkeleton } from "@/components/organisms/Mugshot/Mugshot";
+import LoadingPage from '@/app/loading';
+import { MugshotSkeleton } from '@/components/organisms/Mugshot/Mugshot';
 
 vi.mock(
-  import("@/components/organisms/Mugshot/Mugshot"),
+  import('@/components/organisms/Mugshot/Mugshot'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       MugshotSkeleton:
         vi.fn<
-          typeof import("@/components/organisms/Mugshot/Mugshot").MugshotSkeleton
+          typeof import('@/components/organisms/Mugshot/Mugshot').MugshotSkeleton
         >(),
     };
   },
@@ -19,27 +19,27 @@ vi.mock(
 
 const setup = () => render(<LoadingPage />);
 
-describe("LoadingPage", () => {
+describe('LoadingPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("renders a main", () => {
+  it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
-  it("renders a heading", () => {
+  it('renders a heading', () => {
     setup();
 
     expect(
-      screen.getByRole("heading", { name: "Engaging Engineering" }),
+      screen.getByRole('heading', { name: 'Engaging Engineering' }),
     ).toBeInTheDocument();
   });
 
-  it("renders a MugshotSkeleton component", () => {
+  it('renders a MugshotSkeleton component', () => {
     setup();
 
     expect(MugshotSkeleton).toHaveBeenCalledTimes(1);

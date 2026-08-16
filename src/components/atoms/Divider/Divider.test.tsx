@@ -1,14 +1,14 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import type { Target } from "motion/react";
-import type { Mock } from "vitest";
+import { cleanup, render, screen } from '@testing-library/react';
+import type { Target } from 'motion/react';
+import type { Mock } from 'vitest';
 
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
+import { useScrollTrigger } from '@/hooks/useScrollTrigger';
 
-import { Divider, type DividerProps } from "./Divider";
+import { Divider, type DividerProps } from './Divider';
 
-vi.mock("@/hooks/useScrollTrigger", () => ({
+vi.mock('@/hooks/useScrollTrigger', () => ({
   useScrollTrigger:
-    vi.fn<typeof import("@/hooks/useScrollTrigger").useScrollTrigger>(),
+    vi.fn<typeof import('@/hooks/useScrollTrigger').useScrollTrigger>(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;
@@ -18,12 +18,12 @@ type SetupOptions = {
 };
 
 const defaultScrollTrigger: UseScrollTrigger = {
-  initial: { opacity: 0, y: "10px" },
+  initial: { opacity: 0, y: '10px' },
   animate: { opacity: 1, y: 0 },
   transition: { delay: 0 },
 };
 
-const mockHeading = "mockHeading";
+const mockHeading = 'mockHeading';
 
 const defaultProps: DividerProps = {
   heading: mockHeading,
@@ -43,30 +43,30 @@ const setup = (
   render(<Divider {...defaultProps} {...props} />);
 };
 
-describe("Divider", () => {
+describe('Divider', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  describe("heading", () => {
-    it("renders a heading", () => {
+  describe('heading', () => {
+    it('renders a heading', () => {
       setup();
 
       expect(
-        screen.getByRole("heading", {
+        screen.getByRole('heading', {
           level: 2,
-          name: new RegExp(mockHeading, "i"),
+          name: new RegExp(mockHeading, 'i'),
         }),
       ).toBeInTheDocument();
     });
 
-    it("uses the initial values returned from useScrollTrigger for the heading style", () => {
+    it('uses the initial values returned from useScrollTrigger for the heading style', () => {
       setup();
 
       const { opacity, y } = defaultScrollTrigger.initial as Target;
 
-      expect(screen.getByRole("heading")).toHaveStyle({
+      expect(screen.getByRole('heading')).toHaveStyle({
         opacity,
         transform: `translateY(${y})`,
       });

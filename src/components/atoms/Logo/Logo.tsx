@@ -1,6 +1,6 @@
-import { getImageProps, type ImageProps } from "next/image";
+import { getImageProps, type ImageProps } from 'next/image';
 
-import { personalLogoDimensions } from "@/constants/dimensions";
+import { personalLogoDimensions } from '@/constants/dimensions';
 
 type TLogo = {
   logoLightBackground: TAsset;
@@ -8,7 +8,7 @@ type TLogo = {
 };
 
 const { width, height } = personalLogoDimensions;
-const alt = "Billy Watson logo";
+const alt = 'Billy Watson logo';
 
 const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
   const commonImageProps: ImageProps = {

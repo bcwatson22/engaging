@@ -1,15 +1,15 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import { Divider } from "@/components/atoms/Divider/Divider";
+import { Divider } from '@/components/atoms/Divider/Divider';
 
-import { Section, type SectionProps } from "./Section";
+import { Section, type SectionProps } from './Section';
 
-vi.mock("@/components/atoms/Divider/Divider", () => ({
-  Divider: vi.fn<typeof import("@/components/atoms/Divider/Divider").Divider>(),
+vi.mock('@/components/atoms/Divider/Divider', () => ({
+  Divider: vi.fn<typeof import('@/components/atoms/Divider/Divider').Divider>(),
 }));
 
-const mockHeading = "mockHeading";
-const mockText = "mockText";
+const mockHeading = 'mockHeading';
+const mockText = 'mockText';
 const mockChildren = <button>{mockText}</button>;
 const mockDelay = 22;
 
@@ -22,14 +22,14 @@ const defaultProps: SectionProps = {
 const setup = (props?: Partial<SectionProps>) =>
   render(<Section {...defaultProps} {...props} />);
 
-describe("Section", () => {
+describe('Section', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  describe("heading", () => {
-    it("renders a Divider component", () => {
+  describe('heading', () => {
+    it('renders a Divider component', () => {
       setup();
 
       expect(Divider).toHaveBeenNthCalledWith(
@@ -39,7 +39,7 @@ describe("Section", () => {
       );
     });
 
-    it("defaults to no delay when not provided", () => {
+    it('defaults to no delay when not provided', () => {
       setup({ delay: undefined });
 
       expect(Divider).toHaveBeenNthCalledWith(
@@ -50,25 +50,25 @@ describe("Section", () => {
     });
   });
 
-  describe("children", () => {
-    it("renders children", () => {
+  describe('children', () => {
+    it('renders children', () => {
       setup();
 
       expect(
-        screen.getByRole("button", { name: mockText }),
+        screen.getByRole('button', { name: mockText }),
       ).toBeInTheDocument();
     });
   });
 
-  describe("className", () => {
-    it("renders if provided", () => {
-      const mockClassName = "mockClassName";
+  describe('className', () => {
+    it('renders if provided', () => {
+      const mockClassName = 'mockClassName';
 
       setup({
         className: mockClassName,
       });
 
-      expect(screen.getByRole("article")).toHaveClass(mockClassName);
+      expect(screen.getByRole('article')).toHaveClass(mockClassName);
     });
   });
 });

@@ -1,14 +1,14 @@
-import { Suspense } from "react";
+import { Suspense } from 'react';
 
-import { Bullet, BulletSkeleton } from "@/components/atoms/Bullet/Bullet";
-import { Dates } from "@/components/atoms/Dates/Dates";
+import { Bullet, BulletSkeleton } from '@/components/atoms/Bullet/Bullet';
+import { Dates } from '@/components/atoms/Dates/Dates';
 import {
   SkeletonHeading,
   SkeletonLine,
-} from "@/components/atoms/Skeleton/Skeleton";
+} from '@/components/atoms/Skeleton/Skeleton';
 
 type TRole = TID &
-  Pick<TPosition, "role"> & {
+  Pick<TPosition, 'role'> & {
     dates: string[];
     bullets: string[];
     capacity: string;
@@ -26,15 +26,15 @@ const getLinkClassNames = (
 ): string => {
   switch (true) {
     case !hasMultiple:
-      return "";
+      return '';
     case index === 0:
-      return " linker";
+      return ' linker';
     case index < total:
-      return " linker linkee";
+      return ' linker linkee';
     case index === total:
-      return " linkee";
+      return ' linkee';
     default:
-      return "";
+      return '';
   }
 };
 
@@ -59,7 +59,7 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
            the `$` as part of the candidate, so a class butted against `${`
            is never generated. */
         className={`text-brand-blue dark:text-brand-yellow ${
-          hasMultiple ? "multiple" : ""
+          hasMultiple ? 'multiple' : ''
         }`}
       >
         {role}

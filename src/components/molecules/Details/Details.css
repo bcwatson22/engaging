@@ -7,7 +7,7 @@
   }
 
   & li:not(:last-of-type):after {
-    content: "//";
+    content: '//';
     @apply mx-3;
   }
 }

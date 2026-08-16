@@ -1,10 +1,10 @@
-import robots from "@/app/robots";
-import { domainName } from "@/constants/common";
+import robots from '@/app/robots';
+import { domainName } from '@/constants/common';
 
-describe("robots", () => {
+describe('robots', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("returns a robots", () => {
+  it('returns a robots', () => {
     const result = robots();
 
     expect(result).toEqual(

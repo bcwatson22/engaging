@@ -1,5 +1,5 @@
-import { Link } from "@/components/atoms/Link/Link";
-import { Error } from "@/components/pages/Error/Error";
+import { Link } from '@/components/atoms/Link/Link';
+import { Error } from '@/components/pages/Error/Error';
 
 const NotFound = () => (
   <Error heading="Are you lost?">
@@ -7,7 +7,7 @@ const NotFound = () => (
       We couldn&apos;t find what you were looking for. Maybe it&apos;s moved
       from behind the Pringles, or it might never have existed at all.
     </p>
-    <Link link={{ target: "/", text: "Home", icon: "Home" }} />
+    <Link link={{ target: '/', text: 'Home', icon: 'Home' }} />
   </Error>
 );
 

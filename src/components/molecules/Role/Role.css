@@ -33,7 +33,7 @@
     @apply print:top-1.5;
   }
   &:before {
-    content: "";
+    content: '';
   }
   &:before {
     @apply -left-12 h-3 w-3 rounded-full;
@@ -55,11 +55,11 @@
     @apply print:top-1.5;
   }
   &:before {
-    content: "";
+    content: '';
   }
   &:before,
   &:after {
-    content: "";
+    content: '';
     @apply left-[-43px] z-0 w-0.5;
     @apply print:left-[-36px];
   }
@@ -78,7 +78,7 @@
   }
   &:before,
   &:after {
-    content: "";
+    content: '';
     @apply left-[-43px] z-0 w-0.5;
     @apply print:left-[-36px];
   }
@@ -100,7 +100,7 @@
   @apply mt-0;
 
   &:before {
-    content: "\2022";
+    content: '\2022';
     @apply mr-2;
   }
 }

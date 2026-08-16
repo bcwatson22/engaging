@@ -1,6 +1,6 @@
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown';
 
-import { formatExperience } from "@/utils/formatExperience";
+import { formatExperience } from '@/utils/formatExperience';
 
 type TIntro = {
   intro: string;

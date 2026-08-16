@@ -1,7 +1,7 @@
-import { DetailsSkeleton } from "@/components/molecules/Details/Details";
-import { HeaderSkeleton } from "@/components/molecules/Header/Header";
-import { GigSkeleton } from "@/components/organisms/Gig/Gig";
-import { Section } from "@/components/organisms/Section/Section";
+import { DetailsSkeleton } from '@/components/molecules/Details/Details';
+import { HeaderSkeleton } from '@/components/molecules/Header/Header';
+import { GigSkeleton } from '@/components/organisms/Gig/Gig';
+import { Section } from '@/components/organisms/Section/Section';
 
 const Loading = () => (
   <main className="cv main">

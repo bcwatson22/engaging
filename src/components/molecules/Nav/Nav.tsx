@@ -1,15 +1,15 @@
-import { Link, type TLink } from "@/components/atoms/Link/Link";
+import { Link, type TLink } from '@/components/atoms/Link/Link';
 
 const links: TLink[] = [
   {
-    target: "/",
-    text: "Home",
-    icon: "Home",
+    target: '/',
+    text: 'Home',
+    icon: 'Home',
   },
   {
-    target: "/cv/download",
-    text: "Download",
-    icon: "Download",
+    target: '/cv/download',
+    text: 'Download',
+    icon: 'Download',
   },
 ];
 

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { motion } from "motion/react";
-import Image from "next/image";
-import { useRef } from "react";
+import { motion } from 'motion/react';
+import Image from 'next/image';
+import { useRef } from 'react';
 
 import {
   Skeleton,
   SkeletonHeading,
   SkeletonLine,
-} from "@/components/atoms/Skeleton/Skeleton";
-import { companyLogoDimensions } from "@/constants/dimensions";
-import { useScrollTrigger } from "@/hooks/useScrollTrigger";
+} from '@/components/atoms/Skeleton/Skeleton';
+import { companyLogoDimensions } from '@/constants/dimensions';
+import { useScrollTrigger } from '@/hooks/useScrollTrigger';
 
 type TCompany = TScroll &
-  Pick<TPosition, "company"> & {
+  Pick<TPosition, 'company'> & {
     city: string;
     logo: TAsset;
     sectionId: string;

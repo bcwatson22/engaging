@@ -1,29 +1,29 @@
-import type { Metadata, Viewport } from "next";
-import { Suspense } from "react";
-import ReactMarkdown from "react-markdown";
+import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
+import ReactMarkdown from 'react-markdown';
 
-import { Copyright } from "@/components/atoms/Copyright/Copyright";
-import { Details } from "@/components/molecules/Details/Details";
-import { Header } from "@/components/molecules/Header/Header";
-import { Qualification } from "@/components/molecules/Qualification/Qualification";
-import { Reference } from "@/components/molecules/Reference/Reference";
-import { Gig } from "@/components/organisms/Gig/Gig";
-import { Section } from "@/components/organisms/Section/Section";
+import { Copyright } from '@/components/atoms/Copyright/Copyright';
+import { Details } from '@/components/molecules/Details/Details';
+import { Header } from '@/components/molecules/Header/Header';
+import { Qualification } from '@/components/molecules/Qualification/Qualification';
+import { Reference } from '@/components/molecules/Reference/Reference';
+import { Gig } from '@/components/organisms/Gig/Gig';
+import { Section } from '@/components/organisms/Section/Section';
 import {
   appleWebApp,
   metadata,
   themeColor,
   viewport,
-} from "@/constants/metadata";
-import { getStartupImages } from "@/constants/startupImages";
-import { getData } from "@/data/functions/getData";
-import { snapshotCV } from "@/data/snapshot/snapshot";
-import type { TCV } from "@/data/types/cv";
-import { queryCV } from "@/queries/cv";
-import { formatExperience } from "@/utils/formatExperience";
+} from '@/constants/metadata';
+import { getStartupImages } from '@/constants/startupImages';
+import { getData } from '@/data/functions/getData';
+import { snapshotCV } from '@/data/snapshot/snapshot';
+import type { TCV } from '@/data/types/cv';
+import { queryCV } from '@/queries/cv';
+import { formatExperience } from '@/utils/formatExperience';
 
-const pageNameLower = "cv";
-const pageNamePlural = "cvs";
+const pageNameLower = 'cv';
+const pageNamePlural = 'cvs';
 
 const generateMetadata = async (): Promise<Metadata> => {
   const {
@@ -58,9 +58,9 @@ const generateMetadata = async (): Promise<Metadata> => {
 const generateViewport = async (): Promise<Viewport> => ({
   ...viewport,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f9fafb" },
+    { media: '(prefers-color-scheme: light)', color: '#f9fafb' },
     {
-      media: "(prefers-color-scheme: dark)",
+      media: '(prefers-color-scheme: dark)',
       color: themeColor,
     },
   ],

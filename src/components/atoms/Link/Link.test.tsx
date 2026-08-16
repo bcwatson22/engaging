@@ -1,18 +1,18 @@
-import { cleanup, render, screen } from "@testing-library/react";
-import NextLink from "next/link";
+import { cleanup, render, screen } from '@testing-library/react';
+import NextLink from 'next/link';
 
-import { Icon } from "@/components/atoms/Icon/Icon";
-import { mockCV } from "@/data/mock/cv";
+import { Icon } from '@/components/atoms/Icon/Icon';
+import { mockCV } from '@/data/mock/cv';
 
-import { Link, LinkSkeleton, type LinkProps } from "./Link";
+import { Link, LinkSkeleton, type LinkProps } from './Link';
 
-vi.mock("@/components/atoms/Icon/Icon", () => ({
-  Icon: vi.fn<typeof import("@/components/atoms/Icon/Icon").Icon>(),
+vi.mock('@/components/atoms/Icon/Icon', () => ({
+  Icon: vi.fn<typeof import('@/components/atoms/Icon/Icon').Icon>(),
 }));
 
-vi.mock("next/link", () => ({
+vi.mock('next/link', () => ({
   default: vi
-    .fn<typeof import("next/link").default>()
+    .fn<typeof import('next/link').default>()
     .mockImplementation(({ children }) => <>{children}</>),
 }));
 
@@ -26,20 +26,20 @@ const defaultProps: LinkProps = {
 const setup = (props?: Partial<LinkProps>) =>
   render(<Link {...defaultProps} {...props} />);
 
-describe("Link", () => {
+describe('Link', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  describe("link", () => {
-    it("renders an anchor", () => {
+  describe('link', () => {
+    it('renders an anchor', () => {
       setup();
 
-      expect(screen.getByRole("link", { name: text })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: text })).toBeInTheDocument();
     });
 
-    it("renders an Icon component", () => {
+    it('renders an Icon component', () => {
       setup();
 
       expect(Icon).toHaveBeenNthCalledWith(
@@ -49,11 +49,11 @@ describe("Link", () => {
       );
     });
 
-    describe("target", () => {
-      it("is used for the href value", () => {
+    describe('target', () => {
+      it('is used for the href value', () => {
         setup();
 
-        expect(screen.getByRole("link")).toHaveAttribute("href", target);
+        expect(screen.getByRole('link')).toHaveAttribute('href', target);
       });
 
       it(`doesn't render NextLink if remote`, () => {
@@ -62,7 +62,7 @@ describe("Link", () => {
         expect(NextLink).not.toHaveBeenCalled();
       });
 
-      it("renders NextLink if local", () => {
+      it('renders NextLink if local', () => {
         setup({
           link: mockCV.onlineLinks[0],
         });
@@ -74,18 +74,18 @@ describe("Link", () => {
         it("adds 'url' class", () => {
           setup();
 
-          expect(screen.getByRole("link")).toHaveClass("url");
+          expect(screen.getByRole('link')).toHaveClass('url');
         });
 
-        it("removes protocol for remote data-url value", () => {
+        it('removes protocol for remote data-url value', () => {
           setup();
 
           expect(
-            screen.getByRole("link").getAttribute("data-url"),
-          ).not.toContain("http");
+            screen.getByRole('link').getAttribute('data-url'),
+          ).not.toContain('http');
         });
 
-        it("adds domain for local data-url value", () => {
+        it('adds domain for local data-url value', () => {
           setup({
             link: mockCV.onlineLinks[0],
           });
@@ -93,7 +93,7 @@ describe("Link", () => {
           expect(NextLink).toHaveBeenNthCalledWith(
             1,
             expect.objectContaining({
-              "data-url": expect.stringContaining("engaging.engineering"),
+              'data-url': expect.stringContaining('engaging.engineering'),
             }),
             undefined,
           );
@@ -106,7 +106,7 @@ describe("Link", () => {
             link: mockCV.contactLinks[0],
           });
 
-          expect(screen.getByRole("link")).not.toHaveClass("url");
+          expect(screen.getByRole('link')).not.toHaveClass('url');
         });
 
         it("doesn't have a data-url", () => {
@@ -114,32 +114,32 @@ describe("Link", () => {
             link: mockCV.contactLinks[0],
           });
 
-          expect(screen.getByRole("link")).not.toHaveAttribute("data-url");
+          expect(screen.getByRole('link')).not.toHaveAttribute('data-url');
         });
       });
     });
   });
 
-  describe("className", () => {
-    it("renders if provided", () => {
-      const mockClassName = "mockClassName";
+  describe('className', () => {
+    it('renders if provided', () => {
+      const mockClassName = 'mockClassName';
 
       setup({ className: mockClassName });
 
-      expect(screen.getByRole("link", { name: text })).toHaveClass(
+      expect(screen.getByRole('link', { name: text })).toHaveClass(
         mockClassName,
       );
     });
   });
 });
 
-describe("LinkSkeleton", () => {
-  it("renders a skeleton state", () => {
+describe('LinkSkeleton', () => {
+  it('renders a skeleton state', () => {
     render(<LinkSkeleton />);
 
     const numOfPulses = 2;
 
-    expect(screen.getAllByRole("status", { name: "Loading..." })).toHaveLength(
+    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
   });

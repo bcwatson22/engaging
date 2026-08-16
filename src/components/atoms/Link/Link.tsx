@@ -1,8 +1,8 @@
-import NextLink from "next/link";
-import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from "react";
+import NextLink from 'next/link';
+import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from 'react';
 
-import { Icon, type TIcon } from "@/components/atoms/Icon/Icon";
-import { Skeleton, SkeletonLine } from "@/components/atoms/Skeleton/Skeleton";
+import { Icon, type TIcon } from '@/components/atoms/Icon/Icon';
+import { Skeleton, SkeletonLine } from '@/components/atoms/Skeleton/Skeleton';
 
 type TInner = {
   text: string;
@@ -21,9 +21,9 @@ type Props = {
   className?: string;
 };
 
-type TShared = Omit<ComponentPropsWithRef<"a">, "href"> & {
+type TShared = Omit<ComponentPropsWithRef<'a'>, 'href'> & {
   href: HTMLAttributeAnchorTarget;
-  "data-url": string | null;
+  'data-url': string | null;
 };
 
 const LinkSkeleton = () => (
@@ -43,21 +43,21 @@ const Inner = ({ text, icon }: TInner) => (
 const Link = ({ link, className }: Props) => {
   const { target, text, icon } = link!;
 
-  const isLocal = target === "/";
+  const isLocal = target === '/';
 
   let displayUrl =
-    target.startsWith("tel:") || target.startsWith("mailto:") ? null : target;
+    target.startsWith('tel:') || target.startsWith('mailto:') ? null : target;
 
-  if (isLocal) displayUrl = "engaging.engineering";
+  if (isLocal) displayUrl = 'engaging.engineering';
 
-  if (target.startsWith("https://")) displayUrl = target.split("https://")[1];
+  if (target.startsWith('https://')) displayUrl = target.split('https://')[1];
 
   const outerProps: TShared = {
     href: target,
-    className: `link icon${displayUrl ? " url" : ""}${
-      className ? " " + className : ""
+    className: `link icon${displayUrl ? ' url' : ''}${
+      className ? ' ' + className : ''
     }`,
-    "data-url": displayUrl,
+    'data-url': displayUrl,
   };
 
   const innerProps: TInner = {

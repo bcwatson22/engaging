@@ -1,28 +1,28 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import NotFoundPage from "@/app/not-found";
-import { Link } from "@/components/atoms/Link/Link";
-import { Error } from "@/components/pages/Error/Error";
+import NotFoundPage from '@/app/not-found';
+import { Link } from '@/components/atoms/Link/Link';
+import { Error } from '@/components/pages/Error/Error';
 
 vi.mock(
-  import("@/components/atoms/Link/Link"),
+  import('@/components/atoms/Link/Link'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
-      Link: vi.fn<typeof import("@/components/atoms/Link/Link").Link>(),
+      Link: vi.fn<typeof import('@/components/atoms/Link/Link').Link>(),
     };
   },
 );
 
 vi.mock(
-  import("@/components/pages/Error/Error"),
+  import('@/components/pages/Error/Error'),
   async (importOriginal: Function) => {
     const actual = await importOriginal();
     return {
       ...actual,
       Error: vi
-        .fn<typeof import("@/components/pages/Error/Error").Error>()
+        .fn<typeof import('@/components/pages/Error/Error').Error>()
         .mockImplementation(({ children }) => <>{children}</>),
     };
   },
@@ -30,23 +30,23 @@ vi.mock(
 
 const setup = () => render(<NotFoundPage />);
 
-describe("NotFoundPage", () => {
+describe('NotFoundPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("renders an Error component", () => {
+  it('renders an Error component', () => {
     setup();
 
     expect(Error).toHaveBeenNthCalledWith(
       1,
-      expect.objectContaining({ heading: "Are you lost?" }),
+      expect.objectContaining({ heading: 'Are you lost?' }),
       undefined,
     );
   });
 
-  it("renders a message", () => {
+  it('renders a message', () => {
     setup();
 
     expect(
@@ -54,12 +54,12 @@ describe("NotFoundPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders a Link component", () => {
+  it('renders a Link component', () => {
     setup();
 
     expect(Link).toHaveBeenNthCalledWith(
       1,
-      { link: { icon: "Home", target: "/", text: "Home" } },
+      { link: { icon: 'Home', target: '/', text: 'Home' } },
       undefined,
     );
   });

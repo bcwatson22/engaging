@@ -1,13 +1,13 @@
-import type { Mock } from "vitest";
+import type { Mock } from 'vitest';
 
-import manifest from "@/app/manifest";
-import { getData } from "@/data/functions/getData";
+import manifest from '@/app/manifest';
+import { getData } from '@/data/functions/getData';
 
-const mockTitle = "Engaging Engineering";
-const mockToday = new Date("2025-01-08");
+const mockTitle = 'Engaging Engineering';
+const mockToday = new Date('2025-01-08');
 
-vi.mock("@/data/functions/getData", () => ({
-  getData: vi.fn<typeof import("@/data/functions/getData").getData>(),
+vi.mock('@/data/functions/getData', () => ({
+  getData: vi.fn<typeof import('@/data/functions/getData').getData>(),
 }));
 
 const setup = async () => {
@@ -21,7 +21,7 @@ const setup = async () => {
   return await manifest();
 };
 
-describe("manifest", () => {
+describe('manifest', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
@@ -32,15 +32,15 @@ describe("manifest", () => {
     vi.useRealTimers();
   });
 
-  it("returns a manifest", async () => {
+  it('returns a manifest', async () => {
     const result = await setup();
 
     expect(result).toEqual(
-      expect.objectContaining({ start_url: "/", display: "standalone" }),
+      expect.objectContaining({ start_url: '/', display: 'standalone' }),
     );
   });
 
-  it("uses the title from the CMS", async () => {
+  it('uses the title from the CMS', async () => {
     const result = await setup();
 
     expect(result).toEqual(
@@ -48,7 +48,7 @@ describe("manifest", () => {
     );
   });
 
-  it("replaces the experience placeholder in the description", async () => {
+  it('replaces the experience placeholder in the description', async () => {
     const result = await setup();
 
     expect(result).toEqual(

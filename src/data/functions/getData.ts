@@ -1,16 +1,16 @@
-import { unstable_cache } from "next/cache";
+import { unstable_cache } from 'next/cache';
 
-import { revalidate } from "@/constants/common";
-import { fetchCms } from "@/queries/client";
+import { revalidate } from '@/constants/common';
+import { fetchCms } from '@/queries/client';
 
-const cmsTag = "cms";
-const errorMessage = "Error trying to fetch page data:";
-const emptyMessage = "No data returned for";
+const cmsTag = 'cms';
+const errorMessage = 'Error trying to fetch page data:';
+const emptyMessage = 'No data returned for';
 
 const fetchData = async <Data>(query: string, key: string): Promise<Data> => {
   const { data, errors } = await fetchCms<Data>(query);
 
-  if (errors) throw new Error(errors.map(({ message }) => message).join(", "));
+  if (errors) throw new Error(errors.map(({ message }) => message).join(', '));
 
   const item = data?.[key]?.[0];
 

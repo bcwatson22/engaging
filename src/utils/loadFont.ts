@@ -1,7 +1,7 @@
-import { readFile } from "fs/promises";
-import path from "path";
+import { readFile } from 'fs/promises';
+import path from 'path';
 
-const fontFamily = "Nunito";
+const fontFamily = 'Nunito';
 
 /* Self-hosted rather than fetched from Google at render time.
 
@@ -14,9 +14,9 @@ const fontFamily = "Nunito";
    Ships in the serverless bundle via outputFileTracingIncludes in
    next.config.mjs. Without that entry this throws at runtime but passes
    locally, so the two must stay together. */
-const fontPath = "src/assets/fonts/Nunito-Regular.ttf";
+const fontPath = 'src/assets/fonts/Nunito-Regular.ttf';
 
-const errorMessage = "Failed to read font data";
+const errorMessage = 'Failed to read font data';
 
 const loadFont = async (): Promise<Buffer> => {
   try {

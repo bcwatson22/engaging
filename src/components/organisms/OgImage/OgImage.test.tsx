@@ -1,8 +1,8 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from '@testing-library/react';
 
-import { mockHome } from "@/data/mock/home";
+import { mockHome } from '@/data/mock/home';
 
-import { OgImage, type OgImageProps } from "./OgImage";
+import { OgImage, type OgImageProps } from './OgImage';
 
 const {
   meta: { title },
@@ -13,28 +13,28 @@ const {
 const setup = (props?: Partial<OgImageProps>) =>
   render(<OgImage {...mockHome} {...props} />);
 
-describe("OgImage", () => {
+describe('OgImage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
 
-  it("renders image markup", () => {
+  it('renders image markup', () => {
     setup();
 
-    expect(screen.getByRole("article")).toBeInTheDocument();
+    expect(screen.getByRole('article')).toBeInTheDocument();
     expect(
-      screen.getByRole("img", { name: `Portrait of ${heading}` }),
+      screen.getByRole('img', { name: `Portrait of ${heading}` }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 1, name: title }),
+      screen.getByRole('heading', { level: 1, name: title }),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem")).toHaveLength(technologies.length);
+    expect(screen.getAllByRole('listitem')).toHaveLength(technologies.length);
 
     for (const {
       name,
       icon: { url },
     } of technologies)
-      expect(screen.getByRole("img", { name })).toHaveAttribute("src", url);
+      expect(screen.getByRole('img', { name })).toHaveAttribute('src', url);
   });
 });

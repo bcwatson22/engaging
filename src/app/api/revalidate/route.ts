@@ -1,12 +1,12 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from 'next/cache';
 
-import { cmsTag } from "@/data/functions/getData";
+import { cmsTag } from '@/data/functions/getData';
 
 /* Header rather than a query param, so the secret never lands in an access
    log. revalidatePath alongside the tag is belt-and-braces: two lines to
    remove any doubt about prerendered segments being refreshed. */
-const secretHeader = "x-revalidate-secret";
-const paths = ["/", "/cv"];
+const secretHeader = 'x-revalidate-secret';
+const paths = ['/', '/cv'];
 
 /* Next 16 requires a cacheLife profile here, and it must be `{ expire: 0 }`.
    Next only performs a hard invalidation when the profile's expire is 0 —

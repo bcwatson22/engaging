@@ -1,25 +1,25 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from 'next/og';
 
 import {
   OgImage,
   type OgImageProps,
-} from "@/components/organisms/OgImage/OgImage";
-import { getData } from "@/data/functions/getData";
-import { snapshotHome } from "@/data/snapshot/snapshot";
-import type { THome } from "@/data/types/home";
-import { queryHome } from "@/queries/home";
-import { formatExperience } from "@/utils/formatExperience";
-import { fontFamily, loadFont } from "@/utils/loadFont";
+} from '@/components/organisms/OgImage/OgImage';
+import { getData } from '@/data/functions/getData';
+import { snapshotHome } from '@/data/snapshot/snapshot';
+import type { THome } from '@/data/types/home';
+import { queryHome } from '@/queries/home';
+import { formatExperience } from '@/utils/formatExperience';
+import { fontFamily, loadFont } from '@/utils/loadFont';
 
 const replaceImageFormat = (
   value: string,
-  current = "webp",
-  target = "png",
+  current = 'webp',
+  target = 'png',
 ): string => value.replace(current, target);
 
 /* Satori cannot decode webp, so every asset URL is swapped to png here. */
 const getImageProps = async (): Promise<OgImageProps> => {
-  const home = await getData<THome>(queryHome, "homes", snapshotHome);
+  const home = await getData<THome>(queryHome, 'homes', snapshotHome);
 
   return {
     ...home,
@@ -48,18 +48,18 @@ const getImageProps = async (): Promise<OgImageProps> => {
    has to reach the edge. An explicit policy lets them keep a copy, which is
    what matters when a link is shared and many crawlers arrive at once. */
 const cacheControl =
-  "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
+  'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800';
 
 const GET = async () =>
   new ImageResponse(<OgImage {...await getImageProps()} />, {
     width: 1200,
     height: 630,
-    headers: { "cache-control": cacheControl },
+    headers: { 'cache-control': cacheControl },
     fonts: [
       {
         name: fontFamily,
         data: await loadFont(),
-        style: "normal",
+        style: 'normal',
       },
     ],
   });
