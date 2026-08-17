@@ -17,7 +17,20 @@ const check = {
   stale: false,
 };
 
+const sweep = {
+  at: '2026-08-17T12:00:00.000Z',
+  checked: 12,
+  problems: [
+    {
+      url: 'https://github.com/someone',
+      status: 404,
+      state: 'broken' as const,
+    },
+  ],
+};
+
 const status: TStatus = {
+  links: sweep,
   artifacts: { 'cv-pdf': [record], 'startup-images': [] },
   integrity: { 'cv-pdf': check, 'startup-images': null },
   queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
@@ -91,6 +104,12 @@ describe('getStatus', () => {
   describe('a service too old to run integrity checks', () => {
     const older = { artifacts: status.artifacts, queue: status.queue };
 
+    it('reports no sweep rather than none at all', async () => {
+      setup({ body: older });
+
+      await expect(getStatus()).resolves.toMatchObject({ links: null });
+    });
+
     it('is still read', async () => {
       setup({ body: older });
 
@@ -131,6 +150,42 @@ describe('getStatus', () => {
         { artifacts: status.artifacts, integrity: status.integrity },
       ],
 
+      [
+        'a sweep of the wrong shape',
+        {
+          artifacts: status.artifacts,
+          integrity: status.integrity,
+          links: { at: 'now' },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a sweep problem that is null',
+        {
+          artifacts: status.artifacts,
+          integrity: status.integrity,
+          links: { at: 'now', checked: 1, problems: [null] },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a sweep problem of the wrong shape',
+        {
+          artifacts: status.artifacts,
+          integrity: status.integrity,
+          links: { at: 'now', checked: 1, problems: [{ url: 1 }] },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a sweep that is not an object',
+        {
+          artifacts: status.artifacts,
+          integrity: status.integrity,
+          links: 'fine',
+          queue: status.queue,
+        },
+      ],
       [
         'integrity that is not an object at all',
         {

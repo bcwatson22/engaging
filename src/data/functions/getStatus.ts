@@ -53,7 +53,12 @@ const isCheck = (value: unknown): boolean => {
 const isStatus = (value: unknown): value is TStatus => {
   if (typeof value !== 'object' || value === null) return false;
 
-  const { artifacts: records, integrity, queue } = value as Partial<TStatus>;
+  const {
+    artifacts: records,
+    integrity,
+    links,
+    queue,
+  } = value as Partial<TStatus>;
 
   if (typeof records !== 'object' || records === null) return false;
   if (typeof queue !== 'object' || queue === null) return false;
@@ -63,11 +68,43 @@ const isStatus = (value: unknown): value is TStatus => {
      thing to meet — and refusing to read its response would turn a missing
      feature into "the service is not answering", which is a lie. */
   if (integrity !== undefined && typeof integrity !== 'object') return false;
+  if (!isSweep(links)) return false;
 
   return (
     artifacts.every((name) => isHistory(records[name])) &&
     artifacts.every((name) => isCheck(integrity?.[name])) &&
     [queue.waiting, queue.active, queue.delayed, queue.failed].every(isNumber)
+  );
+};
+
+const linkStates = ['ok', 'blocked', 'broken'];
+
+const isLinkResult = (value: unknown): boolean => {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const { url, status, state } = value as Record<string, unknown>;
+
+  return (
+    typeof url === 'string' &&
+    typeof status === 'number' &&
+    typeof state === 'string' &&
+    linkStates.includes(state)
+  );
+};
+
+/* Absent and null both mean no sweep — the first because the service may
+   predate the sweep, the second because it may not have run one yet. */
+const isSweep = (value: unknown): boolean => {
+  if (value === null || value === undefined) return true;
+  if (typeof value !== 'object') return false;
+
+  const { at, checked, problems } = value as Record<string, unknown>;
+
+  return (
+    typeof at === 'string' &&
+    typeof checked === 'number' &&
+    Array.isArray(problems) &&
+    problems.every(isLinkResult)
   );
 };
 
@@ -93,7 +130,9 @@ const getStatus = async (): Promise<TStatus | null> => {
 
     const parsed: unknown = await response.json();
 
-    return isStatus(parsed) ? { ...parsed, integrity: checksIn(parsed) } : null;
+    return isStatus(parsed)
+      ? { ...parsed, integrity: checksIn(parsed), links: parsed.links ?? null }
+      : null;
   } catch {
     return null;
   }

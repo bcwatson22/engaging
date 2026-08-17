@@ -36,6 +36,27 @@ type TCheck = {
   stale: boolean;
 };
 
+/* One outbound link the sweep looked at.
+
+   `blocked` is a host refusing a robot rather than a link that is gone —
+   LinkedIn answers 999 to anything automated. Worth showing, but not worth
+   alarming anyone about, or the report becomes noise nobody reads. */
+type TLinkState = 'ok' | 'blocked' | 'broken';
+
+type TLinkResult = {
+  url: string;
+  status: number;
+  state: TLinkState;
+};
+
+/* `checked` is the count; `problems` holds only the links that were not fine.
+   Recording that a link still works, weekly, is a fact nobody reads. */
+type TSweep = {
+  at: string;
+  checked: number;
+  problems: TLinkResult[];
+};
+
 type TQueue = {
   waiting: number;
   active: number;
@@ -50,8 +71,19 @@ type TStatus = {
   /* Null where a check has not run yet — the schedule is weekly, so that is
      the ordinary state for the first few days after a deploy. */
   integrity: Record<TArtifact, TCheck | null>;
+  /* Null before a sweep has run. */
+  links: TSweep | null;
   queue: TQueue;
 };
 
 export { artifacts };
-export type { TStatus, TRecord, TCheck, TQueue, TArtifact };
+export type {
+  TStatus,
+  TRecord,
+  TCheck,
+  TSweep,
+  TLinkResult,
+  TLinkState,
+  TQueue,
+  TArtifact,
+};

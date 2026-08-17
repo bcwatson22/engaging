@@ -1,6 +1,6 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
 
-import type { TCheck, TRecord, TStatus } from '@/data/types/status';
+import type { TCheck, TRecord, TStatus, TSweep } from '@/data/types/status';
 
 import {
   renderShare,
@@ -31,7 +31,15 @@ const check = (overrides: Partial<TCheck> = {}): TCheck => ({
   ...overrides,
 });
 
+const sweep = (overrides: Partial<TSweep> = {}): TSweep => ({
+  at: '2026-08-17T11:00:00.000Z',
+  checked: 12,
+  problems: [],
+  ...overrides,
+});
+
 const status: TStatus = {
+  links: sweep(),
   integrity: { 'cv-pdf': check(), 'startup-images': check() },
   artifacts: {
     'cv-pdf': [recordAt('2026-08-17T09:00:00.000Z')],
@@ -239,6 +247,92 @@ describe('Status', () => {
       });
 
       expect(screen.queryByText(/checked .* ago/i)).not.toBeInTheDocument();
+    });
+  });
+
+  /* Reported, never alarmed about — a host refusing a robot is not a link
+     that has gone. */
+  describe('the outbound links', () => {
+    it('reassures with a count when they all answered', () => {
+      setup();
+
+      expect(
+        screen.getByText(/12 outbound links checked/i),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/all answering/i)).toBeInTheDocument();
+    });
+
+    it('says how many did not answer', () => {
+      setup({
+        status: {
+          ...status,
+          links: sweep({
+            problems: [{ url: 'https://a.com', status: 404, state: 'broken' }],
+          }),
+        },
+      });
+
+      expect(screen.getByText(/1 not answering/i)).toBeInTheDocument();
+    });
+
+    it('names the link that failed, so it can be fixed', () => {
+      setup({
+        status: {
+          ...status,
+          links: sweep({
+            problems: [{ url: 'https://a.com', status: 404, state: 'broken' }],
+          }),
+        },
+      });
+
+      expect(screen.getByText('https://a.com')).toBeInTheDocument();
+      expect(screen.getByText(/did not answer \(404\)/i)).toBeInTheDocument();
+    });
+
+    /* Listed, but not counted as broken and not coloured as an alarm. */
+    it('shows a blocked host without calling it broken', () => {
+      setup({
+        status: {
+          ...status,
+          links: sweep({
+            problems: [
+              { url: 'https://linkedin.com', status: 999, state: 'blocked' },
+            ],
+          }),
+        },
+      });
+
+      expect(
+        screen.getByText(/refused an automated check/i),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/all answering/i)).toBeInTheDocument();
+    });
+
+    it('omits a status nobody can act on', () => {
+      setup({
+        status: {
+          ...status,
+          links: sweep({
+            problems: [{ url: 'https://a.com', status: 0, state: 'broken' }],
+          }),
+        },
+      });
+
+      expect(screen.getByText(/^did not answer$/i)).toBeInTheDocument();
+    });
+
+    it('reads a single link in the singular', () => {
+      setup({ status: { ...status, links: sweep({ checked: 1 }) } });
+
+      expect(screen.getByText(/1 outbound link checked/i)).toBeInTheDocument();
+    });
+
+    it('says when no sweep has run', () => {
+      setup({ status: { ...status, links: null } });
+
+      expect(
+        screen.getByText(/have not been checked yet/i),
+      ).toBeInTheDocument();
     });
   });
 

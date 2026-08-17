@@ -2,9 +2,11 @@ import { Icon, type TIcon } from '@/components/atoms/Icon/Icon';
 import type {
   TArtifact,
   TCheck,
+  TLinkState,
   TQueue,
   TRecord,
   TStatus,
+  TSweep,
 } from '@/data/types/status';
 import { formatDuration } from '@/utils/formatDuration';
 import { formatRelative } from '@/utils/formatRelative';
@@ -169,6 +171,70 @@ const Durations = ({ history }: { history: TRecord[] }) => {
   );
 };
 
+/* A host refusing a robot is not a link that is gone. LinkedIn answers 999 to
+   anything automated, so calling that broken would make the whole list read as
+   noise and get ignored — including the time something has genuinely died. */
+const linkStates: Record<
+  Exclude<TLinkState, 'ok'>,
+  { icon: TIcon; says: string }
+> = {
+  broken: { icon: 'Warning', says: 'did not answer' },
+  blocked: { icon: 'Cross', says: 'refused an automated check' },
+};
+
+const Links = ({ sweep }: { sweep: TSweep | null }) => {
+  if (sweep === null) {
+    return (
+      <p className="sweep-summary" data-state="unchecked">
+        Outbound links have not been checked yet
+      </p>
+    );
+  }
+
+  const broken = sweep.problems.filter(({ state }) => state === 'broken');
+
+  return (
+    <>
+      {/* The count is the reassuring part and the reason nothing else needs
+          listing: every link not named below answered. */}
+      <p
+        className="sweep-summary"
+        data-state={broken.length > 0 ? 'broken' : 'ok'}
+      >
+        <Icon icon={broken.length > 0 ? 'Warning' : 'Check'} className="mark" />
+        <span>
+          {sweep.checked} outbound {sweep.checked === 1 ? 'link' : 'links'}{' '}
+          checked
+          {broken.length > 0
+            ? `, ${broken.length} not answering`
+            : ', all answering'}
+        </span>
+        <time dateTime={sweep.at}>{formatRelative(sweep.at)}</time>
+      </p>
+
+      {sweep.problems.length > 0 && (
+        <ul className="sweep-problems">
+          {sweep.problems.map(({ url, status, state }) => {
+            const { icon, says } =
+              linkStates[state as Exclude<TLinkState, 'ok'>];
+
+            return (
+              <li key={url} data-state={state}>
+                <Icon icon={icon} className="mark" />
+                <span className="url">{url}</span>
+                <span className="says">
+                  {says}
+                  {status > 0 && ` (${status})`}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </>
+  );
+};
+
 const Artifact = ({
   artifact,
   history,
@@ -236,6 +302,9 @@ const Status = ({ status }: Props) => (
           ))}
         </ul>
 
+        <h3 className="queue-heading">Outbound links</h3>
+        <Links sweep={status.links} />
+
         <h3 className="queue-heading">Render queue</h3>
         <ul className="queue">
           {counts.map(({ key, name }) => (
@@ -259,5 +328,15 @@ const Status = ({ status }: Props) => (
   </section>
 );
 
-export { Status, labels, counts, shown, waitOf, renderShare, states, stateOf };
+export {
+  Status,
+  labels,
+  counts,
+  shown,
+  waitOf,
+  renderShare,
+  states,
+  stateOf,
+  linkStates,
+};
 export type { Props as StatusProps };

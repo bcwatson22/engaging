@@ -184,6 +184,76 @@
     }
   }
 
+  /* Status again, not a series — an icon and a sentence, with colour as
+     reinforcement. */
+  & .sweep-summary {
+    @apply flex flex-wrap items-baseline gap-x-1.5 text-sm;
+
+    & .mark {
+      @apply mt-px size-4 shrink-0 self-center;
+    }
+
+    & time {
+      @apply text-xs opacity-60;
+    }
+
+    &[data-state='ok'] {
+      color: oklch(from var(--brand-green) 0.5 c h);
+
+      @media (prefers-color-scheme: dark) {
+        color: oklch(from var(--brand-green) 0.72 c h);
+      }
+    }
+
+    &[data-state='broken'] {
+      color: oklch(from var(--brand-red) 0.55 c h);
+
+      @media (prefers-color-scheme: dark) {
+        color: oklch(from var(--brand-red) 0.72 c h);
+      }
+    }
+
+    &[data-state='unchecked'] {
+      @apply opacity-50;
+    }
+  }
+
+  & .sweep-problems {
+    @apply flex flex-col gap-2;
+
+    & li {
+      @apply border-brand-dark/30 flex flex-wrap items-center gap-x-2 rounded-sm border p-2 text-xs;
+      @apply dark:border-brand-light/30;
+    }
+
+    & .mark {
+      @apply size-4 shrink-0;
+    }
+
+    & .url {
+      @apply break-all;
+    }
+
+    & .says {
+      @apply ml-auto shrink-0 opacity-70;
+    }
+
+    /* Broken is a link to fix. Blocked is a host being unfriendly to robots,
+       which is worth seeing and not worth alarm — so it stays in the muted
+       ink rather than taking a status colour. */
+    & li[data-state='broken'] .mark {
+      color: oklch(from var(--brand-red) 0.55 c h);
+
+      @media (prefers-color-scheme: dark) {
+        color: oklch(from var(--brand-red) 0.72 c h);
+      }
+    }
+
+    & li[data-state='blocked'] {
+      @apply opacity-70;
+    }
+  }
+
   & .queue-heading {
     @apply text-base font-medium;
   }
