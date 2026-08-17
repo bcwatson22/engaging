@@ -16,6 +16,8 @@ type Options = {
   isIdle?: boolean;
 };
 
+const colors = { color: '#245385', colorDark: '#f9fafb' };
+
 const setup = ({
   supportsIdleCallback = true,
   isIdle = true,
@@ -36,7 +38,7 @@ const setup = ({
     vi.stubGlobal('requestIdleCallback', undefined);
   }
 
-  return render(<Particles />);
+  return render(<Particles {...colors} />);
 };
 
 describe('Particles', () => {
@@ -72,5 +74,17 @@ describe('Particles', () => {
     setup({ supportsIdleCallback: false });
 
     await waitFor(() => expect(ParticlesCanvas).toHaveBeenCalledTimes(1));
+  });
+
+  /* The gate decides when the field appears; the canvas decides what it looks
+     like. Swallowing the colours here would leave a page unable to say. */
+  it('forwards its colours to the canvas', async () => {
+    setup();
+
+    await waitFor(() => expect(ParticlesCanvas).toHaveBeenCalled());
+
+    /* The props themselves, not the whole call: React hands a second argument
+       through the dynamic wrapper that is an implementation detail. */
+    expect(vi.mocked(ParticlesCanvas).mock.calls[0][0]).toEqual(colors);
   });
 });

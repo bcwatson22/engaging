@@ -14,6 +14,18 @@
   & a {
     @apply decoration-brand-yellow;
     @apply print:decoration-brand-blue;
+
+    /* The link atom picks its underline colour from prefers-color-scheme —
+       blue on light, yellow on dark. This page is dark whatever the visitor
+       has set, so on a light scheme it was drawing a blue underline on a
+       black background. Pinned to the dark treatment here rather than
+       changing the atom, which is right everywhere else. */
+    & span {
+      background-image:
+        linear-gradient(var(--brand-yellow), var(--brand-yellow)),
+        linear-gradient(var(--brand-light), var(--brand-light)),
+        linear-gradient(var(--brand-yellow), var(--brand-yellow));
+    }
   }
 
   .banner {

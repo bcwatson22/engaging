@@ -7,9 +7,11 @@ import {
   GlobeAltIcon,
   HomeIcon,
   IdentificationIcon,
+  PaperAirplaneIcon,
   RocketLaunchIcon,
   UserIcon,
   XMarkIcon,
+  PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import { ForwardRefExoticComponent, SVGProps } from 'react';
 
@@ -17,12 +19,14 @@ const iconOptions = [
   'Cross',
   'Document',
   'Download',
-  'Phone',
   'Email',
   'Home',
+  'Phone',
   'Profile',
+  'Pencil',
   'Repo',
   'Retry',
+  'Send',
   'User',
   'Website',
 ] as const;
@@ -46,8 +50,10 @@ const iconMap: Record<
   Home: HomeIcon,
   Phone: DevicePhoneMobileIcon,
   Profile: IdentificationIcon,
+  Pencil: PencilSquareIcon,
   Repo: RocketLaunchIcon,
   Retry: ArrowPathIcon,
+  Send: PaperAirplaneIcon,
   User: UserIcon,
   Website: GlobeAltIcon,
 };

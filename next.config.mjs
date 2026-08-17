@@ -1,8 +1,17 @@
-/** @type {import('next').NextConfig} */
+/* Where the contact form posts. Public, and hardcoded for the same reason the
+   bucket URL below is: an env var that is merely missing would produce a CSP
+   that silently blocks the form, which is worse than a config that cannot
+   half-work. The form's own endpoint comes from NEXT_PUBLIC_CONTACT_ENDPOINT
+   and must agree with this. */
+const service = 'https://engaging-service.fly.dev';
 
+/* connect-src is spelled out rather than left to fall back to default-src:
+   the form posts cross-origin to the render service, and Vercel's analytics
+   beacons are subject to this directive too, not to script-src. */
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel-scripts.com *.vercel-insights.com;
+    connect-src 'self' ${service} *.vercel-insights.com;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: *.graphassets.com;
     font-src 'self';
@@ -23,6 +32,11 @@ const cspHeader = `
    env var so the config is self-contained and cannot half-work. */
 const artifacts = 'https://pub-53c526b0d6a84a57afc0b459064235fd.r2.dev';
 
+/* Directly above the object it describes. A JSDoc @type applies to the next
+   declaration, so while it sat at the top of the file it was typing whichever
+   constant happened to come first — which made a string of a URL read as a
+   NextConfig object, and only showed up once that string was interpolated. */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   /* The OG route reads this at runtime with fs, which the bundler cannot see,
      so it has to be traced in explicitly. Without it the route throws only

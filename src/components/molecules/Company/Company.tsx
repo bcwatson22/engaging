@@ -10,7 +10,7 @@ import {
   SkeletonLine,
 } from '@/components/atoms/Skeleton/Skeleton';
 import { companyLogoDimensions } from '@/constants/dimensions';
-import { useScrollTrigger } from '@/hooks/useScrollTrigger';
+import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
 type TCompany = TScroll &
   Pick<TPosition, 'company'> & {
