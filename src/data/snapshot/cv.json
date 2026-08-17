@@ -3,7 +3,7 @@
   "meta": {
     "id": "cm721dczq4gcc07mhz6oj8abp",
     "title": "CV | Billy Watson",
-    "description": "Creative, collaborative and personable Front End Engineer with over {{experience}} years' experience including React (+ Native), Next, Node and TypeScript.",
+    "description": "Creative, collaborative Front End Engineer with over {{experience}} years' experience including React (+ Native), Next, Node and TypeScript.",
     "keywords": [
       "Billy Watson",
       "Engaging Engineering",
@@ -141,7 +141,7 @@
           ],
           "capacity": "Permanent",
           "bullets": [
-            "Led and mentored development team of 4 as a T-shaped engineer at travel company",
+            "Led and mentored development team of 5 as a T-shaped engineer at travel company",
             "Used TypeScript and GraphQL extensively in an Agile, product-focused environment",
             "Contributed to component library shared by web (Next) and mobile (React Native)",
             "Thoroughly unit tested code with Jest, explored functional and E2E tests with Cypress",
