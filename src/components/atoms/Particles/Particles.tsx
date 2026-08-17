@@ -1,89 +1,42 @@
 'use client';
 
-import type { Engine, ISourceOptions } from '@tsparticles/engine';
-import {
-  Particles as TSParticles,
-  ParticlesProvider,
-} from '@tsparticles/react';
-import { loadSlim } from '@tsparticles/slim';
-import { useCallback, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+
+/* ssr: false because there is nothing to render on the server — the canvas is
+   painted by the engine after mount — and because it keeps the engine out of
+   the initial client bundle entirely. */
+const ParticlesCanvas = dynamic(
+  async () => (await import('./ParticlesCanvas')).ParticlesCanvas,
+  { ssr: false },
+);
+
+/* Background decoration, so it has no business competing with the page for
+   bandwidth or main thread while that page is still painting. Waiting for
+   idle pushes both the chunk and the engine's setup past LCP. The timeout is
+   the backstop for a browser that never goes idle; the setTimeout branch is
+   for Safari, which only shipped requestIdleCallback in 18.4. */
+const idleTimeout = 2000;
+const fallbackDelay = 200;
 
 const Particles = () => {
-  /* v4 replaced initParticlesEngine with a provider. TSParticles reads the
-     loaded flag off its context, so it no longer needs a render gate here. */
-  const init = useCallback(async (engine: Engine): Promise<void> => {
-    await loadSlim(engine);
+  const [isReady, setIsReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window.requestIdleCallback === 'function') {
+      const handle = window.requestIdleCallback(() => setIsReady(true), {
+        timeout: idleTimeout,
+      });
+
+      return () => window.cancelIdleCallback(handle);
+    }
+
+    const handle = window.setTimeout(() => setIsReady(true), fallbackDelay);
+
+    return () => window.clearTimeout(handle);
   }, []);
 
-  const options: ISourceOptions = useMemo(
-    () => ({
-      particles: {
-        number: {
-          value: 600,
-          density: {
-            enable: true,
-          },
-        },
-        color: {
-          value: '#ffffff',
-        },
-        shape: {
-          type: 'circle',
-          polygon: {
-            nb_sides: 5,
-          },
-        },
-        opacity: {
-          value: 0.3,
-          random: true,
-        },
-        size: {
-          value: 2.2,
-          random: true,
-        },
-        lineLinked: {
-          enable: false,
-        },
-        move: {
-          enable: true,
-          speed: 0.25,
-          direction: 'none',
-          random: false,
-          straight: false,
-          out_mode: 'out',
-          bounce: false,
-          attract: {
-            enable: false,
-          },
-        },
-      },
-      interactivity: {
-        events: {
-          onHover: {
-            enable: true,
-            mode: 'bubble',
-          },
-        },
-        modes: {
-          bubble: {
-            distance: 175,
-            size: 4,
-            duration: 2,
-            opacity: 0.6,
-            speed: 3,
-          },
-        },
-      },
-      detectRetina: true,
-    }),
-    [],
-  );
-
-  return (
-    <ParticlesProvider init={init}>
-      <TSParticles id="tsparticles" options={options} className="particles" />
-    </ParticlesProvider>
-  );
+  return isReady ? <ParticlesCanvas /> : null;
 };
 
 export { Particles };

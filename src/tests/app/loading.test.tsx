@@ -44,4 +44,12 @@ describe('LoadingPage', () => {
 
     expect(MugshotSkeleton).toHaveBeenCalledTimes(1);
   });
+
+  /* Present for parity with the real page: `.home` centres its column, so a
+     footer in one and not the other shifts everything above it on swap. */
+  it('renders a footer', () => {
+    setup();
+
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+  });
 });
