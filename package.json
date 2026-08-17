@@ -16,7 +16,8 @@
     "format:check": "oxfmt --check",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "typecheck": "tsc --pretty --noEmit"
+    "typecheck": "tsc --pretty --noEmit",
+    "verify": "pnpm lint && pnpm format:check && pnpm lint:types && pnpm typecheck && pnpm coverage"
   },
   "dependencies": {
     "@bcwatson22/motes": "0.2.2",
