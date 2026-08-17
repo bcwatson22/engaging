@@ -20,23 +20,23 @@ const idleTimeout = 2000;
 const fallbackDelay = 200;
 
 const Particles = () => {
-  const [ready, setReady] = useState(false);
+  const [isReady, setIsReady] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window.requestIdleCallback === 'function') {
-      const handle = window.requestIdleCallback(() => setReady(true), {
+      const handle = window.requestIdleCallback(() => setIsReady(true), {
         timeout: idleTimeout,
       });
 
       return () => window.cancelIdleCallback(handle);
     }
 
-    const handle = window.setTimeout(() => setReady(true), fallbackDelay);
+    const handle = window.setTimeout(() => setIsReady(true), fallbackDelay);
 
     return () => window.clearTimeout(handle);
   }, []);
 
-  return ready ? <ParticlesCanvas /> : null;
+  return isReady ? <ParticlesCanvas /> : null;
 };
 
 export { Particles };
