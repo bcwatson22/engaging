@@ -6,15 +6,58 @@ import {
   ParticlesProvider,
 } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useId, useMemo, useSyncExternalStore } from 'react';
 
-const Particles = () => {
+type Props = {
+  /* On a light scheme. */
+  color?: string;
+  /* On a dark one. Defaults to `color`, so a page that looks the same in both
+     — the home page — passes one value and gets one behaviour. */
+  colorDark?: string;
+};
+
+const defaultColor = '#ffffff';
+
+const darkQuery = '(prefers-color-scheme: dark)';
+
+const subscribe = (onChange: () => void): (() => void) => {
+  const query = window.matchMedia(darkQuery);
+
+  query.addEventListener('change', onChange);
+
+  return () => query.removeEventListener('change', onChange);
+};
+
+const isDarkNow = (): boolean => window.matchMedia(darkQuery).matches;
+
+/* Assumed on the server, where there is no scheme to read. Dark rather than
+   light because the canvas is only drawn after mount, so this value never
+   reaches the screen — it only has to be stable enough not to trip hydration. */
+const isDarkOnServer = (): boolean => true;
+
+const Particles = ({ color = defaultColor, colorDark = color }: Props) => {
+  /* Subscribed to rather than read once: someone switching their system
+     appearance with the page open should see the field follow, and a media
+     query read in a memo would not. */
+  const isDark = useSyncExternalStore(subscribe, isDarkNow, isDarkOnServer);
+
+  const active = isDark ? colorDark : color;
+
+  /* Unique per instance. The wrapper falls back to a hardcoded "tsparticles"
+     id and refuses to keep a container whose element it cannot find by that
+     id — so two of these on one page, or a client-side navigation between two
+     pages that both render one, would fight over the same container. */
+  const id = useId();
+
   /* v4 replaced initParticlesEngine with a provider. TSParticles reads the
      loaded flag off its context, so it no longer needs a render gate here. */
   const init = useCallback(async (engine: Engine): Promise<void> => {
     await loadSlim(engine);
   }, []);
 
+  /* `color` in the dependencies, not an empty array. The wrapper reloads the
+     container when this object's identity changes, so a memo that never
+     recomputes is a colour that can never change. */
   const options: ISourceOptions = useMemo(
     () => ({
       particles: {
@@ -25,24 +68,16 @@ const Particles = () => {
           },
         },
         color: {
-          value: '#ffffff',
+          value: active,
         },
         shape: {
           type: 'circle',
-          polygon: {
-            nb_sides: 5,
-          },
         },
         opacity: {
           value: 0.3,
-          random: true,
         },
         size: {
           value: 2.2,
-          random: true,
-        },
-        lineLinked: {
-          enable: false,
         },
         move: {
           enable: true,
@@ -50,7 +85,7 @@ const Particles = () => {
           direction: 'none',
           random: false,
           straight: false,
-          out_mode: 'out',
+          outModes: 'out',
           bounce: false,
           attract: {
             enable: false,
@@ -76,14 +111,15 @@ const Particles = () => {
       },
       detectRetina: true,
     }),
-    [],
+    [active],
   );
 
   return (
     <ParticlesProvider init={init}>
-      <TSParticles id="tsparticles" options={options} className="particles" />
+      <TSParticles id={id} options={options} className="particles" />
     </ParticlesProvider>
   );
 };
 
-export { Particles };
+export { Particles, defaultColor };
+export type { Props as ParticlesProps };

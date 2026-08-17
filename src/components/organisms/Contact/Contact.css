@@ -1,52 +1,158 @@
 @utility contact-form {
+  /* Follows the link atom's convention: blue on a light scheme, yellow on a
+     dark one. Declared once here so the outlines, the button border and its
+     wipe cannot drift apart.
+
+     --reset is the page's own background. The button rests with no fill, and
+     the only way to wipe *back* to that is with a layer painted the colour
+     the page already is — see the button's own note. */
+  --accent: var(--brand-blue);
+  --accent-text: var(--brand-light);
+  --reset: var(--brand-light);
+
+  @media (prefers-color-scheme: dark) {
+    --accent: var(--brand-yellow);
+    --accent-text: var(--brand-dark);
+    --reset: var(--brand-dark);
+  }
+
   /* Above the particle canvas, which tsparticles positions for itself. Without
      a stacking context of its own, a full-screen canvas can end up over the
      form and swallow clicks on the inputs. */
-  @apply relative z-10;
-  @apply mx-auto flex w-full max-w-xl flex-col gap-6;
+  @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col justify-center gap-6 py-8;
 
   & form {
     @apply flex flex-col gap-4;
   }
 
-  & .field {
-    @apply flex flex-col;
+  /* A fieldset carries a border, padding and a min-width of min-content by
+     default. The last of those is the one that bites: it stops the fields
+     shrinking below their content and breaks the layout on narrow screens. */
+  & fieldset {
+    @apply flex min-w-0 flex-col gap-4 border-0 p-0;
   }
 
-  /* The label wraps its control, so the text needs to be a block of its own
-     to sit above rather than beside it. */
+  & legend {
+    @apply mb-2 p-0;
+  }
+
   & label > span {
     @apply mb-1 block;
   }
 
+  /* Full-opacity border, matching the button. Both were already 1px — the
+     inputs only looked thinner because a 40% alpha reads as a lighter, and so
+     apparently finer, line. The fill keeps its alpha so the particles still
+     show through. */
   & input,
   & textarea {
-    @apply w-full rounded-sm border border-white/40 bg-black/40 p-2;
-    @apply focus-visible:outline-brand-yellow focus-visible:outline-2 focus-visible:outline-offset-2;
+    @apply border-brand-blue bg-brand-light/40 outline-brand-dark block w-full rounded-sm border-2 p-2;
+    @apply dark:border-brand-yellow dark:bg-brand-dark/40 dark:outline-brand-light;
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2;
   }
 
-  /* Not colour alone — the border weight carries the same information for
-     anyone who cannot distinguish the hue. */
+  /* Lifted the same way the error text is: raw brand-red is dark enough to
+     read as near-black against a light background, so the border looked like
+     an ordinary dark outline rather than an alarm. Hue and chroma are kept,
+     only lightness moves, so it stays the brand's red. */
   & [aria-invalid='true'] {
-    @apply border-brand-red border-2;
+    border-color: oklch(from var(--brand-red) 0.55 c h);
+
+    @media (prefers-color-scheme: dark) {
+      border-color: oklch(from var(--brand-red) 0.72 c h);
+    }
   }
 
   & textarea {
     @apply resize-y;
   }
 
+  /* brand-red is #740a01 — dark enough that it reads as near-black on a light
+     background and as almost nothing on a dark one. It is a good colour to
+     fill a shape with, which is what Bullet uses it for, and a poor one to
+     set small text in.
+
+     Relative colour syntax keeps the brand hue and chroma and only moves
+     lightness, so this stays recognisably the same red rather than becoming
+     a different one. Two stops, because a single value cannot clear both
+     backgrounds. */
   & .error {
-    @apply text-brand-red mt-1 block text-sm;
+    @apply mt-1 block text-xs;
+
+    color: oklch(from var(--brand-red) 0.52 c h);
+
+    @media (prefers-color-scheme: dark) {
+      color: oklch(from var(--brand-red) 0.72 c h);
+    }
   }
 
   & button {
-    @apply border-brand-yellow flex items-center gap-2 self-start rounded-sm border px-4 py-2;
-    @apply focus-visible:outline-brand-yellow focus-visible:outline-2 focus-visible:outline-offset-2;
+    @apply relative flex cursor-pointer items-center gap-2 self-start rounded-sm border-2 px-4 py-2;
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
     @apply disabled:cursor-not-allowed disabled:opacity-60;
+
+    border-color: var(--accent);
+    outline-color: var(--accent);
+
+    /* The link underline's wipe, scaled from a 2px bar to the whole button.
+
+       The thing to preserve is that the link never *shrinks* a layer. Every
+       state grows one from zero width, so every transition reads left to
+       right — including the return to rest, which is a third layer painted
+       the resting colour growing over the hover colour.
+
+       So this needs two layers rather than one. Shrinking the fill on press
+       would animate right to left, because it is the right edge that moves.
+       Instead --reset — the page's own background — wipes across on top of
+       the accent, which looks like the fill leaving but travels the same way
+       it arrived. */
+    background-image:
+      linear-gradient(var(--reset), var(--reset)),
+      linear-gradient(var(--accent), var(--accent));
+    background-size:
+      0 100%,
+      0 100%;
+    background-position:
+      0 0,
+      0 0;
+    background-repeat: no-repeat;
+    transition:
+      background-size 0.125s ease-out,
+      color 0.125s ease-out;
+
+    @apply motion-reduce:transition-none;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--accent-text);
+
+      background-size:
+        0 100%,
+        100% 100%;
+    }
+
+    /* Declared after :hover so it wins while both apply — same specificity.
+       The text returns with the fill: --accent-text was chosen to sit on the
+       accent and would be invisible once the reset layer has covered it. */
+    &:active {
+      @apply text-inherit;
+
+      background-size:
+        100% 100%,
+        100% 100%;
+    }
+
+    /* Nothing to wipe into while it is sending, and a hover state on a
+       control that ignores clicks is a lie. */
+    &:disabled {
+      background-size:
+        0 100%,
+        0 100%;
+    }
 
     /* Sized to the text beside it, matching the icon links elsewhere. */
     & .vector {
-      @apply size-5;
+      @apply relative size-5 translate-none;
     }
   }
 
@@ -57,7 +163,9 @@
   }
 
   & .status:focus-visible {
-    @apply outline-brand-yellow outline-2 outline-offset-2;
+    @apply outline-2 outline-offset-2;
+
+    outline-color: var(--accent);
   }
 
   /* Off-screen rather than display:none — a bot reading the DOM sees a normal

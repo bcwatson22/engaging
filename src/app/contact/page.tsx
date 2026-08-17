@@ -7,13 +7,10 @@ import { Nav } from '@/components/molecules/Nav/Nav';
 import { Contact } from '@/components/organisms/Contact/Contact';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
-const title = 'Contact — Engaging Engineering';
+const title = 'Contact | Engaging Engineering';
 const description =
-  'Get in touch with Billy Watson about contract, permanent or consulting work.';
+  'Get in touch with us about contract, permanent or consulting work.';
 
-/* Static rather than CMS-driven: there is no contact model in Hygraph, and
-   inventing one to hold two sentences would be a schema change in service of
-   nothing. */
 const generateMetadata = (): Metadata => ({
   title,
   description,
@@ -34,9 +31,12 @@ const ContactPage = () => (
   <main className="contact main">
     <h1 className="sr-only">{title}</h1>
     <Suspense>
-      <Particles />
+      {/* Brand blue on a light background, brand light on a dark one — the
+          same pairing the link atom uses. A single colour cannot work here
+          the way it does on the home page, which is always dark. */}
+      <Particles color="#245385" colorDark="#f9fafb" />
     </Suspense>
-    <Nav />
+    <Nav className="flex justify-center" />
     <Contact />
     <footer className="footer">
       <Copyright />

@@ -1,10 +1,14 @@
 @utility contact {
-  @apply animate-fade-in flex flex-col justify-center overflow-hidden bg-black p-6 pb-[calc(var(--footer)+1.5rem)] text-white;
-  @apply sm:p-6 md:items-center;
+  /* No background or text colour of its own, unlike the home page, which is
+     always dark by design. Leaving them off lets `body` supply the pair it
+     already defines for both schemes — see layers/base.css. */
+  @apply animate-fade-in flex flex-col justify-center overflow-hidden p-6;
+  @apply md:items-center;
 
-  /* Matches the home page, where the same particle field sits behind the
-     content. */
+  /* The link atom already swaps blue for yellow by scheme; this only needs to
+     match it. */
   & a {
-    @apply decoration-brand-yellow;
+    @apply decoration-brand-blue;
+    @apply dark:decoration-brand-yellow;
   }
 }

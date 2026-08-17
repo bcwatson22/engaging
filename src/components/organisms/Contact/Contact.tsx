@@ -65,81 +65,91 @@ const Contact = () => {
 
   return (
     <section aria-labelledby={headingId} className="contact-form">
-      <h2 id={headingId}>Get in touch</h2>
-
       <form ref={formRef} action={submit} noValidate>
-        {/* The error sits beside the label rather than inside it. A label's
+        {/* The heading lives inside the legend so the group is named and the
+            page still has a heading to navigate by — a legend does not appear
+            in a heading list, and an h2 does not name a group. Both, once.
+
+            The button sits outside the fieldset: it is an action on the
+            group, not a field in it. */}
+        <fieldset>
+          <legend>
+            <h2 id={headingId}>Get in touch</h2>
+          </legend>
+
+          {/* The error sits beside the label rather than inside it. A label's
             text content becomes its control's accessible name, so an error
             nested in there would be appended to the name — a screen reader
             would announce "Email, please enter a valid email address…" as
             what the field is called, then read it again as its description. */}
-        <div className="field">
-          <label>
-            <span>Name</span>
-            <input
-              {...shared('name')}
-              type="text"
-              maxLength={maxName}
-              autoComplete="name"
-            />
-          </label>
-          {errors.name && (
-            <span id={`${ids.name}-error`} className="error">
-              {errors.name}
-            </span>
-          )}
-        </div>
+          <div className="field">
+            <label>
+              <span>Name</span>
+              <input
+                {...shared('name')}
+                type="text"
+                maxLength={maxName}
+                autoComplete="name"
+              />
+            </label>
+            {errors.name && (
+              <span id={`${ids.name}-error`} className="error">
+                {errors.name}
+              </span>
+            )}
+          </div>
 
-        <div className="field">
-          <label>
-            <span>Email</span>
-            <input
-              {...shared('email')}
-              type="email"
-              pattern={emailPattern}
-              autoComplete="email"
-            />
-          </label>
-          {errors.email && (
-            <span id={`${ids.email}-error`} className="error">
-              {errors.email}
-            </span>
-          )}
-        </div>
+          <div className="field">
+            <label>
+              <span>Email</span>
+              <input
+                {...shared('email')}
+                type="email"
+                pattern={emailPattern}
+                autoComplete="email"
+              />
+            </label>
+            {errors.email && (
+              <span id={`${ids.email}-error`} className="error">
+                {errors.email}
+              </span>
+            )}
+          </div>
 
-        <div className="field">
-          <label>
-            <span>Message</span>
-            <textarea
-              {...shared('message')}
-              rows={6}
-              minLength={minMessage}
-              maxLength={maxMessage}
-            />
-          </label>
-          {errors.message && (
-            <span id={`${ids.message}-error`} className="error">
-              {errors.message}
-            </span>
-          )}
-        </div>
+          <div className="field">
+            <label>
+              <span>Message</span>
+              <textarea
+                {...shared('message')}
+                rows={6}
+                minLength={minMessage}
+                maxLength={maxMessage}
+              />
+            </label>
+            {errors.message && (
+              <span id={`${ids.message}-error`} className="error">
+                {errors.message}
+              </span>
+            )}
+          </div>
 
-        {/* Hidden from everyone who should not see it: from sight, from the
+          {/* Hidden from everyone who should not see it: from sight, from the
             accessibility tree, and from the tab order. Left uncontrolled and
             read from the submitted FormData, which is the most faithful
             record of what a bot actually filled in. */}
-        <div className="honeypot" aria-hidden="true">
-          <label>
-            <span>Leave this empty</span>
-            <input
-              name={honeypotField}
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              defaultValue=""
-            />
-          </label>
-        </div>
+          <div className="honeypot" aria-hidden="true">
+            <label className="honeypot" aria-hidden="true">
+              <span>Leave this empty</span>
+              <input
+                name={honeypotField}
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue=""
+              />
+            </label>
+          </div>
+        </fieldset>
 
         <button type="submit" disabled={isPending}>
           <Icon icon="Send" className="vector" />
@@ -157,7 +167,7 @@ const Contact = () => {
       </output>
 
       <p className="fallback">
-        Or email me directly at <Link link={fallback} />.
+        Or email me directly at: <Link link={fallback} className="block" />
       </p>
     </section>
   );
