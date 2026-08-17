@@ -1,5 +1,3 @@
-/** @type {import('next').NextConfig} */
-
 /* Where the contact form posts. Public, and hardcoded for the same reason the
    bucket URL below is: an env var that is merely missing would produce a CSP
    that silently blocks the form, which is worse than a config that cannot
@@ -34,6 +32,11 @@ const cspHeader = `
    env var so the config is self-contained and cannot half-work. */
 const artifacts = 'https://pub-53c526b0d6a84a57afc0b459064235fd.r2.dev';
 
+/* Directly above the object it describes. A JSDoc @type applies to the next
+   declaration, so while it sat at the top of the file it was typing whichever
+   constant happened to come first — which made a string of a URL read as a
+   NextConfig object, and only showed up once that string was interpolated. */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   /* The OG route reads this at runtime with fs, which the bundler cannot see,
      so it has to be traced in explicitly. Without it the route throws only
