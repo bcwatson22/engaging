@@ -7,6 +7,7 @@ import {
   GlobeAltIcon,
   HomeIcon,
   IdentificationIcon,
+  PaperAirplaneIcon,
   RocketLaunchIcon,
   UserIcon,
   XMarkIcon,
@@ -23,6 +24,7 @@ const iconOptions = [
   'Profile',
   'Repo',
   'Retry',
+  'Send',
   'User',
   'Website',
 ] as const;
@@ -48,6 +50,7 @@ const iconMap: Record<
   Profile: IdentificationIcon,
   Repo: RocketLaunchIcon,
   Retry: ArrowPathIcon,
+  Send: PaperAirplaneIcon,
   User: UserIcon,
   Website: GlobeAltIcon,
 };

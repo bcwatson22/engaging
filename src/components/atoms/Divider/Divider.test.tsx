@@ -2,13 +2,15 @@ import { cleanup, render, screen } from '@testing-library/react';
 import type { Target } from 'motion/react';
 import type { Mock } from 'vitest';
 
-import { useScrollTrigger } from '@/hooks/useScrollTrigger';
+import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
 import { Divider, type DividerProps } from './Divider';
 
-vi.mock('@/hooks/useScrollTrigger', () => ({
+vi.mock('@/hooks/useScrollTrigger/useScrollTrigger', () => ({
   useScrollTrigger:
-    vi.fn<typeof import('@/hooks/useScrollTrigger').useScrollTrigger>(),
+    vi.fn<
+      typeof import('@/hooks/useScrollTrigger/useScrollTrigger').useScrollTrigger
+    >(),
 }));
 
 type UseScrollTrigger = Partial<ReturnType<typeof useScrollTrigger>>;

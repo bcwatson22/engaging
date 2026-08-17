@@ -1,0 +1,10 @@
+@utility contact {
+  @apply animate-fade-in flex flex-col justify-center overflow-hidden bg-black p-6 pb-[calc(var(--footer)+1.5rem)] text-white;
+  @apply sm:p-6 md:items-center;
+
+  /* Matches the home page, where the same particle field sits behind the
+     content. */
+  & a {
+    @apply decoration-brand-yellow;
+  }
+}

@@ -3,7 +3,7 @@
 import { motion, useScroll } from 'motion/react';
 import { useRef } from 'react';
 
-import { useScrollTrigger } from '@/hooks/useScrollTrigger';
+import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
 type Props = TScroll & {
   heading: string;

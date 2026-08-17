@@ -1,0 +1,68 @@
+@utility contact-form {
+  /* Above the particle canvas, which tsparticles positions for itself. Without
+     a stacking context of its own, a full-screen canvas can end up over the
+     form and swallow clicks on the inputs. */
+  @apply relative z-10;
+  @apply mx-auto flex w-full max-w-xl flex-col gap-6;
+
+  & form {
+    @apply flex flex-col gap-4;
+  }
+
+  & .field {
+    @apply flex flex-col;
+  }
+
+  /* The label wraps its control, so the text needs to be a block of its own
+     to sit above rather than beside it. */
+  & label > span {
+    @apply mb-1 block;
+  }
+
+  & input,
+  & textarea {
+    @apply w-full rounded-sm border border-white/40 bg-black/40 p-2;
+    @apply focus-visible:outline-brand-yellow focus-visible:outline-2 focus-visible:outline-offset-2;
+  }
+
+  /* Not colour alone — the border weight carries the same information for
+     anyone who cannot distinguish the hue. */
+  & [aria-invalid='true'] {
+    @apply border-brand-red border-2;
+  }
+
+  & textarea {
+    @apply resize-y;
+  }
+
+  & .error {
+    @apply text-brand-red mt-1 block text-sm;
+  }
+
+  & button {
+    @apply border-brand-yellow flex items-center gap-2 self-start rounded-sm border px-4 py-2;
+    @apply focus-visible:outline-brand-yellow focus-visible:outline-2 focus-visible:outline-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-60;
+
+    /* Sized to the text beside it, matching the icon links elsewhere. */
+    & .vector {
+      @apply size-5;
+    }
+  }
+
+  /* Empty until there is something to say, so it must not reserve space or
+     draw a focus ring around nothing. */
+  & .status:empty {
+    @apply hidden;
+  }
+
+  & .status:focus-visible {
+    @apply outline-brand-yellow outline-2 outline-offset-2;
+  }
+
+  /* Off-screen rather than display:none — a bot reading the DOM sees a normal
+     field, while nothing in the accessibility tree or the tab order does. */
+  & .honeypot {
+    @apply absolute -left-[9999px] h-px w-px overflow-hidden;
+  }
+}

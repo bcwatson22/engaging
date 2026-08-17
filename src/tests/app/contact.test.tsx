@@ -5,13 +5,17 @@ import ContactPage, {
   generateMetadata,
   title,
 } from '@/app/contact/page';
-import { ContactForm } from '@/components/organisms/ContactForm/ContactForm';
+import { Particles } from '@/components/atoms/Particles/Particles';
+import { Contact } from '@/components/organisms/Contact/Contact';
 
-vi.mock('@/components/organisms/ContactForm/ContactForm', () => ({
-  ContactForm:
-    vi.fn<
-      typeof import('@/components/organisms/ContactForm/ContactForm').ContactForm
-    >(),
+vi.mock('@/components/organisms/Contact/Contact', () => ({
+  Contact:
+    vi.fn<typeof import('@/components/organisms/Contact/Contact').Contact>(),
+}));
+
+vi.mock('@/components/atoms/Particles/Particles', () => ({
+  Particles:
+    vi.fn<typeof import('@/components/atoms/Particles/Particles').Particles>(),
 }));
 
 const setup = () => render(<ContactPage />);
@@ -25,7 +29,7 @@ describe('ContactPage', () => {
   it('renders the form', () => {
     setup();
 
-    expect(ContactForm).toHaveBeenCalledTimes(1);
+    expect(Contact).toHaveBeenCalledTimes(1);
   });
 
   it('gives the page a heading for assistive technology', () => {
@@ -38,6 +42,12 @@ describe('ContactPage', () => {
     setup();
 
     expect(screen.getByRole('navigation')).toBeInTheDocument();
+  });
+
+  it('carries the same particle field as the home page', () => {
+    setup();
+
+    expect(Particles).toHaveBeenCalledTimes(1);
   });
 
   it('describes the page for search and for sharing', () => {

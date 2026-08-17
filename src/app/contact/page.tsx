@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { Copyright } from '@/components/atoms/Copyright/Copyright';
+import { Particles } from '@/components/atoms/Particles/Particles';
 import { Nav } from '@/components/molecules/Nav/Nav';
-import { ContactForm } from '@/components/organisms/ContactForm/ContactForm';
+import { Contact } from '@/components/organisms/Contact/Contact';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
 const title = 'Contact — Engaging Engineering';
@@ -31,8 +33,11 @@ const generateMetadata = (): Metadata => ({
 const ContactPage = () => (
   <main className="contact main">
     <h1 className="sr-only">{title}</h1>
+    <Suspense>
+      <Particles />
+    </Suspense>
     <Nav />
-    <ContactForm />
+    <Contact />
     <footer className="footer">
       <Copyright />
     </footer>

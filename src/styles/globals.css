@@ -60,7 +60,7 @@
 @import '../components/molecules/Role/Role.css';
 @import '../components/molecules/Technology/Technology.css';
 
-@import '../components/organisms/ContactForm/ContactForm.css';
+@import '../components/organisms/Contact/Contact.css';
 @import '../components/organisms/Gig/Gig.css';
 @import '../components/organisms/Mugshot/Mugshot.css';
 @import '../components/organisms/Mugshot/Mugshot.utilities.css';
@@ -68,6 +68,7 @@
 
 @import './pages/home.css';
 @import './pages/cv.css';
+@import './pages/contact.css';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
