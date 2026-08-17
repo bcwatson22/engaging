@@ -40,7 +40,7 @@ const Header = ({
       </Suspense>
     </div>
     <Suspense>
-      <Nav />
+      <Nav hasDownload />
     </Suspense>
   </header>
 );
