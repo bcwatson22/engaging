@@ -105,6 +105,11 @@ describe('Mugshot', () => {
 });
 
 describe('MugshotSkeleton', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    cleanup();
+  });
+
   it('renders a skeleton state', () => {
     render(<MugshotSkeleton />);
 
@@ -113,5 +118,20 @@ describe('MugshotSkeleton', () => {
     expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
       numOfPulses,
     );
+  });
+
+  /* The skeleton is painted first and the real Mugshot is swapped in over it,
+     so any difference in the wrapper's classes is a layout shift on every
+     first visit. `.technologies` is positioned against this box at md and up,
+     which makes its width the expensive thing to get wrong. */
+  it('renders the same wrapper as Mugshot', () => {
+    render(<MugshotSkeleton />);
+
+    const { className: skeleton } = screen.getByRole('article');
+
+    cleanup();
+    setup();
+
+    expect(screen.getByRole('article')).toHaveClass(skeleton, { exact: true });
   });
 });

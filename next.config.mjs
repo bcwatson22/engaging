@@ -59,6 +59,11 @@ const nextConfig = {
     },
   ],
   images: {
+    /* Trimmed from the default tail of [..., 2048, 3840]. Every candidate
+       here is spelled out in full in the srcset of any image that ships a
+       `sizes` prop, and nothing on this site is ever laid out wider than
+       448px, so the retina ceiling is comfortably under 1920. */
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [120, 144, 160, 200, 240, 280, 320, 360],
     remotePatterns: [
       {
