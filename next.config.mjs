@@ -77,6 +77,21 @@ const nextConfig = {
        Still experimental, and Turbopack-only: enabling it under webpack throws
        rather than falling back. Babel remains the stable path if that changes. */
     turbopackRustReactCompiler: true,
+
+    /* The stylesheet was the whole critical path: the document had to arrive
+       and be parsed before the browser could even ask for it, and Lighthouse
+       put that second request at 1,168ms on a throttled connection. Inlined,
+       the styles arrive with the HTML and the chain is one deep.
+
+       The trade is that CSS can no longer be cached apart from the document,
+       so every response carries it — worth it here, where the whole app's
+       styles gzip to ~8.6KB and the traffic is overwhelmingly first visits.
+       Revisit if that stops being true.
+
+       The CSP above already allows 'unsafe-inline' for style-src, so the
+       generated <style> is not blocked. Production only; `next dev` keeps
+       emitting <link>, so this can only be verified against a real build. */
+    inlineCss: true,
   },
   /* The OG route reads this at runtime with fs, which the bundler cannot see,
      so it has to be traced in explicitly. Without it the route throws only
