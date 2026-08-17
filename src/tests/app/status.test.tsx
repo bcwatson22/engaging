@@ -18,7 +18,7 @@ vi.mock('@/data/functions/getStatus', () => ({
 }));
 
 const status: TStatus = {
-  artifacts: { 'cv-pdf': null, 'startup-images': null },
+  artifacts: { 'cv-pdf': [], 'startup-images': [] },
   queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
 };
 

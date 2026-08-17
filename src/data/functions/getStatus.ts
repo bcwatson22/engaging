@@ -12,14 +12,25 @@ const timeout = 4000;
    on how stale this is allowed to be. */
 const revalidate = 60;
 
-const isRecord = (value: unknown): boolean =>
-  value === null ||
-  (typeof value === 'object' &&
-    value !== null &&
-    typeof (value as { at?: unknown }).at === 'string' &&
-    typeof (value as { result?: unknown }).result === 'string');
-
 const isNumber = (value: unknown): boolean => typeof value === 'number';
+
+const isRecord = (value: unknown): boolean => {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const { at, result, durationMs, attempts, elapsedMs } = value as Record<
+    string,
+    unknown
+  >;
+
+  return (
+    typeof at === 'string' &&
+    typeof result === 'string' &&
+    [durationMs, attempts, elapsedMs].every(isNumber)
+  );
+};
+
+const isHistory = (value: unknown): boolean =>
+  Array.isArray(value) && value.every(isRecord);
 
 /* Checked rather than cast. The service deploys separately from the site, so
    "the shape I expect" is an assumption about another process at another
@@ -34,7 +45,7 @@ const isStatus = (value: unknown): value is TStatus => {
   if (typeof queue !== 'object' || queue === null) return false;
 
   return (
-    artifacts.every((name) => isRecord(records[name])) &&
+    artifacts.every((name) => isHistory(records[name])) &&
     [queue.waiting, queue.active, queue.delayed, queue.failed].every(isNumber)
   );
 };

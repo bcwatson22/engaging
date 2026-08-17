@@ -9,10 +9,17 @@ type TArtifact = (typeof artifacts)[number];
 
 /* `result` is a string rather than a URL: the PDF has one public URL, the
    startup images have twenty-two and no single one between them, so the
-   service reports whatever the render produced. */
+   service reports whatever the render produced.
+
+   `durationMs` is the render itself; `elapsedMs` is enqueue to finish, so the
+   difference between them is how long the site took to catch up after a
+   publish — the race the service's content check retries through. */
 type TRecord = {
   at: string;
   result: string;
+  durationMs: number;
+  attempts: number;
+  elapsedMs: number;
 };
 
 type TQueue = {
@@ -22,8 +29,10 @@ type TQueue = {
   failed: number;
 };
 
+/* Newest first. The head is "when was this last rendered"; the tail is the
+   history the page draws. */
 type TStatus = {
-  artifacts: Record<TArtifact, TRecord | null>;
+  artifacts: Record<TArtifact, TRecord[]>;
   queue: TQueue;
 };
 

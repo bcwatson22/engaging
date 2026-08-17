@@ -1,11 +1,23 @@
 @utility status-panel {
+  /* Brand blue and yellow, snapped to steps that pass the palette checks:
+     the raw tokens sit below the chroma floor and outside the lightness band
+     for their mode, which is why these are not the tokens themselves.
+
+     `surface` is what the two spacers are drawn in — the gap between stacked
+     segments is the page showing through, not a border. */
+  --viz-render: #2f6fb0;
+  --viz-wait: #e08a10;
+  --viz-surface: var(--brand-light);
   --accent: var(--brand-blue);
 
   @media (prefers-color-scheme: dark) {
+    --viz-render: #4a90d9;
+    --viz-wait: #c07f1a;
+    --viz-surface: var(--brand-dark);
     --accent: var(--brand-yellow);
   }
 
-  @apply relative z-10 mx-auto flex w-full max-w-2xl grow flex-col justify-center gap-6 py-8;
+  @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col justify-center gap-6 py-8;
 
   & .intro {
     @apply max-w-prose text-sm opacity-80;
@@ -17,27 +29,113 @@
   }
 
   & .artifact {
-    @apply border-brand-dark/30 flex flex-col gap-1 rounded-sm border p-4;
+    @apply border-brand-dark/30 flex flex-col gap-3 rounded-sm border p-4;
     @apply dark:border-brand-light/30;
 
-    & .vector {
-      @apply size-6;
+    & h3 {
+      @apply flex items-center gap-2 text-base font-medium;
+    }
+
+    /* Not the shared `vector` utility: that is absolutely positioned for the
+       icon links, which pins it to the left of a padded container rather than
+       letting it sit in this heading's flex row. */
+    & .mark {
+      @apply size-5 shrink-0;
 
       color: var(--accent);
     }
 
-    & h3 {
-      @apply text-base font-medium;
+    /* The reading someone came for. Proportional figures, not tabular —
+       tabular gives every digit the width of a zero, which reads loose at
+       this size and is only worth it in a column of numbers. */
+    & .freshness {
+      @apply flex flex-col;
+
+      & strong {
+        @apply text-2xl font-medium;
+      }
+
+      & time {
+        @apply text-xs opacity-60;
+      }
     }
 
-    & time {
-      @apply text-sm opacity-80;
-    }
-
-    /* A URL or a count — long, and not something to read so much as to
-       confirm. Wraps anywhere rather than pushing the card wide. */
+    /* A URL or a count — long, and there to confirm rather than to read. */
     & .result {
-      @apply text-xs break-all opacity-60;
+      @apply mt-auto text-xs break-all opacity-60;
+    }
+  }
+
+  /* One render, split into the wait and the work. */
+  & .ladder {
+    @apply flex flex-col gap-2;
+
+    & .track {
+      /* 24px is the cap for a bar; the 2px gap between segments is the
+         surface showing through rather than a stroke, so no border. */
+      @apply flex h-4 w-full overflow-hidden rounded-sm;
+
+      gap: 2px;
+      background-color: var(--viz-surface);
+    }
+
+    & .wait {
+      background-color: var(--viz-wait);
+    }
+
+    & .render {
+      background-color: var(--viz-render);
+    }
+
+    & .legend {
+      @apply grid grid-cols-2 gap-2 text-xs;
+
+      & dt {
+        @apply flex items-center gap-1.5 opacity-70;
+      }
+
+      & dd {
+        @apply ml-0;
+      }
+
+      /* The swatch carries identity beside the text; the text never wears the
+         series colour itself. */
+      & .key {
+        @apply block size-2 shrink-0 rounded-full;
+      }
+
+      & .key.wait {
+        background-color: var(--viz-wait);
+      }
+
+      & .key.render {
+        background-color: var(--viz-render);
+      }
+    }
+  }
+
+  & .durations {
+    @apply m-0 flex flex-col gap-1;
+
+    & figcaption {
+      @apply text-xs opacity-70;
+    }
+
+    & .columns {
+      @apply flex h-12 items-end;
+
+      /* The gap is the separator between neighbouring columns, same 2px as
+         the stack's. */
+      gap: 2px;
+    }
+
+    /* Grows from a single baseline, rounded at the data end and square where
+       it meets it. Capped rather than filling its slot, so the row keeps
+       some air. */
+    & .column {
+      @apply w-full max-w-6 rounded-t-[4px];
+
+      background-color: var(--viz-render);
     }
   }
 
@@ -55,7 +153,7 @@
     }
 
     & .count {
-      @apply text-2xl tabular-nums;
+      @apply text-2xl;
     }
 
     & .name {
@@ -72,9 +170,8 @@
       color: var(--accent);
     }
 
-    /* Something is rendering right now — the one number worth catching an eye.
-       Opacity only, so it cannot shift the layout, and off entirely for anyone
-       who has asked for less motion. */
+    /* Something is rendering right now — the one number worth catching an
+       eye. Opacity only, so it cannot shift the layout. */
     & li[data-state='active'][data-busy='true'] .count {
       animation: statusPulse 1.6s ease-in-out infinite;
 

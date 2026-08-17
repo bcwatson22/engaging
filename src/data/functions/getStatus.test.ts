@@ -2,14 +2,16 @@ import type { TStatus } from '@/data/types/status';
 
 import { endpoint, getStatus, revalidate } from './getStatus';
 
+const record = {
+  at: '2026-08-17T12:00:00.000Z',
+  result: 'https://artifacts.example.com/billy-watson-cv.pdf',
+  durationMs: 14_000,
+  attempts: 3,
+  elapsedMs: 49_000,
+};
+
 const status: TStatus = {
-  artifacts: {
-    'cv-pdf': {
-      at: '2026-08-17T12:00:00.000Z',
-      result: 'https://artifacts.example.com/billy-watson-cv.pdf',
-    },
-    'startup-images': null,
-  },
+  artifacts: { 'cv-pdf': [record], 'startup-images': [] },
   queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
 };
 
@@ -101,9 +103,33 @@ describe('getStatus', () => {
         { artifacts: { 'cv-pdf': null }, queue: status.queue },
       ],
       [
-        'a record of the wrong shape',
+        'an artifact that is not a list',
         {
-          artifacts: { 'cv-pdf': { at: 1 }, 'startup-images': null },
+          artifacts: { 'cv-pdf': record, 'startup-images': [] },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a history entry that is not an object',
+        {
+          artifacts: { 'cv-pdf': ['nope'], 'startup-images': [] },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a history entry that is null',
+        {
+          artifacts: { 'cv-pdf': [null], 'startup-images': [] },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a record missing what the render cost',
+        {
+          artifacts: {
+            'cv-pdf': [{ at: 'now', result: 'x' }],
+            'startup-images': [],
+          },
           queue: status.queue,
         },
       ],
