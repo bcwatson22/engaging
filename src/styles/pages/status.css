@@ -1,0 +1,11 @@
+@utility status {
+  /* No colours of its own, so `body` supplies both schemes — same as the
+     contact page. */
+  @apply animate-fade-in flex flex-col justify-center overflow-hidden p-6;
+  @apply md:items-center;
+
+  & a {
+    @apply decoration-brand-blue;
+    @apply dark:decoration-brand-yellow;
+  }
+}

@@ -66,11 +66,13 @@
 @import '../components/organisms/Motes/Motes.css';
 @import '../components/organisms/Mugshot/Mugshot.css';
 @import '../components/organisms/Section/Section.css';
+@import '../components/organisms/Status/Status.css';
 
 @import './pages/home.css';
 @import './pages/cv.css';
 @import './pages/contact.css';
 @import './pages/motes.css';
+@import './pages/status.css';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,

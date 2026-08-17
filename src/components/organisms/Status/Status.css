@@ -1,0 +1,102 @@
+@utility status-panel {
+  --accent: var(--brand-blue);
+
+  @media (prefers-color-scheme: dark) {
+    --accent: var(--brand-yellow);
+  }
+
+  @apply relative z-10 mx-auto flex w-full max-w-2xl grow flex-col justify-center gap-6 py-8;
+
+  & .intro {
+    @apply max-w-prose text-sm opacity-80;
+  }
+
+  & .artifacts {
+    @apply grid gap-4;
+    @apply sm:grid-cols-2;
+  }
+
+  & .artifact {
+    @apply border-brand-dark/30 flex flex-col gap-1 rounded-sm border p-4;
+    @apply dark:border-brand-light/30;
+
+    & .vector {
+      @apply size-6;
+
+      color: var(--accent);
+    }
+
+    & h3 {
+      @apply text-base font-medium;
+    }
+
+    & time {
+      @apply text-sm opacity-80;
+    }
+
+    /* A URL or a count — long, and not something to read so much as to
+       confirm. Wraps anywhere rather than pushing the card wide. */
+    & .result {
+      @apply text-xs break-all opacity-60;
+    }
+  }
+
+  & .queue-heading {
+    @apply text-base font-medium;
+  }
+
+  & .queue {
+    @apply grid grid-cols-2 gap-3;
+    @apply sm:grid-cols-4;
+
+    & li {
+      @apply border-brand-dark/30 flex flex-col items-center rounded-sm border p-3;
+      @apply dark:border-brand-light/30;
+    }
+
+    & .count {
+      @apply text-2xl tabular-nums;
+    }
+
+    & .name {
+      @apply text-xs opacity-70;
+    }
+
+    /* Nothing in the queue is the normal state, so a zero should recede
+       rather than announce itself. */
+    & li[data-busy='false'] .count {
+      @apply opacity-40;
+    }
+
+    & li[data-busy='true'] .count {
+      color: var(--accent);
+    }
+
+    /* Something is rendering right now — the one number worth catching an eye.
+       Opacity only, so it cannot shift the layout, and off entirely for anyone
+       who has asked for less motion. */
+    & li[data-state='active'][data-busy='true'] .count {
+      animation: statusPulse 1.6s ease-in-out infinite;
+
+      @apply motion-reduce:animate-none;
+    }
+
+    & li[data-state='failed'][data-busy='true'] .count {
+      color: oklch(from var(--brand-red) 0.55 c h);
+
+      @media (prefers-color-scheme: dark) {
+        color: oklch(from var(--brand-red) 0.72 c h);
+      }
+    }
+  }
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
