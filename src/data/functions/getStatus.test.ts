@@ -10,8 +10,16 @@ const record = {
   elapsedMs: 49_000,
 };
 
+const check = {
+  at: '2026-08-17T12:00:00.000Z',
+  drifted: false,
+  queued: false,
+  stale: false,
+};
+
 const status: TStatus = {
   artifacts: { 'cv-pdf': [record], 'startup-images': [] },
+  integrity: { 'cv-pdf': check, 'startup-images': null },
   queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
 };
 
@@ -77,6 +85,27 @@ describe('getStatus', () => {
     await expect(getStatus()).resolves.toEqual(status);
   });
 
+  /* The service deploys separately, so a version predating the integrity
+     check is a real thing to meet. Refusing to read it would turn a missing
+     feature into "the service is not answering", which is a lie. */
+  describe('a service too old to run integrity checks', () => {
+    const older = { artifacts: status.artifacts, queue: status.queue };
+
+    it('is still read', async () => {
+      setup({ body: older });
+
+      await expect(getStatus()).resolves.not.toBeNull();
+    });
+
+    it('reports no checks rather than none at all', async () => {
+      setup({ body: older });
+
+      await expect(getStatus()).resolves.toMatchObject({
+        integrity: { 'cv-pdf': null, 'startup-images': null },
+      });
+    });
+  });
+
   it('returns nothing when the service cannot be reached', async () => {
     setup({ rejects: true });
 
@@ -96,8 +125,36 @@ describe('getStatus', () => {
     it.each([
       ['a string', 'nope'],
       ['null', null],
-      ['no artifacts', { queue: status.queue }],
-      ['no queue', { artifacts: status.artifacts }],
+      ['no artifacts', { queue: status.queue, integrity: status.integrity }],
+      [
+        'no queue',
+        { artifacts: status.artifacts, integrity: status.integrity },
+      ],
+
+      [
+        'integrity that is not an object at all',
+        {
+          artifacts: status.artifacts,
+          integrity: 'fine',
+          queue: status.queue,
+        },
+      ],
+      [
+        'a check of the wrong shape',
+        {
+          artifacts: status.artifacts,
+          integrity: { 'cv-pdf': { at: 'now' }, 'startup-images': null },
+          queue: status.queue,
+        },
+      ],
+      [
+        'a check that is not an object',
+        {
+          artifacts: status.artifacts,
+          integrity: { 'cv-pdf': 'fine', 'startup-images': null },
+          queue: status.queue,
+        },
+      ],
       [
         'a missing artifact',
         { artifacts: { 'cv-pdf': null }, queue: status.queue },
@@ -106,6 +163,7 @@ describe('getStatus', () => {
         'an artifact that is not a list',
         {
           artifacts: { 'cv-pdf': record, 'startup-images': [] },
+          integrity: status.integrity,
           queue: status.queue,
         },
       ],
@@ -113,6 +171,7 @@ describe('getStatus', () => {
         'a history entry that is not an object',
         {
           artifacts: { 'cv-pdf': ['nope'], 'startup-images': [] },
+          integrity: status.integrity,
           queue: status.queue,
         },
       ],
@@ -120,6 +179,7 @@ describe('getStatus', () => {
         'a history entry that is null',
         {
           artifacts: { 'cv-pdf': [null], 'startup-images': [] },
+          integrity: status.integrity,
           queue: status.queue,
         },
       ],

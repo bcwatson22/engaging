@@ -5,8 +5,10 @@ import {
   ClipboardDocumentIcon,
   CubeIcon,
   AtSymbolIcon,
+  CheckCircleIcon,
   DevicePhoneMobileIcon,
   DocumentTextIcon,
+  ExclamationTriangleIcon,
   GlobeAltIcon,
   HomeIcon,
   IdentificationIcon,
@@ -22,6 +24,7 @@ import { ForwardRefExoticComponent, SVGProps } from 'react';
 
 const iconOptions = [
   'Check',
+  'CheckCircle',
   'Copy',
   'Cross',
   'Document',
@@ -38,6 +41,7 @@ const iconOptions = [
   'Send',
   'Sparkles',
   'User',
+  'Warning',
   'Website',
 ] as const;
 
@@ -54,6 +58,9 @@ const iconMap: Record<
   ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, 'ref'>>
 > = {
   Check: CheckIcon,
+  /* A circled tick, distinct from the bare `Check` the copy button uses: the
+     status page is reporting a state, not confirming an action. */
+  CheckCircle: CheckCircleIcon,
   Copy: ClipboardDocumentIcon,
   Cross: XMarkIcon,
   Document: DocumentTextIcon,
@@ -70,6 +77,7 @@ const iconMap: Record<
   Send: PaperAirplaneIcon,
   Sparkles: SparklesIcon,
   User: UserIcon,
+  Warning: ExclamationTriangleIcon,
   Website: GlobeAltIcon,
 };
 

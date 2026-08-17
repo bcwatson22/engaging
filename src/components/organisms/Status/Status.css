@@ -60,6 +60,51 @@
       }
     }
 
+    /* Status, not a series: reserved hues, and never the chart's. Each one
+       ships with an icon and a sentence, so the colour is reinforcement
+       rather than the message. */
+    & .integrity {
+      @apply flex flex-wrap items-baseline gap-x-1.5 text-xs;
+
+      /* Separated by space rather than a middot in the markup: a punctuation
+         character between them would join the two into one text node and put
+         the state's wording out of reach of anything reading for it. */
+      & time {
+        @apply opacity-70;
+      }
+
+      & .mark {
+        @apply mt-px size-3.5 shrink-0;
+      }
+
+      &[data-state='current'] {
+        color: oklch(from var(--brand-green) 0.5 c h);
+
+        @media (prefers-color-scheme: dark) {
+          color: oklch(from var(--brand-green) 0.72 c h);
+        }
+      }
+
+      /* Queued is in progress, not a problem — the same accent the rest of
+         the card uses rather than a warning colour. */
+      &[data-state='queued'] {
+        color: var(--accent);
+      }
+
+      &[data-state='stale'] {
+        color: oklch(from var(--brand-red) 0.55 c h);
+
+        @media (prefers-color-scheme: dark) {
+          color: oklch(from var(--brand-red) 0.72 c h);
+        }
+      }
+
+      /* Nothing has happened yet, so it should recede. */
+      &[data-state='unchecked'] {
+        @apply opacity-50;
+      }
+    }
+
     /* A URL or a count — long, and there to confirm rather than to read. */
     & .result {
       @apply mt-auto text-xs break-all opacity-60;

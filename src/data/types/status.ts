@@ -22,6 +22,20 @@ type TRecord = {
   elapsedMs: number;
 };
 
+/* What the service's weekly integrity check last found for an artifact.
+
+   `drifted` — the live page no longer matches what was last rendered from it.
+   `queued`  — that check enqueued a render to put it right.
+   `stale`   — it drifted, a render was already queued by an earlier check, and
+               it is still drifting. Something is wrong that re-rendering will
+               not fix, which is the one state worth looking at. */
+type TCheck = {
+  at: string;
+  drifted: boolean;
+  queued: boolean;
+  stale: boolean;
+};
+
 type TQueue = {
   waiting: number;
   active: number;
@@ -33,8 +47,11 @@ type TQueue = {
    history the page draws. */
 type TStatus = {
   artifacts: Record<TArtifact, TRecord[]>;
+  /* Null where a check has not run yet — the schedule is weekly, so that is
+     the ordinary state for the first few days after a deploy. */
+  integrity: Record<TArtifact, TCheck | null>;
   queue: TQueue;
 };
 
 export { artifacts };
-export type { TStatus, TRecord, TQueue, TArtifact };
+export type { TStatus, TRecord, TCheck, TQueue, TArtifact };

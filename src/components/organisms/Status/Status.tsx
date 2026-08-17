@@ -1,5 +1,11 @@
 import { Icon, type TIcon } from '@/components/atoms/Icon/Icon';
-import type { TArtifact, TQueue, TRecord, TStatus } from '@/data/types/status';
+import type {
+  TArtifact,
+  TCheck,
+  TQueue,
+  TRecord,
+  TStatus,
+} from '@/data/types/status';
 import { formatDuration } from '@/utils/formatDuration';
 import { formatRelative } from '@/utils/formatRelative';
 
@@ -23,6 +29,43 @@ const counts: { key: keyof TQueue; name: string }[] = [
 /* Twelve columns is about a year of renders and about as many as stay
    readable at this width. */
 const shown = 12;
+
+/* Status, not a series — so these carry an icon and a sentence, never colour
+   alone, and they use the reserved status hues rather than the chart's. */
+type TState = 'unchecked' | 'current' | 'queued' | 'stale';
+
+const states: Record<TState, { icon: TIcon; says: string }> = {
+  unchecked: { icon: 'Retry', says: 'Not checked yet' },
+  current: { icon: 'CheckCircle', says: 'Matches the live page' },
+  queued: { icon: 'Retry', says: 'Page changed — a re-render is queued' },
+  stale: { icon: 'Warning', says: 'Still out of date after a re-render' },
+};
+
+const stateOf = (check: TCheck | null): TState => {
+  if (check === null) return 'unchecked';
+  if (check.stale) return 'stale';
+  if (check.drifted) return 'queued';
+
+  return 'current';
+};
+
+/* What the weekly check last found. Its boring answer is the common one, so
+   it reads as a quiet line rather than a banner — only `stale` is worth
+   catching an eye, because it is the one thing re-rendering will not fix. */
+const Integrity = ({ check }: { check: TCheck | null }) => {
+  const state = stateOf(check);
+  const { icon, says } = states[state];
+
+  return (
+    <p className="integrity" data-state={state}>
+      <Icon icon={icon} className="mark" />
+      <span className="says">{says}</span>
+      {check && (
+        <time dateTime={check.at}>checked {formatRelative(check.at)}</time>
+      )}
+    </p>
+  );
+};
 
 type Props = {
   status: TStatus | null;
@@ -129,9 +172,11 @@ const Durations = ({ history }: { history: TRecord[] }) => {
 const Artifact = ({
   artifact,
   history,
+  check,
 }: {
   artifact: TArtifact;
   history: TRecord[];
+  check: TCheck | null;
 }) => {
   const { name, icon } = labels[artifact];
   const [latest] = history;
@@ -157,6 +202,7 @@ const Artifact = ({
           <Ladder record={latest} />
           {history.length > 1 && <Durations history={history} />}
 
+          <Integrity check={check} />
           <p className="result">{latest.result}</p>
         </>
       ) : (
@@ -185,6 +231,7 @@ const Status = ({ status }: Props) => (
               key={artifact}
               artifact={artifact}
               history={status.artifacts[artifact]}
+              check={status.integrity[artifact]}
             />
           ))}
         </ul>
@@ -212,5 +259,5 @@ const Status = ({ status }: Props) => (
   </section>
 );
 
-export { Status, labels, counts, shown, waitOf, renderShare };
+export { Status, labels, counts, shown, waitOf, renderShare, states, stateOf };
 export type { Props as StatusProps };

@@ -1,8 +1,16 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
 
-import type { TRecord, TStatus } from '@/data/types/status';
+import type { TCheck, TRecord, TStatus } from '@/data/types/status';
 
-import { renderShare, shown, Status, type StatusProps, waitOf } from './Status';
+import {
+  renderShare,
+  shown,
+  stateOf,
+  Status,
+  type StatusProps,
+  states,
+  waitOf,
+} from './Status';
 
 const pdfUrl = 'https://artifacts.example.com/billy-watson-cv.pdf';
 
@@ -15,7 +23,16 @@ const recordAt = (at: string, overrides: Partial<TRecord> = {}): TRecord => ({
   ...overrides,
 });
 
+const check = (overrides: Partial<TCheck> = {}): TCheck => ({
+  at: '2026-08-17T11:00:00.000Z',
+  drifted: false,
+  queued: false,
+  stale: false,
+  ...overrides,
+});
+
 const status: TStatus = {
+  integrity: { 'cv-pdf': check(), 'startup-images': check() },
   artifacts: {
     'cv-pdf': [recordAt('2026-08-17T09:00:00.000Z')],
     'startup-images': [
@@ -31,6 +48,11 @@ const setup = (props?: Partial<StatusProps>) =>
 const withHistory = (history: TRecord[]): TStatus => ({
   ...status,
   artifacts: { ...status.artifacts, 'cv-pdf': history },
+});
+
+const withCheck = (found: TCheck | null): TStatus => ({
+  ...status,
+  integrity: { ...status.integrity, 'cv-pdf': found },
 });
 
 const countFor = (name: RegExp): string =>
@@ -166,6 +188,60 @@ describe('Status', () => {
     });
   });
 
+  /* Status rather than a series: an icon and a sentence carry it, so the
+     colour is reinforcement rather than the message. */
+  describe('the integrity check', () => {
+    it('says when an artifact still matches its page', () => {
+      setup();
+
+      expect(screen.getAllByText(states.current.says).length).toBeGreaterThan(
+        0,
+      );
+    });
+
+    it('says when a page changed and a re-render is on its way', () => {
+      setup({ status: withCheck(check({ drifted: true, queued: true })) });
+
+      expect(screen.getByText(states.queued.says)).toBeInTheDocument();
+    });
+
+    /* The one worth catching an eye — re-rendering has already been tried
+       and did not fix it. */
+    it('says when a re-render did not put it right', () => {
+      setup({
+        status: withCheck(check({ drifted: true, stale: true })),
+      });
+
+      expect(screen.getByText(states.stale.says)).toBeInTheDocument();
+    });
+
+    it('says when no check has run yet', () => {
+      setup({ status: withCheck(null) });
+
+      expect(screen.getByText(states.unchecked.says)).toBeInTheDocument();
+    });
+
+    it('says when it last looked', () => {
+      setup();
+
+      expect(
+        screen.getAllByText(/checked an hour ago/i).length,
+      ).toBeGreaterThan(0);
+    });
+
+    it('gives no time for a check that has never run', () => {
+      /* Both, because the other card's check would otherwise answer for it. */
+      setup({
+        status: {
+          ...status,
+          integrity: { 'cv-pdf': null, 'startup-images': null },
+        },
+      });
+
+      expect(screen.queryByText(/checked .* ago/i)).not.toBeInTheDocument();
+    });
+  });
+
   describe('the queue', () => {
     it('reports every count', () => {
       setup({
@@ -214,6 +290,28 @@ describe('Status', () => {
 
       expect(screen.queryByText(/render queue/i)).not.toBeInTheDocument();
     });
+  });
+});
+
+describe('stateOf', () => {
+  it('is unchecked before a check has run', () => {
+    expect(stateOf(null)).toBe('unchecked');
+  });
+
+  it('is current when nothing has drifted', () => {
+    expect(stateOf(check())).toBe('current');
+  });
+
+  it('is queued when it drifted and a render was asked for', () => {
+    expect(stateOf(check({ drifted: true, queued: true }))).toBe('queued');
+  });
+
+  /* Stale outranks drifted: both are true at once, and stale is the one that
+     means re-rendering will not help. */
+  it('is stale when a render was already tried and did not help', () => {
+    expect(stateOf(check({ drifted: true, queued: false, stale: true }))).toBe(
+      'stale',
+    );
   });
 });
 

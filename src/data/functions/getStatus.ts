@@ -32,6 +32,20 @@ const isRecord = (value: unknown): boolean => {
 const isHistory = (value: unknown): boolean =>
   Array.isArray(value) && value.every(isRecord);
 
+/* Null is valid: a check that has not run yet reports nothing rather than a
+   made-up result. Undefined is valid too — see `checksIn`. */
+const isCheck = (value: unknown): boolean => {
+  if (value === null || value === undefined) return true;
+  if (typeof value !== 'object') return false;
+
+  const { at, drifted, queued, stale } = value as Record<string, unknown>;
+
+  return (
+    typeof at === 'string' &&
+    [drifted, queued, stale].every((flag) => typeof flag === 'boolean')
+  );
+};
+
 /* Checked rather than cast. The service deploys separately from the site, so
    "the shape I expect" is an assumption about another process at another
    version — and rendering `undefined` into a page is a worse failure than
@@ -39,16 +53,31 @@ const isHistory = (value: unknown): boolean =>
 const isStatus = (value: unknown): value is TStatus => {
   if (typeof value !== 'object' || value === null) return false;
 
-  const { artifacts: records, queue } = value as Partial<TStatus>;
+  const { artifacts: records, integrity, queue } = value as Partial<TStatus>;
 
   if (typeof records !== 'object' || records === null) return false;
   if (typeof queue !== 'object' || queue === null) return false;
 
+  /* Absent is allowed, not merely empty. The service deploys separately from
+     the site, so a version of it predating the integrity check is a real
+     thing to meet — and refusing to read its response would turn a missing
+     feature into "the service is not answering", which is a lie. */
+  if (integrity !== undefined && typeof integrity !== 'object') return false;
+
   return (
     artifacts.every((name) => isHistory(records[name])) &&
+    artifacts.every((name) => isCheck(integrity?.[name])) &&
     [queue.waiting, queue.active, queue.delayed, queue.failed].every(isNumber)
   );
 };
+
+/* A service too old to run integrity checks reports the same thing as one
+   that has not run any yet: nothing found, for either artifact. */
+const checksIn = ({ integrity }: TStatus): TStatus['integrity'] =>
+  integrity ??
+  (Object.fromEntries(
+    artifacts.map((name) => [name, null]),
+  ) as TStatus['integrity']);
 
 /* Returns null rather than throwing, on any failure — asleep, unreachable, or
    answering something this page does not recognise. The page renders either
@@ -64,7 +93,7 @@ const getStatus = async (): Promise<TStatus | null> => {
 
     const parsed: unknown = await response.json();
 
-    return isStatus(parsed) ? parsed : null;
+    return isStatus(parsed) ? { ...parsed, integrity: checksIn(parsed) } : null;
   } catch {
     return null;
   }
