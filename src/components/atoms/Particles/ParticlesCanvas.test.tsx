@@ -32,8 +32,8 @@ const stubMediaQueries = ({ isDark = false, prefersReduced = false }) =>
       ({
         matches: query.includes('dark') ? isDark : prefersReduced,
         media: query,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
+        addEventListener: vi.fn<() => void>(),
+        removeEventListener: vi.fn<() => void>(),
       }) as unknown as MediaQueryList,
   );
 

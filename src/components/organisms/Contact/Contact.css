@@ -16,9 +16,9 @@
     --reset: var(--brand-dark);
   }
 
-  /* Above the particle canvas, which tsparticles positions for itself. Without
-     a stacking context of its own, a full-screen canvas can end up over the
-     form and swallow clicks on the inputs. */
+  /* Above the particle canvas. It is fixed and full-screen, so without a
+     stacking context of its own this form can end up underneath it — the
+     canvas is pointer-events-none, but z-order still decides what paints. */
   @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col justify-center gap-6 py-8;
 
   & form {

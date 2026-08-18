@@ -46,7 +46,10 @@ const createContext = () => ({
 
 type Options = {
   wasm?: ReturnType<typeof createWasm>;
-  context?: ReturnType<typeof createContext> | null;
+  /* Whether the canvas yields a 2D context at all. A flag rather than a
+     nullable context, so `context` below is never null and the assertions do
+     not have to chain through it. */
+  hasContext?: boolean;
   ratio?: number;
   clientWidth?: number;
   clientHeight?: number;
@@ -54,11 +57,12 @@ type Options = {
 
 const setup = async ({
   wasm = createWasm(),
-  context = createContext(),
+  hasContext = true,
   ratio = 1,
   clientWidth = 1280,
   clientHeight = 800,
 }: Options = {}) => {
+  const context = createContext();
   vi.stubGlobal('devicePixelRatio', ratio);
   vi.stubGlobal(
     'fetch',
@@ -76,7 +80,7 @@ const setup = async ({
   Object.defineProperty(canvas, 'clientWidth', { value: clientWidth });
   Object.defineProperty(canvas, 'clientHeight', { value: clientHeight });
   vi.spyOn(canvas, 'getContext').mockReturnValue(
-    context as unknown as CanvasRenderingContext2D,
+    hasContext ? (context as unknown as CanvasRenderingContext2D) : null,
   );
 
   const field = await createField(canvas, { color: '#245385' });
@@ -138,7 +142,7 @@ describe('createField', () => {
 
     expect(canvas.width).toBe(2560);
     expect(canvas.height).toBe(1600);
-    expect(context?.setTransform).toHaveBeenNthCalledWith(1, 2, 0, 0, 2, 0, 0);
+    expect(context.setTransform).toHaveBeenNthCalledWith(1, 2, 0, 0, 2, 0, 0);
   });
 
   it('falls back to a ratio of 1 where there is none', async () => {
@@ -179,7 +183,7 @@ describe('createField', () => {
 
       advance(performance.now() + 16);
 
-      expect(context?.arc).toHaveBeenCalledTimes(3);
+      expect(context.arc).toHaveBeenCalledTimes(3);
     });
 
     it('clears the canvas before drawing', async () => {
@@ -187,7 +191,7 @@ describe('createField', () => {
 
       advance(performance.now() + 16);
 
-      expect(context?.clearRect).toHaveBeenNthCalledWith(1, 0, 0, 1280, 800);
+      expect(context.clearRect).toHaveBeenNthCalledWith(1, 0, 0, 1280, 800);
     });
 
     it('draws in the colour it was given', async () => {
@@ -195,7 +199,7 @@ describe('createField', () => {
 
       advance(performance.now() + 16);
 
-      expect(context?.fillStyle).toBe('#245385');
+      expect(context.fillStyle).toBe('#245385');
     });
 
     it('draws each particle where the simulation put it', async () => {
@@ -203,7 +207,7 @@ describe('createField', () => {
 
       advance(performance.now() + 16);
 
-      expect(context?.arc).toHaveBeenNthCalledWith(
+      expect(context.arc).toHaveBeenNthCalledWith(
         1,
         10,
         20,
@@ -222,7 +226,7 @@ describe('createField', () => {
 
       advance(performance.now() + 16);
 
-      expect((context?.arc as Mock).mock.calls[0][2]).toBe(options.bubbleSize);
+      expect((context.arc as Mock).mock.calls[0][2]).toBe(options.bubbleSize);
     });
 
     it('interpolates size across a partial bubble', async () => {
@@ -232,7 +236,7 @@ describe('createField', () => {
 
       advance(performance.now() + 16);
 
-      expect((context?.arc as Mock).mock.calls[0][2]).toBeCloseTo(
+      expect((context.arc as Mock).mock.calls[0][2]).toBeCloseTo(
         options.size + (options.bubbleSize - options.size) * 0.5,
       );
     });
@@ -309,13 +313,13 @@ describe('createField', () => {
      page is correct without it. */
   describe('where there is no 2D context', () => {
     it('does not start a loop', async () => {
-      await setup({ context: null });
+      await setup({ hasContext: false });
 
       expect(requestAnimationFrame).toHaveBeenCalledTimes(0);
     });
 
     it('returns a field that is safe to destroy', async () => {
-      const { field } = await setup({ context: null });
+      const { field } = await setup({ hasContext: false });
 
       expect(() => field.destroy()).not.toThrow();
     });
