@@ -33,7 +33,15 @@ const Nav = ({ hasDownload = false, className }: Props) => {
   const links: TLink[] = [home, ...(hasDownload ? [download] : [cv, contact])];
 
   return (
-    <nav className={`nav print:hidden${className ? ' ' + className : ''}`}>
+    /* Built from discrete strings, not a template literal. Tailwind finds
+       classes by scanning source text for candidate tokens, and
+       `print:hidden${className...}` gave it no boundary to stop at — so it
+       read `print:hidden${className`, matched no utility, and generated no
+       rule. The class shipped in the HTML with nothing behind it, and the nav
+       appeared in the printed CV. */
+    <nav
+      className={['nav', 'print:hidden', className].filter(Boolean).join(' ')}
+    >
       <ul>
         {links.map((link) => (
           <li key={link?.target}>
