@@ -31,7 +31,12 @@ const ContactPage = () => (
   <main className="contact main">
     <h1 className="sr-only">{title}</h1>
     <Suspense>
-      <Particles color="var(--brand-blue)" colorDark="var(--brand-light)" />
+      <Particles
+        color="var(--brand-blue)"
+        colorDark="var(--brand-light)"
+        opacity={0.55}
+        opacityDark={0.3}
+      />
     </Suspense>
     <Nav className="flex justify-center" />
     <Contact />

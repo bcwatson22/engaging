@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 
-import { createField, type Field } from './engine';
+import { createField, defaultOpacity, type Field } from './engine';
 
 type Props = {
   /* On a light scheme. */
@@ -10,6 +10,12 @@ type Props = {
   /* On a dark one. Defaults to `color`, so a page that looks the same in both
      — the home page — passes one value and gets one behaviour. */
   colorDark?: string;
+  /* How solid a particle is at rest, 0 to 1. Worth raising on a light page:
+     a dark colour at the default 0.3 composites against near-white to
+     something close to grey. */
+  opacity?: number;
+  /* And on a dark one. Defaults to `opacity`, matching the colour props. */
+  opacityDark?: number;
 };
 
 const defaultColor = '#ffffff';
@@ -47,6 +53,8 @@ const isReducedOnServer = (): boolean => true;
 const ParticlesCanvas = ({
   color = defaultColor,
   colorDark = color,
+  opacity = defaultOpacity,
+  opacityDark = opacity,
 }: Props) => {
   const isDark = useSyncExternalStore(dark.subscribe, dark.get, isDarkOnServer);
   const prefersReduced = useSyncExternalStore(
@@ -56,6 +64,7 @@ const ParticlesCanvas = ({
   );
 
   const active = isDark ? colorDark : color;
+  const activeOpacity = isDark ? opacityDark : opacity;
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -66,7 +75,7 @@ const ParticlesCanvas = ({
     let field: Field | undefined;
     let cancelled = false;
 
-    createField(ref.current, { color: active })
+    createField(ref.current, { color: active, opacity: activeOpacity })
       .then((created) => {
         /* Unmounted while the module was still loading. */
         if (cancelled) {
@@ -84,7 +93,7 @@ const ParticlesCanvas = ({
       cancelled = true;
       field?.destroy();
     };
-  }, [active, prefersReduced]);
+  }, [active, activeOpacity, prefersReduced]);
 
   /* aria-hidden because it is decoration: there is nothing here to announce,
      and a bare canvas in the accessibility tree is noise. */

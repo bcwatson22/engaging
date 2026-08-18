@@ -11,6 +11,9 @@ import {
 
 vi.mock('./engine', () => ({
   createField: vi.fn<typeof import('./engine').createField>(),
+  /* Not mocked away: it is the resting opacity the component falls back to,
+     and a test asserting the default should assert the real one. */
+  defaultOpacity: 0.3,
 }));
 
 type Options = {
@@ -137,6 +140,39 @@ describe('ParticlesCanvas', () => {
         setup({ isDark: true }, { color: '#245385' });
 
         await waitFor(() => expect(colorOf()).toBe('#245385'));
+      });
+    });
+  });
+
+  describe('opacity', () => {
+    const opacityOf = (): number =>
+      (createField as Mock).mock.calls[0][1].opacity;
+
+    it('rests at the default unless told otherwise', async () => {
+      setup();
+
+      await waitFor(() => expect(opacityOf()).toBe(0.3));
+    });
+
+    it('rests at the opacity it is given', async () => {
+      setup({}, { opacity: 0.55 });
+
+      await waitFor(() => expect(opacityOf()).toBe(0.55));
+    });
+
+    describe('on a dark scheme', () => {
+      /* The reason the pair exists: a light page needs a solider particle to
+         keep its colour, and the same value on a dark one is too much. */
+      it('uses the dark opacity', async () => {
+        setup({ isDark: true }, { opacity: 0.55, opacityDark: 0.3 });
+
+        await waitFor(() => expect(opacityOf()).toBe(0.3));
+      });
+
+      it('falls back to the single opacity when no dark one is given', async () => {
+        setup({ isDark: true }, { opacity: 0.55 });
+
+        await waitFor(() => expect(opacityOf()).toBe(0.55));
       });
     });
   });

@@ -43,15 +43,6 @@
       @apply pointer-events-none absolute -inset-2 -z-10 rounded-lg;
 
       background: color-mix(in oklab, var(--reset) 70%, transparent);
-
-      /* Light scheme only. There the particles are brand blue on a near-white
-         page and read as distinct specks behind the text. On the dark scheme
-         they are brand light on near-black at the same 0.3 opacity, which
-         already reads as texture rather than as objects — a pane there would
-         flatten the one place the effect is doing its job. */
-      @media (prefers-color-scheme: dark) {
-        background: none;
-      }
     }
   }
 

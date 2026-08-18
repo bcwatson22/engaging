@@ -12,11 +12,20 @@ const options = {
   count: 600,
   speed: 0.25,
   size: 2.2,
-  opacity: 0.3,
   bubbleDistance: 175,
   bubbleSize: 4,
-  bubbleOpacity: 0.6,
 } as const;
+
+/* What the field settles at when nothing overrides it. Right on the home
+   page, which is always dark: white at 0.3 over near-black reads as texture.
+   Wrong on a light page, where a dark colour at 0.3 composites to a pale
+   grey — brand blue loses about four fifths of its saturation that way. */
+const defaultOpacity = 0.3;
+
+/* A fully bubbled particle in the original config was twice the resting
+   opacity — 0.3 and 0.6. Derived rather than configured separately, so
+   raising one cannot silently invert the relationship. */
+const bubbleOpacityFor = (opacity: number): number => Math.min(1, opacity * 2);
 
 const source = '/particles.wasm';
 
@@ -48,6 +57,7 @@ type Field = {
 
 type Options = {
   color: string;
+  opacity?: number;
 };
 
 /* Plain fetch + instantiate rather than instantiateStreaming: streaming needs
@@ -80,11 +90,12 @@ const resolveColor = (value: string, element: HTMLElement): string => {
 
 const createField = async (
   canvas: HTMLCanvasElement,
-  { color }: Options,
+  { color, opacity = defaultOpacity }: Options,
 ): Promise<Field> => {
   const wasm = await instantiate();
   const context = canvas.getContext('2d');
   const resolved = resolveColor(color, canvas);
+  const bubbleOpacity = bubbleOpacityFor(opacity);
 
   if (!context) {
     /* No 2D context is not an error worth surfacing: the field is decoration,
@@ -140,8 +151,7 @@ const createField = async (
       const offset = i * stride;
       const bubble = view[offset + 4];
 
-      context.globalAlpha =
-        options.opacity + (options.bubbleOpacity - options.opacity) * bubble;
+      context.globalAlpha = opacity + (bubbleOpacity - opacity) * bubble;
 
       context.beginPath();
       context.arc(
@@ -195,5 +205,5 @@ const createField = async (
   };
 };
 
-export { createField, options, source };
+export { bubbleOpacityFor, createField, defaultOpacity, options, source };
 export type { Field, Options };

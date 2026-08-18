@@ -1,6 +1,12 @@
 import type { Mock } from 'vitest';
 
-import { createField, options, source } from './engine';
+import {
+  bubbleOpacityFor,
+  createField,
+  defaultOpacity,
+  options,
+  source,
+} from './engine';
 
 /* A stand-in for the compiled module. The simulation itself is tested in Rust
    with cargo; what matters here is that this half drives it correctly and
@@ -47,6 +53,7 @@ const createContext = () => ({
 type Options = {
   wasm?: ReturnType<typeof createWasm>;
   color?: string;
+  opacity?: number;
   /* Whether the canvas yields a 2D context at all. A flag rather than a
      nullable context, so `context` below is never null and the assertions do
      not have to chain through it. */
@@ -59,6 +66,7 @@ type Options = {
 const setup = async ({
   wasm = createWasm(),
   color = '#245385',
+  opacity,
   hasContext = true,
   ratio = 1,
   clientWidth = 1280,
@@ -85,7 +93,7 @@ const setup = async ({
     hasContext ? (context as unknown as CanvasRenderingContext2D) : null,
   );
 
-  const field = await createField(canvas, { color });
+  const field = await createField(canvas, { color, opacity });
 
   return { field, wasm, context, canvas };
 };
@@ -271,6 +279,58 @@ describe('createField', () => {
       advance(performance.now() + 16);
 
       expect(requestAnimationFrame).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('opacity', () => {
+    it('rests at the default when none is given', async () => {
+      const { context } = await setup({ wasm: createWasm({ count: 1 }) });
+
+      advance(performance.now() + 16);
+
+      expect(context.globalAlpha).toBe(1);
+      expect((context.arc as Mock).mock.calls).toHaveLength(1);
+    });
+
+    /* A dark colour at 0.3 over a near-white page composites to something
+       close to grey, so a light page needs more of it. */
+    it('rests at the opacity it is given', async () => {
+      const alphas: number[] = [];
+      const { context } = await setup({
+        wasm: createWasm({ count: 1 }),
+        opacity: 0.55,
+      });
+
+      (context.fill as Mock).mockImplementation(() => {
+        alphas.push(context.globalAlpha);
+      });
+
+      advance(performance.now() + 16);
+
+      expect(alphas).toEqual([0.55]);
+    });
+
+    /* Twice the resting opacity, as the original config had at 0.3 and 0.6 —
+       derived, so raising one cannot invert the relationship. */
+    it('doubles the opacity for a fully bubbled particle', async () => {
+      const alphas: number[] = [];
+      const { context } = await setup({
+        wasm: createWasm({ count: 1, bubbles: [1] }),
+        opacity: 0.4,
+      });
+
+      (context.fill as Mock).mockImplementation(() => {
+        alphas.push(context.globalAlpha);
+      });
+
+      advance(performance.now() + 16);
+
+      expect(alphas).toEqual([0.8]);
+    });
+
+    it('never exceeds full opacity', () => {
+      expect(bubbleOpacityFor(0.7)).toBe(1);
+      expect(bubbleOpacityFor(defaultOpacity)).toBeCloseTo(0.6);
     });
   });
 
