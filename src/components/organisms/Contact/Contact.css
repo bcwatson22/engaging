@@ -21,26 +21,38 @@
      canvas is pointer-events-none, but z-order still decides what paints. */
   @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col justify-center gap-6 py-8;
 
-  /* A pane behind the form, so the field drifting past does not compete with
-     the text on top of it. Most needed on the light scheme, where the
-     particles are brand blue rather than a near-white that already reads as
-     texture.
-
-     Inset by -0.5rem rather than sized at calc(100% + 1rem): it comes out the
-     same but needs no centring, and it tracks the form if the padding ever
-     changes. --reset is the page's own background, already declared above for
-     the button's wipe, so the pane is the page colour at 70% and follows the
-     scheme without a second set of values. */
-  &::before {
-    content: '';
-
-    @apply pointer-events-none absolute -inset-2 -z-10 rounded-lg;
-
-    background: color-mix(in oklab, var(--reset) 70%, transparent);
-  }
-
   & form {
-    @apply flex flex-col gap-4;
+    @apply relative flex flex-col gap-4;
+
+    /* A pane behind the fields, so the field drifting past does not compete
+       with the text on top of it. Most needed on the light scheme, where the
+       particles are brand blue rather than a near-white that already reads as
+       texture.
+
+       On the form rather than the section, so it covers the inputs without
+       also boxing in the status message and the mailto fallback beneath them.
+
+       Inset by -0.5rem rather than sized at calc(100% + 1rem): it comes out
+       the same but needs no centring, and it tracks the form if the padding
+       ever changes. --reset is the page's own background, already declared
+       above for the button's wipe, so the pane is the page colour at 70% and
+       follows the scheme without a second set of values. */
+    &::before {
+      content: '';
+
+      @apply pointer-events-none absolute -inset-2 -z-10 rounded-lg;
+
+      background: color-mix(in oklab, var(--reset) 70%, transparent);
+
+      /* Light scheme only. There the particles are brand blue on a near-white
+         page and read as distinct specks behind the text. On the dark scheme
+         they are brand light on near-black at the same 0.3 opacity, which
+         already reads as texture rather than as objects — a pane there would
+         flatten the one place the effect is doing its job. */
+      @media (prefers-color-scheme: dark) {
+        background: none;
+      }
+    }
   }
 
   /* A fieldset carries a border, padding and a min-width of min-content by
