@@ -40,9 +40,19 @@
     &::before {
       content: '';
 
-      @apply pointer-events-none absolute -inset-2 -z-10 rounded-lg;
+      @apply pointer-events-none absolute -inset-4 -z-10 rounded-2xl;
 
       background: color-mix(in oklab, var(--reset) 70%, transparent);
+
+      /* Blurred rather than hard-edged, so a particle drifting in fades
+         behind the pane instead of vanishing at a line. A blur rather than a
+         gradient because the shape is a rounded rectangle: a radial gradient
+         would have to approximate it and would leave the corners wrong,
+         while blurring softens the actual shape evenly on every edge.
+
+         The larger inset absorbs the blur — the pane still covers the fields
+         at full strength, and the falloff happens outside them. */
+      filter: blur(12px);
     }
   }
 
