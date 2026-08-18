@@ -8,14 +8,23 @@ const service = 'https://engaging-service.fly.dev';
 /* connect-src is spelled out rather than left to fall back to default-src:
    the form posts cross-origin to the render service, and Vercel's analytics
    beacons are subject to this directive too, not to script-src. */
-/* 'wasm-unsafe-eval' rather than 'unsafe-eval'. The particle field needs to
-   instantiate a WebAssembly module, which the broader grant also permits — but
-   'unsafe-eval' additionally allows eval() and Function() on everything on the
-   page, and nothing here needs that. This is the narrow version of the same
-   permission. */
+/* The particle field instantiates a WebAssembly module, which needs a grant in
+   script-src. 'wasm-unsafe-eval' is the narrow one: 'unsafe-eval' would also
+   allow eval() and Function() across the whole page, and production needs
+   neither.
+
+   Development is the exception, and not one we can style out: React uses
+   eval() in dev for debugging features like reconstructing callstacks across
+   environments, and refuses to start without it. It never does so in a
+   production build, so the wider grant stops at the dev server. */
+const scriptEval =
+  process.env.NODE_ENV === 'development'
+    ? "'unsafe-eval'"
+    : "'wasm-unsafe-eval'";
+
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'wasm-unsafe-eval' 'unsafe-inline' *.vercel-scripts.com *.vercel-insights.com;
+    script-src 'self' ${scriptEval} 'unsafe-inline' *.vercel-scripts.com *.vercel-insights.com;
     connect-src 'self' ${service} *.vercel-insights.com;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: *.graphassets.com;
