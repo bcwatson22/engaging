@@ -1,36 +1,62 @@
 import { cleanup, render, waitFor } from '@testing-library/react';
-import { Particles as TSParticles } from '@tsparticles/react';
-import { loadSlim } from '@tsparticles/slim';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
 
+import { createField } from './engine';
 import {
   defaultColor,
   ParticlesCanvas,
   type ParticlesCanvasProps,
 } from './ParticlesCanvas';
 
-vi.mock(import('@tsparticles/react'), async (importOriginal: Function) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    Particles: vi.fn<typeof import('@tsparticles/react').Particles>(() => null),
-  };
-});
-
-vi.mock('@tsparticles/slim', () => ({
-  loadSlim: vi.fn<typeof import('@tsparticles/slim').loadSlim>(),
+vi.mock('./engine', () => ({
+  createField: vi.fn<typeof import('./engine').createField>(),
+  /* Not mocked away: it is the resting opacity the component falls back to,
+     and a test asserting the default should assert the real one. */
+  defaultOpacity: 0.3,
 }));
 
-const setup = (props?: Partial<ParticlesCanvasProps>) =>
-  render(<ParticlesCanvas {...props} />);
+type Options = {
+  isDark?: boolean;
+  prefersReduced?: boolean;
+  /* Left pending to stand in for a module still downloading. */
+  isLoading?: boolean;
+  fails?: boolean;
+};
 
-/* The options the wrapper was handed. It reloads the field whenever this
-   object's identity changes, so what is in it is what is on screen. */
-const optionsOf = (particles: Mock) => particles.mock.calls[0][0].options;
+const destroy = vi.fn<() => void>();
 
-const colorOf = (particles: Mock): string =>
-  optionsOf(particles).particles.color.value;
+/* Answers per query rather than a flat boolean: the component reads two, and
+   a mock that matches everything would report reduced motion in every test
+   about colour. */
+const stubMediaQueries = ({ isDark = false, prefersReduced = false }) =>
+  vi.spyOn(window, 'matchMedia').mockImplementation(
+    (query: string) =>
+      ({
+        matches: query.includes('dark') ? isDark : prefersReduced,
+        media: query,
+        addEventListener: vi.fn<() => void>(),
+        removeEventListener: vi.fn<() => void>(),
+      }) as unknown as MediaQueryList,
+  );
+
+const setup = (
+  { isDark, prefersReduced, isLoading, fails }: Options = {},
+  props?: Partial<ParticlesCanvasProps>,
+) => {
+  stubMediaQueries({ isDark, prefersReduced });
+
+  (createField as Mock).mockImplementation(() => {
+    if (isLoading) return new Promise(() => {});
+    if (fails) return Promise.reject(new Error('no wasm'));
+
+    return Promise.resolve({ destroy });
+  });
+
+  return render(<ParticlesCanvas {...props} />);
+};
+
+const colorOf = (): string => (createField as Mock).mock.calls[0][1].color;
 
 describe('ParticlesCanvas', () => {
   beforeEach(() => {
@@ -38,87 +64,159 @@ describe('ParticlesCanvas', () => {
     cleanup();
   });
 
-  it('loads the engine', () => {
-    setup();
+  afterEach(() => vi.restoreAllMocks());
 
-    expect(loadSlim).toHaveBeenCalledTimes(1);
+  it('renders a canvas', () => {
+    const { container } = setup();
+
+    expect(container.querySelector('canvas')).toBeInTheDocument();
   });
 
-  it('renders the field', async () => {
-    setup();
+  /* Decoration. There is nothing here to announce, and a bare canvas in the
+     accessibility tree is noise. */
+  it('hides the canvas from assistive technology', () => {
+    const { container } = setup();
 
-    await waitFor(() =>
-      expect(TSParticles).toHaveBeenNthCalledWith(
-        1,
-        {
-          id: expect.any(String),
-          className: 'particles',
-          options: expect.objectContaining({
-            detectRetina: true,
-          }),
-        },
-        undefined,
-      ),
+    expect(container.querySelector('canvas')).toHaveAttribute(
+      'aria-hidden',
+      'true',
     );
   });
 
-  /* Two fields on one page, or a navigation between two pages that each render
-     one, would otherwise fight over the wrapper's default "tsparticles" id —
-     it destroys any container it cannot find by that id. */
-  it('gives each field its own id', () => {
-    setup();
-    const first = (TSParticles as Mock).mock.calls[0][0].id;
-
-    cleanup();
+  it('starts the field', async () => {
     setup();
 
-    const second = (TSParticles as Mock).mock.calls[1][0].id;
+    await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+  });
 
-    expect(first).toBeTruthy();
-    expect(second).not.toBe(first);
+  it('stops the field when it unmounts', async () => {
+    const { unmount } = setup();
+
+    await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+
+    unmount();
+
+    expect(destroy).toHaveBeenCalledTimes(1);
+  });
+
+  describe('reduced motion', () => {
+    /* Halted, not slowed: no loop at all rather than a slower one. */
+    it('never starts the field', () => {
+      setup({ prefersReduced: true });
+
+      expect(createField).toHaveBeenCalledTimes(0);
+    });
+
+    it('still renders the canvas', () => {
+      const { container } = setup({ prefersReduced: true });
+
+      expect(container.querySelector('canvas')).toBeInTheDocument();
+    });
   });
 
   describe('colour', () => {
-    it('draws in white unless told otherwise', () => {
+    it('draws in white unless told otherwise', async () => {
       setup();
 
-      expect(colorOf(TSParticles as Mock)).toBe(defaultColor);
+      await waitFor(() => expect(colorOf()).toBe(defaultColor));
     });
 
-    /* The point of the prop. The options used to be memoised on an empty
-       dependency array, so the colour was fixed at first render and no change
-       to it could ever reach the canvas. */
-    it('draws in the colour it is given', () => {
-      setup({ color: '#245385' });
+    it('draws in the colour it is given', async () => {
+      setup({}, { color: '#245385' });
 
-      expect(colorOf(TSParticles as Mock)).toBe('#245385');
+      await waitFor(() => expect(colorOf()).toBe('#245385'));
     });
 
     describe('on a dark scheme', () => {
-      beforeEach(() =>
-        vi.spyOn(window, 'matchMedia').mockReturnValue({
-          matches: true,
-          addEventListener: vi.fn<() => void>(),
-          removeEventListener: vi.fn<() => void>(),
-        } as unknown as MediaQueryList),
-      );
+      it('draws in the dark colour', async () => {
+        setup({ isDark: true }, { color: '#245385', colorDark: '#f9fafb' });
 
-      afterEach(() => vi.restoreAllMocks());
-
-      it('draws in the dark colour', () => {
-        setup({ color: '#245385', colorDark: '#f9fafb' });
-
-        expect(colorOf(TSParticles as Mock)).toBe('#f9fafb');
+        await waitFor(() => expect(colorOf()).toBe('#f9fafb'));
       });
 
       /* A page that looks the same either way passes one colour and should
          get it whichever way the query goes. */
-      it('falls back to the single colour when no dark one is given', () => {
-        setup({ color: '#245385' });
+      it('falls back to the single colour when no dark one is given', async () => {
+        setup({ isDark: true }, { color: '#245385' });
 
-        expect(colorOf(TSParticles as Mock)).toBe('#245385');
+        await waitFor(() => expect(colorOf()).toBe('#245385'));
       });
     });
+  });
+
+  describe('opacity', () => {
+    const opacityOf = (): number =>
+      (createField as Mock).mock.calls[0][1].opacity;
+
+    it('rests at the default unless told otherwise', async () => {
+      setup();
+
+      await waitFor(() => expect(opacityOf()).toBe(0.3));
+    });
+
+    it('rests at the opacity it is given', async () => {
+      setup({}, { opacity: 0.55 });
+
+      await waitFor(() => expect(opacityOf()).toBe(0.55));
+    });
+
+    describe('on a dark scheme', () => {
+      /* The reason the pair exists: a light page needs a solider particle to
+         keep its colour, and the same value on a dark one is too much. */
+      it('uses the dark opacity', async () => {
+        setup({ isDark: true }, { opacity: 0.55, opacityDark: 0.3 });
+
+        await waitFor(() => expect(opacityOf()).toBe(0.3));
+      });
+
+      it('falls back to the single opacity when no dark one is given', async () => {
+        setup({ isDark: true }, { opacity: 0.55 });
+
+        await waitFor(() => expect(opacityOf()).toBe(0.55));
+      });
+    });
+  });
+
+  describe('when the module does not arrive', () => {
+    /* The page is correct without a decorative background, so a failed load
+       is swallowed rather than raised to an error boundary. */
+    it('does not throw', async () => {
+      setup({ fails: true });
+
+      await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+
+      expect(document.querySelector('canvas')).toBeInTheDocument();
+    });
+  });
+
+  /* Unmounting while the module is still downloading would otherwise leave a
+     field running with nothing to stop it. */
+  it('stops a field that arrives after it unmounted', async () => {
+    let settle: (field: { destroy: () => void }) => void = () => {};
+
+    stubMediaQueries({});
+    (createField as Mock).mockReturnValue(
+      new Promise((resolve) => {
+        settle = resolve;
+      }),
+    );
+
+    const { unmount } = render(<ParticlesCanvas />);
+
+    await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+
+    unmount();
+    settle({ destroy });
+
+    await waitFor(() => expect(destroy).toHaveBeenCalledTimes(1));
+  });
+
+  it('does not start a field while the module is still loading', async () => {
+    setup({ isLoading: true });
+
+    await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+
+    expect(destroy).toHaveBeenCalledTimes(0);
   });
 
   /* Rendered where there is no media query to read. The point is that it does

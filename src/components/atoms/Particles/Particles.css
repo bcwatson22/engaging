@@ -1,4 +1,19 @@
 @utility particles {
   @apply animate-fade-in;
   @apply print:hidden;
+
+  /* tsparticles applied these itself via its `fullScreen` option. The canvas
+     is ours now, so the positioning has to be too.
+
+     z-0 rather than a negative index: the pages this sits on paint an opaque
+     background (`.home` is `bg-black`), and a negative-z child paints beneath
+     an ancestor's block background — so the field would be there, drawing,
+     and invisible. It therefore sits above the page like the old one did,
+     which is what the Contact form's `z-10` is guarding against.
+
+     pointer-events-none because the field reads the pointer from a window
+     listener and never needs to be a hit target. The old canvas did swallow
+     clicks, which is what that z-10 was originally for. */
+  @apply fixed inset-0 z-0 h-full w-full;
+  @apply pointer-events-none;
 }

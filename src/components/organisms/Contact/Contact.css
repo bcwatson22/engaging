@@ -16,13 +16,44 @@
     --reset: var(--brand-dark);
   }
 
-  /* Above the particle canvas, which tsparticles positions for itself. Without
-     a stacking context of its own, a full-screen canvas can end up over the
-     form and swallow clicks on the inputs. */
+  /* Above the particle canvas. It is fixed and full-screen, so without a
+     stacking context of its own this form can end up underneath it — the
+     canvas is pointer-events-none, but z-order still decides what paints. */
   @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col justify-center gap-6 py-8;
 
   & form {
-    @apply flex flex-col gap-4;
+    @apply relative flex flex-col gap-4;
+
+    /* A pane behind the fields, so the field drifting past does not compete
+       with the text on top of it. Most needed on the light scheme, where the
+       particles are brand blue rather than a near-white that already reads as
+       texture.
+
+       On the form rather than the section, so it covers the inputs without
+       also boxing in the status message and the mailto fallback beneath them.
+
+       Inset by -0.5rem rather than sized at calc(100% + 1rem): it comes out
+       the same but needs no centring, and it tracks the form if the padding
+       ever changes. --reset is the page's own background, already declared
+       above for the button's wipe, so the pane is the page colour at 70% and
+       follows the scheme without a second set of values. */
+    &::before {
+      content: '';
+
+      @apply pointer-events-none absolute -inset-4 -z-10 rounded-2xl;
+
+      background: color-mix(in oklab, var(--reset) 70%, transparent);
+
+      /* Blurred rather than hard-edged, so a particle drifting in fades
+         behind the pane instead of vanishing at a line. A blur rather than a
+         gradient because the shape is a rounded rectangle: a radial gradient
+         would have to approximate it and would leave the corners wrong,
+         while blurring softens the actual shape evenly on every edge.
+
+         The larger inset absorbs the blur — the pane still covers the fields
+         at full strength, and the falloff happens outside them. */
+      filter: blur(12px);
+    }
   }
 
   /* A fieldset carries a border, padding and a min-width of min-content by
