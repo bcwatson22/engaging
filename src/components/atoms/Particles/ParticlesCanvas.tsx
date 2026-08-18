@@ -1,12 +1,8 @@
 'use client';
 
-import type { Engine, ISourceOptions } from '@tsparticles/engine';
-import {
-  Particles as TSParticles,
-  ParticlesProvider,
-} from '@tsparticles/react';
-import { loadSlim } from '@tsparticles/slim';
-import { useCallback, useId, useMemo, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
+
+import { createField, type Field } from './engine';
 
 type Props = {
   /* On a light scheme. */
@@ -19,119 +15,80 @@ type Props = {
 const defaultColor = '#ffffff';
 
 const darkQuery = '(prefers-color-scheme: dark)';
+const motionQuery = '(prefers-reduced-motion: reduce)';
 
-const subscribe = (onChange: () => void): (() => void) => {
-  const query = window.matchMedia(darkQuery);
+/* Subscribed to rather than read once: someone switching their system
+   appearance or their motion preference with the page open should see the
+   field follow, and a media query read inside an effect would not. */
+const watch = (query: string) => {
+  const subscribe = (onChange: () => void): (() => void) => {
+    const list = window.matchMedia(query);
 
-  query.addEventListener('change', onChange);
+    list.addEventListener('change', onChange);
 
-  return () => query.removeEventListener('change', onChange);
+    return () => list.removeEventListener('change', onChange);
+  };
+
+  const get = (): boolean => window.matchMedia(query).matches;
+
+  return { subscribe, get };
 };
 
-const isDarkNow = (): boolean => window.matchMedia(darkQuery).matches;
+const dark = watch(darkQuery);
+const reduced = watch(motionQuery);
 
-/* Assumed where there is no scheme to read. Dark rather than light because the
-   canvas is only painted after mount, so this value never reaches the screen —
-   it only has to be stable. */
+/* Assumed where there is no media query to read. Dark rather than light
+   because the canvas is only painted after mount, so this value never reaches
+   the screen — it only has to be stable. Reduced motion is assumed on for the
+   same reason it is honoured at all: doing nothing is the safe default. */
 const isDarkOnServer = (): boolean => true;
+const isReducedOnServer = (): boolean => true;
 
-/* Split out of Particles so that the engine — the single largest chunk the
-   client downloads, and none of it needed to paint the page — sits behind a
-   dynamic import rather than in the initial bundle. Particles owns the
-   decision of when to load this; this file is only the canvas. */
 const ParticlesCanvas = ({
   color = defaultColor,
   colorDark = color,
 }: Props) => {
-  /* Subscribed to rather than read once: someone switching their system
-     appearance with the page open should see the field follow, and a media
-     query read inside a memo would not. */
-  const isDark = useSyncExternalStore(subscribe, isDarkNow, isDarkOnServer);
+  const isDark = useSyncExternalStore(dark.subscribe, dark.get, isDarkOnServer);
+  const prefersReduced = useSyncExternalStore(
+    reduced.subscribe,
+    reduced.get,
+    isReducedOnServer,
+  );
 
   const active = isDark ? colorDark : color;
+  const ref = useRef<HTMLCanvasElement>(null);
 
-  /* Unique per instance. The wrapper falls back to a hardcoded "tsparticles"
-     id and destroys any container whose element it cannot find by that id — so
-     two of these on one page, or a navigation between two pages that each
-     render one, would fight over the same container. */
-  const id = useId();
+  useEffect(() => {
+    /* Halted, not slowed. Reduced motion means no animation loop at all, so
+       the canvas stays empty rather than drifting imperceptibly. */
+    if (prefersReduced || !ref.current) return;
 
-  /* v4 replaced initParticlesEngine with a provider. TSParticles reads the
-     loaded flag off its context, so it no longer needs a render gate here. */
-  const init = useCallback(async (engine: Engine): Promise<void> => {
-    await loadSlim(engine);
-  }, []);
+    let field: Field | undefined;
+    let cancelled = false;
 
-  /* `active` in the dependencies, not an empty array. The wrapper reloads the
-     container when this object's identity changes, so a memo that never
-     recomputes is a colour that can never change. */
-  const options: ISourceOptions = useMemo(
-    () => ({
-      particles: {
-        number: {
-          value: 600,
-          density: {
-            enable: true,
-          },
-        },
-        color: {
-          value: active,
-        },
-        shape: {
-          type: 'circle',
-        },
-        opacity: {
-          value: 0.3,
-        },
-        size: {
-          value: 2.2,
-        },
-        /* `outModes`, not the `out_mode` this carried before — that is a v1/v2
-           name absent from v4's types and silently ignored, so the setting was
-           never applied. `lineLinked`, `nb_sides` and `random` were the same
-           and have gone; `random: true` in particular means opacity and size
-           have been uniform rather than varied. Restore that deliberately with
-           `value: { min, max }` if it is wanted. */
-        move: {
-          enable: true,
-          speed: 0.25,
-          direction: 'none',
-          random: false,
-          straight: false,
-          outModes: 'out',
-          bounce: false,
-          attract: {
-            enable: false,
-          },
-        },
-      },
-      interactivity: {
-        events: {
-          onHover: {
-            enable: true,
-            mode: 'bubble',
-          },
-        },
-        modes: {
-          bubble: {
-            distance: 175,
-            size: 4,
-            duration: 2,
-            opacity: 0.6,
-            speed: 3,
-          },
-        },
-      },
-      detectRetina: true,
-    }),
-    [active],
-  );
+    createField(ref.current, { color: active })
+      .then((created) => {
+        /* Unmounted while the module was still loading. */
+        if (cancelled) {
+          created.destroy();
+          return;
+        }
 
-  return (
-    <ParticlesProvider init={init}>
-      <TSParticles id={id} options={options} className="particles" />
-    </ParticlesProvider>
-  );
+        field = created;
+      })
+      /* The module failing to load is not worth an error boundary — the page
+         is correct without a decorative background. */
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+      field?.destroy();
+    };
+  }, [active, prefersReduced]);
+
+  /* aria-hidden because it is decoration: there is nothing here to announce,
+     and a bare canvas in the accessibility tree is noise. */
+  return <canvas ref={ref} className="particles" aria-hidden="true" />;
 };
 
 export { ParticlesCanvas, defaultColor };

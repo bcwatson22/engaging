@@ -1,4 +1,12 @@
 @utility particles {
   @apply animate-fade-in;
   @apply print:hidden;
+
+  /* tsparticles applied these itself via its `fullScreen` option. The canvas
+     is ours now, so the positioning has to be too. Behind everything and
+     transparent to the pointer — the field reads the pointer from a window
+     listener, so it never needs to be a hit target. */
+  @apply fixed inset-0 -z-10;
+  @apply pointer-events-none;
+  @apply h-full w-full;
 }
