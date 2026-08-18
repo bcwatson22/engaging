@@ -9,6 +9,30 @@ The browser-rendered artifacts the site links to — the CV PDF and the PWA spla
 
 To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pnpm.io/) package manager installed you can do this with `npm i -g pnpm`) and then `pnpm dev` to spin up the dev server.
 
+## Performance
+
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 18 August 2026, Lighthouse 13.4.1:
+
+| Page                                                   | Performance | Accessibility | Best Practices | SEO |
+| ------------------------------------------------------ | ----------- | ------------- | -------------- | --- |
+| [Home](https://www.engaging.engineering/) — mobile     | 94          | 100           | 100            | 100 |
+| Home — desktop                                          | 100         | 100           | 100            | 100 |
+| [CV](https://www.engaging.engineering/cv) — mobile     | 96          | 100           | 100            | 100 |
+| CV — desktop                                            | 100         | 100           | 100            | 100 |
+
+Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
+4G, and it is what Google ranks on. Largest Contentful Paint is the only metric
+not already at full marks there — 3.0s on Home, 2.8s on the CV — with everything
+else passing comfortably (CLS 0 on Home, Total Blocking Time 70ms and 30ms).
+
+These are lab numbers. Field data needs enough real traffic for the Chrome UX
+Report to have a sample, and this domain does not have it, so there is nothing
+to publish there yet.
+
+Run it yourself with the link above rather than taking these on trust — and note
+Chrome's own Lighthouse tab will disagree, mostly because it runs on your machine
+and inside your extensions. PageSpeed Insights is the reproducible one.
+
 ## Next
 
 <table>
