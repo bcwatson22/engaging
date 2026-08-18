@@ -31,10 +31,7 @@ const ContactPage = () => (
   <main className="contact main">
     <h1 className="sr-only">{title}</h1>
     <Suspense>
-      {/* Brand blue on a light background, brand light on a dark one — the
-          same pairing the link atom uses. A single colour cannot work here
-          the way it does on the home page, which is always dark. */}
-      <Particles color="#245385" colorDark="#f9fafb" />
+      <Particles color="var(--brand-blue)" colorDark="var(--brand-light)" />
     </Suspense>
     <Nav className="flex justify-center" />
     <Contact />

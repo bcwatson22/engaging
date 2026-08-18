@@ -46,6 +46,7 @@ const createContext = () => ({
 
 type Options = {
   wasm?: ReturnType<typeof createWasm>;
+  color?: string;
   /* Whether the canvas yields a 2D context at all. A flag rather than a
      nullable context, so `context` below is never null and the assertions do
      not have to chain through it. */
@@ -57,6 +58,7 @@ type Options = {
 
 const setup = async ({
   wasm = createWasm(),
+  color = '#245385',
   hasContext = true,
   ratio = 1,
   clientWidth = 1280,
@@ -83,7 +85,7 @@ const setup = async ({
     hasContext ? (context as unknown as CanvasRenderingContext2D) : null,
   );
 
-  const field = await createField(canvas, { color: '#245385' });
+  const field = await createField(canvas, { color });
 
   return { field, wasm, context, canvas };
 };
@@ -193,8 +195,31 @@ describe('createField', () => {
       expect(context.clearRect).toHaveBeenNthCalledWith(1, 0, 0, 1280, 800);
     });
 
-    it('draws in the colour it was given', async () => {
+    /* Canvas cannot read `var(--brand-blue)`, so the value is set on the
+       element and read back resolved — which is why this is rgb rather than
+       the hex it was handed. */
+    it('draws in the colour it was given, resolved', async () => {
       const { context } = await setup();
+
+      advance(performance.now() + 16);
+
+      expect(context.fillStyle).toBe('rgb(36, 83, 133)');
+    });
+
+    /* Custom properties are the point of resolving rather than parsing — a
+       page names the token and the brand hexes stay in globals.css as the
+       only copy. Not asserted here: jsdom returns `var(--x)` from
+       getComputedStyle unresolved, so this is verified in a real browser
+       instead. Hex above covers the mechanism itself. */
+
+    /* Nothing to compute against — the value is used as given rather than
+       leaving the field with an empty fillStyle and drawing nothing. */
+    it('falls back to the value as given when nothing resolves', async () => {
+      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
+        color: '',
+      } as unknown as CSSStyleDeclaration);
+
+      const { context } = await setup({ color: '#245385' });
 
       advance(performance.now() + 16);
 

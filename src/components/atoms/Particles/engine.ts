@@ -63,12 +63,28 @@ const instantiate = async (): Promise<Exports> => {
   return instance.exports as Exports;
 };
 
+/* Canvas takes a concrete colour — it cannot read `var(--brand-blue)`. Rather
+   than parse CSS, set the value on the element and read back what the browser
+   computed: that resolves custom properties, colour functions and keywords
+   alike, and keeps the brand hexes in globals.css as the only copy.
+
+   Falls back to the value as given if there is nothing to compute against,
+   which is the case under jsdom. */
+const resolveColor = (value: string, element: HTMLElement): string => {
+  element.style.color = value;
+
+  const computed = window.getComputedStyle(element).color;
+
+  return computed || value;
+};
+
 const createField = async (
   canvas: HTMLCanvasElement,
   { color }: Options,
 ): Promise<Field> => {
   const wasm = await instantiate();
   const context = canvas.getContext('2d');
+  const resolved = resolveColor(color, canvas);
 
   if (!context) {
     /* No 2D context is not an error worth surfacing: the field is decoration,
@@ -118,7 +134,7 @@ const createField = async (
     const stride = wasm.stride();
 
     context.clearRect(0, 0, width, height);
-    context.fillStyle = color;
+    context.fillStyle = resolved;
 
     for (let i = 0; i < count; i++) {
       const offset = i * stride;
