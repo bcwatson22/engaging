@@ -41,3 +41,6 @@ AGENTS.md
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Rust build output; the .wasm artifact in public/ is committed instead
+crates/*/target/
