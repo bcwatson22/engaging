@@ -16,7 +16,6 @@ const options = {
   bubbleDistance: 175,
   bubbleSize: 4,
   bubbleOpacity: 0.6,
-  bubbleDuration: 2,
 } as const;
 
 const source = '/particles.wasm';
@@ -35,7 +34,6 @@ type Exports = {
     speed: number,
     radius: number,
     bubbleRange: number,
-    bubbleDuration: number,
   ) => void;
   resize: (width: number, height: number) => void;
   tick: (dt: number, pointerX: number, pointerY: number) => void;
@@ -83,7 +81,6 @@ const createField = async (
     options.speed,
     options.size,
     options.bubbleDistance,
-    options.bubbleDuration,
   );
 
   let view = new Float32Array(0);

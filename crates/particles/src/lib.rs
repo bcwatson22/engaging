@@ -49,7 +49,6 @@ struct State {
     speed: f32,
     radius: f32,
     bubble_range: f32,
-    bubble_duration: f32,
 }
 
 /// `UnsafeCell` rather than `static mut`: the latter now trips `static_mut_refs`
@@ -76,7 +75,6 @@ static STATE: Shared = Shared(core::cell::UnsafeCell::new(State {
     speed: 0.0,
     radius: 0.0,
     bubble_range: 0.0,
-    bubble_duration: 0.0,
 }));
 
 #[allow(clippy::mut_from_ref)]
@@ -98,20 +96,13 @@ fn random(s: &mut State) -> f32 {
 /// values live in one place — the component — rather than being duplicated
 /// either side of the boundary.
 #[no_mangle]
-pub extern "C" fn configure(
-    configured: f32,
-    speed: f32,
-    radius: f32,
-    bubble_range: f32,
-    bubble_duration: f32,
-) {
+pub extern "C" fn configure(configured: f32, speed: f32, radius: f32, bubble_range: f32) {
     let s = state();
 
     s.configured = configured;
     s.speed = speed;
     s.radius = radius;
     s.bubble_range = bubble_range;
-    s.bubble_duration = bubble_duration;
     s.seed = INITIAL_SEED;
 }
 
@@ -166,6 +157,24 @@ fn cos(x: f32) -> f32 {
     sin(x + PI / 2.0)
 }
 
+/// Newton's method from a bit-hack seed. `f32::sqrt` lives on std's impl and
+/// is unavailable under no_std, and the bubble needs true distance rather than
+/// squared distance — a falloff computed on d² bunches far too tightly around
+/// the pointer.
+fn sqrt(x: f32) -> f32 {
+    if x <= 0.0 {
+        return 0.0;
+    }
+
+    let seed = 0x1fbd_1df5 + (x.to_bits() >> 1);
+    let mut y = f32::from_bits(seed);
+
+    y = 0.5 * (y + x / y);
+    y = 0.5 * (y + x / y);
+
+    y
+}
+
 fn abs(x: f32) -> f32 {
     if x < 0.0 {
         -x
@@ -192,9 +201,8 @@ pub extern "C" fn tick(dt: f32, pointer_x: f32, pointer_y: f32) {
     let w = s.width;
     let h = s.height;
 
-    // The bubble eases over `duration` seconds, in and back out again.
-    let ease = dt / (s.bubble_duration * 1000.0);
-    let range_squared = s.bubble_range * s.bubble_range;
+    let range = s.bubble_range;
+    let range_squared = range * range;
 
     let mut i = 0;
 
@@ -219,28 +227,23 @@ pub extern "C" fn tick(dt: f32, pointer_x: f32, pointer_y: f32) {
         s.data[o] = x;
         s.data[o + 1] = y;
 
-        // 0 at rest, 1 fully bubbled. JS interpolates size and opacity across
-        // it, so the whole interaction is one number per particle.
+        /* 0 at rest, 1 directly under the pointer, falling off linearly with
+        distance across the bubble radius. JS interpolates size and opacity
+        across it, so the whole interaction is one number per particle.
+
+        Recomputed from the pointer every frame rather than eased toward a
+        target over time: the hover bubble tracks the pointer, so it has to
+        land the moment the pointer arrives. Easing it over the configured
+        `duration` made the field take two seconds to respond, which reads
+        as nothing happening. */
         let dx = x - pointer_x;
         let dy = y - pointer_y;
-        let progress = s.data[o + 4];
+        let distance_squared = dx * dx + dy * dy;
 
-        s.data[o + 4] = if dx * dx + dy * dy < range_squared {
-            let next = progress + ease;
-
-            if next > 1.0 {
-                1.0
-            } else {
-                next
-            }
+        s.data[o + 4] = if distance_squared < range_squared {
+            1.0 - sqrt(distance_squared) / range
         } else {
-            let next = progress - ease;
-
-            if next < 0.0 {
-                0.0
-            } else {
-                next
-            }
+            0.0
         };
 
         i += 1;
@@ -310,7 +313,7 @@ mod tests {
 
         s.count = 0;
         // configure re-seeds, so this is a full reset.
-        configure(600.0, 0.25, 2.2, 175.0, 2.0);
+        configure(600.0, 0.25, 2.2, 175.0);
     }
 
     #[test]
@@ -522,17 +525,58 @@ mod tests {
     }
 
     #[test]
-    fn bubbles_a_particle_the_pointer_is_near() {
+    fn fully_bubbles_the_particle_under_the_pointer() {
         let _guard = lock();
 
         reset();
         resize(1280.0, 800.0);
         one_particle_at(640.0, 400.0);
 
-        // Pointer on top of it, one second of a two-second ease.
-        tick(1000.0, 640.0, 400.0);
+        tick(FRAME_MS, 640.0, 400.0);
 
-        assert!((state().data[4] - 0.5).abs() < 0.001);
+        assert!((state().data[4] - 1.0).abs() < 0.001);
+    }
+
+    /// The whole point of the correction: the bubble tracks the pointer, so it
+    /// has to land on the frame the pointer arrives. Easing it over a duration
+    /// made the field take two seconds to respond, which reads as nothing
+    /// happening at all.
+    #[test]
+    fn bubbles_on_the_first_frame() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        tick(FRAME_MS, 640.0, 400.0);
+        let immediate = state().data[4];
+
+        tick(FRAME_MS, 640.0, 400.0);
+
+        assert_eq!(immediate, state().data[4]);
+    }
+
+    /// Linear in distance: a particle halfway across the radius is halfway
+    /// bubbled, which is what gives the field its gradient under the pointer.
+    #[test]
+    fn falls_off_linearly_with_distance() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+
+        for (offset, expected) in [(0.0, 1.0), (43.75, 0.75), (87.5, 0.5), (131.25, 0.25)] {
+            one_particle_at(640.0 + offset, 400.0);
+            tick(FRAME_MS, 640.0, 400.0);
+
+            let actual = state().data[4];
+
+            assert!(
+                (actual - expected).abs() < 0.01,
+                "{offset}px from the pointer bubbled {actual}, expected {expected}"
+            );
+        }
     }
 
     #[test]
@@ -544,71 +588,56 @@ mod tests {
         one_particle_at(640.0, 400.0);
 
         // 176px away, just outside the 175px bubble distance.
-        tick(1000.0, 816.0, 400.0);
+        tick(FRAME_MS, 816.0, 400.0);
 
         assert_eq!(state().data[4], 0.0);
     }
 
     /// The radius is a circle, not a bounding box: a particle diagonally
-    /// 176px away must not bubble even though both axes are within range.
+    /// 212px away must not bubble even though both axes are within range.
     #[test]
     fn measures_the_radius_as_a_circle() {
         let _guard = lock();
 
         reset();
         resize(1280.0, 800.0);
+        one_particle_at(790.0, 550.0);
+
+        tick(FRAME_MS, 640.0, 400.0);
+
+        assert_eq!(state().data[4], 0.0);
+    }
+
+    /// Drops the moment the pointer goes, for the same reason it lands the
+    /// moment it arrives.
+    #[test]
+    fn returns_to_rest_when_the_pointer_leaves() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
         one_particle_at(640.0, 400.0);
 
-        // 150px on each axis is 212px away.
-        tick(1000.0, 790.0, 550.0);
+        tick(FRAME_MS, 640.0, 400.0);
+        assert!(state().data[4] > 0.9);
+
+        tick(FRAME_MS, -1e9, -1e9);
 
         assert_eq!(state().data[4], 0.0);
     }
 
     #[test]
-    fn saturates_rather_than_overshooting() {
-        let _guard = lock();
+    fn approximates_square_roots_closely_enough() {
+        for x in [0.0, 1.0, 2.0, 16.0, 175.0, 1024.0, 30625.0] {
+            let error = abs(sqrt(x) - x.sqrt());
 
-        reset();
-        resize(1280.0, 800.0);
-        one_particle_at(640.0, 400.0);
-
-        // Ten seconds of a two-second ease.
-        tick(10_000.0, 640.0, 400.0);
-
-        assert_eq!(state().data[4], 1.0);
-    }
-
-    /// The 2s ease runs both ways. Without this the field would snap back the
-    /// instant the pointer left, which is the part people notice.
-    #[test]
-    fn eases_back_to_rest_when_the_pointer_leaves() {
-        let _guard = lock();
-
-        reset();
-        resize(1280.0, 800.0);
-        one_particle_at(640.0, 400.0);
-
-        tick(10_000.0, 640.0, 400.0);
-        assert_eq!(state().data[4], 1.0);
-
-        // Pointer gone; half the duration should undo half the bubble.
-        tick(1000.0, -1e9, -1e9);
-
-        assert!((state().data[4] - 0.5).abs() < 0.001);
+            assert!(error < 0.01, "sqrt({x}) was off by {error}");
+        }
     }
 
     #[test]
-    fn settles_at_rest_rather_than_going_negative() {
-        let _guard = lock();
-
-        reset();
-        resize(1280.0, 800.0);
-        one_particle_at(640.0, 400.0);
-
-        tick(10_000.0, -1e9, -1e9);
-
-        assert_eq!(state().data[4], 0.0);
+    fn treats_a_negative_square_root_as_zero() {
+        assert_eq!(sqrt(-1.0), 0.0);
     }
 
     #[test]

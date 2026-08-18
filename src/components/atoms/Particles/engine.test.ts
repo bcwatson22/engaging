@@ -125,7 +125,6 @@ describe('createField', () => {
       options.speed,
       options.size,
       options.bubbleDistance,
-      options.bubbleDuration,
     );
   });
 
