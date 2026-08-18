@@ -21,6 +21,24 @@
      canvas is pointer-events-none, but z-order still decides what paints. */
   @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col justify-center gap-6 py-8;
 
+  /* A pane behind the form, so the field drifting past does not compete with
+     the text on top of it. Most needed on the light scheme, where the
+     particles are brand blue rather than a near-white that already reads as
+     texture.
+
+     Inset by -0.5rem rather than sized at calc(100% + 1rem): it comes out the
+     same but needs no centring, and it tracks the form if the padding ever
+     changes. --reset is the page's own background, already declared above for
+     the button's wipe, so the pane is the page colour at 70% and follows the
+     scheme without a second set of values. */
+  &::before {
+    content: '';
+
+    @apply pointer-events-none absolute -inset-2 -z-10 rounded-lg;
+
+    background: color-mix(in oklab, var(--reset) 70%, transparent);
+  }
+
   & form {
     @apply flex flex-col gap-4;
   }
