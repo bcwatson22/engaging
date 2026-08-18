@@ -29,6 +29,9 @@ const STRIDE: usize = 5;
 /// that failure mode entirely.
 const MAX: usize = 8192;
 
+const PI: f32 = core::f32::consts::PI;
+const TAU: f32 = core::f32::consts::TAU;
+
 /// Any non-zero constant. xorshift degenerates to all-zeroes if seeded with 0.
 const INITIAL_SEED: u32 = 0x9e37_79b9;
 
@@ -135,6 +138,87 @@ fn scaled_count(width: f32, height: f32, configured: f32) -> usize {
     }
 }
 
+/// `direction: 'none'` means a particle drifts along a fixed random bearing,
+/// so spawning needs one sine and one cosine each. `libm` is a dependency and a
+/// few kilobytes to provide that; a Bhaskara-style approximation is a dozen
+/// lines and is accurate to about half a percent, which is indistinguishable
+/// once it has been multiplied by a speed of 0.25.
+fn sin(x: f32) -> f32 {
+    // Wrap to [-PI, PI].
+    let mut a = x;
+
+    while a > PI {
+        a -= TAU;
+    }
+    while a < -PI {
+        a += TAU;
+    }
+
+    let b = 4.0 / PI;
+    let c = -4.0 / (PI * PI);
+    let y = b * a + c * a * abs(a);
+
+    // Second pass; without it the error is nearer 5%.
+    0.225 * (y * abs(y) - y) + y
+}
+
+fn cos(x: f32) -> f32 {
+    sin(x + PI / 2.0)
+}
+
+fn abs(x: f32) -> f32 {
+    if x < 0.0 {
+        -x
+    } else {
+        x
+    }
+}
+
+/// tsparticles advances by `speed` per frame at 60fps rather than per second,
+/// so a delta in milliseconds is scaled to sixtieths of a second to match.
+const FRAME_MS: f32 = 1000.0 / 60.0;
+
+/// Advance the field by `dt` milliseconds.
+///
+/// `out_mode: 'out'` — a particle that leaves the canvas re-enters from the
+/// opposite edge, offset by its radius so it slides in rather than appearing
+/// mid-frame.
+#[no_mangle]
+pub extern "C" fn tick(dt: f32, _pointer_x: f32, _pointer_y: f32) {
+    let s = state();
+
+    let step = dt / FRAME_MS;
+    let r = s.radius;
+    let w = s.width;
+    let h = s.height;
+
+    let mut i = 0;
+
+    while i < s.count {
+        let o = i * STRIDE;
+
+        let mut x = s.data[o] + s.data[o + 2] * step;
+        let mut y = s.data[o + 1] + s.data[o + 3] * step;
+
+        if x < -r {
+            x = w + r;
+        } else if x > w + r {
+            x = -r;
+        }
+
+        if y < -r {
+            y = h + r;
+        } else if y > h + r {
+            y = -r;
+        }
+
+        s.data[o] = x;
+        s.data[o + 1] = y;
+
+        i += 1;
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn data_ptr() -> *const f32 {
     state().data.as_ptr()
@@ -165,10 +249,12 @@ pub extern "C" fn resize(width: f32, height: f32) {
     while i < next {
         let o = i * STRIDE;
 
+        let angle = random(s) * TAU;
+
         s.data[o] = random(s) * width;
         s.data[o + 1] = random(s) * height;
-        s.data[o + 2] = 0.0;
-        s.data[o + 3] = 0.0;
+        s.data[o + 2] = cos(angle) * s.speed;
+        s.data[o + 3] = sin(angle) * s.speed;
         s.data[o + 4] = 0.0;
 
         i += 1;
@@ -180,6 +266,16 @@ pub extern "C" fn resize(width: f32, height: f32) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// The module is a single global, and cargo runs tests in parallel — so
+    /// every test that touches the simulation has to hold this first.
+    static LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+    fn lock() -> std::sync::MutexGuard<'static, ()> {
+        // A test that panics mid-way poisons the mutex; the state is reset by
+        // the next `reset()` regardless, so the poison carries no information.
+        LOCK.lock().unwrap_or_else(|e| e.into_inner())
+    }
 
     fn reset() {
         let s = state();
@@ -206,6 +302,8 @@ mod tests {
 
     #[test]
     fn spawns_inside_the_canvas() {
+        let _guard = lock();
+
         reset();
         resize(1280.0, 800.0);
 
@@ -224,6 +322,8 @@ mod tests {
     /// A resize should reflow the field, not restart it.
     #[test]
     fn keeps_existing_particles_across_a_resize() {
+        let _guard = lock();
+
         reset();
         resize(1280.0, 800.0);
 
@@ -235,8 +335,155 @@ mod tests {
         assert_eq!(state().count, 600);
     }
 
+    /// Checked against std's `sin`, which the host build has — the wasm build
+    /// is the only one that needs the approximation.
+    #[test]
+    fn approximates_sine_closely_enough() {
+        // Half a percent of full scale. At speed 0.25 that is a positional
+        // error under a hundredth of a pixel per frame.
+        let cases = [0.0, 0.5, 1.0, PI / 2.0, PI, 4.0, TAU, -1.0, -PI, 12.0];
+
+        for x in cases {
+            let error = abs(sin(x) - x.sin());
+
+            assert!(error < 0.005, "sin({x}) was off by {error}");
+        }
+    }
+
+    #[test]
+    fn approximates_cosine_closely_enough() {
+        for x in [0.0, 0.5, 1.0, PI / 2.0, PI, 4.0, TAU, -1.0] {
+            let error = abs(cos(x) - x.cos());
+
+            assert!(error < 0.005, "cos({x}) was off by {error}");
+        }
+    }
+
+    /// Spawn bearings are uniform, so the velocity vector always has magnitude
+    /// `speed` whatever the angle — a sloppier approximation would make some
+    /// particles measurably faster than others.
+    #[test]
+    fn gives_every_particle_the_same_speed() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+
+        let s = state();
+
+        for i in 0..s.count {
+            let o = i * STRIDE;
+            let magnitude = (s.data[o + 2].powi(2) + s.data[o + 3].powi(2)).sqrt();
+
+            assert!((magnitude - 0.25).abs() < 0.002, "speed was {magnitude}");
+        }
+    }
+
+    #[test]
+    fn drifts_at_the_configured_speed() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+
+        let (x, y) = (state().data[0], state().data[1]);
+
+        tick(FRAME_MS, -1e9, -1e9);
+
+        let s = state();
+        let moved = ((s.data[0] - x).powi(2) + (s.data[1] - y).powi(2)).sqrt();
+
+        // One frame at speed 0.25 moves a particle 0.25px along its bearing.
+        assert!((moved - 0.25).abs() < 0.01, "moved {moved}px in one frame");
+    }
+
+    /// dt is milliseconds, so a double-length frame must move twice as far —
+    /// otherwise the field speeds up and slows down with the frame rate.
+    #[test]
+    fn scales_movement_by_the_frame_time() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        let x = state().data[0];
+        tick(FRAME_MS, -1e9, -1e9);
+        let one = state().data[0] - x;
+
+        reset();
+        resize(1280.0, 800.0);
+        let x = state().data[0];
+        tick(FRAME_MS * 2.0, -1e9, -1e9);
+        let two = state().data[0] - x;
+
+        assert!((two - one * 2.0).abs() < 0.001);
+    }
+
+    /// `out_mode: 'out'` — off one edge, back on the opposite one.
+    #[test]
+    fn wraps_a_particle_that_leaves_the_canvas() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+
+        let s = state();
+
+        // Park one just past the left edge, heading further left.
+        s.data[0] = -3.0;
+        s.data[1] = 400.0;
+        s.data[2] = -1.0;
+        s.data[3] = 0.0;
+
+        tick(FRAME_MS, -1e9, -1e9);
+
+        // Re-entered from the right, offset by the radius.
+        assert!(state().data[0] > 1280.0);
+    }
+
+    #[test]
+    fn wraps_on_every_edge() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+
+        let cases = [
+            // (x, y, vx, vy, expect_x_beyond_right, expect_y_beyond_bottom)
+            (-3.0, 400.0, -1.0, 0.0, true, false),
+            (1283.0, 400.0, 1.0, 0.0, false, false),
+            (640.0, -3.0, 0.0, -1.0, false, true),
+            (640.0, 803.0, 0.0, 1.0, false, false),
+        ];
+
+        for (x, y, vx, vy, beyond_right, beyond_bottom) in cases {
+            let s = state();
+
+            s.data[0] = x;
+            s.data[1] = y;
+            s.data[2] = vx;
+            s.data[3] = vy;
+
+            tick(FRAME_MS, -1e9, -1e9);
+
+            let s = state();
+
+            if beyond_right {
+                assert!(s.data[0] > 1280.0);
+            }
+            if beyond_bottom {
+                assert!(s.data[1] > 800.0);
+            }
+
+            // Whatever happened, it stayed within a radius of the canvas.
+            assert!(s.data[0] >= -3.0 && s.data[0] <= 1283.0);
+            assert!(s.data[1] >= -3.0 && s.data[1] <= 803.0);
+        }
+    }
+
     #[test]
     fn is_deterministic_from_its_seed() {
+        let _guard = lock();
+
         reset();
         resize(1280.0, 800.0);
         let a = state().data[0];
