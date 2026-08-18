@@ -13,12 +13,12 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 [PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 18 August 2026, Lighthouse 13.4.1:
 
-| Page                                                   | Performance | Accessibility | Best Practices | SEO |
-| ------------------------------------------------------ | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) — mobile     | 94          | 100           | 100            | 100 |
-| Home — desktop                                          | 100         | 100           | 100            | 100 |
-| [CV](https://www.engaging.engineering/cv) — mobile     | 96          | 100           | 100            | 100 |
-| CV — desktop                                            | 100         | 100           | 100            | 100 |
+| Page                                               | Performance | Accessibility | Best Practices | SEO |
+| -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
+| [Home](https://www.engaging.engineering/) — mobile | 94          | 100           | 100            | 100 |
+| Home — desktop                                     | 100         | 100           | 100            | 100 |
+| [CV](https://www.engaging.engineering/cv) — mobile | 96          | 100           | 100            | 100 |
+| CV — desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
 4G, and it is what Google ranks on. Largest Contentful Paint is the only metric
