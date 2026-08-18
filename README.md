@@ -33,7 +33,9 @@ Run it yourself with the link above rather than taking these on trust — and no
 Chrome's own Lighthouse tab will disagree, mostly because it runs on your machine
 and inside your extensions. PageSpeed Insights is the reproducible one.
 
-## Next
+## Stack
+
+### Next
 
 <table>
   <tr>
@@ -46,7 +48,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## GraphQL
+### GraphQL
 
 <table>
   <tr>
@@ -59,7 +61,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Node
+### Node
 
 <table>
   <tr>
@@ -72,7 +74,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Vitest
+### Vitest
 
 <table>
   <tr>
@@ -85,7 +87,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## TypeScript
+### TypeScript
 
 <table>
   <tr>
@@ -98,7 +100,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Render service
+### Render service
 
 <table>
   <tr>
@@ -111,7 +113,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## oxlint & oxfmt
+### oxlint & oxfmt
 
 <table>
   <tr>
@@ -124,7 +126,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Tailwind
+### Tailwind
 
 <table>
   <tr>
@@ -137,7 +139,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Motion
+### Motion
 
 <table>
   <tr>
@@ -150,7 +152,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Hygraph
+### Hygraph
 
 <table>
   <tr>
@@ -163,7 +165,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
   </tr>
 </table>
 
-## Vercel
+### Vercel
 
 <table>
   <tr>
