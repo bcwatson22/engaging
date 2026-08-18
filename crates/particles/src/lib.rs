@@ -184,13 +184,17 @@ const FRAME_MS: f32 = 1000.0 / 60.0;
 /// opposite edge, offset by its radius so it slides in rather than appearing
 /// mid-frame.
 #[no_mangle]
-pub extern "C" fn tick(dt: f32, _pointer_x: f32, _pointer_y: f32) {
+pub extern "C" fn tick(dt: f32, pointer_x: f32, pointer_y: f32) {
     let s = state();
 
     let step = dt / FRAME_MS;
     let r = s.radius;
     let w = s.width;
     let h = s.height;
+
+    // The bubble eases over `duration` seconds, in and back out again.
+    let ease = dt / (s.bubble_duration * 1000.0);
+    let range_squared = s.bubble_range * s.bubble_range;
 
     let mut i = 0;
 
@@ -214,6 +218,30 @@ pub extern "C" fn tick(dt: f32, _pointer_x: f32, _pointer_y: f32) {
 
         s.data[o] = x;
         s.data[o + 1] = y;
+
+        // 0 at rest, 1 fully bubbled. JS interpolates size and opacity across
+        // it, so the whole interaction is one number per particle.
+        let dx = x - pointer_x;
+        let dy = y - pointer_y;
+        let progress = s.data[o + 4];
+
+        s.data[o + 4] = if dx * dx + dy * dy < range_squared {
+            let next = progress + ease;
+
+            if next > 1.0 {
+                1.0
+            } else {
+                next
+            }
+        } else {
+            let next = progress - ease;
+
+            if next < 0.0 {
+                0.0
+            } else {
+                next
+            }
+        };
 
         i += 1;
     }
@@ -478,6 +506,109 @@ mod tests {
             assert!(s.data[0] >= -3.0 && s.data[0] <= 1283.0);
             assert!(s.data[1] >= -3.0 && s.data[1] <= 803.0);
         }
+    }
+
+    /// Everything below drives one particle at a known position so the
+    /// pointer distance is exact rather than incidental.
+    fn one_particle_at(x: f32, y: f32) {
+        let s = state();
+
+        s.count = 1;
+        s.data[0] = x;
+        s.data[1] = y;
+        s.data[2] = 0.0;
+        s.data[3] = 0.0;
+        s.data[4] = 0.0;
+    }
+
+    #[test]
+    fn bubbles_a_particle_the_pointer_is_near() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        // Pointer on top of it, one second of a two-second ease.
+        tick(1000.0, 640.0, 400.0);
+
+        assert!((state().data[4] - 0.5).abs() < 0.001);
+    }
+
+    #[test]
+    fn leaves_a_particle_outside_the_radius_alone() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        // 176px away, just outside the 175px bubble distance.
+        tick(1000.0, 816.0, 400.0);
+
+        assert_eq!(state().data[4], 0.0);
+    }
+
+    /// The radius is a circle, not a bounding box: a particle diagonally
+    /// 176px away must not bubble even though both axes are within range.
+    #[test]
+    fn measures_the_radius_as_a_circle() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        // 150px on each axis is 212px away.
+        tick(1000.0, 790.0, 550.0);
+
+        assert_eq!(state().data[4], 0.0);
+    }
+
+    #[test]
+    fn saturates_rather_than_overshooting() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        // Ten seconds of a two-second ease.
+        tick(10_000.0, 640.0, 400.0);
+
+        assert_eq!(state().data[4], 1.0);
+    }
+
+    /// The 2s ease runs both ways. Without this the field would snap back the
+    /// instant the pointer left, which is the part people notice.
+    #[test]
+    fn eases_back_to_rest_when_the_pointer_leaves() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        tick(10_000.0, 640.0, 400.0);
+        assert_eq!(state().data[4], 1.0);
+
+        // Pointer gone; half the duration should undo half the bubble.
+        tick(1000.0, -1e9, -1e9);
+
+        assert!((state().data[4] - 0.5).abs() < 0.001);
+    }
+
+    #[test]
+    fn settles_at_rest_rather_than_going_negative() {
+        let _guard = lock();
+
+        reset();
+        resize(1280.0, 800.0);
+        one_particle_at(640.0, 400.0);
+
+        tick(10_000.0, -1e9, -1e9);
+
+        assert_eq!(state().data[4], 0.0);
     }
 
     #[test]
