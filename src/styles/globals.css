@@ -62,6 +62,7 @@
 
 @import '../components/organisms/Contact/Contact.css';
 @import '../components/organisms/Gig/Gig.css';
+@import '../components/organisms/MotesDemo/MotesDemo.css';
 @import '../components/organisms/Mugshot/Mugshot.css';
 @import '../components/organisms/Mugshot/Mugshot.utilities.css';
 @import '../components/organisms/Section/Section.css';

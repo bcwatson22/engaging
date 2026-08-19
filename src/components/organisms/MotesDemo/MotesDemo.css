@@ -1,0 +1,87 @@
+@utility motes-demo {
+  @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 py-8;
+  @apply lg:flex-row lg:items-start;
+
+  /* The canvas is sized from its own box, so the box has to have one. A fixed
+     aspect keeps the field the same shape as the controls grow. */
+  /* Its own dark backdrop in both schemes, rather than inheriting the page's.
+     A demo where the colour picker behaves differently depending on the
+     visitor's system is a demo that looks broken half the time — and a dark
+     stage is where a field of pale particles reads best. */
+  & .stage {
+    @apply bg-brand-dark border-brand-blue relative aspect-video w-full overflow-hidden rounded-lg border-2;
+    @apply dark:border-brand-yellow lg:sticky lg:top-8 lg:w-1/2;
+
+    & canvas {
+      @apply block h-full w-full;
+    }
+  }
+
+  /* A fieldset carries a border, padding and a min-width of min-content by
+     default. The last of those is what bites: it stops the controls shrinking
+     below their content and breaks the layout on narrow screens. */
+  & .controls {
+    @apply flex w-full min-w-0 flex-col gap-4 border-0 p-0 lg:w-1/2;
+  }
+
+  & .note {
+    @apply text-sm opacity-80;
+  }
+
+  & label {
+    @apply flex flex-col gap-1;
+
+    & > span {
+      @apply flex items-baseline justify-between text-sm;
+    }
+
+    /* Tabular figures, so a value changing under a drag does not shuffle the
+       label beside it. */
+    & .value {
+      @apply font-mono text-xs tabular-nums opacity-70;
+    }
+  }
+
+  & input[type='range'] {
+    @apply accent-brand-blue w-full;
+    @apply dark:accent-brand-yellow;
+  }
+
+  & input[type='color'] {
+    @apply border-brand-blue h-10 w-full cursor-pointer rounded-sm border-2 bg-transparent p-1;
+    @apply dark:border-brand-yellow;
+  }
+
+  & .actions {
+    @apply flex gap-2;
+  }
+
+  & button {
+    @apply border-brand-blue cursor-pointer rounded-sm border-2 px-3 py-1.5 text-sm;
+    @apply dark:border-brand-yellow;
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
+  }
+
+  & pre {
+    @apply bg-brand-dark/5 overflow-x-auto rounded-sm p-3 text-xs;
+    @apply dark:bg-brand-light/5;
+  }
+}
+
+@utility motes {
+  @apply animate-fade-in flex flex-col p-6 pb-[calc(var(--footer)+1.5rem)];
+  @apply sm:p-6;
+
+  & .intro {
+    @apply mx-auto flex w-full max-w-5xl flex-col gap-2 pt-4;
+
+    & h2 {
+      @apply font-mono text-2xl;
+    }
+
+    & a {
+      @apply decoration-brand-blue underline;
+      @apply dark:decoration-brand-yellow;
+    }
+  }
+}
