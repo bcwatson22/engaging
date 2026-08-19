@@ -80,7 +80,7 @@ describe('Nav', () => {
     cleanup();
     setup();
 
-    expect(screen.getAllByRole('link')).toHaveLength(3);
+    expect(screen.getAllByRole('link')).toHaveLength(4);
   });
 
   /* The download variant is the one that broke: a single object spread into

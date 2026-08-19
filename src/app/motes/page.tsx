@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Copyright } from '@/components/atoms/Copyright/Copyright';
+import { Link } from '@/components/atoms/Link/Link';
 import { Nav } from '@/components/molecules/Nav/Nav';
 import { MotesDemo } from '@/components/organisms/MotesDemo/MotesDemo';
 import { metadata as shared, viewport } from '@/constants/metadata';
@@ -39,10 +40,21 @@ const MotesPage = () => (
         is written in Rust and compiled to WebAssembly; the drawing stays in
         TypeScript. It is what paints the background of this site.
       </p>
-      <p>
-        <a href="https://www.npmjs.com/package/@bcwatson22/motes">npm</a>
-        {' · '}
-        <a href="https://github.com/bcwatson22/motes">source</a>
+      <p className="links">
+        <Link
+          link={{
+            target: 'https://www.npmjs.com/package/@bcwatson22/motes',
+            text: 'npm',
+            icon: 'Package',
+          }}
+        />
+        <Link
+          link={{
+            target: 'https://github.com/bcwatson22/motes',
+            text: 'Source',
+            icon: 'Repo',
+          }}
+        />
       </p>
     </section>
     <MotesDemo />

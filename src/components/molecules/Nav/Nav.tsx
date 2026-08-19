@@ -29,8 +29,17 @@ const contact: TLink = {
   icon: 'Pencil',
 };
 
+const motes: TLink = {
+  target: '/motes',
+  text: 'Motes',
+  icon: 'Sparkles',
+};
+
 const Nav = ({ hasDownload = false, className }: Props) => {
-  const links: TLink[] = [home, ...(hasDownload ? [download] : [cv, contact])];
+  const links: TLink[] = [
+    home,
+    ...(hasDownload ? [download] : [cv, contact, motes]),
+  ];
 
   return (
     /* Built from discrete strings, not a template literal. Tailwind finds

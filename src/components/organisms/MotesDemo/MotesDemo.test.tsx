@@ -241,6 +241,48 @@ describe('MotesDemo', () => {
         expect(sliderFor(label)).toBeInTheDocument();
       }
     });
+
+    /* Without this someone with the preference on cannot see the demo at all.
+       Opt-in, never on by default. */
+    it('offers to animate anyway', () => {
+      setup({ prefersReducedMotion: true });
+
+      const override = screen.getByRole('checkbox', { name: /animate/i });
+
+      expect(override).toBeInTheDocument();
+      expect(override).not.toBeChecked();
+    });
+
+    it('rebuilds the field without the preference when asked', async () => {
+      const { user } = setup({ prefersReducedMotion: true });
+
+      await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+      expect((createField as Mock).mock.calls[0][1]).toMatchObject({
+        respectReducedMotion: true,
+      });
+
+      await user.click(screen.getByRole('checkbox', { name: /animate/i }));
+
+      await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(2));
+      expect((createField as Mock).mock.calls[1][1]).toMatchObject({
+        respectReducedMotion: false,
+      });
+    });
+
+    it('stops saying the field is still once it is not', async () => {
+      const { user } = setup({ prefersReducedMotion: true });
+
+      await user.click(screen.getByRole('checkbox', { name: /animate/i }));
+
+      expect(screen.queryByText(/asks for reduced motion/i)).toBeNull();
+    });
+  });
+
+  /* A switch that does nothing is worse than no switch. */
+  it('does not offer to animate anyway when nothing is holding it back', () => {
+    setup();
+
+    expect(screen.queryByRole('checkbox', { name: /animate/i })).toBeNull();
   });
 
   it('renders without a media query to read', () => {

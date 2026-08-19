@@ -1,6 +1,6 @@
 @utility motes-demo {
   @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 py-8;
-  @apply lg:flex-row lg:items-start;
+  @apply md:flex-row md:items-start;
 
   /* The canvas is sized from its own box, so the box has to have one. A fixed
      aspect keeps the field the same shape as the controls grow. */
@@ -10,7 +10,13 @@
      stage is where a field of pale particles reads best. */
   & .stage {
     @apply bg-brand-dark border-brand-blue relative aspect-video w-full overflow-hidden rounded-lg border-2;
-    @apply dark:border-brand-yellow lg:sticky lg:top-8 lg:w-1/2;
+    /* Two columns from 768, but the full-height stage waits for 1024. At
+       tablet widths half the viewport is narrow enough that filling the
+       column height gives a tall thin strip; square reads better there.
+       Sticky either way, so it stays in view while the controls scroll. */
+    @apply md:sticky md:top-8 md:aspect-square md:w-1/2;
+    @apply lg:aspect-auto lg:h-[calc(100vh-6rem)];
+    @apply dark:border-brand-yellow;
 
     & canvas {
       @apply block h-full w-full;
@@ -21,7 +27,7 @@
      default. The last of those is what bites: it stops the controls shrinking
      below their content and breaks the layout on narrow screens. */
   & .controls {
-    @apply flex w-full min-w-0 flex-col gap-4 border-0 p-0 lg:w-1/2;
+    @apply flex w-full min-w-0 flex-col gap-4 border-0 p-0 md:w-1/2;
   }
 
   & .note {
@@ -52,6 +58,17 @@
     @apply dark:border-brand-yellow;
   }
 
+  /* Laid out along the row, unlike the sliders above it, because a checkbox
+     belongs beside its label rather than under it. */
+  & .override {
+    @apply flex-row items-center gap-2;
+
+    & input {
+      @apply accent-brand-blue size-4;
+      @apply dark:accent-brand-yellow;
+    }
+  }
+
   & .actions {
     @apply flex gap-2;
   }
@@ -77,6 +94,10 @@
 
     & h2 {
       @apply font-mono text-2xl;
+    }
+
+    & .links {
+      @apply flex flex-wrap items-center gap-4;
     }
 
     & a {

@@ -95,6 +95,9 @@ const MotesDemo = () => {
   const [color, setColor] = useState<string>(initialColor);
   const [values, setValues] = useState<Values>(initialValues);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  /* Opt-in, and only offered to someone whose system asks for less motion —
+     see the checkbox below. */
+  const [isOverridden, setIsOverridden] = useState<boolean>(false);
 
   const isStill = useSyncExternalStore(
     subscribeToMotion,
@@ -107,7 +110,11 @@ const MotesDemo = () => {
 
     let cancelled = false;
 
-    createField(canvas, { color: initialColor, ...initialValues })
+    createField(canvas, {
+      color: initialColor,
+      ...initialValues,
+      respectReducedMotion: !isOverridden,
+    })
       .then((created) => {
         if (cancelled) {
           created.destroy();
@@ -124,10 +131,12 @@ const MotesDemo = () => {
       fieldRef.current?.destroy();
       fieldRef.current = null;
     };
-    /* Created once per canvas. Every later change goes through update, which
-       is the whole point — recreating the field on each input event would
-       restart the animation on every pixel of a drag. */
-  }, [canvas]);
+    /* Created once per canvas, and again if the visitor asks for the motion
+       back. Every other change goes through update, which is the whole point —
+       recreating the field on each input event would restart the animation on
+       every pixel of a drag. respectReducedMotion is settled when a field is
+       made, so this one setting is the exception. */
+  }, [canvas, isOverridden]);
 
   const change = useCallback((key: Setting, value: number): void => {
     setValues((current) => ({ ...current, [key]: value }));
@@ -166,10 +175,26 @@ const MotesDemo = () => {
       <fieldset className="controls">
         <legend className="sr-only">Particle settings</legend>
         <p className="note">
-          {isStill
+          {isStill && !isOverridden
             ? 'Your system asks for reduced motion, so the field is drawn once and left still. Every setting below still applies.'
             : 'Drag anything. The field updates as you go rather than restarting, and your pointer pulls the particles near it.'}
         </p>
+
+        {/* Offered only where the system asks for less motion. Somewhere else
+            it would be a switch that does nothing, and here it is the
+            difference between seeing the demo and not — so it is opt-in,
+            never on by default, and the preference is honoured until someone
+            deliberately says otherwise. */}
+        {isStill && (
+          <label className="override">
+            <input
+              type="checkbox"
+              checked={isOverridden}
+              onChange={(event) => setIsOverridden(event.target.checked)}
+            />
+            <span>Animate anyway</span>
+          </label>
+        )}
 
         <label>
           <span>Colour</span>
