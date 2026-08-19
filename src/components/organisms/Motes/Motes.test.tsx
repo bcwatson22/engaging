@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
 
-import { controls, initialColor, MotesDemo, snippetFor } from './MotesDemo';
+import { controls, initialColor, Motes, snippetFor } from './Motes';
 
 vi.mock('@bcwatson22/motes', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@bcwatson22/motes')>()),
@@ -45,7 +45,7 @@ const setup = ({
     return Promise.resolve({ update, destroy });
   });
 
-  return { user: userEvent.setup(), ...render(<MotesDemo />) };
+  return { user: userEvent.setup(), ...render(<Motes />) };
 };
 
 /* Anchored, or "Size" also matches "Bubble size". The accessible name carries
@@ -68,7 +68,7 @@ const drag = (label: string, value: number): void => {
   fireEvent.change(sliderFor(label), { target: { value: String(value) } });
 };
 
-describe('MotesDemo', () => {
+describe('Motes', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -114,7 +114,7 @@ describe('MotesDemo', () => {
       }),
     );
 
-    const { unmount } = render(<MotesDemo />);
+    const { unmount } = render(<Motes />);
 
     await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
 
@@ -303,7 +303,7 @@ describe('MotesDemo', () => {
   });
 
   it('renders without a media query to read', () => {
-    expect(() => renderToString(<MotesDemo />)).not.toThrow();
+    expect(() => renderToString(<Motes />)).not.toThrow();
   });
 
   describe('snippetFor', () => {

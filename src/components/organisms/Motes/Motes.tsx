@@ -82,7 +82,7 @@ const snippetFor = (color: string, values: Values): string => {
   ].join('\n');
 };
 
-const MotesDemo = () => {
+const Motes = () => {
   /* The canvas arrives through state rather than a ref, so the effect can
      depend on it. A ref would need a guard for a null that never actually
      happens; this way the first pass genuinely has no element and the second
@@ -182,6 +182,8 @@ const MotesDemo = () => {
           {isStill && !isOverridden
             ? 'Your system asks for reduced motion, so the field is drawn once and left still. Every setting below still applies.'
             : 'Drag anything. The field updates as you go rather than restarting, and your pointer pulls the particles near it.'}
+          The field honours <code>prefers-reduced-motion</code>: where a system
+          asks for less motion it is drawn once and left still.
         </p>
 
         {/* Said either way, because it is a feature of the package and
@@ -252,4 +254,4 @@ const MotesDemo = () => {
   );
 };
 
-export { controls, initialColor, initialValues, MotesDemo, snippetFor };
+export { controls, initialColor, initialValues, Motes, snippetFor };

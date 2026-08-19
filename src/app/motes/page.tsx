@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Link } from '@/components/atoms/Link/Link';
 import { Nav } from '@/components/molecules/Nav/Nav';
-import { MotesDemo } from '@/components/organisms/MotesDemo/MotesDemo';
+import { Motes } from '@/components/organisms/Motes/Motes';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
 /* A literal rather than useId: there is exactly one of this section on one
@@ -61,7 +61,7 @@ const MotesPage = () => (
         />
       </p>
     </section>
-    <MotesDemo />
+    <Motes />
     <footer className="footer">
       <Copyright />
     </footer>
