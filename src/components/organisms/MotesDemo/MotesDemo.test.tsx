@@ -53,7 +53,14 @@ const setup = ({
 const sliderFor = (label: string): HTMLElement =>
   screen.getByRole('slider', { name: new RegExp(`^${label}\\b`, 'i') });
 
-const snippet = (): string => screen.getByRole('code').textContent ?? '';
+/* Two elements carry the code role — the generated config and the media
+   feature named in the note above it — so this picks the one that is a config
+   rather than reaching for a test id. */
+const snippet = (): string =>
+  screen
+    .getAllByRole('code')
+    .find((element) => element.textContent?.includes('createField'))
+    ?.textContent ?? '';
 
 /* jsdom does not implement a range input's keyboard behaviour, so a change
    event is how a slider is driven in a test. The query is still by role. */

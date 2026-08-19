@@ -184,11 +184,18 @@ const MotesDemo = () => {
             : 'Drag anything. The field updates as you go rather than restarting, and your pointer pulls the particles near it.'}
         </p>
 
-        {/* Offered only where the system asks for less motion. Somewhere else
-            it would be a switch that does nothing, and here it is the
-            difference between seeing the demo and not — so it is opt-in,
-            never on by default, and the preference is honoured until someone
-            deliberately says otherwise. */}
+        {/* Said either way, because it is a feature of the package and
+            otherwise invisible to anyone whose system is not asking for it. */}
+        <p className="note">
+          The field honours <code>prefers-reduced-motion</code>: where a system
+          asks for less motion it is drawn once and left still.
+        </p>
+
+        {/* The switch itself is offered only where the system asks for less
+            motion. Anywhere else it would do nothing, and here it is the
+            difference between seeing the demo and not — so it is opt-in, never
+            on by default, and the preference stands until someone deliberately
+            says otherwise. */}
         {isStill && (
           <label className="override">
             <input

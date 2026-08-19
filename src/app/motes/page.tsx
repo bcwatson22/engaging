@@ -55,8 +55,8 @@ const MotesPage = () => (
         <Link
           link={{
             target: 'https://github.com/bcwatson22/motes',
-            text: 'Source',
-            icon: 'Repo',
+            text: 'Docs',
+            icon: 'Lightbulb',
           }}
         />
       </p>

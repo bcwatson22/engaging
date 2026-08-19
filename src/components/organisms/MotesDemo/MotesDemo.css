@@ -32,6 +32,10 @@
 
   & .note {
     @apply text-sm opacity-80;
+
+    & code {
+      @apply font-mono text-xs;
+    }
   }
 
   & label {
@@ -100,9 +104,8 @@
       @apply flex flex-wrap items-center gap-4;
     }
 
-    & a {
-      @apply decoration-brand-blue underline;
-      @apply dark:decoration-brand-yellow;
-    }
+    /* No underline rule here. The Link atom draws its own, as a gradient it
+       animates on hover — a text-decoration on top of that is a second, static
+       line that never moves. */
   }
 }
