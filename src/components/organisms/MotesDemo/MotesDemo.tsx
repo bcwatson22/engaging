@@ -160,8 +160,12 @@ const MotesDemo = () => {
     void navigator.clipboard.writeText(snippet).then(() => setIsCopied(true));
   }, [snippet]);
 
+  /* Named rather than pointed at a heading: there is no heading here to point
+     at, and inventing a visible one to satisfy the markup would add clutter
+     the page does not otherwise want. A section only becomes a landmark once
+     it has a name, which is the point of giving it one. */
   return (
-    <section className="motes-demo">
+    <section aria-label="Particle field demo" className="motes-demo">
       <div className="stage">
         {/* aria-hidden because it is decoration: the controls beside it are
             what carries the meaning. */}

@@ -6,6 +6,10 @@ import { Nav } from '@/components/molecules/Nav/Nav';
 import { MotesDemo } from '@/components/organisms/MotesDemo/MotesDemo';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
+/* A literal rather than useId: there is exactly one of this section on one
+   page, and generating it would make the page a client component for nothing. */
+const introId = 'motes-intro';
+
 const title = 'Motes | Engaging Engineering';
 const description =
   'An interactive demo of motes, a 4KB WebAssembly particle field with its simulation written in Rust.';
@@ -33,8 +37,8 @@ const MotesPage = () => (
   <main className="motes main">
     <h1 className="sr-only">{title}</h1>
     <Nav className="flex justify-center" />
-    <section className="intro">
-      <h2>motes</h2>
+    <section aria-labelledby={introId} className="intro">
+      <h2 id={introId}>motes</h2>
       <p>
         A drifting particle field for a canvas, in 4.3KB gzipped. The simulation
         is written in Rust and compiled to WebAssembly; the drawing stays in
