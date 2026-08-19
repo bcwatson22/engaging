@@ -1,16 +1,16 @@
+import { createField } from '@bcwatson22/motes';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
 
-import { createField } from './engine';
 import {
   defaultColor,
   ParticlesCanvas,
   type ParticlesCanvasProps,
 } from './ParticlesCanvas';
 
-vi.mock('./engine', () => ({
-  createField: vi.fn<typeof import('./engine').createField>(),
+vi.mock('@bcwatson22/motes', () => ({
+  createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
   /* Not mocked away: it is the resting opacity the component falls back to,
      and a test asserting the default should assert the real one. */
   defaultOpacity: 0.3,
