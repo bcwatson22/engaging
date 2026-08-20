@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import LoadingPage from '@/app/loading';
+import LoadingPage from '@/app/(site)/loading';
 import { MugshotSkeleton } from '@/components/organisms/Mugshot/Mugshot';
 
 vi.mock(

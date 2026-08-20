@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
 import { Copyright } from '@/components/atoms/Copyright/Copyright';
-import { Nav } from '@/components/molecules/Nav/Nav';
 import { Motes } from '@/components/organisms/Motes/Motes';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
@@ -29,9 +28,8 @@ const generateMetadata = (): Metadata => ({
    of its own, and a background field behind it would be two fields arguing
    over the same pointer. */
 const MotesPage = () => (
-  <main className="motes main">
+  <main className="motes grow">
     <h1 className="sr-only">{title}</h1>
-    <Nav className="flex justify-center" />
     <Motes />
     <footer className="footer">
       <Copyright />

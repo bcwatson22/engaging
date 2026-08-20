@@ -12,7 +12,7 @@ import { MugshotSkeleton } from '@/components/organisms/Mugshot/Mugshot';
    Particles are the one thing not mirrored: the canvas is fixed-position and
    the element it mounts into has no height, so it cannot shift anything. */
 const LoadingPage: NextPage = () => (
-  <main className="home main">
+  <main className="home grow">
     <h1 className="sr-only">Engaging Engineering</h1>
     <MugshotSkeleton />
     <footer className="footer">

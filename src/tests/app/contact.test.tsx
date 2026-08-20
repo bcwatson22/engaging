@@ -4,7 +4,7 @@ import ContactPage, {
   description,
   generateMetadata,
   title,
-} from '@/app/contact/page';
+} from '@/app/(site)/contact/page';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Contact } from '@/components/organisms/Contact/Contact';
 
@@ -36,12 +36,6 @@ describe('ContactPage', () => {
     setup();
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(title);
-  });
-
-  it('offers a way back to the rest of the site', () => {
-    setup();
-
-    expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 
   it('carries the same particle field as the home page', () => {
