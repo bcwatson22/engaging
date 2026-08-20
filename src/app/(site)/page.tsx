@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 import { appleWebApp, metadata, viewport } from '@/constants/metadata';
@@ -61,9 +60,6 @@ const HomePage = async () => {
       <Suspense>
         <Particles />
       </Suspense>
-      <footer className="footer">
-        <Copyright />
-      </footer>
     </main>
   );
 };

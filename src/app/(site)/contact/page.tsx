@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Contact } from '@/components/organisms/Contact/Contact';
 import { metadata as shared, viewport } from '@/constants/metadata';
@@ -38,9 +37,6 @@ const ContactPage = () => (
       />
     </Suspense>
     <Contact />
-    <footer className="footer">
-      <Copyright />
-    </footer>
   </main>
 );
 

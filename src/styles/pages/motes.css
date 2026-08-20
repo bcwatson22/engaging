@@ -1,4 +1,4 @@
 @utility motes {
-  @apply animate-fade-in flex flex-col p-6 pb-[calc(var(--footer)+1.5rem)];
+  @apply animate-fade-in flex flex-col p-6;
   @apply sm:p-6;
 }

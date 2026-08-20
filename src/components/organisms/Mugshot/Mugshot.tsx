@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { useId } from 'react';
 
 import type { TLink } from '@/components/atoms/Link/Link';
 import { Skeleton } from '@/components/atoms/Skeleton/Skeleton';
@@ -46,52 +45,51 @@ const MugshotSkeleton = () => (
 
 const { width, height } = mugshotDimensions;
 
+const sectionId = 'mugshot';
+
 const Mugshot = ({
   mugshot: { heading, description, image, links },
   technologies,
-}: Props) => {
-  const sectionId = useId();
-
-  return (
-    <article className="mugshot">
-      <section aria-labelledby={sectionId} className="overview">
-        <figure className="coupon">
-          <Image
-            src={image.url}
-            alt={`Portrait of ${heading}`}
-            width={width}
-            height={height}
-            /* `100vw` and not the truer `calc(100vw - 3rem)`: Next only reads
+}: Props) => (
+  <article className="mugshot">
+    <section aria-labelledby={sectionId} className="overview">
+      <figure className="coupon">
+        <Image
+          src={image.url}
+          alt={`Portrait of ${heading}`}
+          width={width}
+          height={height}
+          /* `100vw` and not the truer `calc(100vw - 3rem)`: Next only reads
                a vw figure that follows whitespace or the start of the string
                (see getWidths in next/dist/shared/lib/get-img-props), so the
                calc() form matched nothing and fell back to emitting every
                width it knows — a 16-candidate srcset, in a preload, in the
                document. Overstating the slot by the 3rem gutter costs at most
                one step up on narrow screens. */
-            sizes={`(min-width: 480px) ${width}px, 100vw`}
-            /* The LCP element. `preload` replaces the deprecated `priority`
+          sizes={`(min-width: 480px) ${width}px, 100vw`}
+          /* The LCP element. `preload` replaces the deprecated `priority`
                in Next 16, and fetchPriority rides along onto the preload link
                — which is the bit Lighthouse was asking for. */
-            preload
-            fetchPriority="high"
-          />
-        </figure>
-        <div className="info">
-          <h2 id={sectionId}>{heading}</h2>
-          <p>{description}</p>
-          {links && <Details links={links} />}
-        </div>
-      </section>
-      <ul className="technologies">
-        {technologies.map((technology) => (
-          <li key={technology.id}>
-            <Technology {...technology} />
-          </li>
-        ))}
-      </ul>
-    </article>
-  );
-};
+          preload
+          fetchPriority="high"
+          loading="eager"
+        />
+      </figure>
+      <div className="info">
+        <h2 id={sectionId}>{heading}</h2>
+        <p>{description}</p>
+        {links && <Details links={links} />}
+      </div>
+    </section>
+    <ul className="technologies">
+      {technologies.map((technology) => (
+        <li key={technology.id}>
+          <Technology {...technology} />
+        </li>
+      ))}
+    </ul>
+  </article>
+);
 
 export { Mugshot, MugshotSkeleton };
 export type { TMugshot, Props as MugshotProps };

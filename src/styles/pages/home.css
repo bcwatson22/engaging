@@ -1,11 +1,7 @@
 @utility home {
-  @apply animate-fade-in flex flex-col justify-center overflow-hidden bg-black p-6 pb-[calc(var(--footer)+1.5rem)] text-white;
+  @apply animate-fade-in flex flex-col justify-center overflow-hidden bg-black p-6 text-white;
   @apply sm:p-6 md:items-center;
   @apply print:justify-start print:bg-white print:text-black;
-
-  &.loading {
-    @apply sm:pb-[calc(var(--footer)+1.5rem)];
-  }
 
   &.loaded {
     @apply animate-fade-in;

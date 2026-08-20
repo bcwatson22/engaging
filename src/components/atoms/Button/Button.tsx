@@ -7,8 +7,6 @@ type Props = ComponentPropsWithRef<'button'> & {
   children: ReactNode;
 };
 
-/* type defaults to "button". A button inside a form submits it otherwise,
-   which is the default nobody wants and everybody forgets. */
 const Button = ({
   icon,
   children,

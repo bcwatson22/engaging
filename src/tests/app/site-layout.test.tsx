@@ -22,11 +22,20 @@ describe('SiteLayout', () => {
     expect(screen.getByRole('main')).toHaveTextContent('Contact');
   });
 
-  /* Outside main, which is where a nav repeated on every page belongs — main
-     is for what is unique to the page. */
-  it('keeps the nav out of main', () => {
+  /* Both are landmarks only when they sit outside main — nesting either inside
+     it disqualifies them, which is what was happening while each page rendered
+     its own footer. */
+  it('offers a banner and a contentinfo landmark', () => {
+    setup();
+
+    expect(screen.getByRole('banner')).toBeInTheDocument();
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+  });
+
+  it('keeps them both out of main', () => {
     const { container } = setup({ children: <main>Contact</main> });
 
     expect(container.querySelector('main nav')).toBeNull();
+    expect(container.querySelector('main footer')).toBeNull();
   });
 });

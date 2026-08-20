@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Motes } from '@/components/organisms/Motes/Motes';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
@@ -31,9 +30,6 @@ const MotesPage = () => (
   <main className="motes grow">
     <h1 className="sr-only">{title}</h1>
     <Motes />
-    <footer className="footer">
-      <Copyright />
-    </footer>
   </main>
 );
 
