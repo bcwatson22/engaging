@@ -58,7 +58,7 @@ const Nav = ({ links = siteLinks, label = 'Site', className }: Props) => (
     <ul>
       {links.map((link) => (
         <li key={link?.target}>
-          <Link link={link} />
+          <Link link={link} className={links === siteLinks ? 'expand' : ''} />
         </li>
       ))}
     </ul>

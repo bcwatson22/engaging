@@ -55,6 +55,7 @@
 @import '../components/molecules/Company/Company.css';
 @import '../components/molecules/Details/Details.css';
 @import '../components/molecules/Header/Header.css';
+@import '../components/molecules/Nav/Nav.css';
 @import '../components/molecules/Qualification/Qualification.css';
 @import '../components/molecules/Reference/Reference.css';
 @import '../components/molecules/Role/Role.css';

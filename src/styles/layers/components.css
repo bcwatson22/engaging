@@ -1,7 +1,3 @@
-@utility header {
-  @apply flex justify-center p-6;
-}
-
 @utility main {
   @apply min-h-screen;
 }

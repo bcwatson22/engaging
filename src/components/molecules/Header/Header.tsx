@@ -28,7 +28,7 @@ const Header = ({
   logoLightBackground,
   intro,
 }: Props) => (
-  <header className="cv-header">
+  <header className="header">
     <h1 className="sr-only">{title}</h1>
     <Logo
       logoDarkBackground={logoDarkBackground}

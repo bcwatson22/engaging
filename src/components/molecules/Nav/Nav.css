@@ -1,0 +1,6 @@
+@utility expand {
+  & span {
+    @apply sr-only;
+    @apply xs:not-sr-only;
+  }
+}
