@@ -1,6 +1,6 @@
 'use client';
 
-import { createField, defaultOpacity, type Field } from '@bcwatson22/motes';
+import { createField, defaults, type Field } from '@bcwatson22/motes';
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 
 type Props = {
@@ -52,7 +52,7 @@ const isReducedOnServer = (): boolean => true;
 const ParticlesCanvas = ({
   color = defaultColor,
   colorDark = color,
-  opacity = defaultOpacity,
+  opacity = defaults.opacity,
   opacityDark = opacity,
 }: Props) => {
   const isDark = useSyncExternalStore(dark.subscribe, dark.get, isDarkOnServer);

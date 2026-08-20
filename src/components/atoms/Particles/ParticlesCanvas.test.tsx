@@ -11,9 +11,9 @@ import {
 
 vi.mock('@bcwatson22/motes', () => ({
   createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
-  /* Not mocked away: it is the resting opacity the component falls back to,
-     and a test asserting the default should assert the real one. */
-  defaultOpacity: 0.3,
+  /* Not mocked away: these are the values the component falls back to, and a
+     test asserting a default should assert the real one. */
+  defaults: { opacity: 0.3 },
 }));
 
 type Options = {
