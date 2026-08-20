@@ -11,6 +11,8 @@ import {
 } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
+import type { TLink } from '@/components/atoms/Link/Link';
+import { Nav } from '@/components/molecules/Nav/Nav';
 
 /* The knobs, in the order they read on screen. Kept as data so the controls,
    the state and the generated snippet cannot drift apart — adding a setting
@@ -45,6 +47,22 @@ const initialValues: Values = {
   bubbleSize: defaults.bubbleSize,
   bubbleDistance: defaults.bubbleDistance,
 };
+
+/* Where the package lives. A nav of its own rather than a paragraph of links:
+   it is a set of destinations, and it sits beside the site's nav rather than
+   replacing it. */
+const packageLinks: TLink[] = [
+  {
+    target: 'https://www.npmjs.com/package/@bcwatson22/motes',
+    text: 'npm',
+    icon: 'Package',
+  },
+  {
+    target: 'https://github.com/bcwatson22/motes',
+    text: 'Docs',
+    icon: 'Lightbulb',
+  },
+];
 
 const motionQuery = '(prefers-reduced-motion: reduce)';
 
@@ -192,6 +210,7 @@ const Motes = () => {
             </>
           )}
         </p>
+        <Nav links={packageLinks} label="Motes package" />
       </header>
 
       <div className="layout">

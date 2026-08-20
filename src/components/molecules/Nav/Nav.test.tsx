@@ -39,6 +39,24 @@ describe('Nav', () => {
     );
   });
 
+  /* Two navs on a page are announced identically without this, so neither
+     says which one it is. */
+  it('names itself for a screen reader', () => {
+    setup();
+
+    expect(
+      screen.getByRole('navigation', { name: 'Site' }),
+    ).toBeInTheDocument();
+  });
+
+  it('takes a name of its own', () => {
+    setup({ label: 'Motes package' });
+
+    expect(
+      screen.getByRole('navigation', { name: 'Motes package' }),
+    ).toBeInTheDocument();
+  });
+
   it('offers whatever links it is given', () => {
     setup({ links: [home, download] });
 

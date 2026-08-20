@@ -300,6 +300,31 @@ describe('Motes', () => {
     expect(screen.getByRole('region', { name: /motes/i })).toBeInTheDocument();
   });
 
+  /* A second nav beside the site's own, so it needs a name of its own — and
+     it points outward, at where the package actually lives. */
+  describe('the package links', () => {
+    it('is a nav of its own', () => {
+      setup();
+
+      expect(
+        screen.getByRole('navigation', { name: /motes package/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('points at npm and the docs', () => {
+      setup();
+
+      expect(screen.getByRole('link', { name: /npm/i })).toHaveAttribute(
+        'href',
+        'https://www.npmjs.com/package/@bcwatson22/motes',
+      );
+      expect(screen.getByRole('link', { name: /docs/i })).toHaveAttribute(
+        'href',
+        'https://github.com/bcwatson22/motes',
+      );
+    });
+  });
+
   it('renders without a media query to read', () => {
     expect(() => renderToString(<Motes />)).not.toThrow();
   });
