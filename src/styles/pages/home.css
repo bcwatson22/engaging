@@ -9,8 +9,8 @@ body:has(.home) {
 }
 
 @utility home {
-  @apply animate-fade-in flex flex-col p-6;
-  @apply sm:p-6 md:items-center;
+  @apply animate-fade-in flex flex-col px-6;
+  @apply md:items-center;
   @apply print:justify-start;
 
   /* `safe`, not a plain centre. The technologies orbit at a fixed radius, so
@@ -25,10 +25,24 @@ body:has(.home) {
 
   /* Room for the orbit. From md the technologies are positioned at --radius
      (18rem) from the centre and are 6rem across, so the column needs twice
-     the radius plus a logo to hold them — 42rem — and 3rem more for the p-6
-     either side, since the orbit is centred on the content box rather than
-     the border box. Below md they are a grid and take their own space. */
+     the radius plus a logo to hold them. Not 42rem though: the arrangement
+     spins, so each logo's box turns with it and its far corner reaches half a
+     diagonal rather than half a width — 288 + 68, or 712px at the extreme.
+     45rem covers that; 42rem clipped two of them at most angles. Below md
+     they are a grid and take their own space. */
   @apply md:min-h-[45rem];
+
+  /* And clipped at that box, now that it is big enough to hold them. The
+     orbit spins, and a rotated arrangement's axis-aligned bounding box
+     changes with its angle — so its overflow was extending the document by up
+     to 46px and back, over and over, at the speed of the 240s rotation: a gap
+     below the footer that breathed.
+
+     `clip` rather than `hidden`, which would make main a scroll container for
+     no reason. This is what the original overflow-hidden was doing, except
+     that one also cut the orbit off, because nothing had reserved room for
+     it. */
+  @apply overflow-clip;
 
   &.loaded {
     @apply animate-fade-in;
