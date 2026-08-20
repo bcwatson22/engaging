@@ -5,7 +5,7 @@ import { Logo, type TLogo } from '@/components/atoms/Logo/Logo';
 import { SkeletonParagraph } from '@/components/atoms/Skeleton/Skeleton';
 import { logoDarkBackground, logoLightBackground } from '@/constants/assets';
 
-import { Nav } from '../Nav/Nav';
+import { download, home, Nav } from '../Nav/Nav';
 
 type Props = Pick<TMeta, 'title'> & TLogo & TIntro;
 
@@ -40,7 +40,7 @@ const Header = ({
       </Suspense>
     </div>
     <Suspense>
-      <Nav hasDownload />
+      <Nav links={[home, download]} />
     </Suspense>
   </header>
 );

@@ -43,8 +43,12 @@
     }
   }
 
+  /* cursor-pointer, matching the colour input and the buttons. grab/grabbing
+     would describe the thumb more literally, but the track is clickable too —
+     and pointer is what every other control here uses for "this does
+     something". */
   & input[type='range'] {
-    @apply accent-brand-blue w-full;
+    @apply accent-brand-blue w-full cursor-pointer;
     @apply dark:accent-brand-yellow;
   }
 }

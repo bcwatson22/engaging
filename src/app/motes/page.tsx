@@ -1,9 +1,26 @@
 import type { Metadata } from 'next';
 
 import { Copyright } from '@/components/atoms/Copyright/Copyright';
-import { Nav } from '@/components/molecules/Nav/Nav';
+import type { TLink } from '@/components/atoms/Link/Link';
+import { home, Nav } from '@/components/molecules/Nav/Nav';
 import { Motes } from '@/components/organisms/Motes/Motes';
 import { metadata as shared, viewport } from '@/constants/metadata';
+
+/* Where the package lives, rather than where the site does. Home stays, so
+   there is still a way back out of the demo. */
+const links: TLink[] = [
+  home,
+  {
+    target: 'https://www.npmjs.com/package/@bcwatson22/motes',
+    text: 'npm',
+    icon: 'Package',
+  },
+  {
+    target: 'https://github.com/bcwatson22/motes',
+    text: 'Docs',
+    icon: 'Lightbulb',
+  },
+];
 
 const title = 'Motes | Engaging Engineering';
 const description =
@@ -31,7 +48,7 @@ const generateMetadata = (): Metadata => ({
 const MotesPage = () => (
   <main className="motes main">
     <h1 className="sr-only">{title}</h1>
-    <Nav className="flex justify-center" />
+    <Nav links={links} className="flex justify-center" />
     <Motes />
     <footer className="footer">
       <Copyright />

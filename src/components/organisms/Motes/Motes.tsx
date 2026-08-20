@@ -11,7 +11,6 @@ import {
 } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
-import { Link } from '@/components/atoms/Link/Link';
 
 /* The knobs, in the order they read on screen. Kept as data so the controls,
    the state and the generated snippet cannot drift apart — adding a setting
@@ -192,22 +191,6 @@ const Motes = () => {
               still.
             </>
           )}
-        </p>
-        <p className="flex flex-wrap items-center gap-4">
-          <Link
-            link={{
-              target: 'https://www.npmjs.com/package/@bcwatson22/motes',
-              text: 'npm',
-              icon: 'Package',
-            }}
-          />
-          <Link
-            link={{
-              target: 'https://github.com/bcwatson22/motes',
-              text: 'Docs',
-              icon: 'Lightbulb',
-            }}
-          />
         </p>
       </header>
 
