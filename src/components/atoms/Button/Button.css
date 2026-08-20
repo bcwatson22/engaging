@@ -1,0 +1,83 @@
+@utility button {
+  /* The accent trio is declared here rather than inherited, so a button works
+     wherever it is put. An ancestor that declares its own — the contact form
+     does, for its inputs and status ring — will not reach these, but the
+     values are the same pairing the link atom uses, so they agree. */
+  --accent: var(--brand-blue);
+  --accent-text: var(--brand-light);
+  --reset: var(--brand-light);
+
+  @media (prefers-color-scheme: dark) {
+    --accent: var(--brand-yellow);
+    --accent-text: var(--brand-dark);
+    --reset: var(--brand-dark);
+  }
+
+  @apply relative flex cursor-pointer items-center gap-2 self-start rounded-sm border-2 px-4 py-2;
+  @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
+  @apply disabled:cursor-not-allowed disabled:opacity-60;
+
+  border-color: var(--accent);
+  outline-color: var(--accent);
+
+  /* The link underline's wipe, scaled from a 2px bar to the whole button.
+
+     The thing to preserve is that the link never *shrinks* a layer. Every
+     state grows one from zero width, so every transition reads left to right —
+     including the return to rest, which is a third layer painted the resting
+     colour growing over the hover colour.
+
+     So this needs two layers rather than one. Shrinking the fill on press
+     would animate right to left, because it is the right edge that moves.
+     Instead --reset — the page's own background — wipes across on top of the
+     accent, which looks like the fill leaving but travels the same way it
+     arrived. */
+  background-image:
+    linear-gradient(var(--reset), var(--reset)),
+    linear-gradient(var(--accent), var(--accent));
+  background-size:
+    0 100%,
+    0 100%;
+  background-position:
+    0 0,
+    0 0;
+  background-repeat: no-repeat;
+  transition:
+    background-size 0.125s ease-out,
+    color 0.125s ease-out;
+
+  @apply motion-reduce:transition-none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--accent-text);
+
+    background-size:
+      0 100%,
+      100% 100%;
+  }
+
+  /* Declared after :hover so it wins while both apply — same specificity. The
+     text returns with the fill: --accent-text was chosen to sit on the accent
+     and would be invisible once the reset layer has covered it. */
+  &:active {
+    @apply text-inherit;
+
+    background-size:
+      100% 100%,
+      100% 100%;
+  }
+
+  /* Nothing to wipe into while it is busy, and a hover state on a control that
+     ignores clicks is a lie. */
+  &:disabled {
+    background-size:
+      0 100%,
+      0 100%;
+  }
+
+  /* Sized to the text beside it, matching the icon links elsewhere. */
+  & .vector {
+    @apply relative size-5 translate-none;
+  }
+}

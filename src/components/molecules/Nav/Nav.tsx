@@ -2,7 +2,14 @@ import { Link, type TLink } from '@/components/atoms/Link/Link';
 
 type Props = {
   className?: string;
-  hasDownload?: boolean;
+  /* The site's own pages by default. A page with a second nav — the CV's
+     download, the demo's package links — passes its own, composed from the
+     exports below. */
+  links?: TLink[];
+  /* What a screen reader calls this one. Two navs on a page are
+     indistinguishable without it: both are announced as "navigation" and
+     neither says which. */
+  label?: string;
 };
 
 const home: TLink = {
@@ -29,28 +36,33 @@ const contact: TLink = {
   icon: 'Pencil',
 };
 
-const Nav = ({ hasDownload = false, className }: Props) => {
-  const links: TLink[] = [home, ...(hasDownload ? [download] : [cv, contact])];
+const motes: TLink = {
+  target: '/motes',
+  text: 'Motes',
+  icon: 'Sparkles',
+};
 
-  return (
-    /* Built from discrete strings, not a template literal. Tailwind finds
+const siteLinks: TLink[] = [home, cv, contact, motes];
+
+const Nav = ({ links = siteLinks, label = 'Site', className }: Props) => (
+  /* Built from discrete strings, not a template literal. Tailwind finds
        classes by scanning source text for candidate tokens, and
        `print:hidden${className...}` gave it no boundary to stop at — so it
        read `print:hidden${className`, matched no utility, and generated no
        rule. The class shipped in the HTML with nothing behind it, and the nav
        appeared in the printed CV. */
-    <nav
-      className={['nav', 'print:hidden', className].filter(Boolean).join(' ')}
-    >
-      <ul>
-        {links.map((link) => (
-          <li key={link?.target}>
-            <Link link={link} />
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
+  <nav
+    aria-label={label}
+    className={['nav', 'print:hidden', className].filter(Boolean).join(' ')}
+  >
+    <ul>
+      {links.map((link) => (
+        <li key={link?.target}>
+          <Link link={link} className={links === siteLinks ? 'expand' : ''} />
+        </li>
+      ))}
+    </ul>
+  </nav>
+);
 
-export { Nav };
+export { contact, cv, download, home, motes, Nav, siteLinks };

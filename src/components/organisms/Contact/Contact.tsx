@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 
-import { Icon } from '@/components/atoms/Icon/Icon';
+import { Button } from '@/components/atoms/Button/Button';
 import { Link, type TLink } from '@/components/atoms/Link/Link';
 import {
   emailPattern,
@@ -151,10 +151,9 @@ const Contact = () => {
           </div>
         </fieldset>
 
-        <button type="submit" disabled={isPending}>
-          <Icon icon="Send" className="vector" />
-          <span>{isPending ? 'Sending…' : 'Send'}</span>
-        </button>
+        <Button icon="Send" type="submit" disabled={isPending}>
+          {isPending ? 'Sending…' : 'Send'}
+        </Button>
       </form>
 
       {/* `output` rather than a div with role="status": it carries that role

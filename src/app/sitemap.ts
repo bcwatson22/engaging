@@ -25,6 +25,12 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency,
     priority: 0.5,
   },
+  {
+    url: `${domainName}/motes`,
+    lastModified,
+    changeFrequency,
+    priority: 0.3,
+  },
 ];
 
 export default sitemap;

@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import type { Mock } from 'vitest';
 
-import HomePage, { generateMetadata } from '@/app/page';
+import HomePage, { generateMetadata } from '@/app/(site)/page';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 import { getStartupImages } from '@/constants/startupImages';

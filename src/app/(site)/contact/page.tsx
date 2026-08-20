@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Particles } from '@/components/atoms/Particles/Particles';
-import { Nav } from '@/components/molecules/Nav/Nav';
 import { Contact } from '@/components/organisms/Contact/Contact';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
@@ -28,7 +26,7 @@ const generateMetadata = (): Metadata => ({
 });
 
 const ContactPage = () => (
-  <main className="contact main">
+  <main className="contact grow">
     <h1 className="sr-only">{title}</h1>
     <Suspense>
       <Particles
@@ -38,11 +36,7 @@ const ContactPage = () => (
         opacityDark={0.3}
       />
     </Suspense>
-    <Nav className="flex justify-center" />
     <Contact />
-    <footer className="footer">
-      <Copyright />
-    </footer>
   </main>
 );
 

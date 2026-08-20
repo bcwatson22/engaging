@@ -45,7 +45,7 @@
 
 @import '../components/atoms/Address/Address.css';
 @import '../components/atoms/Bullet/Bullet.css';
-@import '../components/atoms/Copyright/Copyright.css';
+@import '../components/atoms/Button/Button.css';
 @import '../components/atoms/Divider/Divider.css';
 @import '../components/atoms/Link/Link.css';
 @import '../components/atoms/Logo/Logo.css';
@@ -55,6 +55,7 @@
 @import '../components/molecules/Company/Company.css';
 @import '../components/molecules/Details/Details.css';
 @import '../components/molecules/Header/Header.css';
+@import '../components/molecules/Nav/Nav.css';
 @import '../components/molecules/Qualification/Qualification.css';
 @import '../components/molecules/Reference/Reference.css';
 @import '../components/molecules/Role/Role.css';
@@ -62,13 +63,14 @@
 
 @import '../components/organisms/Contact/Contact.css';
 @import '../components/organisms/Gig/Gig.css';
+@import '../components/organisms/Motes/Motes.css';
 @import '../components/organisms/Mugshot/Mugshot.css';
-@import '../components/organisms/Mugshot/Mugshot.utilities.css';
 @import '../components/organisms/Section/Section.css';
 
 @import './pages/home.css';
 @import './pages/cv.css';
 @import './pages/contact.css';
+@import './pages/motes.css';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -97,9 +99,4 @@
   --brand-blue: #245385;
   --brand-red: #740a01;
   --transparent: rgba(0, 0, 0, 0);
-  --footer: 2.5rem;
-
-  @media (width >= theme(--breakpoint-sm)) {
-    --footer: 3.5rem;
-  }
 }

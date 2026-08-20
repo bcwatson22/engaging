@@ -1,0 +1,54 @@
+@utility motes-demo {
+  @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 py-8;
+
+  /* The two columns. Stretched rather than aligned to the start, so the stage
+     takes whatever height the controls beside it come to — no viewport maths,
+     and nothing to keep in step when a control is added. */
+  & .layout {
+    @apply flex flex-col gap-6 md:flex-row;
+  }
+
+  /* Its own dark backdrop in both schemes rather than inheriting the page's: a
+     demo whose colour picker behaves differently depending on the visitor's
+     system looks broken half the time, and a dark stage is where a field of
+     pale particles reads best.
+
+     The aspect ratio is only for the stacked layout, where there is no
+     neighbouring column to take a height from. */
+  & .stage {
+    @apply bg-brand-dark border-brand-blue relative aspect-video w-full overflow-hidden rounded-lg border-2;
+    @apply md:aspect-auto md:w-1/2;
+    @apply dark:border-brand-yellow;
+
+    /* Flex items default to min-height:auto, so this could not shrink below
+       its content — and its content is a canvas whose intrinsic height is the
+       backing store the engine sized for a previous layout. Left alone it
+       grows past the column beside it and never comes back down. */
+    @apply md:min-h-0;
+  }
+
+  /* A fieldset carries a border, padding and a min-width of min-content by
+     default. The last of those is what bites: it stops the controls shrinking
+     below their content and breaks the layout on narrow screens. */
+  & .controls {
+    @apply flex w-full min-w-0 flex-col gap-4 border-0 p-0 md:w-1/2;
+  }
+
+  /* Seven of these, so they are worth a rule. */
+  & label {
+    @apply flex flex-col gap-1;
+
+    & > span {
+      @apply flex items-baseline justify-between text-sm;
+    }
+  }
+
+  /* cursor-pointer, matching the colour input and the buttons. grab/grabbing
+     would describe the thumb more literally, but the track is clickable too —
+     and pointer is what every other control here uses for "this does
+     something". */
+  & input[type='range'] {
+    @apply accent-brand-blue w-full cursor-pointer;
+    @apply dark:accent-brand-yellow;
+  }
+}

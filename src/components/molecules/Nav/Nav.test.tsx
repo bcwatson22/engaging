@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import { Nav } from './Nav';
+import { download, home, Nav } from './Nav';
 
 type Props = Parameters<typeof Nav>[0];
 
@@ -39,8 +39,26 @@ describe('Nav', () => {
     );
   });
 
-  it('offers the download instead where there is one', () => {
-    setup({ hasDownload: true });
+  /* Two navs on a page are announced identically without this, so neither
+     says which one it is. */
+  it('names itself for a screen reader', () => {
+    setup();
+
+    expect(
+      screen.getByRole('navigation', { name: 'Site' }),
+    ).toBeInTheDocument();
+  });
+
+  it('takes a name of its own', () => {
+    setup({ label: 'Motes package' });
+
+    expect(
+      screen.getByRole('navigation', { name: 'Motes package' }),
+    ).toBeInTheDocument();
+  });
+
+  it('offers whatever links it is given', () => {
+    setup({ links: [home, download] });
 
     expect(screen.getByRole('link', { name: /download/i })).toHaveAttribute(
       'href',
@@ -48,10 +66,10 @@ describe('Nav', () => {
     );
   });
 
-  /* On the CV page itself, where the download replaces both — linking to the
-     page you are already on, and away from it, would both be noise. */
-  it('offers only the download, not the pages it replaces', () => {
-    setup({ hasDownload: true });
+  /* The point of the prop: a page that passes its own gets only those. On the
+     CV, linking to the page you are already on would be noise. */
+  it('offers nothing but the links it is given', () => {
+    setup({ links: [home, download] });
 
     expect(
       screen.queryByRole('link', { name: /contact/i }),
@@ -80,16 +98,16 @@ describe('Nav', () => {
     cleanup();
     setup();
 
-    expect(screen.getAllByRole('link')).toHaveLength(3);
+    expect(screen.getAllByRole('link')).toHaveLength(4);
   });
 
-  /* The download variant is the one that broke: a single object spread into
-     an array literal throws, because an object has no iterator. It only ever
-     ran on the CV page, so the default path stayed working. */
-  it('does not accumulate links across renders, with a download', () => {
-    setup({ hasDownload: true });
+  /* The variant that broke: a single object spread into an array literal
+     throws, because an object has no iterator. It only ever ran on the CV
+     page, so the default path stayed working. */
+  it('does not accumulate links across renders, with its own links', () => {
+    setup({ links: [home, download] });
     cleanup();
-    setup({ hasDownload: true });
+    setup({ links: [home, download] });
 
     expect(screen.getAllByRole('link')).toHaveLength(2);
   });

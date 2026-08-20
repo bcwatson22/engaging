@@ -1,5 +1,7 @@
 @utility link {
   & span {
+    @apply ml-2;
+
     background-image:
       linear-gradient(var(--brand-blue), var(--brand-blue)),
       linear-gradient(var(--brand-dark), var(--brand-dark)),
@@ -59,8 +61,8 @@
 }
 
 @utility icon {
-  @apply relative pl-8;
-  @apply print:pl-5;
+  @apply relative pl-6;
+  @apply print:pl-3;
 }
 
 @utility vector {
