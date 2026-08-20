@@ -1,8 +1,7 @@
 'use client';
 
+import { createField, defaultOpacity, type Field } from '@bcwatson22/motes';
 import { useEffect, useRef, useSyncExternalStore } from 'react';
-
-import { createField, defaultOpacity, type Field } from './engine';
 
 type Props = {
   /* On a light scheme. */
@@ -68,8 +67,10 @@ const ParticlesCanvas = ({
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    /* Halted, not slowed. Reduced motion means no animation loop at all, so
-       the canvas stays empty rather than drifting imperceptibly. */
+    /* The package honours reduced motion itself, drawing a single static
+       frame. This gate is kept anyway because it is stricter: no module is
+       instantiated and no canvas context is taken, so the preference costs
+       nothing at all rather than costing one frame. */
     if (prefersReduced || !ref.current) return;
 
     let field: Field | undefined;
