@@ -1,7 +1,8 @@
 @utility contact-form {
   /* Follows the link atom's convention: blue on a light scheme, yellow on a
-     dark one. Declared once here so the outlines, the button border and its
-     wipe cannot drift apart.
+     dark one. Declared once here so the outlines and the status ring cannot
+     drift apart. The button carries its own copy, so that it works wherever
+     it is used rather than only inside this form.
 
      --reset is the page's own background. The button rests with no fill, and
      the only way to wipe *back* to that is with a layer painted the colour
@@ -114,76 +115,6 @@
 
     @media (prefers-color-scheme: dark) {
       color: oklch(from var(--brand-red) 0.72 c h);
-    }
-  }
-
-  & button {
-    @apply relative flex cursor-pointer items-center gap-2 self-start rounded-sm border-2 px-4 py-2;
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
-    @apply disabled:cursor-not-allowed disabled:opacity-60;
-
-    border-color: var(--accent);
-    outline-color: var(--accent);
-
-    /* The link underline's wipe, scaled from a 2px bar to the whole button.
-
-       The thing to preserve is that the link never *shrinks* a layer. Every
-       state grows one from zero width, so every transition reads left to
-       right — including the return to rest, which is a third layer painted
-       the resting colour growing over the hover colour.
-
-       So this needs two layers rather than one. Shrinking the fill on press
-       would animate right to left, because it is the right edge that moves.
-       Instead --reset — the page's own background — wipes across on top of
-       the accent, which looks like the fill leaving but travels the same way
-       it arrived. */
-    background-image:
-      linear-gradient(var(--reset), var(--reset)),
-      linear-gradient(var(--accent), var(--accent));
-    background-size:
-      0 100%,
-      0 100%;
-    background-position:
-      0 0,
-      0 0;
-    background-repeat: no-repeat;
-    transition:
-      background-size 0.125s ease-out,
-      color 0.125s ease-out;
-
-    @apply motion-reduce:transition-none;
-
-    &:hover,
-    &:focus-visible {
-      color: var(--accent-text);
-
-      background-size:
-        0 100%,
-        100% 100%;
-    }
-
-    /* Declared after :hover so it wins while both apply — same specificity.
-       The text returns with the fill: --accent-text was chosen to sit on the
-       accent and would be invisible once the reset layer has covered it. */
-    &:active {
-      @apply text-inherit;
-
-      background-size:
-        100% 100%,
-        100% 100%;
-    }
-
-    /* Nothing to wipe into while it is sending, and a hover state on a
-       control that ignores clicks is a lie. */
-    &:disabled {
-      background-size:
-        0 100%,
-        0 100%;
-    }
-
-    /* Sized to the text beside it, matching the icon links elsewhere. */
-    & .vector {
-      @apply relative size-5 translate-none;
     }
   }
 

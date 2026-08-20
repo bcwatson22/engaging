@@ -10,6 +10,7 @@ import {
   useSyncExternalStore,
 } from 'react';
 
+import { Button } from '@/components/atoms/Button/Button';
 import { Link } from '@/components/atoms/Link/Link';
 
 /* The knobs, in the order they read on screen. Kept as data so the controls,
@@ -217,7 +218,7 @@ const Motes = () => {
           <canvas
             ref={setCanvas}
             aria-hidden="true"
-            className="block h-full w-full"
+            className="absolute inset-0 block size-full"
           />
         </div>
 
@@ -277,13 +278,15 @@ const Motes = () => {
             </label>
           ))}
 
-          <div className="flex gap-2">
-            <button type="button" onClick={reset}>
+          <div className="flex flex-wrap gap-2">
+            <Button icon="Retry" onClick={reset}>
               Reset
-            </button>
-            <button type="button" onClick={copy}>
+            </Button>
+            {/* The icon changes with the label, so the feedback reads at a
+                glance rather than only on close inspection. */}
+            <Button icon={isCopied ? 'Check' : 'Copy'} onClick={copy}>
               {isCopied ? 'Copied' : 'Copy config'}
-            </button>
+            </Button>
           </div>
 
           <pre className="bg-brand-dark/5 dark:bg-brand-light/5 overflow-x-auto rounded-sm p-3 text-xs">

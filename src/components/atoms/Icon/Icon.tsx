@@ -1,6 +1,8 @@
 import {
   ArrowPathIcon,
   ArrowDownTrayIcon,
+  CheckIcon,
+  ClipboardDocumentIcon,
   CubeIcon,
   AtSymbolIcon,
   DevicePhoneMobileIcon,
@@ -19,6 +21,8 @@ import {
 import { ForwardRefExoticComponent, SVGProps } from 'react';
 
 const iconOptions = [
+  'Check',
+  'Copy',
   'Cross',
   'Document',
   'Download',
@@ -49,6 +53,8 @@ const iconMap: Record<
   TIcon,
   ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, 'ref'>>
 > = {
+  Check: CheckIcon,
+  Copy: ClipboardDocumentIcon,
   Cross: XMarkIcon,
   Document: DocumentTextIcon,
   Download: ArrowDownTrayIcon,

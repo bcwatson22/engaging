@@ -19,6 +19,12 @@
     @apply bg-brand-dark border-brand-blue relative aspect-video w-full overflow-hidden rounded-lg border-2;
     @apply md:aspect-auto md:w-1/2;
     @apply dark:border-brand-yellow;
+
+    /* Flex items default to min-height:auto, so this could not shrink below
+       its content — and its content is a canvas whose intrinsic height is the
+       backing store the engine sized for a previous layout. Left alone it
+       grows past the column beside it and never comes back down. */
+    @apply md:min-h-0;
   }
 
   /* A fieldset carries a border, padding and a min-width of min-content by
@@ -40,11 +46,5 @@
   & input[type='range'] {
     @apply accent-brand-blue w-full;
     @apply dark:accent-brand-yellow;
-  }
-
-  & button {
-    @apply border-brand-blue cursor-pointer rounded-sm border-2 px-3 py-1.5 text-sm;
-    @apply dark:border-brand-yellow;
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
   }
 }
