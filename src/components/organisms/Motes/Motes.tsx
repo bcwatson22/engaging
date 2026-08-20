@@ -184,7 +184,7 @@ const Motes = () => {
 
   return (
     <section aria-labelledby={headingId} className="motes-demo">
-      <header className="flex flex-col gap-2">
+      <header>
         <h2 id={headingId} className="font-mono text-2xl">
           motes
         </h2>
@@ -210,7 +210,7 @@ const Motes = () => {
             </>
           )}
         </p>
-        <Nav links={packageLinks} label="Motes package" />
+        <Nav links={packageLinks} label="Motes package" className="mt-4" />
       </header>
 
       <div className="layout">
