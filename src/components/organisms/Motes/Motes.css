@@ -1,26 +1,24 @@
 @utility motes-demo {
   @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 py-8;
-  @apply md:flex-row md:items-start;
 
-  /* The canvas is sized from its own box, so the box has to have one. A fixed
-     aspect keeps the field the same shape as the controls grow. */
-  /* Its own dark backdrop in both schemes, rather than inheriting the page's.
-     A demo where the colour picker behaves differently depending on the
-     visitor's system is a demo that looks broken half the time — and a dark
-     stage is where a field of pale particles reads best. */
+  /* The two columns. Stretched rather than aligned to the start, so the stage
+     takes whatever height the controls beside it come to — no viewport maths,
+     and nothing to keep in step when a control is added. */
+  & .layout {
+    @apply flex flex-col gap-6 md:flex-row;
+  }
+
+  /* Its own dark backdrop in both schemes rather than inheriting the page's: a
+     demo whose colour picker behaves differently depending on the visitor's
+     system looks broken half the time, and a dark stage is where a field of
+     pale particles reads best.
+
+     The aspect ratio is only for the stacked layout, where there is no
+     neighbouring column to take a height from. */
   & .stage {
     @apply bg-brand-dark border-brand-blue relative aspect-video w-full overflow-hidden rounded-lg border-2;
-    /* Two columns from 768, but the full-height stage waits for 1024. At
-       tablet widths half the viewport is narrow enough that filling the
-       column height gives a tall thin strip; square reads better there.
-       Sticky either way, so it stays in view while the controls scroll. */
-    @apply md:sticky md:top-8 md:aspect-square md:w-1/2;
-    @apply lg:aspect-auto lg:h-[calc(100vh-6rem)];
+    @apply md:aspect-auto md:w-1/2;
     @apply dark:border-brand-yellow;
-
-    & canvas {
-      @apply block h-full w-full;
-    }
   }
 
   /* A fieldset carries a border, padding and a min-width of min-content by
@@ -30,25 +28,12 @@
     @apply flex w-full min-w-0 flex-col gap-4 border-0 p-0 md:w-1/2;
   }
 
-  & .note {
-    @apply text-sm opacity-80;
-
-    & code {
-      @apply font-mono text-xs;
-    }
-  }
-
+  /* Seven of these, so they are worth a rule. */
   & label {
     @apply flex flex-col gap-1;
 
     & > span {
       @apply flex items-baseline justify-between text-sm;
-    }
-
-    /* Tabular figures, so a value changing under a drag does not shuffle the
-       label beside it. */
-    & .value {
-      @apply font-mono text-xs tabular-nums opacity-70;
     }
   }
 
@@ -57,34 +42,9 @@
     @apply dark:accent-brand-yellow;
   }
 
-  & input[type='color'] {
-    @apply border-brand-blue h-10 w-full cursor-pointer rounded-sm border-2 bg-transparent p-1;
-    @apply dark:border-brand-yellow;
-  }
-
-  /* Laid out along the row, unlike the sliders above it, because a checkbox
-     belongs beside its label rather than under it. */
-  & .override {
-    @apply flex-row items-center gap-2;
-
-    & input {
-      @apply accent-brand-blue size-4;
-      @apply dark:accent-brand-yellow;
-    }
-  }
-
-  & .actions {
-    @apply flex gap-2;
-  }
-
   & button {
     @apply border-brand-blue cursor-pointer rounded-sm border-2 px-3 py-1.5 text-sm;
     @apply dark:border-brand-yellow;
     @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
-  }
-
-  & pre {
-    @apply bg-brand-dark/5 overflow-x-auto rounded-sm p-3 text-xs;
-    @apply dark:bg-brand-light/5;
   }
 }

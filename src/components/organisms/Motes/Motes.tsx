@@ -5,9 +5,12 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useId,
   useState,
   useSyncExternalStore,
 } from 'react';
+
+import { Link } from '@/components/atoms/Link/Link';
 
 /* The knobs, in the order they read on screen. Kept as data so the controls,
    the state and the generated snippet cannot drift apart — adding a setting
@@ -94,6 +97,7 @@ const Motes = () => {
 
   const [color, setColor] = useState<string>(initialColor);
   const [values, setValues] = useState<Values>(initialValues);
+  const headingId = useId();
   const [isCopied, setIsCopied] = useState<boolean>(false);
   /* Opt-in, and only offered to someone whose system asks for less motion —
      see the checkbox below. */
@@ -160,98 +164,133 @@ const Motes = () => {
     void navigator.clipboard.writeText(snippet).then(() => setIsCopied(true));
   }, [snippet]);
 
-  /* Named rather than pointed at a heading: there is no heading here to point
-     at, and inventing a visible one to satisfy the markup would add clutter
-     the page does not otherwise want. A section only becomes a landmark once
-     it has a name, which is the point of giving it one. */
   return (
-    <section aria-label="Particle field demo" className="motes-demo">
-      <div className="stage">
-        {/* aria-hidden because it is decoration: the controls beside it are
-            what carries the meaning. */}
-        <canvas ref={setCanvas} aria-hidden="true" />
-      </div>
-
-      {/* A fieldset rather than a form: nothing here is ever submitted, and a
-          form that cannot be submitted needs a submit handler purely to stop
-          the browser doing something the page does not want. This groups the
-          controls and names the group, which is all that was wanted. */}
-      <fieldset className="controls">
-        <legend className="sr-only">Particle settings</legend>
+    <section aria-labelledby={headingId} className="motes-demo">
+      <header className="flex flex-col gap-2">
+        <h2 id={headingId} className="font-mono text-2xl">
+          motes
+        </h2>
+        <p>
+          A drifting particle field for a canvas, in 4.3KB gzipped. The
+          simulation is written in Rust and compiled to WebAssembly; the drawing
+          stays in TypeScript. It is what paints the background of this site.
+        </p>
         {/* The reduced-motion sentence only belongs in the second branch. In
             the first the field is already still and has just said so, and
             explaining the behaviour to the one person watching it happen is
             the sort of repetition that reads as filler. */}
-        <p className="note">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           {isStill && !isOverridden ? (
             'Your system asks for reduced motion, so the field is drawn once and left still. Every setting below still applies.'
           ) : (
             <>
               Drag anything. The field updates as you go rather than restarting,
               and your pointer pulls the particles near it. It honours{' '}
-              <code>prefers-reduced-motion</code>, so where a system asks for
-              less motion it is drawn once and left still.
+              <code className="font-mono text-xs">prefers-reduced-motion</code>,
+              so where a system asks for less motion it is drawn once and left
+              still.
             </>
           )}
         </p>
+        <p className="flex flex-wrap items-center gap-4">
+          <Link
+            link={{
+              target: 'https://www.npmjs.com/package/@bcwatson22/motes',
+              text: 'npm',
+              icon: 'Package',
+            }}
+          />
+          <Link
+            link={{
+              target: 'https://github.com/bcwatson22/motes',
+              text: 'Docs',
+              icon: 'Lightbulb',
+            }}
+          />
+        </p>
+      </header>
 
-        {/* The switch itself is offered only where the system asks for less
+      <div className="layout">
+        <div className="stage">
+          {/* aria-hidden because it is decoration: the controls beside it are
+            what carries the meaning. */}
+          <canvas
+            ref={setCanvas}
+            aria-hidden="true"
+            className="block h-full w-full"
+          />
+        </div>
+
+        {/* A fieldset rather than a form: nothing here is ever submitted, and a
+          form that cannot be submitted needs a submit handler purely to stop
+          the browser doing something the page does not want. This groups the
+          controls and names the group, which is all that was wanted. */}
+        <fieldset className="controls">
+          <legend className="sr-only">Particle settings</legend>
+
+          {/* The switch itself is offered only where the system asks for less
             motion. Anywhere else it would do nothing, and here it is the
             difference between seeing the demo and not — so it is opt-in, never
             on by default, and the preference stands until someone deliberately
             says otherwise. */}
-        {isStill && (
-          <label className="override">
+          {isStill && (
+            <label className="flex-row items-center gap-2">
+              <input
+                type="checkbox"
+                className="accent-brand-blue dark:accent-brand-yellow size-4"
+                checked={isOverridden}
+                onChange={(event) => setIsOverridden(event.target.checked)}
+              />
+              <span>Animate anyway</span>
+            </label>
+          )}
+
+          <label>
+            <span>Colour</span>
             <input
-              type="checkbox"
-              checked={isOverridden}
-              onChange={(event) => setIsOverridden(event.target.checked)}
+              type="color"
+              className="border-brand-blue dark:border-brand-yellow h-10 w-full cursor-pointer rounded-sm border-2 bg-transparent p-1"
+              value={color}
+              onChange={(event) => changeColor(event.target.value)}
             />
-            <span>Animate anyway</span>
           </label>
-        )}
 
-        <label>
-          <span>Colour</span>
-          <input
-            type="color"
-            value={color}
-            onChange={(event) => changeColor(event.target.value)}
-          />
-        </label>
-
-        {controls.map(({ key, label, min, max, step }) => (
-          <label key={key}>
-            {/* A span, not an <output>. Output is a labelable element, so a
+          {controls.map(({ key, label, min, max, step }) => (
+            <label key={key}>
+              {/* A span, not an <output>. Output is a labelable element, so a
                 label wrapping both it and the input would name the output and
                 leave the slider with no accessible name at all. */}
-            <span>
-              {label} <span className="value">{values[key]}</span>
-            </span>
-            <input
-              type="range"
-              min={min}
-              max={max}
-              step={step}
-              value={values[key]}
-              onChange={(event) => change(key, Number(event.target.value))}
-            />
-          </label>
-        ))}
+              <span>
+                {label}{' '}
+                <span className="font-mono text-xs text-gray-600 tabular-nums dark:text-gray-400">
+                  {values[key]}
+                </span>
+              </span>
+              <input
+                type="range"
+                min={min}
+                max={max}
+                step={step}
+                value={values[key]}
+                onChange={(event) => change(key, Number(event.target.value))}
+              />
+            </label>
+          ))}
 
-        <div className="actions">
-          <button type="button" onClick={reset}>
-            Reset
-          </button>
-          <button type="button" onClick={copy}>
-            {isCopied ? 'Copied' : 'Copy config'}
-          </button>
-        </div>
+          <div className="flex gap-2">
+            <button type="button" onClick={reset}>
+              Reset
+            </button>
+            <button type="button" onClick={copy}>
+              {isCopied ? 'Copied' : 'Copy config'}
+            </button>
+          </div>
 
-        <pre>
-          <code>{snippet}</code>
-        </pre>
-      </fieldset>
+          <pre className="bg-brand-dark/5 dark:bg-brand-light/5 overflow-x-auto rounded-sm p-3 text-xs">
+            <code>{snippet}</code>
+          </pre>
+        </fieldset>
+      </div>
     </section>
   );
 };

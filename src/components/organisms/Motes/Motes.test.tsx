@@ -292,14 +292,12 @@ describe('Motes', () => {
     expect(screen.queryByRole('checkbox', { name: /animate/i })).toBeNull();
   });
 
-  /* A section is only a landmark once it has a name, and this one has no
-     heading to take one from. */
+  /* A section is only a landmark once it has a name, and this one takes its
+     name from the heading in its header. */
   it('names the region it occupies', () => {
     setup();
 
-    expect(
-      screen.getByRole('region', { name: /particle field demo/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /motes/i })).toBeInTheDocument();
   });
 
   it('renders without a media query to read', () => {

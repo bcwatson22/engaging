@@ -1,20 +1,4 @@
 @utility motes {
   @apply animate-fade-in flex flex-col p-6 pb-[calc(var(--footer)+1.5rem)];
   @apply sm:p-6;
-
-  & .intro {
-    @apply mx-auto flex w-full max-w-5xl flex-col gap-2 pt-4;
-
-    & h2 {
-      @apply font-mono text-2xl;
-    }
-
-    & .links {
-      @apply flex flex-wrap items-center gap-4;
-    }
-
-    /* No underline rule here. The Link atom draws its own, as a gradient it
-       animates on hover — a text-decoration on top of that is a second, static
-       line that never moves. */
-  }
 }

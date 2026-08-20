@@ -1,7 +1,7 @@
 # Engaging Engineering
 
 [![CI](https://github.com/bcwatson22/engaging/actions/workflows/ci.yml/badge.svg)](https://github.com/bcwatson22/engaging/actions/workflows/ci.yml)
-![Coverage 100%](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![Coverage 100%](https://img.shields.io/badge/coverage-100%25-2EBB4F?labelColor=343B42)
 
 This is a project created with [Next](https://nextjs.org/), [Node](https://nodejs.org/en), [GraphQL](https://graphql.org/), [Vitest](https://vitest.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind](https://tailwindcss.com/) and [Motion](https://motion.dev/) - powered by [Hygraph](https://hygraph.com/), deployed and hosted with [Vercel](https://vercel.com/). Linting and formatting run on [oxlint and oxfmt](https://oxc.rs/). The [Home page](https://www.engaging.engineering/) showcases technologies and expertise offered by Engaging Engineering, and the [CV page](https://www.engaging.engineering/cv) is an interactive overview of Billy Watson's vast range of skills and experience.
 
