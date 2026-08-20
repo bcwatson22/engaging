@@ -16,15 +16,11 @@ type Props = {
    would come to a viewport plus a nav and scroll by exactly that much. */
 const SiteLayout = ({ children }: Props) => (
   <div className="flex min-h-screen flex-col">
-    {/* header and footer, rather than a bare nav and a div, because both are
-        landmarks only when they sit outside main — nesting either inside it
-        disqualifies them. This is what makes the page navigable by landmark:
-        banner, main, contentinfo. */}
-    <header>
-      <Nav className="flex justify-center" />
+    <header className="flex justify-center p-6">
+      <Nav />
     </header>
     {children}
-    <footer className="footer">
+    <footer className="flex justify-center p-6">
       <Copyright />
     </footer>
   </div>

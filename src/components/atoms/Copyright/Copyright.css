@@ -1,8 +1,0 @@
-@utility copy {
-  @apply mt-4 flex shrink-0 items-center justify-center text-sm;
-  @apply print:hidden;
-}
-
-@utility rights {
-  @apply inline-block overflow-hidden whitespace-pre;
-}

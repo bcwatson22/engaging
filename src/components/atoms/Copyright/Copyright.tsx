@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 const today = dayjs().year();
 
 const Copyright = () => (
-  <p className="copy" suppressHydrationWarning>
+  <p className="text-sm print:hidden" suppressHydrationWarning>
     &copy; {today}. All rights reserved
   </p>
 );

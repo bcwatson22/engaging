@@ -1,7 +1,34 @@
+/* The whole page is black, not only its main. The header and the footer are
+   rendered by the layout, which cannot know which route it is wrapping — but
+   the document can see what it is currently holding, which is what :has is
+   for. Matches the loading shell and the error page too, both of which carry
+   .home. */
+body:has(.home) {
+  @apply bg-black text-white;
+  @apply print:bg-white print:text-black;
+}
+
 @utility home {
-  @apply animate-fade-in flex flex-col justify-center overflow-hidden bg-black p-6 text-white;
+  @apply animate-fade-in flex flex-col p-6;
   @apply sm:p-6 md:items-center;
-  @apply print:justify-start print:bg-white print:text-black;
+  @apply print:justify-start;
+
+  /* `safe`, not a plain centre. The technologies orbit at a fixed radius, so
+     on a short viewport the column is taller than the space it has. Centred
+     overflow spills equally in both directions and the half above the top
+     edge cannot be scrolled back to; safe centring gives up and aligns to the
+     start once that would happen.
+
+     No overflow-hidden either — that was clipping the orbit at main's edge
+     rather than letting the page scroll to it. */
+  justify-content: safe center;
+
+  /* Room for the orbit. From md the technologies are positioned at --radius
+     (18rem) from the centre and are 6rem across, so the column needs twice
+     the radius plus a logo to hold them — 42rem — and 3rem more for the p-6
+     either side, since the orbit is centred on the content box rather than
+     the border box. Below md they are a grid and take their own space. */
+  @apply md:min-h-[45rem];
 
   &.loaded {
     @apply animate-fade-in;
