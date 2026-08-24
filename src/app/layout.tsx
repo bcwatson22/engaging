@@ -4,6 +4,8 @@ import type { CssVariable } from 'next/dist/compiled/@next/font';
 import { Nunito } from 'next/font/google';
 import { type ReactNode } from 'react';
 
+import { MotionProvider } from '@/components/providers/MotionProvider/MotionProvider';
+
 import '@/styles/globals.css';
 
 type Props = Readonly<{
@@ -21,7 +23,7 @@ const nunito = Nunito({
 const Layout = ({ children }: Props) => (
   <html lang="en">
     <body className={nunito.className} suppressHydrationWarning>
-      {children}
+      <MotionProvider>{children}</MotionProvider>
       <Analytics />
       <SpeedInsights />
     </body>

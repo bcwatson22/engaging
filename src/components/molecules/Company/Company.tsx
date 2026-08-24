@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import Image from 'next/image';
 import { useRef } from 'react';
 
@@ -40,7 +40,7 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
   const alt = `${company} logo`;
 
   return (
-    <motion.header ref={ref} className="company" {...triggerProps}>
+    <m.header ref={ref} className="company" {...triggerProps}>
       {logo?.url && (
         <>
           <figure className="company-logo screen-company-logo">
@@ -67,7 +67,7 @@ const Company = ({ company, city, logo, sectionId, delay }: Props) => {
         <h3 id={sectionId}>{company}</h3>
         <p className="mt-0">{city}</p>
       </div>
-    </motion.header>
+    </m.header>
   );
 };
 

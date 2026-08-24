@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll } from 'motion/react';
+import { m, useScroll } from 'motion/react';
 import { useRef } from 'react';
 
 import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
@@ -19,10 +19,10 @@ const Divider = ({ heading, delay = 0 }: Props) => {
 
   return (
     <div ref={ref}>
-      <motion.h2 className="divider" {...triggerProps}>
+      <m.h2 className="divider" {...triggerProps}>
         {heading}:{' '}
-        <motion.span style={{ scaleX: scrollYProgress }}>Divider</motion.span>
-      </motion.h2>
+        <m.span style={{ scaleX: scrollYProgress }}>Divider</m.span>
+      </m.h2>
     </div>
   );
 };
