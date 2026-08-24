@@ -1,3 +1,9 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /* Where the contact form posts. Public, and hardcoded for the same reason the
    bucket URL below is: an env var that is merely missing would produce a CSP
    that silently blocks the form, which is worse than a config that cannot
@@ -122,4 +128,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

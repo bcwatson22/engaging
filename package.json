@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@heroicons/react": "2.2.0",
+    "@next/bundle-analyzer": "^16.3.2",
     "@sidekickicons/react": "0.12.0",
     "@tailwindcss/postcss": "4.3.3",
     "@testing-library/jest-dom": "7.0.1",

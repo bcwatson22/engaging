@@ -1,6 +1,6 @@
 'use client';
 
-import { useScroll, motion } from 'motion/react';
+import { useScroll, m } from 'motion/react';
 import { type ReactNode, useRef } from 'react';
 
 import { SkeletonLine } from '../Skeleton/Skeleton';
@@ -48,7 +48,7 @@ const Bullet = ({ children }: Props) => {
 
   return (
     <li ref={ref} className="bullet">
-      <motion.span style={{ scale: scrollYProgress }}>Bullet</motion.span>
+      <m.span style={{ scale: scrollYProgress }}>Bullet</m.span>
       {children}
     </li>
   );
