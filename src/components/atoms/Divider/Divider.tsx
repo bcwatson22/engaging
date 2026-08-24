@@ -20,8 +20,7 @@ const Divider = ({ heading, delay = 0 }: Props) => {
   return (
     <div ref={ref}>
       <m.h2 className="divider" {...triggerProps}>
-        {heading}:{' '}
-        <m.span style={{ scaleX: scrollYProgress }}>Divider</m.span>
+        {heading}: <m.span style={{ scaleX: scrollYProgress }}>Divider</m.span>
       </m.h2>
     </div>
   );
