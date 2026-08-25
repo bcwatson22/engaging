@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
 
-import { controls, initialColor, Motes, snippetFor } from './Motes';
+import { controls, initialColor, linesFor, Motes, snippetFor } from './Motes';
 
 vi.mock('@bcwatson22/motes', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@bcwatson22/motes')>()),
@@ -55,12 +55,21 @@ const sliderFor = (label: string): HTMLElement =>
 
 /* Two elements carry the code role — the generated config and the media
    feature named in the note above it — so this picks the one that is a config
-   rather than reaching for a test id. */
-const snippet = (): string =>
-  screen
+   rather than reaching for a test id.
+
+   Every possible line is in the DOM so it can transition open and shut, which
+   makes textContent the wrong thing to read: it would include the lines that
+   are collapsed. Reading the shown rows is both what a visitor sees and what
+   the copy button writes. */
+const snippet = (): string => {
+  const block = screen
     .getAllByRole('code')
-    .find((element) => element.textContent?.includes('createField'))
-    ?.textContent ?? '';
+    .find((element) => element.textContent?.includes('createField'));
+
+  return Array.from(block?.querySelectorAll('[data-shown="true"]') ?? [])
+    .map((row) => row.textContent)
+    .join('\n');
+};
 
 /* jsdom does not implement a range input's keyboard behaviour, so a change
    event is how a slider is driven in a test. The query is still by role. */
@@ -191,6 +200,20 @@ describe('Motes', () => {
       drag('Speed', 1.5);
 
       expect(snippet()).toContain('speed: 1.5');
+    });
+
+    it('keeps a defaulted line in the DOM, hidden, so it can animate', () => {
+      setup();
+
+      const row = Array.from(
+        screen
+          .getAllByRole('code')
+          .find((element) => element.textContent?.includes('createField'))
+          ?.querySelectorAll('[data-shown="false"]') ?? [],
+      ).find((hidden) => hidden.textContent?.includes('speed:'));
+
+      expect(row).toBeInTheDocument();
+      expect(row).toHaveAttribute('aria-hidden', 'true');
     });
 
     it('drops it again when it is put back', () => {
@@ -327,6 +350,41 @@ describe('Motes', () => {
 
   it('renders without a media query to read', () => {
     expect(() => renderToString(<Motes />)).not.toThrow();
+  });
+
+  describe('linesFor', () => {
+    const values = {
+      count: 600,
+      speed: 0.25,
+      size: 2.2,
+      opacity: 0.3,
+      bubbleSize: 4,
+      bubbleDistance: 175,
+    };
+
+    it('keeps a defaulted line, so it has something to transition', () => {
+      const line = linesFor('#ffffff', values).find(
+        ({ key }) => key === 'count',
+      );
+
+      expect(line).toMatchObject({ text: '  count: 600,', shown: false });
+    });
+
+    it('shows a line once its setting differs', () => {
+      const line = linesFor('#ffffff', { ...values, count: 1200 }).find(
+        ({ key }) => key === 'count',
+      );
+
+      expect(line).toMatchObject({ text: '  count: 1200,', shown: true });
+    });
+
+    it('always shows the lines that are not a setting', () => {
+      const fixed = linesFor('#ffffff', values).filter(
+        ({ key }) => !controls.some((control) => control.key === key),
+      );
+
+      expect(fixed.every(({ shown }) => shown)).toBe(true);
+    });
   });
 
   describe('snippetFor', () => {

@@ -43,6 +43,18 @@
     }
   }
 
+  /* The snippet's blank line has no text, and an empty row has no height —
+     the newline that used to separate the import from the call is gone now
+     that every line is its own element rather than part of one string.
+
+     Only on the shown rows. An explicit min-height would otherwise become the
+     collapsed track's minimum: a grid item contributes its automatic minimum
+     of zero only while min-height is auto, so setting it on every row would
+     stop a hidden line ever reaching nothing. */
+  & pre .reveal[data-shown='true'] > span {
+    min-height: 1lh;
+  }
+
   /* cursor-pointer, matching the colour input and the buttons. grab/grabbing
      would describe the thumb more literally, but the track is clickable too —
      and pointer is what every other control here uses for "this does

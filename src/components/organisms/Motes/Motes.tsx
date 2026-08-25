@@ -84,24 +84,37 @@ const prefersReducedMotion = (): boolean =>
    treats the unknown. */
 const prefersReducedMotionOnServer = (): boolean => true;
 
+type Line = { key: string; text: string; shown: boolean };
+
 /* What someone came for: the settings they landed on, in a form they can
    paste. Only what differs from the defaults, so the snippet stays short and
-   says something. */
-const snippetFor = (color: string, values: Values): string => {
-  const changed = controls
-    .map(({ key }) => key)
-    .filter((key) => values[key] !== defaults[key])
-    .map((key) => `  ${key}: ${values[key]},`);
+   says something.
 
-  return [
-    "import { createField } from '@bcwatson22/motes';",
-    '',
-    'const field = await createField(canvas, {',
-    `  color: '${color}',`,
-    ...changed,
-    '});',
-  ].join('\n');
-};
+   Every possible line is returned, including the ones with nothing to say, so
+   the block can transition them open and shut rather than having them appear
+   fully formed. A line at its default still carries its current text: there is
+   no stale value to leave behind, only a row with no height. */
+const linesFor = (color: string, values: Values): Line[] =>
+  [
+    { key: 'import', text: "import { createField } from '@bcwatson22/motes';" },
+    { key: 'blank', text: '' },
+    { key: 'open', text: 'const field = await createField(canvas, {' },
+    { key: 'color', text: `  color: '${color}',` },
+    ...controls.map(({ key }) => ({
+      key,
+      text: `  ${key}: ${values[key]},`,
+      shown: values[key] !== defaults[key],
+    })),
+    { key: 'close', text: '});' },
+  ].map((line) => ({ shown: true, ...line }));
+
+/* The text a visitor actually pastes, and the single definition of it — the
+   rendered block and the clipboard cannot disagree about which lines count. */
+const snippetFor = (color: string, values: Values): string =>
+  linesFor(color, values)
+    .filter(({ shown }) => shown)
+    .map(({ text }) => text)
+    .join('\n');
 
 const Motes = () => {
   /* The canvas arrives through state rather than a ref, so the effect can
@@ -176,6 +189,7 @@ const Motes = () => {
     fieldRef.current?.update({ color: initialColor, ...initialValues });
   }, []);
 
+  const lines = linesFor(color, values);
   const snippet = snippetFor(color, values);
 
   const copy = useCallback((): void => {
@@ -291,8 +305,33 @@ const Motes = () => {
             </Button>
           </div>
 
-          <pre className="bg-brand-dark/5 dark:bg-brand-light/5 overflow-x-auto rounded-sm p-3 text-xs">
-            <code>{snippet}</code>
+          {/* One element per line rather than one string: a text node has no
+              box, so nothing about it can be transitioned. Keyed by the
+              setting rather than by index, so a line appearing above another
+              does not re-key its sibling and restart its animation.
+
+              Hidden lines stay in the DOM — that is what lets them animate in
+              both directions — so aria-hidden keeps them out of the
+              accessibility tree, and the copy button reads the filtered
+              string rather than this markup. */}
+          {/* Wraps rather than scrolls. Each line clips itself so that it can
+              collapse, which means a long one can no longer scroll the block
+              sideways to be read — on a narrow screen the import line is
+              wider than the column. Wrapping is the better trade anyway: it
+              needs no horizontal scrollbar on a phone. */}
+          <pre className="bg-brand-dark/5 dark:bg-brand-light/5 rounded-sm p-3 text-xs break-words whitespace-pre-wrap">
+            <code>
+              {lines.map(({ key, text, shown }) => (
+                <span
+                  key={key}
+                  className="reveal"
+                  data-shown={shown}
+                  aria-hidden={!shown || undefined}
+                >
+                  <span>{text}</span>
+                </span>
+              ))}
+            </code>
           </pre>
         </fieldset>
       </div>
@@ -300,4 +339,4 @@ const Motes = () => {
   );
 };
 
-export { controls, initialColor, initialValues, Motes, snippetFor };
+export { controls, initialColor, initialValues, linesFor, Motes, snippetFor };
