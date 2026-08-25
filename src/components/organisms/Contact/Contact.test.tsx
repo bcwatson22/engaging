@@ -255,9 +255,12 @@ describe('Contact', () => {
       await complete(user);
       await submit(user);
 
-      await waitFor(() =>
-        expect(screen.getByText(messages.sent)).toHaveFocus(),
-      );
+      /* By role rather than by text: the message sits in a child of the
+         region now that the region transitions open, so the text matches the
+         span while the focus is on the output around it. */
+      await waitFor(() => expect(screen.getByRole('status')).toHaveFocus());
+
+      expect(screen.getByRole('status')).toHaveTextContent(messages.sent);
     });
 
     it('explains a rate-limited submission', async () => {

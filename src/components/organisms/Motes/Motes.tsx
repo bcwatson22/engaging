@@ -84,24 +84,37 @@ const prefersReducedMotion = (): boolean =>
    treats the unknown. */
 const prefersReducedMotionOnServer = (): boolean => true;
 
+type Line = { key: string; text: string; shown: boolean };
+
 /* What someone came for: the settings they landed on, in a form they can
    paste. Only what differs from the defaults, so the snippet stays short and
-   says something. */
-const snippetFor = (color: string, values: Values): string => {
-  const changed = controls
-    .map(({ key }) => key)
-    .filter((key) => values[key] !== defaults[key])
-    .map((key) => `  ${key}: ${values[key]},`);
+   says something.
 
-  return [
-    "import { createField } from '@bcwatson22/motes';",
-    '',
-    'const field = await createField(canvas, {',
-    `  color: '${color}',`,
-    ...changed,
-    '});',
-  ].join('\n');
-};
+   Every possible line is returned, including the ones with nothing to say, so
+   the block can transition them open and shut rather than having them appear
+   fully formed. A line at its default still carries its current text: there is
+   no stale value to leave behind, only a row with no height. */
+const linesFor = (color: string, values: Values): Line[] =>
+  [
+    { key: 'import', text: "import { createField } from '@bcwatson22/motes';" },
+    { key: 'blank', text: '' },
+    { key: 'open', text: 'const field = await createField(canvas, {' },
+    { key: 'color', text: `  color: '${color}',` },
+    ...controls.map(({ key }) => ({
+      key,
+      text: `  ${key}: ${values[key]},`,
+      shown: values[key] !== defaults[key],
+    })),
+    { key: 'close', text: '});' },
+  ].map((line) => ({ shown: true, ...line }));
+
+/* The text a visitor actually pastes, and the single definition of it — the
+   rendered block and the clipboard cannot disagree about which lines count. */
+const snippetFor = (color: string, values: Values): string =>
+  linesFor(color, values)
+    .filter(({ shown }) => shown)
+    .map(({ text }) => text)
+    .join('\n');
 
 const Motes = () => {
   /* The canvas arrives through state rather than a ref, so the effect can
@@ -160,25 +173,26 @@ const Motes = () => {
        made, so this one setting is the exception. */
   }, [canvas, isOverridden]);
 
-  const change = useCallback((key: Setting, value: number): void => {
+  const handleChange = useCallback((key: Setting, value: number): void => {
     setValues((current) => ({ ...current, [key]: value }));
     fieldRef.current?.update({ [key]: value });
   }, []);
 
-  const changeColor = useCallback((next: string): void => {
+  const handleChangeColor = useCallback((next: string): void => {
     setColor(next);
     fieldRef.current?.update({ color: next });
   }, []);
 
-  const reset = useCallback((): void => {
+  const handleReset = useCallback((): void => {
     setColor(initialColor);
     setValues(initialValues);
     fieldRef.current?.update({ color: initialColor, ...initialValues });
   }, []);
 
+  const lines = linesFor(color, values);
   const snippet = snippetFor(color, values);
 
-  const copy = useCallback((): void => {
+  const handleCopy = useCallback((): void => {
     void navigator.clipboard.writeText(snippet).then(() => setIsCopied(true));
   }, [snippet]);
 
@@ -217,11 +231,7 @@ const Motes = () => {
         <div className="stage">
           {/* aria-hidden because it is decoration: the controls beside it are
             what carries the meaning. */}
-          <canvas
-            ref={setCanvas}
-            aria-hidden="true"
-            className="absolute inset-0 block size-full"
-          />
+          <canvas ref={setCanvas} aria-hidden="true" />
         </div>
 
         {/* A fieldset rather than a form: nothing here is ever submitted, and a
@@ -242,7 +252,7 @@ const Motes = () => {
                 type="checkbox"
                 className="accent-brand-blue dark:accent-brand-yellow size-4"
                 checked={isOverridden}
-                onChange={(event) => setIsOverridden(event.target.checked)}
+                onChange={({ target: { checked } }) => setIsOverridden(checked)}
               />
               <span>Animate anyway</span>
             </label>
@@ -252,9 +262,8 @@ const Motes = () => {
             <span>Colour</span>
             <input
               type="color"
-              className="border-brand-blue dark:border-brand-yellow h-10 w-full cursor-pointer rounded-sm border-2 bg-transparent p-1"
               value={color}
-              onChange={(event) => changeColor(event.target.value)}
+              onChange={({ target: { value } }) => handleChangeColor(value)}
             />
           </label>
 
@@ -264,10 +273,7 @@ const Motes = () => {
                 label wrapping both it and the input would name the output and
                 leave the slider with no accessible name at all. */}
               <span>
-                {label}{' '}
-                <span className="font-mono text-xs text-gray-600 tabular-nums dark:text-gray-400">
-                  {values[key]}
-                </span>
+                {label} <span className="value">{values[key]}</span>
               </span>
               <input
                 type="range"
@@ -275,24 +281,46 @@ const Motes = () => {
                 max={max}
                 step={step}
                 value={values[key]}
-                onChange={(event) => change(key, Number(event.target.value))}
+                onChange={({ target: { value } }) =>
+                  handleChange(key, Number(value))
+                }
               />
             </label>
           ))}
 
           <div className="flex flex-wrap gap-2">
-            <Button icon="Retry" onClick={reset}>
+            <Button icon="Retry" onClick={handleReset}>
               Reset
             </Button>
             {/* The icon changes with the label, so the feedback reads at a
                 glance rather than only on close inspection. */}
-            <Button icon={isCopied ? 'Check' : 'Copy'} onClick={copy}>
+            <Button icon={isCopied ? 'Check' : 'Copy'} onClick={handleCopy}>
               {isCopied ? 'Copied' : 'Copy config'}
             </Button>
           </div>
 
-          <pre className="bg-brand-dark/5 dark:bg-brand-light/5 overflow-x-auto rounded-sm p-3 text-xs">
-            <code>{snippet}</code>
+          {/* One element per line rather than one string: a text node has no
+              box, so nothing about it can be transitioned. Keyed by the
+              setting rather than by index, so a line appearing above another
+              does not re-key its sibling and restart its animation.
+
+              Hidden lines stay in the DOM — that is what lets them animate in
+              both directions — so aria-hidden keeps them out of the
+              accessibility tree, and the copy button reads the filtered
+              string rather than this markup. */}
+          <pre>
+            <code>
+              {lines.map(({ key, text, shown }) => (
+                <span
+                  key={key}
+                  className="reveal"
+                  data-shown={shown}
+                  aria-hidden={!shown || undefined}
+                >
+                  <span>{text}</span>
+                </span>
+              ))}
+            </code>
           </pre>
         </fieldset>
       </div>
@@ -300,4 +328,4 @@ const Motes = () => {
   );
 };
 
-export { controls, initialColor, initialValues, Motes, snippetFor };
+export { controls, initialColor, initialValues, linesFor, Motes, snippetFor };

@@ -26,6 +26,25 @@ const fallback: TLink = {
   icon: 'Email',
 };
 
+/* Always rendered, even with nothing to say, so an arriving error can
+   transition its row open instead of appearing at full height. Empty when
+   there is no error, so nothing stale is left in the accessibility tree — and
+   aria-hidden while it is collapsed, since a screen reader should not meet an
+   error that is not being shown.
+
+   Not referenced by aria-describedby unless it has content: see `describedBy`
+   below. */
+const FieldError = ({ id, message }: { id: string; message?: string }) => (
+  <span
+    id={id}
+    className="error reveal"
+    data-shown={Boolean(message)}
+    aria-hidden={!message || undefined}
+  >
+    <span>{message}</span>
+  </span>
+);
+
 const Contact = () => {
   const headingId = useId();
   const statusId = useId();
@@ -92,11 +111,7 @@ const Contact = () => {
                 autoComplete="name"
               />
             </label>
-            {errors.name && (
-              <span id={`${ids.name}-error`} className="error">
-                {errors.name}
-              </span>
-            )}
+            <FieldError id={`${ids.name}-error`} message={errors.name} />
           </div>
 
           <div className="field">
@@ -109,11 +124,7 @@ const Contact = () => {
                 autoComplete="email"
               />
             </label>
-            {errors.email && (
-              <span id={`${ids.email}-error`} className="error">
-                {errors.email}
-              </span>
-            )}
+            <FieldError id={`${ids.email}-error`} message={errors.email} />
           </div>
 
           <div className="field">
@@ -126,11 +137,7 @@ const Contact = () => {
                 maxLength={maxMessage}
               />
             </label>
-            {errors.message && (
-              <span id={`${ids.message}-error`} className="error">
-                {errors.message}
-              </span>
-            )}
+            <FieldError id={`${ids.message}-error`} message={errors.message} />
           </div>
 
           {/* Hidden from everyone who should not see it: from sight, from the
@@ -160,9 +167,20 @@ const Contact = () => {
           implicitly, along with an aria-live of polite.
 
           Always in the DOM so its updates are announced — a live region added
-          to the page at the same moment as its content is unreliable. */}
-      <output ref={statusRef} id={statusId} tabIndex={-1} className="status">
-        {outcome !== 'idle' && messages[outcome]}
+          to the page at the same moment as its content is unreliable.
+
+          Collapsed rather than hidden when there is no outcome. It keeps no
+          text while collapsed, so there is nothing stale to read, and unlike
+          the field errors it is never aria-hidden: hiding a live region from
+          the accessibility tree stops it announcing at all. */}
+      <output
+        ref={statusRef}
+        id={statusId}
+        tabIndex={-1}
+        className="status reveal"
+        data-shown={outcome !== 'idle'}
+      >
+        <span>{outcome !== 'idle' && messages[outcome]}</span>
       </output>
 
       <p className="fallback">

@@ -43,6 +43,45 @@
     }
   }
 
+  /* The generated config. Wraps rather than scrolls: each line clips itself so
+     that it can collapse, which means a long one can no longer scroll the
+     block sideways to be read — on a narrow screen the import line is wider
+     than the column. Wrapping needs no horizontal scrollbar on a phone. */
+  & pre {
+    @apply bg-brand-dark/5 rounded-sm p-3 text-xs break-words whitespace-pre-wrap;
+    @apply dark:bg-brand-light/5;
+
+    /* The snippet's blank line has no text, and an empty row has no height —
+       the newline that used to separate the import from the call is gone now
+       that every line is its own element rather than part of one string.
+
+       A zero-width space through a pseudo-element rather than a min-height on
+       the row. Content only contributes to how large the track *wants* to be,
+       which is what is needed here, whereas an explicit min-height becomes the
+       track's minimum and floors it: the row would jump to full height the
+       moment it was shown, with nothing left to animate. It also stays out of
+       textContent, so it cannot reach the clipboard or a test. */
+    & .reveal > span:empty::after {
+      content: '\200b';
+    }
+  }
+
+  /* Fills the stage it is positioned within. */
+  & canvas {
+    @apply absolute inset-0 block size-full;
+  }
+
+  & input[type='color'] {
+    @apply border-brand-blue h-10 w-full cursor-pointer rounded-sm border-2 bg-transparent p-1;
+    @apply dark:border-brand-yellow;
+  }
+
+  /* The live value beside each slider's label. */
+  & .value {
+    @apply font-mono text-xs text-gray-600 tabular-nums;
+    @apply dark:text-gray-400;
+  }
+
   /* cursor-pointer, matching the colour input and the buttons. grab/grabbing
      would describe the thumb more literally, but the track is clickable too —
      and pointer is what every other control here uses for "this does
