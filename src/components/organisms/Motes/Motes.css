@@ -47,12 +47,14 @@
      the newline that used to separate the import from the call is gone now
      that every line is its own element rather than part of one string.
 
-     Only on the shown rows. An explicit min-height would otherwise become the
-     collapsed track's minimum: a grid item contributes its automatic minimum
-     of zero only while min-height is auto, so setting it on every row would
-     stop a hidden line ever reaching nothing. */
-  & pre .reveal[data-shown='true'] > span {
-    min-height: 1lh;
+     A zero-width space through a pseudo-element rather than a min-height on
+     the row. Content only contributes to how large the track *wants* to be,
+     which is what is needed here, whereas an explicit min-height becomes the
+     track's minimum and floors it: the row would jump to full height the
+     moment it was shown, with nothing left to animate. It also stays out of
+     textContent, so it cannot reach the clipboard or a test. */
+  & pre .reveal > span:empty::after {
+    content: '\200b';
   }
 
   /* cursor-pointer, matching the colour input and the buttons. grab/grabbing

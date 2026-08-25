@@ -72,9 +72,9 @@
   grid-template-rows: 1fr;
 
   transition:
-    grid-template-rows 180ms ease,
-    opacity 180ms ease,
-    margin-block-start 180ms ease;
+    grid-template-rows 240ms ease,
+    opacity 240ms ease,
+    margin-block-start 240ms ease;
 
   & > * {
     overflow: hidden;
