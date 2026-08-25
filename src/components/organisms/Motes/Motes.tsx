@@ -173,17 +173,17 @@ const Motes = () => {
        made, so this one setting is the exception. */
   }, [canvas, isOverridden]);
 
-  const change = useCallback((key: Setting, value: number): void => {
+  const handleChange = useCallback((key: Setting, value: number): void => {
     setValues((current) => ({ ...current, [key]: value }));
     fieldRef.current?.update({ [key]: value });
   }, []);
 
-  const changeColor = useCallback((next: string): void => {
+  const handleChangeColor = useCallback((next: string): void => {
     setColor(next);
     fieldRef.current?.update({ color: next });
   }, []);
 
-  const reset = useCallback((): void => {
+  const handleReset = useCallback((): void => {
     setColor(initialColor);
     setValues(initialValues);
     fieldRef.current?.update({ color: initialColor, ...initialValues });
@@ -192,7 +192,7 @@ const Motes = () => {
   const lines = linesFor(color, values);
   const snippet = snippetFor(color, values);
 
-  const copy = useCallback((): void => {
+  const handleCopy = useCallback((): void => {
     void navigator.clipboard.writeText(snippet).then(() => setIsCopied(true));
   }, [snippet]);
 
@@ -263,7 +263,7 @@ const Motes = () => {
             <input
               type="color"
               value={color}
-              onChange={({ target: { value } }) => changeColor(value)}
+              onChange={({ target: { value } }) => handleChangeColor(value)}
             />
           </label>
 
@@ -281,18 +281,20 @@ const Motes = () => {
                 max={max}
                 step={step}
                 value={values[key]}
-                onChange={({ target: { value } }) => change(key, Number(value))}
+                onChange={({ target: { value } }) =>
+                  handleChange(key, Number(value))
+                }
               />
             </label>
           ))}
 
           <div className="flex flex-wrap gap-2">
-            <Button icon="Retry" onClick={reset}>
+            <Button icon="Retry" onClick={handleReset}>
               Reset
             </Button>
             {/* The icon changes with the label, so the feedback reads at a
                 glance rather than only on close inspection. */}
-            <Button icon={isCopied ? 'Check' : 'Copy'} onClick={copy}>
+            <Button icon={isCopied ? 'Check' : 'Copy'} onClick={handleCopy}>
               {isCopied ? 'Copied' : 'Copy config'}
             </Button>
           </div>
