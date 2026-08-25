@@ -231,11 +231,7 @@ const Motes = () => {
         <div className="stage">
           {/* aria-hidden because it is decoration: the controls beside it are
             what carries the meaning. */}
-          <canvas
-            ref={setCanvas}
-            aria-hidden="true"
-            className="absolute inset-0 block size-full"
-          />
+          <canvas ref={setCanvas} aria-hidden="true" />
         </div>
 
         {/* A fieldset rather than a form: nothing here is ever submitted, and a
@@ -266,7 +262,6 @@ const Motes = () => {
             <span>Colour</span>
             <input
               type="color"
-              className="border-brand-blue dark:border-brand-yellow h-10 w-full cursor-pointer rounded-sm border-2 bg-transparent p-1"
               value={color}
               onChange={(event) => changeColor(event.target.value)}
             />
@@ -278,10 +273,7 @@ const Motes = () => {
                 label wrapping both it and the input would name the output and
                 leave the slider with no accessible name at all. */}
               <span>
-                {label}{' '}
-                <span className="font-mono text-xs text-gray-600 tabular-nums dark:text-gray-400">
-                  {values[key]}
-                </span>
+                {label} <span className="value">{values[key]}</span>
               </span>
               <input
                 type="range"
@@ -314,12 +306,7 @@ const Motes = () => {
               both directions — so aria-hidden keeps them out of the
               accessibility tree, and the copy button reads the filtered
               string rather than this markup. */}
-          {/* Wraps rather than scrolls. Each line clips itself so that it can
-              collapse, which means a long one can no longer scroll the block
-              sideways to be read — on a narrow screen the import line is
-              wider than the column. Wrapping is the better trade anyway: it
-              needs no horizontal scrollbar on a phone. */}
-          <pre className="bg-brand-dark/5 dark:bg-brand-light/5 rounded-sm p-3 text-xs break-words whitespace-pre-wrap">
+          <pre>
             <code>
               {lines.map(({ key, text, shown }) => (
                 <span
