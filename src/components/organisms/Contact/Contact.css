@@ -109,19 +109,38 @@
      a different one. Two stops, because a single value cannot clear both
      backgrounds. */
   & .error {
-    @apply mt-1 block text-xs;
+    @apply mt-1 text-xs;
 
     color: oklch(from var(--brand-red) 0.52 c h);
+
+    & > span {
+      @apply block;
+    }
+
+    /* The gap above goes as the row closes. Left alone it would survive the
+       collapse and hold the field apart by a few pixels; put on the child
+       instead it would be worse, since a grid item's margin sets the minimum
+       size of its track and the row could never reach zero at all. */
+    &[data-shown='false'] {
+      @apply mt-0;
+    }
 
     @media (prefers-color-scheme: dark) {
       color: oklch(from var(--brand-red) 0.72 c h);
     }
   }
 
-  /* Empty until there is something to say, so it must not reserve space or
-     draw a focus ring around nothing. */
-  & .status:empty {
-    @apply hidden;
+  /* The section is a flex column with a gap, and a collapsed row is still a
+     flex item: left alone it draws a gap above *and* below itself, doubling
+     the space between the form and the fallback address whenever there is no
+     outcome. Pulling back one gap's worth cancels it, and transitioning it
+     alongside the height keeps the two in step rather than having the layout
+     snap closed under a smooth collapse.
+
+     Kept here rather than in the utility: it is a fact about this layout's
+     gap, which the pattern cannot know. */
+  & .status[data-shown='false'] {
+    margin-block-start: calc(var(--spacing) * -6);
   }
 
   & .status:focus-visible {
