@@ -25,7 +25,7 @@
     "id": "cm2lwgbp33vv606mh2a0o6uuu",
     "url": "https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb/resize=fit:scale,width:896/output=format:webp/cm60oelf4h2g007js2owzxjwv"
   },
-  "intro": "Creative, collaborative Front End Engineer from the Peaks, with {{experience}} years' experience spanning agency, in-house and freelance roles - including Next, Node, React (+ Native) and TypeScript.\n\nI care about accessibility and love using subtle animation and interactivity to craft natural user experiences. Away from the keyboard, I like to go mountain biking or scuba diving.",
+  "intro": "Creative, collaborative Front End Engineer with {{experience}} years' experience spanning agency, in-house and freelance roles - from early-stage startups to enterprise-scale organisations - including Next, Node, React (+ Native) and TypeScript.\n\nI care about accessibility and love using subtle animation and interactivity to craft natural and engaging user experiences. Away from work, I like to go mountain biking or scuba diving.",
   "address": {
     "id": "cm2okptsmag4108mo3xu62vbj",
     "streetAddress": "20 Perigree Road",
@@ -287,7 +287,7 @@
       ]
     }
   ],
-  "skills": "My huge wealth of experience in engineering has equipped me with a broad toolkit across web and native technologies, and a genuine focus on code that's tested, scalable, performant and accessible. Next, Node, React Native and TypeScript are my usual stack; but I prefer reaching for the right tool over the familiar one, and keep pace with the evolving ecosystem.\n\nI'm a T-shaped engineer who values working closely with other disciplines. Mentoring is where I do some of my best work - there's nothing more satisfying than watching someone I've mentored get promoted - though I'm equally at home solving a hard technical problem myself.",
+  "skills": "My huge wealth of experience in engineering has equipped me with a broad toolkit across web and native technologies, and a genuine focus on code that's tested, scalable, performant and accessible. Next, Node, React Native and TypeScript are my usual stack; but I prefer reaching for the right tool over the familiar one, and keep pace with the evolving ecosystem - most recently branching into Back End with Nest, Go and Rust.\n\nI'm a T-shaped engineer who values working closely with other disciplines. Mentoring is where I do some of my best work - there's nothing more satisfying than watching someone I've mentored get promoted - though I'm equally at home solving a hard technical problem myself.",
   "qualifications": [
     {
       "id": "club67ocb13nw08mjxerotjn8",
@@ -339,7 +339,7 @@
       "link": {
         "id": "cm2ou5gm5d5en08mo5ikyytcb",
         "text": "LinkedIn",
-        "target": "https://linkedin.com/in/tom-tollafield-9732ba18 ",
+        "target": "https://linkedin.com/in/tom-tollafield-9732ba18",
         "icon": "Profile"
       }
     },

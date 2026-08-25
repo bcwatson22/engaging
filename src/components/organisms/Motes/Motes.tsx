@@ -252,7 +252,7 @@ const Motes = () => {
                 type="checkbox"
                 className="accent-brand-blue dark:accent-brand-yellow size-4"
                 checked={isOverridden}
-                onChange={(event) => setIsOverridden(event.target.checked)}
+                onChange={({ target: { checked } }) => setIsOverridden(checked)}
               />
               <span>Animate anyway</span>
             </label>
@@ -263,7 +263,7 @@ const Motes = () => {
             <input
               type="color"
               value={color}
-              onChange={(event) => changeColor(event.target.value)}
+              onChange={({ target: { value } }) => changeColor(value)}
             />
           </label>
 
@@ -281,7 +281,7 @@ const Motes = () => {
                 max={max}
                 step={step}
                 value={values[key]}
-                onChange={(event) => change(key, Number(event.target.value))}
+                onChange={({ target: { value } }) => change(key, Number(value))}
               />
             </label>
           ))}
