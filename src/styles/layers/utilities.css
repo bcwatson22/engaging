@@ -45,3 +45,53 @@
 @utility animation-delay-300 {
   animation-delay: 300ms;
 }
+
+/* A row that transitions between nothing and its natural height, for content
+   that appears and disappears in place — a line joining a code block, a status
+   message arriving under a form.
+
+   `height: auto` cannot be interpolated, but an `fr` track can, so the row is a
+   single-cell grid and the height animation is really the track resizing. The
+   child does the clipping: the track is what shrinks, and content in a track
+   shorter than itself would spill out unless the item hides it.
+
+   `interpolate-size: allow-keywords` makes `height: auto` animate directly and
+   would replace all of this, but it is Chromium-only for now. This works back
+   to Safari 16 and Firefox 114, and degrades to an instant show/hide rather
+   than to a broken layout where it does not.
+
+   Callers own the collapsed state's effect on their own layout, and the top
+   margin is transitioned for them so they can do it smoothly. Two cases need
+   it. A flex parent with a `gap` still counts a zero-height row, so it draws
+   two gaps around it and one has to be pulled back. And any spacing above the
+   row has to go to zero as it closes: put that spacing on the child instead
+   and the row can never reach zero height, because a grid item's margin sets
+   the automatic minimum of the track it sits in. */
+@utility reveal {
+  display: grid;
+  grid-template-rows: 1fr;
+
+  transition:
+    grid-template-rows 180ms ease,
+    opacity 180ms ease,
+    margin-block-start 180ms ease;
+
+  & > * {
+    overflow: hidden;
+  }
+
+  &[data-shown='false'] {
+    grid-template-rows: 0fr;
+
+    @apply opacity-0;
+
+    /* Collapsed, but still text: this keeps it out of a drag-select. The
+       accessibility tree is handled at the call site with aria-hidden, where
+       there is enough context to know whether hiding it is right. */
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
