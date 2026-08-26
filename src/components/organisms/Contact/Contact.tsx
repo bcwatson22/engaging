@@ -3,6 +3,7 @@
 import { useId } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
+import { Icon } from '@/components/atoms/Icon/Icon';
 import { Link, type TLink } from '@/components/atoms/Link/Link';
 import {
   emailPattern,
@@ -11,6 +12,7 @@ import {
   maxName,
   messages,
   minMessage,
+  outcomes,
   type TField,
 } from '@/constants/contact';
 import { useContact } from '@/hooks/useContact/useContact';
@@ -180,7 +182,18 @@ const Contact = () => {
         className="status reveal"
         data-shown={outcome !== 'idle'}
       >
-        <span>{outcome !== 'idle' && messages[outcome]}</span>
+        {/* The icon lives inside the collapsing row, so it arrives with the
+            sentence rather than sitting there while the row is shut. */}
+        <span
+          data-state={outcome === 'idle' ? undefined : outcomes[outcome].state}
+        >
+          {outcome !== 'idle' && (
+            <>
+              <Icon icon={outcomes[outcome].icon} className="mark" />
+              <span>{messages[outcome]}</span>
+            </>
+          )}
+        </span>
       </output>
 
       <p className="fallback">

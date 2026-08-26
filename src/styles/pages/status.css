@@ -1,0 +1,16 @@
+@utility status {
+  /* No colours of its own, so `body` supplies both schemes — same as the
+     contact page. */
+  /* Not `justify-center`, which the contact page uses and this one copied.
+     That page is a short form and centres well; this one is a column of
+     panels taller than the viewport, and centring it pushed the first heading
+     a long way down the page while the rest ran off the bottom. Top-aligned,
+     it matches the motes page. */
+  @apply animate-fade-in flex flex-col overflow-hidden p-6;
+  @apply md:items-center;
+
+  & a {
+    @apply decoration-brand-blue;
+    @apply dark:decoration-brand-yellow;
+  }
+}

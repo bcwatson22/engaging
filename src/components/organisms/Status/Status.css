@@ -1,0 +1,316 @@
+@utility status-panel {
+  /* Brand blue and yellow, snapped to steps that pass the palette checks:
+     the raw tokens sit below the chroma floor and outside the lightness band
+     for their mode, which is why these are not the tokens themselves.
+
+     `surface` is what the two spacers are drawn in — the gap between stacked
+     segments is the page showing through, not a border. */
+  --viz-render: #2f6fb0;
+  --viz-wait: #e08a10;
+  --viz-surface: var(--brand-light);
+  --accent: var(--brand-blue);
+  /* The page's own background, for the pane below — same pair the contact
+     form declares, for the same reason. */
+  --reset: var(--brand-light);
+
+  @media (prefers-color-scheme: dark) {
+    --viz-render: #4a90d9;
+    --viz-wait: #c07f1a;
+    --viz-surface: var(--brand-dark);
+    --accent: var(--brand-yellow);
+    --reset: var(--brand-dark);
+  }
+
+  @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col gap-6 py-8;
+
+  /* The same pane the contact form puts behind its fields, for the same
+     reason and by the same means: the particle field drifts past underneath,
+     and this page is small text and bar charts, which lose to it faster than
+     a form does.
+
+     Blurred rather than hard-edged so a particle fades behind the pane rather
+     than vanishing at a line, and the larger inset absorbs that falloff so
+     the content still sits on the pane at full strength. --reset is the
+     page's own background, so this follows the scheme without a second set of
+     values. */
+  &::before {
+    content: '';
+
+    @apply pointer-events-none absolute -inset-4 -z-10 rounded-2xl;
+
+    background: color-mix(in oklab, var(--reset) 70%, transparent);
+
+    filter: blur(16px);
+  }
+
+  /* The heading and its intro, spaced as a pair. The panel's own gap-6 is for
+     the blocks below, which are further apart than these two should be. */
+  & header {
+    @apply flex flex-col gap-2;
+  }
+
+  & .intro {
+    @apply max-w-prose text-sm opacity-80;
+  }
+
+  & .artifacts {
+    @apply grid gap-4;
+    @apply sm:grid-cols-2;
+  }
+
+  & .artifact {
+    @apply border-brand-dark/30 flex flex-col gap-3 rounded-sm border p-4;
+    @apply dark:border-brand-light/30;
+
+    & h3 {
+      @apply flex items-center gap-2 text-base font-medium;
+    }
+
+    /* Not the shared `vector` utility: that is absolutely positioned for the
+       icon links, which pins it to the left of a padded container rather than
+       letting it sit in this heading's flex row. */
+    & .mark {
+      @apply size-5 shrink-0;
+
+      color: var(--accent);
+    }
+
+    /* The reading someone came for. Proportional figures, not tabular —
+       tabular gives every digit the width of a zero, which reads loose at
+       this size and is only worth it in a column of numbers. */
+    & .freshness {
+      @apply flex flex-col;
+
+      & strong {
+        @apply text-2xl font-medium;
+      }
+
+      & time {
+        @apply text-xs opacity-60;
+      }
+    }
+
+    /* Status, not a series: reserved hues, and never the chart's. Each one
+       ships with an icon and a sentence, so the colour is reinforcement
+       rather than the message. */
+    & .integrity {
+      @apply flex flex-wrap items-baseline gap-x-1.5 text-xs;
+
+      /* Separated by space rather than a middot in the markup: a punctuation
+         character between them would join the two into one text node and put
+         the state's wording out of reach of anything reading for it. */
+      & time {
+        @apply opacity-70;
+      }
+
+      & .mark {
+        @apply mt-px size-3.5 shrink-0;
+      }
+
+      &[data-state='current'] {
+        color: oklch(from var(--brand-green) 0.5 c h);
+
+        @media (prefers-color-scheme: dark) {
+          color: oklch(from var(--brand-green) 0.72 c h);
+        }
+      }
+
+      /* Queued is in progress, not a problem — the same accent the rest of
+         the card uses rather than a warning colour. */
+      &[data-state='queued'] {
+        color: var(--accent);
+      }
+
+      &[data-state='stale'] {
+        color: oklch(from var(--brand-red) 0.55 c h);
+
+        @media (prefers-color-scheme: dark) {
+          color: oklch(from var(--brand-red) 0.72 c h);
+        }
+      }
+
+      /* Nothing has happened yet, so it should recede. */
+      &[data-state='unchecked'] {
+        @apply opacity-50;
+      }
+    }
+
+    /* A URL or a count — long, and there to confirm rather than to read. */
+    & .result {
+      @apply mt-auto text-xs break-all opacity-60;
+    }
+  }
+
+  /* One render, split into the wait and the work. */
+  & .ladder {
+    @apply flex flex-col gap-2;
+
+    & .track {
+      /* 24px is the cap for a bar; the 2px gap between segments is the
+         surface showing through rather than a stroke, so no border. */
+      @apply flex h-4 w-full overflow-hidden rounded-sm;
+
+      gap: 2px;
+      background-color: var(--viz-surface);
+    }
+
+    & .wait {
+      background-color: var(--viz-wait);
+    }
+
+    & .render {
+      background-color: var(--viz-render);
+    }
+
+    & .legend {
+      @apply grid grid-cols-2 gap-2 text-xs;
+
+      & dt {
+        @apply flex items-center gap-1.5 opacity-70;
+      }
+
+      & dd {
+        @apply ml-0;
+      }
+
+      /* The swatch carries identity beside the text; the text never wears the
+         series colour itself. */
+      & .key {
+        @apply block size-2 shrink-0 rounded-full;
+      }
+
+      & .key.wait {
+        background-color: var(--viz-wait);
+      }
+
+      & .key.render {
+        background-color: var(--viz-render);
+      }
+    }
+  }
+
+  & .durations {
+    @apply m-0 flex flex-col gap-1;
+
+    & figcaption {
+      @apply text-xs opacity-70;
+    }
+
+    & .columns {
+      @apply flex h-12 items-end;
+
+      /* The gap is the separator between neighbouring columns, same 2px as
+         the stack's. */
+      gap: 2px;
+    }
+
+    /* Grows from a single baseline, rounded at the data end and square where
+       it meets it. Capped rather than filling its slot, so the row keeps
+       some air. */
+    & .column {
+      @apply w-full max-w-6 rounded-t-[4px];
+
+      background-color: var(--viz-render);
+    }
+  }
+
+  /* Status again, not a series — an icon and a sentence, with colour as
+     reinforcement. */
+  & .sweep-summary {
+    @apply outcome-summary;
+  }
+
+  & .sweep-problems {
+    @apply flex flex-col gap-2;
+
+    & li {
+      @apply border-brand-dark/30 flex flex-wrap items-center gap-x-2 rounded-sm border p-2 text-xs;
+      @apply dark:border-brand-light/30;
+    }
+
+    & .mark {
+      @apply size-4 shrink-0;
+    }
+
+    & .url {
+      @apply break-all;
+    }
+
+    & .says {
+      @apply ml-auto shrink-0 opacity-70;
+    }
+
+    /* Broken is a link to fix. Blocked is a host being unfriendly to robots,
+       which is worth seeing and not worth alarm — so it stays in the muted
+       ink rather than taking a status colour. */
+    & li[data-state='broken'] .mark {
+      color: oklch(from var(--brand-red) 0.55 c h);
+
+      @media (prefers-color-scheme: dark) {
+        color: oklch(from var(--brand-red) 0.72 c h);
+      }
+    }
+
+    & li[data-state='blocked'] {
+      @apply opacity-70;
+    }
+  }
+
+  & .queue-heading {
+    @apply text-base font-medium;
+  }
+
+  & .queue {
+    @apply grid grid-cols-2 gap-3;
+    @apply sm:grid-cols-4;
+
+    & li {
+      @apply border-brand-dark/30 flex flex-col items-center rounded-sm border p-3;
+      @apply dark:border-brand-light/30;
+    }
+
+    & .count {
+      @apply text-2xl;
+    }
+
+    & .name {
+      @apply text-xs opacity-70;
+    }
+
+    /* Nothing in the queue is the normal state, so a zero should recede
+       rather than announce itself. */
+    & li[data-busy='false'] .count {
+      @apply opacity-40;
+    }
+
+    & li[data-busy='true'] .count {
+      color: var(--accent);
+    }
+
+    /* Something is rendering right now — the one number worth catching an
+       eye. Opacity only, so it cannot shift the layout. */
+    & li[data-state='active'][data-busy='true'] .count {
+      animation: statusPulse 1.6s ease-in-out infinite;
+
+      @apply motion-reduce:animate-none;
+    }
+
+    & li[data-state='failed'][data-busy='true'] .count {
+      color: oklch(from var(--brand-red) 0.55 c h);
+
+      @media (prefers-color-scheme: dark) {
+        color: oklch(from var(--brand-red) 0.72 c h);
+      }
+    }
+  }
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}

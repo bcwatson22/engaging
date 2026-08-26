@@ -139,6 +139,13 @@
 
      Kept here rather than in the utility: it is a fact about this layout's
      gap, which the pattern cannot know. */
+  /* The same treatment the status page gives its link sweep — an icon, the
+     sentence, and a colour that says how it went. The row itself still
+     collapses, so this only describes what is inside it. */
+  & .status > span {
+    @apply outcome-summary;
+  }
+
   & .status[data-shown='false'] {
     margin-block-start: calc(var(--spacing) * -6);
   }

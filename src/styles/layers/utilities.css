@@ -95,3 +95,56 @@
     transition: none;
   }
 }
+
+/* A one-line outcome: an icon, a sentence, and optionally a quieter aside
+   after it. Shared because the status page's link sweep and the contact
+   form's submission result are the same thing to a reader — something
+   happened, here is whether it went well — and they looked like two unrelated
+   components while saying it.
+
+   States are named for what they mean rather than what produced them, so a
+   sweep's broken link and a failed send can both be `bad`. Colours are
+   derived from the brand tokens rather than set literally: the raw tokens sit
+   outside the lightness band that passes contrast in each mode, so each is
+   snapped to a step that does. */
+@utility outcome-summary {
+  @apply flex flex-wrap items-baseline gap-x-1.5 text-sm;
+
+  & .mark {
+    @apply mt-px size-4 shrink-0 self-center;
+  }
+
+  /* Times, counts, and anything else trailing the sentence. */
+  & time,
+  & .aside {
+    @apply text-xs opacity-60;
+  }
+
+  &[data-state='ok'] {
+    color: oklch(from var(--brand-green) 0.5 c h);
+
+    @media (prefers-color-scheme: dark) {
+      color: oklch(from var(--brand-green) 0.72 c h);
+    }
+  }
+
+  &[data-state='warn'] {
+    color: oklch(from var(--brand-yellow) 0.5 c h);
+
+    @media (prefers-color-scheme: dark) {
+      color: oklch(from var(--brand-yellow) 0.78 c h);
+    }
+  }
+
+  &[data-state='bad'] {
+    color: oklch(from var(--brand-red) 0.55 c h);
+
+    @media (prefers-color-scheme: dark) {
+      color: oklch(from var(--brand-red) 0.72 c h);
+    }
+  }
+
+  &[data-state='muted'] {
+    @apply opacity-50;
+  }
+}
