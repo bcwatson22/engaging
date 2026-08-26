@@ -17,7 +17,13 @@
     --accent: var(--brand-yellow);
   }
 
-  @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col justify-center gap-6 py-8;
+  @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col gap-6 py-8;
+
+  /* The heading and its intro, spaced as a pair. The panel's own gap-6 is for
+     the blocks below, which are further apart than these two should be. */
+  & header {
+    @apply flex flex-col gap-2;
+  }
 
   & .intro {
     @apply max-w-prose text-sm opacity-80;
@@ -187,35 +193,7 @@
   /* Status again, not a series — an icon and a sentence, with colour as
      reinforcement. */
   & .sweep-summary {
-    @apply flex flex-wrap items-baseline gap-x-1.5 text-sm;
-
-    & .mark {
-      @apply mt-px size-4 shrink-0 self-center;
-    }
-
-    & time {
-      @apply text-xs opacity-60;
-    }
-
-    &[data-state='ok'] {
-      color: oklch(from var(--brand-green) 0.5 c h);
-
-      @media (prefers-color-scheme: dark) {
-        color: oklch(from var(--brand-green) 0.72 c h);
-      }
-    }
-
-    &[data-state='broken'] {
-      color: oklch(from var(--brand-red) 0.55 c h);
-
-      @media (prefers-color-scheme: dark) {
-        color: oklch(from var(--brand-red) 0.72 c h);
-      }
-    }
-
-    &[data-state='unchecked'] {
-      @apply opacity-50;
-    }
+    @apply outcome-summary;
   }
 
   & .sweep-problems {

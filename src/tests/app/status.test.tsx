@@ -5,9 +5,15 @@ import StatusPage, {
   generateMetadata,
   title,
 } from '@/app/(site)/status/page';
+import { Particles } from '@/components/atoms/Particles/Particles';
 import { Status } from '@/components/organisms/Status/Status';
 import { getStatus } from '@/data/functions/getStatus';
 import type { TStatus } from '@/data/types/status';
+
+vi.mock('@/components/atoms/Particles/Particles', () => ({
+  Particles:
+    vi.fn<typeof import('@/components/atoms/Particles/Particles').Particles>(),
+}));
 
 vi.mock('@/components/organisms/Status/Status', () => ({
   Status: vi.fn<typeof import('@/components/organisms/Status/Status').Status>(),
@@ -40,6 +46,12 @@ describe('StatusPage', () => {
     await setup();
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(title);
+  });
+
+  it('carries the same particle field as the other pages', async () => {
+    await setup();
+
+    expect(Particles).toHaveBeenCalledTimes(1);
   });
 
   it('passes what the service reported to the panel', async () => {

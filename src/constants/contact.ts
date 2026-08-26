@@ -1,3 +1,5 @@
+import type { TIcon } from '@/components/atoms/Icon/Icon';
+
 /* Shared by the hook that validates and the component that renders, so the
    constraints in the markup and the messages shown when they fail cannot
    drift apart. Kept in step with engaging-service's own zod schema —
@@ -44,6 +46,19 @@ const rejectedMessage = 'This was not accepted.';
    client-side failures never reach the network. */
 type TOutcome = 'idle' | 'sent' | 'invalid' | 'limited' | 'failed';
 
+/* How each outcome reads, for the shared `outcome-summary` treatment. `sent`
+   is the only good news; the two the sender can act on are warnings rather
+   than failures, because trying again genuinely helps. `failed` is ours. */
+const outcomes: Record<
+  Exclude<TOutcome, 'idle'>,
+  { state: 'ok' | 'warn' | 'bad'; icon: TIcon }
+> = {
+  sent: { state: 'ok', icon: 'CheckCircle' },
+  invalid: { state: 'warn', icon: 'Warning' },
+  limited: { state: 'warn', icon: 'Warning' },
+  failed: { state: 'bad', icon: 'Cross' },
+};
+
 const messages: Record<Exclude<TOutcome, 'idle'>, string> = {
   sent: 'Thanks for your message. I will reply as soon as I can.',
   invalid: 'Hmm, some of the details might need another gander.',
@@ -64,5 +79,6 @@ export {
   patternMessage,
   rejectedMessage,
   messages,
+  outcomes,
 };
 export type { TField, TValues, TErrors, TOutcome };

@@ -1,6 +1,19 @@
 @utility motes-demo {
   @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 py-8;
 
+  /* Matching the status page: the heading and its prose are a pair, spaced
+     closer than the blocks below them. */
+  & header {
+    @apply flex flex-col gap-2;
+  }
+
+  /* The column is max-w-5xl because the stage and its controls need the width.
+     Prose does not, and at that measure these two paragraphs ran to well over
+     a hundred characters a line. */
+  & header p {
+    @apply max-w-prose;
+  }
+
   /* The two columns. Stretched rather than aligned to the start, so the stage
      takes whatever height the controls beside it come to — no viewport maths,
      and nothing to keep in step when a control is added. */

@@ -1,11 +1,24 @@
 @utility status {
   /* No colours of its own, so `body` supplies both schemes — same as the
      contact page. */
-  @apply animate-fade-in flex flex-col justify-center overflow-hidden p-6;
+  /* Not `justify-center`, which the contact page uses and this one copied.
+     That page is a short form and centres well; this one is a column of
+     panels taller than the viewport, and centring it pushed the first heading
+     a long way down the page while the rest ran off the bottom. Top-aligned,
+     it matches the motes page. */
+  @apply animate-fade-in flex flex-col overflow-hidden p-6;
   @apply md:items-center;
 
   & a {
     @apply decoration-brand-blue;
     @apply dark:decoration-brand-yellow;
   }
+}
+
+/* The field is decoration on the other pages that carry it; here it is behind
+   a page of small text and numbers, so it is blurred and dimmed rather than
+   drawn sharp. Scoped from the body the same way the home page's colours are,
+   because the canvas is the atom's own element and takes no class of ours. */
+body:has(.status) .particles {
+  @apply blur-[3px];
 }

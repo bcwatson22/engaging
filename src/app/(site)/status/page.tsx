@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
+import { Particles } from '@/components/atoms/Particles/Particles';
 import { Status } from '@/components/organisms/Status/Status';
 import { metadata as shared, viewport } from '@/constants/metadata';
 import { getStatus } from '@/data/functions/getStatus';
@@ -36,6 +38,17 @@ const StatusPage = async () => {
   return (
     <main className="status grow">
       <h1 className="sr-only">{title}</h1>
+      {/* Dimmer than the contact page's, and blurred by the page's own CSS:
+          this sits behind small text and a set of bar charts rather than
+          beside a form, so it has to stay well out of their way. */}
+      <Suspense>
+        <Particles
+          color="var(--brand-blue)"
+          colorDark="var(--brand-light)"
+          opacity={0.35}
+          opacityDark={0.2}
+        />
+      </Suspense>
       <Status status={status} />
     </main>
   );

@@ -185,7 +185,7 @@ const linkStates: Record<
 const Links = ({ sweep }: { sweep: TSweep | null }) => {
   if (sweep === null) {
     return (
-      <p className="sweep-summary" data-state="unchecked">
+      <p className="sweep-summary" data-state="muted">
         Outbound links have not been checked yet
       </p>
     );
@@ -199,7 +199,7 @@ const Links = ({ sweep }: { sweep: TSweep | null }) => {
           listing: every link not named below answered. */}
       <p
         className="sweep-summary"
-        data-state={broken.length > 0 ? 'broken' : 'ok'}
+        data-state={broken.length > 0 ? 'bad' : 'ok'}
       >
         <Icon icon={broken.length > 0 ? 'Warning' : 'Check'} className="mark" />
         <span>
@@ -280,17 +280,22 @@ const Artifact = ({
 
 const Status = ({ status }: Props) => (
   <section aria-labelledby="status-heading" className="status-panel">
-    <h2 id="status-heading">Service status</h2>
+    {/* Heading and intro grouped, so the gap between them is theirs rather
+        than the panel's — the motes page reads the same way. */}
+    <header>
+      <h2 id="status-heading">Service status</h2>
+      <p className="intro">
+        {status
+          ? 'The CV document and the app splash screens are rendered by a separate service when the content changes, rather than when the site is deployed. Each render waits for the site to catch up before it starts — that wait is the first half of every bar below.'
+          : /* Not an error. The service sleeps between renders, so being
+               unreachable is its ordinary resting state rather than a fault,
+               and saying so is more honest than a red banner. */
+            'The render service is not answering at the moment. It sleeps between renders, so this is usually nothing — the CV and splash screens are served from storage and are unaffected either way.'}
+      </p>
+    </header>
 
-    {status ? (
+    {status && (
       <>
-        <p className="intro">
-          The CV document and the app splash screens are rendered by a separate
-          service when the content changes, rather than when the site is
-          deployed. Each render waits for the site to catch up before it starts
-          — that wait is the first half of every bar below.
-        </p>
-
         <ul className="artifacts">
           {(Object.keys(labels) as TArtifact[]).map((artifact) => (
             <Artifact
@@ -315,15 +320,6 @@ const Status = ({ status }: Props) => (
           ))}
         </ul>
       </>
-    ) : (
-      /* Not an error page. The service sleeps between renders, so being
-         unreachable is its ordinary resting state rather than a fault, and
-         saying so is more honest than a red banner. */
-      <p className="intro">
-        The render service is not answering at the moment. It sleeps between
-        renders, so this is usually nothing — the CV and splash screens are
-        served from storage and are unaffected either way.
-      </p>
     )}
   </section>
 );
