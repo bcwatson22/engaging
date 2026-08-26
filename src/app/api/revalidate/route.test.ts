@@ -1,7 +1,8 @@
 import { revalidatePath, revalidateTag } from 'next/cache';
 
-import { POST, secretHeader, paths } from '@/app/api/revalidate/route';
 import { cmsTag } from '@/data/functions/getData';
+
+import { POST, secretHeader, paths } from './route';
 
 vi.mock('next/cache', () => ({
   revalidateTag: vi.fn<typeof import('next/cache').revalidateTag>(),

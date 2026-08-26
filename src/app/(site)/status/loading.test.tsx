@@ -1,7 +1,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import LoadingStatus from '@/app/(site)/status/loading';
 import { title } from '@/app/(site)/status/page';
+
+import LoadingStatus from './loading';
 
 const setup = () => render(<LoadingStatus />);
 

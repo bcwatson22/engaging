@@ -1,7 +1,8 @@
 import { cleanup, render } from '@testing-library/react';
 
-import LoadingPage from '@/app/cv/loading';
 import { Loading } from '@/components/pages/Loading/Loading';
+
+import LoadingPage from './loading';
 
 vi.mock('@/components/pages/Loading/Loading', () => ({
   Loading: vi.fn<typeof import('@/components/pages/Loading/Loading').Loading>(),

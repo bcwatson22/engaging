@@ -11,7 +11,11 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     coverage: {
       provider: 'istanbul',
-      reportsDirectory: './src/tests/coverage',
+      /* Out of src/ now that the app tests sit beside what they cover. It was
+         in src/tests because that directory already existed for the tests;
+         with those gone, keeping it there would leave a source directory whose
+         only contents are build output. */
+      reportsDirectory: './coverage',
       exclude: [
         '.next/**',
         'src/data/types/**',

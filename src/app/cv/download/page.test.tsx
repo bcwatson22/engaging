@@ -2,8 +2,9 @@ import { cleanup, render } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import type { Mock } from 'vitest';
 
-import DownloadPage from '@/app/cv/download/page';
 import { Loading } from '@/components/pages/Loading/Loading';
+
+import DownloadPage from './page';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn<typeof import('next/navigation').useRouter>(),

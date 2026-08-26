@@ -2,7 +2,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-import Layout, { type LayoutProps } from '@/app/layout';
+import Layout, { type LayoutProps } from './layout';
 
 vi.mock(import('next/font/google'), async (importOriginal: Function) => {
   const actual = await importOriginal();

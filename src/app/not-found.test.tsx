@@ -1,8 +1,9 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import NotFoundPage from '@/app/not-found';
 import { Link } from '@/components/atoms/Link/Link';
 import { Error } from '@/components/pages/Error/Error';
+
+import NotFoundPage from './not-found';
 
 vi.mock(
   import('@/components/atoms/Link/Link'),

@@ -1,14 +1,11 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import StatusPage, {
-  description,
-  generateMetadata,
-  title,
-} from '@/app/(site)/status/page';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Status } from '@/components/organisms/Status/Status';
 import { getStatus } from '@/data/functions/getStatus';
 import type { TStatus } from '@/data/types/status';
+
+import StatusPage, { description, generateMetadata, title } from './page';
 
 vi.mock('@/components/atoms/Particles/Particles', () => ({
   Particles:

@@ -2,7 +2,6 @@ import { cleanup, render, screen } from '@testing-library/react';
 import ReactMarkdown from 'react-markdown';
 import type { Mock } from 'vitest';
 
-import CVPage, { generateMetadata, generateViewport } from '@/app/cv/page';
 import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Details } from '@/components/molecules/Details/Details';
 import { Header } from '@/components/molecules/Header/Header';
@@ -16,6 +15,8 @@ import { getData } from '@/data/functions/getData';
 import { mockCV } from '@/data/mock/cv';
 import type { TCV } from '@/data/types/cv';
 import { queryCV } from '@/queries/cv';
+
+import CVPage, { generateMetadata, generateViewport } from './page';
 
 vi.mock('react-markdown', () => ({
   default: vi

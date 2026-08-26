@@ -1,7 +1,8 @@
 import type { Mock } from 'vitest';
 
-import manifest from '@/app/manifest';
 import { getData } from '@/data/functions/getData';
+
+import manifest from './manifest';
 
 const mockTitle = 'Engaging Engineering';
 const mockToday = new Date('2025-01-08');

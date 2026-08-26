@@ -1,5 +1,6 @@
-import robots from '@/app/robots';
 import { domainName } from '@/constants/common';
+
+import robots from './robots';
 
 describe('robots', () => {
   beforeEach(() => vi.clearAllMocks());

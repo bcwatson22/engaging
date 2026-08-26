@@ -1,7 +1,8 @@
 import { cleanup, render } from '@testing-library/react';
 
-import ErrorPage, { type ErrorPageProps } from '@/app/error';
 import { Error } from '@/components/pages/Error/Error';
+
+import ErrorPage, { type ErrorPageProps } from './error';
 
 vi.mock(
   import('@/components/pages/Error/Error'),

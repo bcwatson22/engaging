@@ -1,4 +1,4 @@
-import sitemap, { changeFrequency } from '@/app/sitemap';
+import sitemap, { changeFrequency } from './sitemap';
 
 describe('sitemap', () => {
   beforeEach(() => vi.clearAllMocks());
