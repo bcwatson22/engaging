@@ -14,11 +14,3 @@
     @apply dark:decoration-brand-yellow;
   }
 }
-
-/* The field is decoration on the other pages that carry it; here it is behind
-   a page of small text and numbers, so it is blurred and dimmed rather than
-   drawn sharp. Scoped from the body the same way the home page's colours are,
-   because the canvas is the atom's own element and takes no class of ours. */
-body:has(.status) .particles {
-  @apply blur-[3px];
-}

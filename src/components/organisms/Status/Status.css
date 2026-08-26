@@ -9,15 +9,39 @@
   --viz-wait: #e08a10;
   --viz-surface: var(--brand-light);
   --accent: var(--brand-blue);
+  /* The page's own background, for the pane below — same pair the contact
+     form declares, for the same reason. */
+  --reset: var(--brand-light);
 
   @media (prefers-color-scheme: dark) {
     --viz-render: #4a90d9;
     --viz-wait: #c07f1a;
     --viz-surface: var(--brand-dark);
     --accent: var(--brand-yellow);
+    --reset: var(--brand-dark);
   }
 
   @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col gap-6 py-8;
+
+  /* The same pane the contact form puts behind its fields, for the same
+     reason and by the same means: the particle field drifts past underneath,
+     and this page is small text and bar charts, which lose to it faster than
+     a form does.
+
+     Blurred rather than hard-edged so a particle fades behind the pane rather
+     than vanishing at a line, and the larger inset absorbs that falloff so
+     the content still sits on the pane at full strength. --reset is the
+     page's own background, so this follows the scheme without a second set of
+     values. */
+  &::before {
+    content: '';
+
+    @apply pointer-events-none absolute -inset-4 -z-10 rounded-2xl;
+
+    background: color-mix(in oklab, var(--reset) 70%, transparent);
+
+    filter: blur(16px);
+  }
 
   /* The heading and its intro, spaced as a pair. The panel's own gap-6 is for
      the blocks below, which are further apart than these two should be. */
