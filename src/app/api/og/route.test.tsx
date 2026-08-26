@@ -1,9 +1,10 @@
 import { ImageResponse } from 'next/og';
 import type { Mock } from 'vitest';
 
-import { GET, getImageProps } from '@/app/api/og/route';
 import { getData } from '@/data/functions/getData';
 import { mockHome } from '@/data/mock/home';
+
+import { GET, getImageProps } from './route';
 
 vi.mock('@/data/functions/getData', () => ({
   getData: vi.fn<typeof import('@/data/functions/getData').getData>(),

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import SiteLayout, { type SiteLayoutProps } from '@/app/(site)/layout';
+import SiteLayout, { type SiteLayoutProps } from './layout';
 
 const setup = (props?: Partial<SiteLayoutProps>) =>
   render(<SiteLayout {...props}>{props?.children ?? <main />}</SiteLayout>);

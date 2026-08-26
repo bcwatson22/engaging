@@ -1,12 +1,9 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import ContactPage, {
-  description,
-  generateMetadata,
-  title,
-} from '@/app/(site)/contact/page';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Contact } from '@/components/organisms/Contact/Contact';
+
+import ContactPage, { description, generateMetadata, title } from './page';
 
 vi.mock('@/components/organisms/Contact/Contact', () => ({
   Contact:

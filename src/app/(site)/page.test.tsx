@@ -1,7 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import type { Mock } from 'vitest';
 
-import HomePage, { generateMetadata } from '@/app/(site)/page';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 import { getStartupImages } from '@/constants/startupImages';
@@ -9,6 +8,8 @@ import { getData } from '@/data/functions/getData';
 import { mockHome } from '@/data/mock/home';
 import type { THome } from '@/data/types/home';
 import { queryHome } from '@/queries/home';
+
+import HomePage, { generateMetadata } from './page';
 
 vi.mock('@/data/functions/getData', () => ({
   getData: vi.fn<typeof import('@/data/functions/getData').getData>(),
