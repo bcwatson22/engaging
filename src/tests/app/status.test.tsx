@@ -4,7 +4,7 @@ import StatusPage, {
   description,
   generateMetadata,
   title,
-} from '@/app/status/page';
+} from '@/app/(site)/status/page';
 import { Status } from '@/components/organisms/Status/Status';
 import { getStatus } from '@/data/functions/getStatus';
 import type { TStatus } from '@/data/types/status';
@@ -40,12 +40,6 @@ describe('StatusPage', () => {
     await setup();
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(title);
-  });
-
-  it('offers a way back to the rest of the site', async () => {
-    await setup();
-
-    expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 
   it('passes what the service reported to the panel', async () => {

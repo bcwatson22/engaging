@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
-import { Nav } from '@/components/molecules/Nav/Nav';
 import { Status } from '@/components/organisms/Status/Status';
 import { metadata as shared, viewport } from '@/constants/metadata';
 import { getStatus } from '@/data/functions/getStatus';
@@ -36,13 +34,9 @@ const StatusPage = async () => {
   const status = await getStatus();
 
   return (
-    <main className="status main">
+    <main className="status grow">
       <h1 className="sr-only">{title}</h1>
-      <Nav className="flex justify-center" />
       <Status status={status} />
-      <footer className="footer">
-        <Copyright />
-      </footer>
     </main>
   );
 };
