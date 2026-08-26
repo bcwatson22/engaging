@@ -11,19 +11,29 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 18 August 2026, Lighthouse 13.4.1:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 26 August 2026, Lighthouse 13.4.1:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) — mobile | 94          | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) — mobile | 97          | 100           | 100            | 100 |
 | Home — desktop                                     | 100         | 100           | 100            | 100 |
-| [CV](https://www.engaging.engineering/cv) — mobile | 96          | 100           | 100            | 100 |
+| [CV](https://www.engaging.engineering/cv) — mobile | 99          | 100           | 100            | 100 |
 | CV — desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
-4G, and it is what Google ranks on. Largest Contentful Paint is the only metric
-not already at full marks there — 3.0s on Home, 2.8s on the CV — with everything
-else passing comfortably (CLS 0 on Home, Total Blocking Time 70ms and 30ms).
+4G, and it is what Google ranks on. Largest Contentful Paint is still the only
+metric not at full marks there — 2.6s on Home, 2.0s on the CV — with everything
+else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
+20ms).
+
+Each figure is the median of three runs. A single run moves by a point or two
+either way, which is wide enough to invent an improvement that is not there.
+
+The mobile numbers moved from 93 and 94, measured the same way immediately
+before the change, when the stylesheet stopped being a second request:
+`experimental.inlineCss` puts it in the document, so the critical path is one
+deep rather than two, and LCP came down by half a second on Home and nearly a
+second on the CV.
 
 These are lab numbers. Field data needs enough real traffic for the Chrome UX
 Report to have a sample, and this domain does not have it, so there is nothing
