@@ -33,7 +33,7 @@ const status: TStatus = {
   links: sweep,
   artifacts: { 'cv-pdf': [record], 'startup-images': [] },
   integrity: { 'cv-pdf': check, 'startup-images': null },
-  queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
+  queue: { waiting: 0, pending: 0, dead: 0 },
 };
 
 type TOptions = {
@@ -248,17 +248,46 @@ describe('getStatus', () => {
           queue: status.queue,
         },
       ],
-      [
-        'a count that is not a number',
-        {
-          artifacts: status.artifacts,
-          queue: { ...status.queue, failed: 'lots' },
-        },
-      ],
     ])('%s', async (_label, body) => {
       setup({ body });
 
       await expect(getStatus()).resolves.toBeNull();
+    });
+  });
+
+  /* The counts used to be demanded as a set, and when the service renamed
+     them the whole payload was rejected — the page told visitors the service
+     was not answering while it answered perfectly well. A count this version
+     does not recognise is worth zero, not the entire page. */
+  describe('a queue it only partly recognises', () => {
+    it('reads an unknown count as zero rather than rejecting the response', async () => {
+      setup({
+        body: { ...status, queue: { waiting: 3, pending: 1, dead: 'lots' } },
+      });
+
+      await expect(getStatus()).resolves.toMatchObject({
+        queue: { waiting: 3, pending: 1, dead: 0 },
+      });
+    });
+
+    it('survives a service that reports counts this version has never heard of', async () => {
+      setup({
+        body: { ...status, queue: { waiting: 2, active: 1, delayed: 4 } },
+      });
+
+      await expect(getStatus()).resolves.toMatchObject({
+        queue: { waiting: 2, pending: 0, dead: 0 },
+      });
+    });
+
+    /* The rest of the response is the part worth keeping — it is where the
+       render history lives. */
+    it('still reports the history alongside it', async () => {
+      setup({ body: { ...status, queue: {} } });
+
+      await expect(getStatus()).resolves.toMatchObject({
+        artifacts: status.artifacts,
+      });
     });
   });
 });
