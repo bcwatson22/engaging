@@ -1,5 +1,5 @@
 import { serviceOrigin } from '@/constants/common';
-import { artifacts, type TStatus } from '@/data/types/status';
+import { artifacts, type TQueue, type TStatus } from '@/data/types/status';
 
 const endpoint = `${serviceOrigin}/status`;
 
@@ -72,8 +72,7 @@ const isStatus = (value: unknown): value is TStatus => {
 
   return (
     artifacts.every((name) => isHistory(records[name])) &&
-    artifacts.every((name) => isCheck(integrity?.[name])) &&
-    [queue.waiting, queue.active, queue.delayed, queue.failed].every(isNumber)
+    artifacts.every((name) => isCheck(integrity?.[name]))
   );
 };
 
@@ -108,6 +107,26 @@ const isSweep = (value: unknown): boolean => {
   );
 };
 
+/* Counts are read individually rather than demanded as a set.
+
+   They were demanded as a set, and it cost the page: when the service moved
+   from BullMQ to a Redis stream its counts changed name, every one of them
+   failed `isNumber`, the whole payload was rejected as unrecognisable, and
+   the page told visitors the service was not answering — while it answered
+   perfectly well. The rest of the response was fine and none of it was shown.
+
+   The same reasoning already applied to integrity and links a few lines up;
+   the queue was the one place the response had to be perfect. A count this
+   version does not know reads as zero, and the rest of the page survives. */
+const countIn = (queue: Partial<TQueue>, key: keyof TQueue): number =>
+  isNumber(queue[key]) ? (queue[key] as number) : 0;
+
+const queueIn = ({ queue }: TStatus): TQueue => ({
+  waiting: countIn(queue, 'waiting'),
+  pending: countIn(queue, 'pending'),
+  dead: countIn(queue, 'dead'),
+});
+
 /* A service too old to run integrity checks reports the same thing as one
    that has not run any yet: nothing found, for either artifact. */
 const checksIn = ({ integrity }: TStatus): TStatus['integrity'] =>
@@ -131,7 +150,12 @@ const getStatus = async (): Promise<TStatus | null> => {
     const parsed: unknown = await response.json();
 
     return isStatus(parsed)
-      ? { ...parsed, integrity: checksIn(parsed), links: parsed.links ?? null }
+      ? {
+          ...parsed,
+          integrity: checksIn(parsed),
+          links: parsed.links ?? null,
+          queue: queueIn(parsed),
+        }
       : null;
   } catch {
     return null;

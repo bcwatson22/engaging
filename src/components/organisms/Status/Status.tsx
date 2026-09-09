@@ -19,13 +19,16 @@ const labels: Record<TArtifact, { name: string; icon: TIcon }> = {
 };
 
 /* Ordered by how much they mean rather than by the queue's own vocabulary:
-   anything failed is the thing to notice, and waiting comes before the
-   bookkeeping states. */
+   anything given up on is the thing to notice, and waiting comes last.
+
+   Three rather than four. The queue is a Redis stream now, and a stream has
+   no 'delayed' — the worker's retry ladder runs in its own process, so a job
+   waiting to be retried is one the worker is still holding, which is what
+   'Rendering' already says. */
 const counts: { key: keyof TQueue; name: string }[] = [
-  { key: 'failed', name: 'Failed' },
-  { key: 'active', name: 'Rendering' },
+  { key: 'dead', name: 'Failed' },
+  { key: 'pending', name: 'Rendering' },
   { key: 'waiting', name: 'Waiting' },
-  { key: 'delayed', name: 'Retrying' },
 ];
 
 /* Twelve columns is about a year of renders and about as many as stay

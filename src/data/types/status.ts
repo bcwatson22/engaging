@@ -57,11 +57,18 @@ type TSweep = {
   problems: TLinkResult[];
 };
 
+/* What a Redis stream can answer, which is not what BullMQ used to. `waiting`
+   is work the worker has not been handed, `pending` is work it holds and has
+   not acknowledged, and `dead` is what it gave up on — the only one of the
+   three that means something is wrong rather than merely busy.
+
+   There is no `delayed`: the worker's retry ladder runs inside its own
+   process rather than in Redis, so a job waiting to be retried is simply one
+   the worker is still holding. */
 type TQueue = {
   waiting: number;
-  active: number;
-  delayed: number;
-  failed: number;
+  pending: number;
+  dead: number;
 };
 
 /* Newest first. The head is "when was this last rendered"; the tail is the

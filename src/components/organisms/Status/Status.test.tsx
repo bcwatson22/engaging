@@ -47,7 +47,7 @@ const status: TStatus = {
       recordAt('2026-08-17T09:00:00.000Z', { result: '22 startup images' }),
     ],
   },
-  queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
+  queue: { waiting: 0, pending: 0, dead: 0 },
 };
 
 const setup = (props?: Partial<StatusProps>) =>
@@ -341,18 +341,17 @@ describe('Status', () => {
       setup({
         status: {
           ...status,
-          queue: { waiting: 1, active: 2, delayed: 3, failed: 4 },
+          queue: { waiting: 1, pending: 2, dead: 3 },
         },
       });
 
       expect(countFor(/waiting/i)).toBe('1');
       expect(countFor(/^rendering$/i)).toBe('2');
-      expect(countFor(/retrying/i)).toBe('3');
-      expect(countFor(/failed/i)).toBe('4');
+      expect(countFor(/failed/i)).toBe('3');
     });
 
     it('marks a count with something in it as busy', () => {
-      setup({ status: { ...status, queue: { ...status.queue, failed: 2 } } });
+      setup({ status: { ...status, queue: { ...status.queue, dead: 2 } } });
 
       expect(screen.getByText(/failed/i).closest('li')).toHaveAttribute(
         'data-busy',

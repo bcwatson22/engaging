@@ -24,7 +24,7 @@ const status: TStatus = {
   artifacts: { 'cv-pdf': [], 'startup-images': [] },
   integrity: { 'cv-pdf': null, 'startup-images': null },
   links: null,
-  queue: { waiting: 0, active: 0, delayed: 0, failed: 0 },
+  queue: { waiting: 0, pending: 0, dead: 0 },
 };
 
 const setup = async ({ result = status as TStatus | null } = {}) => {
