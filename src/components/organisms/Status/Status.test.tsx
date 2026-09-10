@@ -9,6 +9,7 @@ import {
   Status,
   type StatusProps,
   states,
+  varies,
   waitOf,
 } from './Status';
 
@@ -433,5 +434,75 @@ describe('renderShare', () => {
     expect(renderShare(recordAt('x', { elapsedMs: 0, durationMs: 0 }))).toBe(
       100,
     );
+  });
+});
+
+describe('the render-time chart', () => {
+  /* The bars give a shape and no scale: an eight-fold difference in height
+     says nothing about whether the tallest is five seconds or five minutes. */
+  it('writes out the range the bars are drawn against', () => {
+    setup({
+      status: {
+        ...status,
+        artifacts: {
+          ...status.artifacts,
+          'cv-pdf': [
+            recordAt('2026-09-09T12:00:00.000Z', { durationMs: 37_923 }),
+            recordAt('2026-09-08T12:00:00.000Z', { durationMs: 4696 }),
+          ],
+        },
+      },
+    });
+
+    expect(screen.getByText('5s to 38s')).toBeInTheDocument();
+  });
+
+  /* The most interesting fact about the system, and the chart cannot show it
+     on its own. */
+  it('explains a spread wide enough to need it', () => {
+    setup({
+      status: {
+        ...status,
+        artifacts: {
+          ...status.artifacts,
+          'cv-pdf': [
+            recordAt('2026-09-09T12:00:00.000Z', { durationMs: 37_923 }),
+            recordAt('2026-09-08T12:00:00.000Z', { durationMs: 4696 }),
+          ],
+        },
+      },
+    });
+
+    expect(screen.getByText(/the machine waking/i)).toBeInTheDocument();
+  });
+
+  /* The splash screens swing 67s to 100s, which is a normal amount of
+     variation and explaining it would be noise. */
+  it('says nothing about a spread that is ordinary', () => {
+    setup({
+      status: {
+        ...status,
+        artifacts: {
+          ...status.artifacts,
+          'cv-pdf': [
+            recordAt('2026-09-09T12:00:00.000Z', { durationMs: 99_922 }),
+            recordAt('2026-09-08T12:00:00.000Z', { durationMs: 67_089 }),
+          ],
+        },
+      },
+    });
+
+    expect(screen.queryByText(/the machine waking/i)).not.toBeInTheDocument();
+  });
+});
+
+describe('varies', () => {
+  it.each([
+    ['a cold render beside a warm one', 4696, 37_923, true],
+    ['exactly twice over', 1000, 2000, true],
+    ['ordinary variation', 67_089, 99_922, false],
+    ['no renders to compare', 0, 0, false],
+  ])('%s', (_label, fastest, slowest, expected) => {
+    expect(varies(fastest, slowest)).toBe(expected);
   });
 });
