@@ -53,6 +53,12 @@
     text-decoration: underline;
     @apply decoration-brand-blue decoration-2 underline-offset-4;
     @apply print:inline-block;
+
+    /* The same offset the span it replaces carries. In print this pseudo
+       element *is* the visible text — the span goes sr-only just above — so
+       without this it starts at the container's padding alone, which is 12px
+       against a 16px icon, and the icon lands on the first character. */
+    @apply print:ml-2;
   }
 
   & span {
