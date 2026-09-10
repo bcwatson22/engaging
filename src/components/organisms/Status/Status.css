@@ -212,6 +212,20 @@
 
       background-color: var(--viz-render);
     }
+
+    /* The scale the bars do not carry. Same size and weight as the caption,
+       because it is the caption's other half rather than a finding. */
+    & .range {
+      @apply text-xs opacity-70;
+    }
+
+    /* A sentence, not a number, so it reads at body weight rather than
+       joining the figures around it. */
+    & .varies {
+      @apply text-xs opacity-70;
+
+      text-wrap: pretty;
+    }
   }
 
   /* Status again, not a series — an icon and a sentence, with colour as

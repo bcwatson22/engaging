@@ -128,14 +128,28 @@ const Ladder = ({ record }: { record: TRecord }) => {
   );
 };
 
+/* Where a render's time is so much larger than the smallest that the shape of
+   the chart needs explaining rather than just labelling. Twice over is the
+   threshold because it is roughly where two clusters stop looking like noise:
+   the CV swings 5s to 38s and wants a sentence, the splash screens swing 67s
+   to 100s and do not. */
+const varies = (fastest: number, slowest: number): boolean =>
+  fastest > 0 && slowest >= fastest * 2;
+
 /* A single series, so no legend — the heading names it. Heights are relative
    to the slowest render shown, which is what makes a short bar mean anything.
+
+   The range is written out because the bars alone give a shape and no scale:
+   an eight-fold difference in height says nothing about whether the tallest
+   is five seconds or five minutes.
 
    The table beside it is not a fallback; it is the same data in the form a
    screen reader, a print-out or anyone who prefers numbers can use. */
 const Durations = ({ history }: { history: TRecord[] }) => {
   const recent = history.slice(0, shown).reverse();
-  const slowest = Math.max(...recent.map(({ durationMs }) => durationMs));
+  const durations = recent.map(({ durationMs }) => durationMs);
+  const slowest = Math.max(...durations);
+  const fastest = Math.min(...durations);
 
   return (
     <figure className="durations">
@@ -152,6 +166,23 @@ const Durations = ({ history }: { history: TRecord[] }) => {
           />
         ))}
       </div>
+
+      {/* Hidden from the reading order because the table below carries the
+          same two figures, and hearing the range twice helps nobody. */}
+      <p className="range" aria-hidden="true">
+        {formatDuration(fastest)} to {formatDuration(slowest)}
+      </p>
+
+      {varies(fastest, slowest) && (
+        /* Not hidden: this explains the chart's shape rather than repeating a
+            number, and it is the most interesting thing on the page — the
+            machine sleeps, so the first render after it wakes pays for
+            reading a browser off cold storage before it can start. */
+        <p className="varies">
+          The spread is the machine waking: a render that finds it asleep spends
+          about half a minute loading the browser before it can begin.
+        </p>
+      )}
 
       <table className="sr-only">
         <caption>Render time, oldest to newest</caption>
@@ -332,6 +363,7 @@ export {
   labels,
   counts,
   shown,
+  varies,
   waitOf,
   renderShare,
   states,
