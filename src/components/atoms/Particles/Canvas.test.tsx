@@ -14,7 +14,7 @@ vi.mock('@bcwatson22/motes', () => ({
   createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
   /* Not mocked away: these are the values the component falls back to, and a
      test asserting a default should assert the real one. */
-  defaults: { opacity: 0.3, speed: 0.25 },
+  defaults: { opacity: 0.3 },
 }));
 
 type Options = {
@@ -27,7 +27,8 @@ type Options = {
 };
 
 const destroy = vi.fn<() => void>();
-const update = vi.fn<(options: { speed: number }) => void>();
+const pause = vi.fn<() => void>();
+const resume = vi.fn<() => void>();
 
 /* Answers per query rather than a flat boolean: the component reads two, and
    a mock that matches everything would report reduced motion in every test
@@ -54,7 +55,7 @@ const setup = (
     if (isLoading) return new Promise(() => {});
     if (fails) return Promise.reject(new Error('no wasm'));
 
-    return Promise.resolve({ update, destroy });
+    return Promise.resolve({ pause, resume, destroy });
   });
 
   return render(<Canvas {...props} />);
@@ -119,47 +120,47 @@ describe('Canvas', () => {
   });
 
   describe('paused by the visitor', () => {
-    const pause = (value: 'paused' | 'running') =>
+    const setMotion = (value: 'paused' | 'running') =>
       act(() => {
         window.localStorage.setItem(storageKey, value);
         window.dispatchEvent(new Event(changeEvent));
       });
 
-    const speedOf = (): number => (createField as Mock).mock.calls[0][1].speed;
-
-    it('starts a still field when already paused', async () => {
+    it('pauses a field that arrives while already paused', async () => {
       setup({ isPaused: true });
 
-      await waitFor(() => expect(speedOf()).toBe(0));
+      await waitFor(() => expect(pause).toHaveBeenCalledTimes(1));
     });
 
-    it('starts at the default speed otherwise', async () => {
+    it('lets a field run when not paused', async () => {
       setup();
 
-      await waitFor(() => expect(speedOf()).toBe(0.25));
+      await waitFor(() => expect(resume).toHaveBeenCalledTimes(1));
+
+      expect(pause).toHaveBeenCalledTimes(0);
     });
 
-    it('stills the running field rather than replacing it', async () => {
+    it('pauses the running field rather than replacing it', async () => {
       setup();
 
-      await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(resume).toHaveBeenCalledTimes(1));
 
-      pause('paused');
+      setMotion('paused');
 
-      expect(update).toHaveBeenNthCalledWith(1, { speed: 0 });
+      expect(pause).toHaveBeenCalledTimes(1);
       expect(destroy).toHaveBeenCalledTimes(0);
       expect(createField).toHaveBeenCalledTimes(1);
     });
 
-    it('carries on from where it stopped when played again', async () => {
+    it('resumes the same field when played again', async () => {
       setup();
 
-      await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(resume).toHaveBeenCalledTimes(1));
 
-      pause('paused');
-      pause('running');
+      setMotion('paused');
+      setMotion('running');
 
-      expect(update).toHaveBeenNthCalledWith(2, { speed: 0.25 });
+      expect(resume).toHaveBeenCalledTimes(2);
       expect(createField).toHaveBeenCalledTimes(1);
     });
   });

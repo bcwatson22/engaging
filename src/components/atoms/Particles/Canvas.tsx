@@ -1,7 +1,7 @@
 'use client';
 
 import { createField, defaults, type Field } from '@bcwatson22/motes';
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 import { useMotionPreference } from '@/hooks/useMotionPreference/useMotionPreference';
 
@@ -68,13 +68,14 @@ const Canvas = ({
   const active = isDark ? colorDark : color;
   const activeOpacity = isDark ? opacityDark : opacity;
   const ref = useRef<HTMLCanvasElement>(null);
-  const fieldRef = useRef<Field | null>(null);
-  const isPausedRef = useRef<boolean>(isPaused);
+  const [field, setField] = useState<Field | null>(null);
 
   useEffect(() => {
-    isPausedRef.current = isPaused;
-    fieldRef.current?.update({ speed: isPaused ? 0 : defaults.speed });
-  }, [isPaused]);
+    if (!field) return;
+
+    if (isPaused) field.pause();
+    else field.resume();
+  }, [field, isPaused]);
 
   useEffect(() => {
     /* The package honours reduced motion itself, drawing a single static
@@ -84,20 +85,18 @@ const Canvas = ({
     if (prefersReduced || !ref.current) return;
 
     let cancelled = false;
+    let created: Field | undefined;
 
-    createField(ref.current, {
-      color: active,
-      opacity: activeOpacity,
-      speed: isPausedRef.current ? 0 : defaults.speed,
-    })
-      .then((created) => {
+    createField(ref.current, { color: active, opacity: activeOpacity })
+      .then((next) => {
         /* Unmounted while the module was still loading. */
         if (cancelled) {
-          created.destroy();
+          next.destroy();
           return;
         }
 
-        fieldRef.current = created;
+        created = next;
+        setField(next);
       })
       /* The module failing to load is not worth an error boundary — the page
          is correct without a decorative background. */
@@ -105,8 +104,8 @@ const Canvas = ({
 
     return () => {
       cancelled = true;
-      fieldRef.current?.destroy();
-      fieldRef.current = null;
+      created?.destroy();
+      setField(null);
     };
   }, [active, activeOpacity, prefersReduced]);
 
