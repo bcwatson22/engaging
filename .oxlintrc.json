@@ -14,7 +14,20 @@
   "categories": {
     "correctness": "error"
   },
-  "rules": {},
+  "rules": {
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "motion/react",
+            "importNames": ["m", "motion"],
+            "message": "Import m from 'motion/react-m'. The motion/react barrel pulls every Motion feature into the page bundle and defeats LazyMotion."
+          }
+        ]
+      }
+    ]
+  },
   "env": {
     "builtin": true,
     "browser": true,

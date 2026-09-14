@@ -1,6 +1,7 @@
 'use client';
 
-import { m, MotionConfig } from 'motion/react';
+import { MotionConfig } from 'motion/react';
+import * as m from 'motion/react-m';
 import { usePathname } from 'next/navigation';
 
 import { Link, type TLink } from '@/components/atoms/Link/Link';

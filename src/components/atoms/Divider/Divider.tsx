@@ -1,6 +1,7 @@
 'use client';
 
-import { m, useScroll } from 'motion/react';
+import { useScroll } from 'motion/react';
+import * as m from 'motion/react-m';
 import { useRef } from 'react';
 
 import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
