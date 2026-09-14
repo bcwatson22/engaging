@@ -31,7 +31,7 @@ const Layout = ({ children }: Props) => (
       </a>
       <MotionProvider>
         <div className="flex min-h-screen flex-col">
-          <header className="flex justify-center p-6 print:hidden">
+          <header className="site-header flex justify-center p-6 print:hidden">
             <Nav />
           </header>
           {children}

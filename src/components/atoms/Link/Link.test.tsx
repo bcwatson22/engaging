@@ -90,6 +90,19 @@ describe('Link', () => {
         expect(NextLink).not.toHaveBeenCalled();
       });
 
+      it('passes transitionTypes to NextLink', () => {
+        setup({
+          link: { ...mockLink!, target: '/contact' },
+          transitionTypes: ['nav-forward'],
+        });
+
+        expect(NextLink).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ transitionTypes: ['nav-forward'] }),
+          undefined,
+        );
+      });
+
       it('passes prefetch to NextLink', () => {
         setup({
           link: { ...mockLink!, target: '/contact' },

@@ -1,5 +1,14 @@
 import '@testing-library/jest-dom/vitest';
 import axe from 'axe-core';
+import type { ReactNode } from 'react';
+
+/* ViewTransition ships in the canary React that Next bundles for the App
+   Router, not in the stable react package the tests import. Under test it is
+   only a wrapper, so it renders its children and nothing else. */
+vi.mock('react', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react')>()),
+  ViewTransition: ({ children }: { children?: ReactNode }) => children,
+}));
 
 /* jsdom does not implement matchMedia, and anything reading a media query at
    runtime — a colour scheme, reduced motion — throws without it rather than

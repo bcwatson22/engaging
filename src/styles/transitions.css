@@ -1,0 +1,116 @@
+/* Route changes between the nav's own pages slide in the direction of travel:
+   forward along the nav, the old page leaves to the left and the new one
+   arrives from the right; back along it, the reverse. The types come from the
+   nav (see List), and only a page wrapped in Transition takes part.
+
+   A short offset rather than a full width: enough to say which way, without
+   asking anyone to track a page flying across the screen. The exit is quick
+   and the enter waits for it, so the two never read as one smeared frame. */
+::view-transition-old(.nav-forward) {
+  --slide-offset: -3rem;
+  animation:
+    150ms ease-in both fade reverse,
+    350ms ease-in-out both slide reverse;
+}
+
+::view-transition-new(.nav-forward) {
+  --slide-offset: 3rem;
+  animation:
+    210ms ease-out 150ms both fade,
+    350ms ease-in-out both slide;
+}
+
+::view-transition-old(.nav-back) {
+  --slide-offset: 3rem;
+  animation:
+    150ms ease-in both fade reverse,
+    350ms ease-in-out both slide reverse;
+}
+
+::view-transition-new(.nav-back) {
+  --slide-offset: -3rem;
+  animation:
+    210ms ease-out 150ms both fade,
+    350ms ease-in-out both slide;
+}
+
+@keyframes slide {
+  from {
+    translate: var(--slide-offset);
+  }
+
+  to {
+    translate: 0;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* The header is the fixed point the page moves against, so it does not
+   animate at all. Its old snapshot is dropped to avoid a frame where both are
+   visible. The pill and the nav items inside it carry names of their own, so
+   they are lifted out of this snapshot and morph separately above it. */
+.site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* The pill slides beneath the nav items, not over them: the items carry the
+   labels, and a pill drawn on top hid the newly current label until it had
+   finished moving. */
+::view-transition-group(nav-pill) {
+  animation-duration: 350ms;
+  z-index: 101;
+}
+
+::view-transition-group(.nav-item) {
+  z-index: 102;
+}
+
+/* The current link's colour is chosen to sit on the pill. While the pill is
+   still on its way that colour sits on the bare track instead, where it all but
+   disappears, so the link keeps the ordinary text colour for the length of
+   the transition and eases to the pill's colour once the pill is under it. */
+:root:active-view-transition .site-nav .link[aria-current='page'] {
+  color: inherit;
+}
+
+/* The overlay would otherwise swallow a click made mid-transition. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Both the system preference and the site's own pause control stop it. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+:root[data-motion='paused']::view-transition-group(*),
+:root[data-motion='paused']::view-transition-old(*),
+:root[data-motion='paused']::view-transition-new(*) {
+  animation: none !important;
+}

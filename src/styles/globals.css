@@ -42,6 +42,7 @@
 @import './layers/base.css';
 @import './layers/components.css';
 @import './layers/utilities.css';
+@import './transitions.css';
 
 @import '../components/atoms/Address/Address.css';
 @import '../components/atoms/Bullet/Bullet.css';

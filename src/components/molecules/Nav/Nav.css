@@ -3,9 +3,9 @@
    zero-width, overflow-clipped span is still read out, so every link keeps its
    accessible name.
 
-   Its width is not transitioned. The pill and its neighbours are moved by
-   Motion's layout animation, which measures the finished layout up front; a
-   width still easing towards it would be measured part way. */
+   Its width is not transitioned. The pill and its neighbours are moved by a
+   view transition, which snapshots the finished layout; a width still easing
+   towards it would be captured part way. */
 @utility expand {
   & span {
     @apply max-w-0 overflow-hidden whitespace-nowrap opacity-0;
@@ -19,9 +19,8 @@
 }
 
 /* A track of pills, so that it reads as a nav and not as a row of loose icons.
-   The filled pill behind the current page is one element, handed from link to
-   link by a shared layoutId, so it slides and stretches across on a route
-   change. */
+   The filled pill behind the current page carries one view-transition name,
+   so on a route change the browser morphs it from the old link to the new. */
 @utility site-nav {
   & ul {
     @apply flex items-center gap-1 rounded-full border border-current/20 bg-current/5 p-1;
@@ -101,7 +100,7 @@
 }
 
 @utility nav-pill {
-  @apply bg-brand-blue absolute inset-0;
+  @apply bg-brand-blue absolute inset-0 rounded-full;
 
   @media (prefers-color-scheme: dark) {
     @apply bg-brand-yellow;

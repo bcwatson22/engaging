@@ -1,3 +1,5 @@
+/// <reference types="react/canary" />
+
 type TID = {
   id?: string;
   __typename?: string;

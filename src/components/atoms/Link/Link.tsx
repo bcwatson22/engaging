@@ -21,6 +21,7 @@ type Props = {
   className?: string;
   current?: boolean;
   prefetch?: boolean;
+  transitionTypes?: string[];
 };
 
 type TShared = Omit<ComponentPropsWithRef<'a'>, 'href'> & {
@@ -42,7 +43,13 @@ const Inner = ({ text, icon }: TInner) => (
   </>
 );
 
-const Link = ({ link, className, current = false, prefetch }: Props) => {
+const Link = ({
+  link,
+  className,
+  current = false,
+  prefetch,
+  transitionTypes,
+}: Props) => {
   const { target, text, icon } = link!;
 
   const isLocal = target === '/';
@@ -70,7 +77,11 @@ const Link = ({ link, className, current = false, prefetch }: Props) => {
   };
 
   return isInternal ? (
-    <NextLink {...outerProps} prefetch={prefetch}>
+    <NextLink
+      {...outerProps}
+      prefetch={prefetch}
+      transitionTypes={transitionTypes}
+    >
       <Inner {...innerProps} />
     </NextLink>
   ) : (
