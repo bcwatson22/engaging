@@ -81,6 +81,21 @@
   }
 }
 
+/* The current page's pill is a background, which forced colours removes,
+   leaving nothing to say which page this is. An outline in the system's text
+   colour survives. The hover wash goes the same way, so it gets one too. */
+@media (forced-colors: active) {
+  .site-nav .link[aria-current='page'] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
+
+  .site-nav .link:hover:not([aria-current='page']) {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+}
+
 @utility nav-pill {
   @apply bg-brand-blue absolute inset-0;
 

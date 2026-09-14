@@ -50,6 +50,7 @@ const FieldError = ({ id, message }: { id: string; message?: string }) => (
 const Contact = () => {
   const headingId = useId();
   const statusId = useId();
+  const requiredId = useId();
   const ids: Record<TField, string> = {
     name: useId(),
     email: useId(),
@@ -93,10 +94,13 @@ const Contact = () => {
 
             The button sits outside the fieldset: it is an action on the
             group, not a field in it. */}
-        <fieldset>
+        <fieldset aria-describedby={requiredId}>
           <legend>
             <h2 id={headingId}>Get in touch</h2>
           </legend>
+          <p id={requiredId} className="text-sm">
+            All fields are required.
+          </p>
 
           {/* The error sits beside the label rather than inside it. A label's
             text content becomes its control's accessible name, so an error

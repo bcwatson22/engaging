@@ -6,8 +6,19 @@
     @apply flex flex-wrap;
   }
 
+  /* Visual separators only. Where the alt-text syntax is supported the
+     generated text gets an empty alternative, so screen readers stop reading
+     "slash slash" between links.
+
+     Behind @supports rather than as a second declaration: the CSS build
+     dedupes repeated properties, keeping only the last, which left browsers
+     without the syntax (Safari before 17.4) with no separator at all. */
   & li:not(:last-of-type):after {
     content: '//';
     @apply mx-3;
+
+    @supports (content: '' / '') {
+      content: '//' / '';
+    }
   }
 }

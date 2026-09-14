@@ -21,8 +21,11 @@ const nunito = Nunito({
 });
 
 const Layout = ({ children }: Props) => (
-  <html lang="en">
+  <html lang="en-GB">
     <body className={nunito.className} suppressHydrationWarning>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
       <MotionProvider>{children}</MotionProvider>
       <Analytics />
       <SpeedInsights />

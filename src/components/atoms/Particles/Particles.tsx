@@ -3,15 +3,14 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
-import type { ParticlesCanvasProps } from './ParticlesCanvas';
+import type { CanvasProps } from './Canvas';
 
 /* ssr: false because there is nothing to render on the server — the canvas is
    painted by the engine after mount — and because it keeps the engine out of
    the initial client bundle entirely. */
-const ParticlesCanvas = dynamic(
-  async () => (await import('./ParticlesCanvas')).ParticlesCanvas,
-  { ssr: false },
-);
+const Canvas = dynamic(async () => (await import('./Canvas')).Canvas, {
+  ssr: false,
+});
 
 /* Background decoration, so it has no business competing with the page for
    bandwidth or main thread while that page is still painting. Waiting for
@@ -23,7 +22,7 @@ const fallbackDelay = 200;
 
 /* Props are forwarded rather than owned: the gate decides *when* the field
    appears, the canvas decides what it looks like. */
-const Particles = (props: ParticlesCanvasProps) => {
+const Particles = (props: CanvasProps) => {
   const [isReady, setIsReady] = useState<boolean>(false);
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const Particles = (props: ParticlesCanvasProps) => {
     return () => window.clearTimeout(handle);
   }, []);
 
-  return isReady ? <ParticlesCanvas {...props} /> : null;
+  return isReady ? <Canvas {...props} /> : null;
 };
 
 export { Particles };

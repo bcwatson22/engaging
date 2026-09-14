@@ -64,7 +64,13 @@ describe('Loading', () => {
   it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
+  });
+
+  it('announces that it is loading', () => {
+    setup();
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
   });
 
   it('renders a HeaderSkeleton component', () => {

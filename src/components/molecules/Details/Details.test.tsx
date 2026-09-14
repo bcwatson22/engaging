@@ -71,22 +71,22 @@ describe('Details', () => {
 
 describe('DetailsSkeleton', () => {
   it('renders a skeleton state', () => {
-    render(<DetailsSkeleton />);
+    const { container } = render(<DetailsSkeleton />);
 
     const numOfPulses = 4;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 
   it('renders an additional skeleton line if hasParagraph is true', () => {
-    render(<DetailsSkeleton hasParagraph />);
+    const { container } = render(<DetailsSkeleton hasParagraph />);
 
     const numOfPulses = 5;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 });

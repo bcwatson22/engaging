@@ -28,7 +28,7 @@ describe('Technology', () => {
     it('renders an image if defined', () => {
       setup();
 
-      expect(screen.getByRole('img', { name: `${name} logo` })).toHaveAttribute(
+      expect(screen.getByRole('presentation')).toHaveAttribute(
         'src',
         expect.stringContaining(encodeURIComponent(icon.url)),
       );
@@ -39,10 +39,15 @@ describe('Technology', () => {
         icon: undefined,
       });
 
-      expect(
-        screen.queryByRole('img', { name: `${name} logo` }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
     });
+  });
+
+  it('is announced once, by its name', () => {
+    setup();
+
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(screen.getByText(name)).toBeInTheDocument();
   });
 
   describe('name', () => {
@@ -65,9 +70,7 @@ describe('Technology', () => {
     it("adds 'white' class if value is Next", () => {
       setup();
 
-      expect(screen.getByRole('img', { name: `${name} logo` })).toHaveClass(
-        'white',
-      );
+      expect(screen.getByRole('presentation')).toHaveClass('white');
     });
 
     it("doesn't add 'white' class if value is not Next", () => {
@@ -77,21 +80,19 @@ describe('Technology', () => {
         name,
       });
 
-      expect(screen.getByRole('img', { name: `${name} logo` })).not.toHaveClass(
-        'white',
-      );
+      expect(screen.getByRole('presentation')).not.toHaveClass('white');
     });
   });
 });
 
 describe('TechnologySkeleton', () => {
   it('renders a skeleton state', () => {
-    render(<TechnologySkeleton />);
+    const { container } = render(<TechnologySkeleton />);
 
     const numOfPulses = 1;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 });

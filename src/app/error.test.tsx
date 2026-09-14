@@ -2,7 +2,7 @@ import { cleanup, render } from '@testing-library/react';
 
 import { Error } from '@/components/pages/Error/Error';
 
-import ErrorPage, { type ErrorPageProps } from './error';
+import ErrorPage, { type ErrorPageProps, title } from './error';
 
 vi.mock(
   import('@/components/pages/Error/Error'),
@@ -52,5 +52,10 @@ describe('Error', () => {
       expect.objectContaining({ reset: mockReset }),
       undefined,
     );
+  });
+  it('titles the page', () => {
+    setup();
+
+    expect(document.title).toBe(title);
   });
 });

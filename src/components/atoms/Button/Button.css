@@ -80,4 +80,13 @@
   & .vector {
     @apply relative size-5 translate-none;
   }
+
+  /* The hover and focus fill is a background image, which forced colours
+     removes. The system highlight on the border stands in for it. */
+  @media (forced-colors: active) {
+    &:hover,
+    &:focus-visible {
+      border-color: Highlight;
+    }
+  }
 }

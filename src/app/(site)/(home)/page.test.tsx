@@ -52,6 +52,12 @@ describe('HomePage', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = await setup();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   it('calls getData', async () => {
     await setup();
 
@@ -68,7 +74,7 @@ describe('HomePage', () => {
   it('renders a main', async () => {
     await setup();
 
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
   });
 
   it('renders a heading', async () => {

@@ -4,7 +4,7 @@ import type { Mock } from 'vitest';
 
 import { Loading } from '@/components/pages/Loading/Loading';
 
-import DownloadPage from './page';
+import DownloadPage, { title } from './page';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn<typeof import('next/navigation').useRouter>(),
@@ -100,5 +100,10 @@ describe('Loading', () => {
       'Error downloading file:',
       expect.any(Error),
     );
+  });
+  it('titles the page', () => {
+    setup();
+
+    expect(document.title).toBe(title);
   });
 });

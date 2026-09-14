@@ -36,7 +36,7 @@ const StatusPage = async () => {
   const status = await getStatus();
 
   return (
-    <main className="status grow">
+    <main id="main" className="status grow">
       <h1 className="sr-only">{title}</h1>
       {/* Dimmer than the contact page's, and blurred by the page's own CSS:
           this sits behind small text and a set of bar charts rather than

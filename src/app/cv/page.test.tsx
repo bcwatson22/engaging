@@ -121,6 +121,14 @@ describe('CVPage', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = await setup();
+
+    vi.useRealTimers();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   afterEach(() => {
     vi.useRealTimers();
   });
@@ -143,7 +151,7 @@ describe('CVPage', () => {
   it('renders a main', async () => {
     await setup();
 
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
   });
 
   it('renders a Header component', async () => {

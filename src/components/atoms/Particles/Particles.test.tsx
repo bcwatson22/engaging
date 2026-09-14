@@ -1,12 +1,10 @@
 import { act, cleanup, render, waitFor } from '@testing-library/react';
 
+import { Canvas } from './Canvas';
 import { Particles } from './Particles';
-import { ParticlesCanvas } from './ParticlesCanvas';
 
-vi.mock('./ParticlesCanvas', () => ({
-  ParticlesCanvas: vi.fn<typeof import('./ParticlesCanvas').ParticlesCanvas>(
-    () => <></>,
-  ),
+vi.mock('./Canvas', () => ({
+  Canvas: vi.fn<typeof import('./Canvas').Canvas>(() => <></>),
 }));
 
 type IdleCallback = Parameters<typeof window.requestIdleCallback>[0];
@@ -61,19 +59,19 @@ describe('Particles', () => {
        the dynamic import hasn't settled yet, and holds even if the gate goes. */
     await act(async () => {});
 
-    expect(ParticlesCanvas).not.toHaveBeenCalled();
+    expect(Canvas).not.toHaveBeenCalled();
   });
 
   it('renders the canvas once the browser is idle', async () => {
     setup();
 
-    await waitFor(() => expect(ParticlesCanvas).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(Canvas).toHaveBeenCalledTimes(1));
   });
 
   it('falls back to a timeout without requestIdleCallback', async () => {
     setup({ supportsIdleCallback: false });
 
-    await waitFor(() => expect(ParticlesCanvas).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(Canvas).toHaveBeenCalledTimes(1));
   });
 
   /* The gate decides when the field appears; the canvas decides what it looks
@@ -81,10 +79,10 @@ describe('Particles', () => {
   it('forwards its colours to the canvas', async () => {
     setup();
 
-    await waitFor(() => expect(ParticlesCanvas).toHaveBeenCalled());
+    await waitFor(() => expect(Canvas).toHaveBeenCalled());
 
     /* The props themselves, not the whole call: React hands a second argument
        through the dynamic wrapper that is an implementation detail. */
-    expect(vi.mocked(ParticlesCanvas).mock.calls[0][0]).toEqual(colors);
+    expect(vi.mocked(Canvas).mock.calls[0][0]).toEqual(colors);
   });
 });

@@ -94,13 +94,13 @@ describe('Role', () => {
 
 describe('RoleSkeleton', () => {
   it('renders a skeleton state', () => {
-    render(<RoleSkeleton />);
+    const { container } = render(<RoleSkeleton />);
 
     const numOfPulses = 9;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 });
 

@@ -51,12 +51,26 @@ describe('Contact', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = setup();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   it('names the form for assistive technology', () => {
     setup();
 
     expect(
       screen.getByRole('region', { name: /get in touch/i }),
     ).toBeInTheDocument();
+  });
+
+  it('says up front that every field is required', () => {
+    setup();
+
+    expect(
+      screen.getByRole('group', { name: 'Get in touch' }),
+    ).toHaveAccessibleDescription('All fields are required.');
   });
 
   it('offers the address as a fallback that needs no server', () => {

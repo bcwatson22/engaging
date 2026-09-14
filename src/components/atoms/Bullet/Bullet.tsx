@@ -35,7 +35,7 @@ const getWidthClassName = (index: number): string => {
 
 const BulletSkeleton = ({ index }: SkeletonProps) => (
   <div className="bullet bullet-skeleton">
-    <span>Bullet</span>
+    <span aria-hidden="true">Bullet</span>
     <SkeletonLine className={`my-2 ${getWidthClassName(index)}`} />
   </div>
 );
@@ -49,7 +49,9 @@ const Bullet = ({ children }: Props) => {
 
   return (
     <li ref={ref} className="bullet">
-      <m.span style={{ scale: scrollYProgress }}>Bullet</m.span>
+      <m.span style={{ scale: scrollYProgress }} aria-hidden="true">
+        Bullet
+      </m.span>
       {children}
     </li>
   );

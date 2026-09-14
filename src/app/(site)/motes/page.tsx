@@ -27,7 +27,7 @@ const generateMetadata = (): Metadata => ({
    of its own, and a background field behind it would be two fields arguing
    over the same pointer. */
 const MotesPage = () => (
-  <main className="motes grow">
+  <main id="main" className="motes grow">
     <h1 className="sr-only">{title}</h1>
     <Motes />
   </main>

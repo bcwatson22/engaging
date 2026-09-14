@@ -58,8 +58,16 @@ describe('Layout', () => {
   it('renders a document', () => {
     setup();
 
-    expect(document.documentElement).toHaveAttribute('lang', 'en');
+    expect(document.documentElement).toHaveAttribute('lang', 'en-GB');
     expect(document.body).toHaveClass('mockClassName');
+  });
+
+  it('offers a way past the navigation', () => {
+    setup();
+
+    expect(
+      screen.getByRole('link', { name: 'Skip to content' }),
+    ).toHaveAttribute('href', '#main');
   });
 
   it('renders children', () => {

@@ -84,7 +84,7 @@ const CVPage = async () => {
   } = data;
 
   return (
-    <main className="cv main">
+    <main id="main" className="cv main">
       <div className="wrapper">
         <div className="inner">
           <Header

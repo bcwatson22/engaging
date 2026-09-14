@@ -136,4 +136,114 @@ describe('Reveal', () => {
       );
     });
   });
+
+  describe('dismissing', () => {
+    const regionOf = () => screen.getByRole('region', { name: 'Mock heading' });
+
+    it('is not dismissed to begin with', () => {
+      setup();
+
+      expect(regionOf()).not.toHaveAttribute('data-dismissed');
+    });
+
+    it('dismisses the hover reveal on Escape', async () => {
+      const { user } = setup();
+
+      await user.hover(regionOf());
+      await user.keyboard('{Escape}');
+
+      expect(regionOf()).toHaveAttribute('data-dismissed', 'true');
+    });
+
+    it('allows it again once the pointer leaves', async () => {
+      const { user } = setup();
+
+      await user.hover(regionOf());
+      await user.keyboard('{Escape}');
+      await user.unhover(regionOf());
+
+      expect(regionOf()).not.toHaveAttribute('data-dismissed');
+    });
+
+    it('allows it again once focus moves within it', async () => {
+      const { user } = setup({
+        children: (
+          <div id="mock-info">
+            <h2 id="mock-heading">Mock heading</h2>
+            <a href="#first">First</a>
+            <a href="#second">Second</a>
+          </div>
+        ),
+      });
+
+      await user.keyboard('{Escape}');
+      await user.tab();
+
+      expect(regionOf()).toHaveAttribute('data-dismissed', 'true');
+
+      await user.tab();
+
+      expect(regionOf()).not.toHaveAttribute('data-dismissed');
+    });
+
+    it('stays dismissed after handing focus back from the links', async () => {
+      const { user } = setup({
+        children: (
+          <div id="mock-info">
+            <h2 id="mock-heading">Mock heading</h2>
+            <a href="#first">First</a>
+          </div>
+        ),
+      });
+
+      await user.hover(regionOf());
+      await user.tab();
+      await user.tab();
+      await user.keyboard('{Escape}');
+
+      expect(regionOf()).toHaveAttribute('data-dismissed', 'true');
+    });
+
+    it('hands focus from the links back to the toggle', async () => {
+      const { user } = setup({
+        children: (
+          <div id="mock-info">
+            <h2 id="mock-heading">Mock heading</h2>
+            <a href="#first">First</a>
+          </div>
+        ),
+      });
+
+      await user.tab();
+      await user.tab();
+
+      expect(screen.getByRole('link', { name: 'First' })).toHaveFocus();
+
+      await user.keyboard('{Escape}');
+
+      expect(
+        screen.getByRole('button', { name: /show about me/i }),
+      ).toHaveFocus();
+    });
+
+    it('leaves focus alone when it is elsewhere', async () => {
+      const { user } = setup();
+
+      await user.keyboard('{Escape}');
+
+      expect(document.body).toHaveFocus();
+    });
+
+    it('stops listening when unmounted', async () => {
+      const spyRemove = vi.spyOn(document, 'removeEventListener');
+
+      render(<Reveal {...defaultProps} />).unmount();
+
+      expect(spyRemove).toHaveBeenNthCalledWith(
+        1,
+        'keydown',
+        expect.any(Function),
+      );
+    });
+  });
 });

@@ -54,7 +54,7 @@ const HomePage = async () => {
   } = data;
 
   return (
-    <main className="home grow">
+    <main id="main" className="home grow">
       <h1 className="sr-only">{title}</h1>
       <Mugshot mugshot={mugshot} technologies={technologies} />
       <Suspense>

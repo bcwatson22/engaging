@@ -15,7 +15,7 @@ describe('LoadingStatus', () => {
   it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
   });
 
   /* The same heading the page renders. A fallback that named the page
@@ -34,5 +34,11 @@ describe('LoadingStatus', () => {
     expect(
       screen.queryByRole('heading', { name: 'Engaging Engineering' }),
     ).not.toBeInTheDocument();
+  });
+
+  it('announces that it is loading', () => {
+    setup();
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
   });
 });

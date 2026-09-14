@@ -44,6 +44,16 @@
         100% 0.125rem;
     }
   }
+
+  /* Forced colours (Windows High Contrast) drops background images, and the
+     underline is one — so links fell back to looking like plain text. A real
+     text-decoration survives, in the system's link colour. */
+  @media (forced-colors: active) {
+    & span {
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
+  }
 }
 
 @utility url {
