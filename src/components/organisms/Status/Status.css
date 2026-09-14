@@ -86,7 +86,9 @@
       }
 
       & time {
-        @apply text-xs opacity-60;
+        @apply text-xs;
+
+        color: var(--ink-muted);
       }
     }
 
@@ -100,7 +102,7 @@
          character between them would join the two into one text node and put
          the state's wording out of reach of anything reading for it. */
       & time {
-        @apply opacity-70;
+        color: var(--ink-muted);
       }
 
       & .mark {
@@ -129,15 +131,18 @@
         }
       }
 
-      /* Nothing has happened yet, so it should recede. */
+      /* Nothing has happened yet, so it should recede — in the muted ink
+         rather than at half opacity, which took it to 3.7:1. */
       &[data-state='unchecked'] {
-        @apply opacity-50;
+        color: var(--ink-muted);
       }
     }
 
     /* A URL or a count — long, and there to confirm rather than to read. */
     & .result {
-      @apply mt-auto text-xs break-all opacity-60;
+      @apply mt-auto text-xs break-all;
+
+      color: var(--ink-muted);
     }
   }
 
@@ -166,7 +171,9 @@
       @apply grid grid-cols-2 gap-2 text-xs;
 
       & dt {
-        @apply flex items-center gap-1.5 opacity-70;
+        @apply flex items-center gap-1.5;
+
+        color: var(--ink-muted);
       }
 
       & dd {
@@ -193,7 +200,9 @@
     @apply m-0 flex flex-col gap-1;
 
     & figcaption {
-      @apply text-xs opacity-70;
+      @apply text-xs;
+
+      color: var(--ink-muted);
     }
 
     & .columns {
@@ -216,13 +225,17 @@
     /* The scale the bars do not carry. Same size and weight as the caption,
        because it is the caption's other half rather than a finding. */
     & .range {
-      @apply text-xs opacity-70;
+      @apply text-xs;
+
+      color: var(--ink-muted);
     }
 
     /* A sentence, not a number, so it reads at body weight rather than
        joining the figures around it. */
     & .varies {
-      @apply text-xs opacity-70;
+      @apply text-xs;
+
+      color: var(--ink-muted);
 
       text-wrap: pretty;
     }
@@ -251,7 +264,9 @@
     }
 
     & .says {
-      @apply ml-auto shrink-0 opacity-70;
+      @apply ml-auto shrink-0;
+
+      color: var(--ink-muted);
     }
 
     /* Broken is a link to fix. Blocked is a host being unfriendly to robots,
@@ -266,7 +281,7 @@
     }
 
     & li[data-state='blocked'] {
-      @apply opacity-70;
+      color: var(--ink-muted);
     }
   }
 
@@ -288,13 +303,16 @@
     }
 
     & .name {
-      @apply text-xs opacity-70;
+      @apply text-xs;
+
+      color: var(--ink-muted);
     }
 
     /* Nothing in the queue is the normal state, so a zero should recede
-       rather than announce itself. */
+       rather than announce itself. Muted ink, not 40% opacity: that came out
+       at 2.7:1, below even the large-text minimum. */
     & li[data-busy='false'] .count {
-      @apply opacity-40;
+      color: var(--ink-muted);
     }
 
     & li[data-busy='true'] .count {
@@ -324,7 +342,9 @@
   100% {
     opacity: 1;
   }
+  /* No lower than this: at its dimmest the count still clears 3:1 as large
+     text in both schemes. 0.45 took it to 2.2:1. */
   50% {
-    opacity: 0.45;
+    opacity: 0.75;
   }
 }

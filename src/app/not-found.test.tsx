@@ -3,7 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { Link } from '@/components/atoms/Link/Link';
 import { Error } from '@/components/pages/Error/Error';
 
-import NotFoundPage from './not-found';
+import NotFoundPage, { title } from './not-found';
 
 vi.mock(
   import('@/components/atoms/Link/Link'),
@@ -63,5 +63,10 @@ describe('NotFoundPage', () => {
       { link: { icon: 'Home', target: '/', text: 'Home' } },
       undefined,
     );
+  });
+  it('titles the page', () => {
+    setup();
+
+    expect(document.title).toBe(title);
   });
 });

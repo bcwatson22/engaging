@@ -8,11 +8,19 @@ type Props = Pick<ErrorProps, 'reset'> & {
   error: Error & { digest?: string };
 };
 
+const title = 'Something went wrong | Engaging Engineering';
+
 const ErrorPage = ({ error, reset }: Props) => {
   useEffect(() => console.error(error), [error]);
 
-  return <Error reset={reset} />;
+  return (
+    <>
+      <title>{title}</title>
+      <Error reset={reset} />
+    </>
+  );
 };
 
 export default ErrorPage;
+export { title };
 export type { Props as ErrorPageProps };

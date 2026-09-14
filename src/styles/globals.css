@@ -117,4 +117,15 @@
   --brand-blue: #245385;
   --brand-red: #740a01;
   --transparent: rgba(0, 0, 0, 0);
+
+  /* Secondary text. A solid colour rather than opacity on the text: opacity
+     compounds with any parent's, and a 70% line inside a 50% one lands well
+     under 4.5:1. Mixed to 70% of the ink, which measures 7.6:1 on the light
+     ground and 9.4:1 on the dark, so it has room to sit over the particle
+     panes and still pass. */
+  --ink-muted: color-mix(in srgb, var(--brand-dark) 70%, var(--brand-light));
+
+  @media (prefers-color-scheme: dark) {
+    --ink-muted: color-mix(in srgb, var(--brand-light) 70%, var(--brand-dark));
+  }
 }

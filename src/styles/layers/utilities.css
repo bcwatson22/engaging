@@ -117,7 +117,9 @@
   /* Times, counts, and anything else trailing the sentence. */
   & time,
   & .aside {
-    @apply text-xs opacity-60;
+    @apply text-xs;
+
+    color: var(--ink-muted);
   }
 
   &[data-state='ok'] {
@@ -145,6 +147,6 @@
   }
 
   &[data-state='muted'] {
-    @apply opacity-50;
+    color: var(--ink-muted);
   }
 }

@@ -6,6 +6,8 @@ import { useCallback, useEffect } from 'react';
 
 import { Loading } from '@/components/pages/Loading/Loading';
 
+const title = 'Downloading CV | Engaging Engineering';
+
 const DownloadPage: NextPage = () => {
   /* oxlint-disable-next-line typescript/unbound-method -- destructuring the
      router is Next's documented API; its methods are already bound. */
@@ -31,7 +33,13 @@ const DownloadPage: NextPage = () => {
     downloadFile();
   }, [downloadFile]);
 
-  return <Loading />;
+  return (
+    <>
+      <title>{title}</title>
+      <Loading />
+    </>
+  );
 };
 
 export default DownloadPage;
+export { title };
