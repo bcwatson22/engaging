@@ -1,10 +1,29 @@
 import { cleanup, render, screen } from '@testing-library/react';
+import { usePathname } from 'next/navigation';
+import type { Mock } from 'vitest';
 
 import { download, home, Nav } from './Nav';
 
+vi.mock('next/navigation', () => ({
+  usePathname: vi.fn<typeof import('next/navigation').usePathname>(),
+}));
+
 type Props = Parameters<typeof Nav>[0];
 
-const setup = (props?: Partial<Props>) => render(<Nav {...props} />);
+type SetupOptions = {
+  pathname: string;
+};
+
+const setup = (options?: Partial<SetupOptions>, props?: Partial<Props>) => {
+  const setupOptions: SetupOptions = {
+    pathname: '/',
+    ...options,
+  };
+
+  (usePathname as Mock).mockReturnValue(setupOptions.pathname);
+
+  return render(<Nav {...props} />);
+};
 
 describe('Nav', () => {
   beforeEach(() => {
@@ -39,8 +58,6 @@ describe('Nav', () => {
     );
   });
 
-  /* Two navs on a page are announced identically without this, so neither
-     says which one it is. */
   it('names itself for a screen reader', () => {
     setup();
 
@@ -50,7 +67,7 @@ describe('Nav', () => {
   });
 
   it('takes a name of its own', () => {
-    setup({ label: 'Motes package' });
+    setup({}, { label: 'Motes package' });
 
     expect(
       screen.getByRole('navigation', { name: 'Motes package' }),
@@ -58,7 +75,7 @@ describe('Nav', () => {
   });
 
   it('offers whatever links it is given', () => {
-    setup({ links: [home, download] });
+    setup({}, { links: [home, download] });
 
     expect(screen.getByRole('link', { name: /download/i })).toHaveAttribute(
       'href',
@@ -66,10 +83,8 @@ describe('Nav', () => {
     );
   });
 
-  /* The point of the prop: a page that passes its own gets only those. On the
-     CV, linking to the page you are already on would be noise. */
   it('offers nothing but the links it is given', () => {
-    setup({ links: [home, download] });
+    setup({}, { links: [home, download] });
 
     expect(
       screen.queryByRole('link', { name: /contact/i }),
@@ -80,7 +95,7 @@ describe('Nav', () => {
   });
 
   it('takes a className, so a page can place it', () => {
-    setup({ className: 'flex justify-center' });
+    setup({}, { className: 'flex justify-center' });
 
     expect(screen.getByRole('navigation')).toHaveClass(
       'flex',
@@ -88,11 +103,6 @@ describe('Nav', () => {
     );
   });
 
-  /* The regression this file was written for. The links used to be a
-     module-level array that the component pushed onto, so it grew by an entry
-     every render — twice on mount under Strict Mode, and again on every
-     navigation — leaving the nav with repeated links and duplicate keys.
-     Rendering twice is what makes that visible; a single render passed. */
   it('does not accumulate links across renders', () => {
     setup();
     cleanup();
@@ -101,14 +111,61 @@ describe('Nav', () => {
     expect(screen.getAllByRole('link')).toHaveLength(4);
   });
 
-  /* The variant that broke: a single object spread into an array literal
-     throws, because an object has no iterator. It only ever ran on the CV
-     page, so the default path stayed working. */
   it('does not accumulate links across renders, with its own links', () => {
-    setup({ links: [home, download] });
+    setup({}, { links: [home, download] });
     cleanup();
-    setup({ links: [home, download] });
+    setup({}, { links: [home, download] });
 
     expect(screen.getAllByRole('link')).toHaveLength(2);
+  });
+
+  describe('current page', () => {
+    it('marks the link for the page being viewed', () => {
+      setup({ pathname: '/contact' });
+
+      expect(screen.getByRole('link', { name: /contact/i })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
+
+    it('marks no other link', () => {
+      setup({ pathname: '/contact' });
+
+      expect(screen.getByRole('link', { name: /home/i })).not.toHaveAttribute(
+        'aria-current',
+      );
+    });
+
+    it('marks home only on the home page', () => {
+      setup({ pathname: '/' });
+
+      expect(
+        screen
+          .getAllByRole('link')
+          .filter((link) => link.hasAttribute('aria-current')),
+      ).toHaveLength(1);
+    });
+
+    it('marks a section from a page nested inside it', () => {
+      setup({ pathname: '/motes/some-mote' });
+
+      expect(screen.getByRole('link', { name: /motes/i })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
+  });
+
+  it('styles the site nav as a pill track', () => {
+    setup();
+
+    expect(screen.getByRole('navigation')).toHaveClass('site-nav');
+  });
+
+  it('styles a nav of its own links like the details', () => {
+    setup({}, { links: [home, download] });
+
+    expect(screen.getByRole('navigation')).toHaveClass('nav');
   });
 });

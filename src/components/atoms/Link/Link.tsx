@@ -19,6 +19,8 @@ type TLink =
 type Props = {
   link: TLink;
   className?: string;
+  current?: boolean;
+  prefetch?: boolean;
 };
 
 type TShared = Omit<ComponentPropsWithRef<'a'>, 'href'> & {
@@ -40,10 +42,11 @@ const Inner = ({ text, icon }: TInner) => (
   </>
 );
 
-const Link = ({ link, className }: Props) => {
+const Link = ({ link, className, current = false, prefetch }: Props) => {
   const { target, text, icon } = link!;
 
   const isLocal = target === '/';
+  const isInternal = target.startsWith('/');
 
   let displayUrl =
     target.startsWith('tel:') || target.startsWith('mailto:') ? null : target;
@@ -58,6 +61,7 @@ const Link = ({ link, className }: Props) => {
       className ? ' ' + className : ''
     }`,
     'data-url': displayUrl,
+    'aria-current': current ? 'page' : undefined,
   };
 
   const innerProps: TInner = {
@@ -65,8 +69,8 @@ const Link = ({ link, className }: Props) => {
     icon,
   };
 
-  return isLocal ? (
-    <NextLink {...outerProps}>
+  return isInternal ? (
+    <NextLink {...outerProps} prefetch={prefetch}>
       <Inner {...innerProps} />
     </NextLink>
   ) : (

@@ -70,6 +70,31 @@ describe('Link', () => {
         expect(NextLink).toHaveBeenCalledTimes(1);
       });
 
+      it('renders NextLink for any internal route', () => {
+        setup({
+          link: { ...mockLink!, target: '/contact' },
+        });
+
+        expect(NextLink).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ href: '/contact' }),
+          undefined,
+        );
+      });
+
+      it('passes prefetch to NextLink', () => {
+        setup({
+          link: { ...mockLink!, target: '/contact' },
+          prefetch: true,
+        });
+
+        expect(NextLink).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ prefetch: true }),
+          undefined,
+        );
+      });
+
       describe("when it's a URL", () => {
         it("adds 'url' class", () => {
           setup();
@@ -117,6 +142,25 @@ describe('Link', () => {
           expect(screen.getByRole('link')).not.toHaveAttribute('data-url');
         });
       });
+    });
+  });
+
+  describe('current', () => {
+    it('marks the link as the current page', () => {
+      setup({ current: true });
+
+      expect(screen.getByRole('link', { name: text })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
+
+    it("doesn't mark the link by default", () => {
+      setup();
+
+      expect(screen.getByRole('link', { name: text })).not.toHaveAttribute(
+        'aria-current',
+      );
     });
   });
 

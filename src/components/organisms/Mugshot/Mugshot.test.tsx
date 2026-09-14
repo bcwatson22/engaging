@@ -120,10 +120,6 @@ describe('MugshotSkeleton', () => {
     );
   });
 
-  /* The skeleton is painted first and the real Mugshot is swapped in over it,
-     so any difference in the wrapper's classes is a layout shift on every
-     first visit. `.technologies` is positioned against this box at md and up,
-     which makes its width the expensive thing to get wrong. */
   it('renders the same wrapper as Mugshot', () => {
     render(<MugshotSkeleton />);
 

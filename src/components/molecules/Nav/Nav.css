@@ -1,6 +1,90 @@
+/* Below xs the site nav shows icons only, bar the page you are on, whose label
+   sits beside its icon. The label is narrowed rather than sr-only — a
+   zero-width, overflow-clipped span is still read out, so every link keeps its
+   accessible name.
+
+   Its width is not transitioned. The pill and its neighbours are moved by
+   Motion's layout animation, which measures the finished layout up front; a
+   width still easing towards it would be measured part way. */
 @utility expand {
   & span {
-    @apply sr-only;
-    @apply xs:not-sr-only;
+    @apply max-w-0 overflow-hidden whitespace-nowrap opacity-0;
+    @apply xs:max-w-32 xs:opacity-100;
+  }
+
+  &[aria-current='page'] span {
+    @apply max-w-32 opacity-100;
+    @apply transition-opacity delay-100 duration-200 motion-reduce:transition-none;
+  }
+}
+
+/* A track of pills, so that it reads as a nav and not as a row of loose icons.
+   The filled pill behind the current page is one element, handed from link to
+   link by a shared layoutId, so it slides and stretches across on a route
+   change. */
+@utility site-nav {
+  & ul {
+    @apply flex items-center gap-1 rounded-full border border-current/20 bg-current/5 p-1;
+  }
+
+  & li {
+    @apply relative;
+  }
+
+  & .link {
+    /* 44px square: a 24px icon and 10px either side. Anything wider and an
+       icon-only pill is an oval rather than a circle. */
+    @apply relative z-10 flex h-11 min-w-11 items-center justify-center rounded-full px-2.5;
+    @apply transition-colors duration-150 motion-reduce:transition-none;
+
+    /* The icon atom positions its vector absolutely against a left padding.
+       In a pill that padding stacks on the pill's own, so the icon is put back
+       into the flow instead. */
+    & .vector {
+      @apply static shrink-0 translate-y-0;
+    }
+
+    /* The pill is the hover state here; the underline would be a second one.
+
+       The margins live here, not on .expand, because the link atom's own
+       `ml-2` on the same span otherwise wins — and 8px of margin on an empty
+       label is what stretched an icon-only pill into an oval. */
+    & span {
+      background-image: none;
+      @apply ml-0;
+      @apply xs:mr-1.5 xs:ml-2;
+    }
+
+    &[aria-current='page'] span {
+      @apply mr-1.5 ml-2;
+    }
+
+    /* Hover only where there is hover. A tap on a touch screen leaves a sticky
+       :hover behind, which painted a grey pill over the link just left. */
+    @media (hover: hover) {
+      &:hover:not([aria-current='page']) {
+        @apply bg-current/10;
+      }
+    }
+
+    &:focus-visible:not([aria-current='page']) {
+      @apply bg-current/10;
+    }
+
+    &[aria-current='page'] {
+      @apply text-brand-light;
+
+      @media (prefers-color-scheme: dark) {
+        @apply text-brand-dark;
+      }
+    }
+  }
+}
+
+@utility nav-pill {
+  @apply bg-brand-blue absolute inset-0;
+
+  @media (prefers-color-scheme: dark) {
+    @apply bg-brand-yellow;
   }
 }
