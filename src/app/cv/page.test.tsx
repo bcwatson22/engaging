@@ -121,6 +121,14 @@ describe('CVPage', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = await setup();
+
+    vi.useRealTimers();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   afterEach(() => {
     vi.useRealTimers();
   });

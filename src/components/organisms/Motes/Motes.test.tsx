@@ -94,6 +94,12 @@ describe('Motes', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = setup();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   afterEach(() => vi.restoreAllMocks());
 
   it('starts a field', async () => {

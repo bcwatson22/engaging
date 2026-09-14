@@ -51,6 +51,12 @@ describe('Contact', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = setup();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   it('names the form for assistive technology', () => {
     setup();
 

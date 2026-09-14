@@ -31,6 +31,12 @@ describe('Nav', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = setup();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   it('always offers a way home', () => {
     setup();
 

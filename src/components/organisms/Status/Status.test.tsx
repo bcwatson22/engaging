@@ -75,6 +75,14 @@ describe('Status', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = setup();
+
+    vi.useRealTimers();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   afterEach(() => vi.useRealTimers());
 
   it('names the panel for assistive technology', () => {

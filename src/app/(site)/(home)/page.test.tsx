@@ -52,6 +52,12 @@ describe('HomePage', () => {
     cleanup();
   });
 
+  it('has no detectable WCAG A or AA violations', async () => {
+    const { container } = await setup();
+
+    await expect(container).toHaveNoViolations();
+  });
+
   it('calls getData', async () => {
     await setup();
 
