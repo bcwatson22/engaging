@@ -1,7 +1,12 @@
 import { createField } from '@bcwatson22/motes';
-import { cleanup, render, waitFor } from '@testing-library/react';
+import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
+
+import {
+  changeEvent,
+  storageKey,
+} from '@/hooks/useMotionPreference/useMotionPreference';
 
 import {
   defaultColor,
@@ -13,11 +18,12 @@ vi.mock('@bcwatson22/motes', () => ({
   createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
   /* Not mocked away: these are the values the component falls back to, and a
      test asserting a default should assert the real one. */
-  defaults: { opacity: 0.3 },
+  defaults: { opacity: 0.3, speed: 0.25 },
 }));
 
 type Options = {
   isDark?: boolean;
+  isPaused?: boolean;
   prefersReduced?: boolean;
   /* Left pending to stand in for a module still downloading. */
   isLoading?: boolean;
@@ -25,6 +31,7 @@ type Options = {
 };
 
 const destroy = vi.fn<() => void>();
+const update = vi.fn<(options: { speed: number }) => void>();
 
 /* Answers per query rather than a flat boolean: the component reads two, and
    a mock that matches everything would report reduced motion in every test
@@ -41,16 +48,17 @@ const stubMediaQueries = ({ isDark = false, prefersReduced = false }) =>
   );
 
 const setup = (
-  { isDark, prefersReduced, isLoading, fails }: Options = {},
+  { isDark, prefersReduced, isPaused = false, isLoading, fails }: Options = {},
   props?: Partial<ParticlesCanvasProps>,
 ) => {
   stubMediaQueries({ isDark, prefersReduced });
+  window.localStorage.setItem(storageKey, isPaused ? 'paused' : 'running');
 
   (createField as Mock).mockImplementation(() => {
     if (isLoading) return new Promise(() => {});
     if (fails) return Promise.reject(new Error('no wasm'));
 
-    return Promise.resolve({ destroy });
+    return Promise.resolve({ update, destroy });
   });
 
   return render(<ParticlesCanvas {...props} />);
@@ -111,6 +119,52 @@ describe('ParticlesCanvas', () => {
       const { container } = setup({ prefersReduced: true });
 
       expect(container.querySelector('canvas')).toBeInTheDocument();
+    });
+  });
+
+  describe('paused by the visitor', () => {
+    const pause = (value: 'paused' | 'running') =>
+      act(() => {
+        window.localStorage.setItem(storageKey, value);
+        window.dispatchEvent(new Event(changeEvent));
+      });
+
+    const speedOf = (): number => (createField as Mock).mock.calls[0][1].speed;
+
+    it('starts a still field when already paused', async () => {
+      setup({ isPaused: true });
+
+      await waitFor(() => expect(speedOf()).toBe(0));
+    });
+
+    it('starts at the default speed otherwise', async () => {
+      setup();
+
+      await waitFor(() => expect(speedOf()).toBe(0.25));
+    });
+
+    it('stills the running field rather than replacing it', async () => {
+      setup();
+
+      await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+
+      pause('paused');
+
+      expect(update).toHaveBeenNthCalledWith(1, { speed: 0 });
+      expect(destroy).toHaveBeenCalledTimes(0);
+      expect(createField).toHaveBeenCalledTimes(1);
+    });
+
+    it('carries on from where it stopped when played again', async () => {
+      setup();
+
+      await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
+
+      pause('paused');
+      pause('running');
+
+      expect(update).toHaveBeenNthCalledWith(2, { speed: 0.25 });
+      expect(createField).toHaveBeenCalledTimes(1);
     });
   });
 

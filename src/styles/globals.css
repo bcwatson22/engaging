@@ -49,6 +49,7 @@
 @import '../components/atoms/Divider/Divider.css';
 @import '../components/atoms/Link/Link.css';
 @import '../components/atoms/Logo/Logo.css';
+@import '../components/atoms/Toggle/Toggle.css';
 @import '../components/atoms/Particles/Particles.css';
 @import '../components/atoms/Skeleton/Skeleton.css';
 
@@ -89,6 +90,21 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/* The site's own pause control — see useMotionPreference. Paused rather than
+   removed, so resuming carries on from where it stopped instead of snapping
+   the orbit back to its start. Anything that can run for more than five
+   seconds belongs in this list — skeletons included, since the error page
+   keeps its pulsing placeholder orbit indefinitely rather than while
+   loading. */
+:root[data-motion='paused'] {
+  & .technologies,
+  & .technologies li div,
+  & .skeleton,
+  & .status-panel .queue .count {
+    animation-play-state: paused;
   }
 }
 

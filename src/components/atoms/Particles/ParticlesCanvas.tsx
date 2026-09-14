@@ -3,6 +3,8 @@
 import { createField, defaults, type Field } from '@bcwatson22/motes';
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 
+import { useMotionPreference } from '@/hooks/useMotionPreference/useMotionPreference';
+
 type Props = {
   /* On a light scheme. */
   color?: string;
@@ -61,10 +63,18 @@ const ParticlesCanvas = ({
     reduced.get,
     isReducedOnServer,
   );
+  const { isPaused } = useMotionPreference();
 
   const active = isDark ? colorDark : color;
   const activeOpacity = isDark ? opacityDark : opacity;
   const ref = useRef<HTMLCanvasElement>(null);
+  const fieldRef = useRef<Field | null>(null);
+  const isPausedRef = useRef<boolean>(isPaused);
+
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+    fieldRef.current?.update({ speed: isPaused ? 0 : defaults.speed });
+  }, [isPaused]);
 
   useEffect(() => {
     /* The package honours reduced motion itself, drawing a single static
@@ -73,10 +83,13 @@ const ParticlesCanvas = ({
        nothing at all rather than costing one frame. */
     if (prefersReduced || !ref.current) return;
 
-    let field: Field | undefined;
     let cancelled = false;
 
-    createField(ref.current, { color: active, opacity: activeOpacity })
+    createField(ref.current, {
+      color: active,
+      opacity: activeOpacity,
+      speed: isPausedRef.current ? 0 : defaults.speed,
+    })
       .then((created) => {
         /* Unmounted while the module was still loading. */
         if (cancelled) {
@@ -84,7 +97,7 @@ const ParticlesCanvas = ({
           return;
         }
 
-        field = created;
+        fieldRef.current = created;
       })
       /* The module failing to load is not worth an error boundary — the page
          is correct without a decorative background. */
@@ -92,7 +105,8 @@ const ParticlesCanvas = ({
 
     return () => {
       cancelled = true;
-      field?.destroy();
+      fieldRef.current?.destroy();
+      fieldRef.current = null;
     };
   }, [active, activeOpacity, prefersReduced]);
 

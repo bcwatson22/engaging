@@ -1,0 +1,65 @@
+/* Sized to sit on the same line as the copyright beside it. The icon link's
+   vector is 24px against body text; at text-sm it is brought down to match,
+   and the left padding follows so the label does not land on it. */
+@utility toggle {
+  @apply cursor-pointer text-sm;
+
+  /* Compounded with the atom's own classes: Tailwind emits utilities in its
+     sort order, not source order, so a bare override here lost to .icon's
+     padding and .link's label margin at equal specificity. */
+  &.icon {
+    @apply pl-5;
+  }
+
+  /* "Pause motion" and "Play motion" are different widths, and the footer
+     centres its row, so swapping one for the other nudged the copyright and
+     the button sideways on every press. Both labels are laid into the same
+     grid cell as invisible pseudo-elements, which holds the button at the
+     width of the longer one whichever is showing. The visible label keeps its
+     own width, so its underline still matches the text. */
+  display: inline-grid;
+  justify-items: start;
+  align-items: center;
+
+  &::before,
+  &::after,
+  & > span {
+    grid-area: 1 / 1;
+  }
+
+  &::before,
+  &::after {
+    @apply ml-1.5;
+
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &::before {
+    content: attr(data-running);
+  }
+
+  &::after {
+    content: attr(data-paused);
+  }
+
+  /* Hidden already, but given an empty alternative where the syntax exists
+     so the reserved text can never join the button's accessible name. */
+  @supports (content: '' / '') {
+    &::before {
+      content: attr(data-running) / '';
+    }
+
+    &::after {
+      content: attr(data-paused) / '';
+    }
+  }
+
+  & .vector {
+    @apply size-5;
+  }
+
+  &.link > span {
+    @apply ml-1.5;
+  }
+}

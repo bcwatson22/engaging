@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 
 import SiteLayout, { type SiteLayoutProps } from './layout';
 
@@ -30,6 +30,16 @@ describe('SiteLayout', () => {
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+  });
+
+  it('offers a way to pause motion in the footer', () => {
+    setup();
+
+    expect(
+      within(screen.getByRole('contentinfo')).getByRole('button', {
+        name: 'Pause motion',
+      }),
+    ).toBeInTheDocument();
   });
 
   it('keeps them both out of main', () => {
