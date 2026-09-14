@@ -15,7 +15,7 @@ describe('LoadingStatus', () => {
   it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
   });
 
   /* The same heading the page renders. A fallback that named the page

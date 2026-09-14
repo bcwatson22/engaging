@@ -5,7 +5,7 @@ import { GigSkeleton } from '@/components/organisms/Gig/Gig';
 import { Section } from '@/components/organisms/Section/Section';
 
 const Loading = () => (
-  <main className="cv main">
+  <main id="main" className="cv main">
     <SkeletonStatus />
     <div className="wrapper">
       <div className="inner">

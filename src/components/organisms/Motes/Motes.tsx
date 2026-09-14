@@ -66,6 +66,8 @@ const packageLinks: TLink[] = [
 
 const motionQuery = '(prefers-reduced-motion: reduce)';
 
+const copiedFor = 2000;
+
 /* The field honours reduced motion itself, drawing one static frame instead of
    animating. Read here only so the page can say so — a still field with no
    explanation looks like something failed. */
@@ -196,6 +198,14 @@ const Motes = () => {
     void navigator.clipboard.writeText(snippet).then(() => setIsCopied(true));
   }, [snippet]);
 
+  useEffect(() => {
+    if (!isCopied) return;
+
+    const handle = window.setTimeout(() => setIsCopied(false), copiedFor);
+
+    return () => window.clearTimeout(handle);
+  }, [isCopied]);
+
   return (
     <section aria-labelledby={headingId} className="motes-demo">
       <header>
@@ -273,7 +283,10 @@ const Motes = () => {
                 label wrapping both it and the input would name the output and
                 leave the slider with no accessible name at all. */}
               <span>
-                {label} <span className="value">{values[key]}</span>
+                {label}{' '}
+                <span className="value" aria-hidden="true">
+                  {values[key]}
+                </span>
               </span>
               <input
                 type="range"
@@ -298,6 +311,10 @@ const Motes = () => {
               {isCopied ? 'Copied' : 'Copy config'}
             </Button>
           </div>
+
+          <output className="sr-only">
+            {isCopied ? 'Config copied to the clipboard' : ''}
+          </output>
 
           {/* One element per line rather than one string: a text node has no
               box, so nothing about it can be transitioned. Keyed by the
@@ -328,4 +345,12 @@ const Motes = () => {
   );
 };
 
-export { controls, initialColor, initialValues, linesFor, Motes, snippetFor };
+export {
+  controls,
+  copiedFor,
+  initialColor,
+  initialValues,
+  linesFor,
+  Motes,
+  snippetFor,
+};

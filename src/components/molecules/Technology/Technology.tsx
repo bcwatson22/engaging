@@ -32,7 +32,7 @@ const Technology = ({ id, icon, name }: Props) => {
           <Image
             className={name === 'Next' ? 'white' : ''}
             src={icon.url}
-            alt={`${name} logo`}
+            alt=""
             width={width}
             height={height}
             /* No `sizes`, no preload and no `eager`, deliberately. These are

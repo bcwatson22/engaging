@@ -59,6 +59,14 @@ describe('Contact', () => {
     ).toBeInTheDocument();
   });
 
+  it('says up front that every field is required', () => {
+    setup();
+
+    expect(
+      screen.getByRole('group', { name: 'Get in touch' }),
+    ).toHaveAccessibleDescription('All fields are required.');
+  });
+
   it('offers the address as a fallback that needs no server', () => {
     setup();
 

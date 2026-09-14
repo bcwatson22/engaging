@@ -29,7 +29,7 @@ describe('LoadingPage', () => {
   it('renders a main', () => {
     setup();
 
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
   });
 
   it('renders a heading', () => {

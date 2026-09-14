@@ -17,7 +17,7 @@ import { title } from './page';
    history, the sweep may never have run — so any shape drawn here would be a
    guess, and guessing wrong shifts the page when the real answer lands. */
 const LoadingStatus: NextPage = () => (
-  <main className="status grow">
+  <main id="main" className="status grow">
     <h1 className="sr-only">{title}</h1>
     <SkeletonStatus />
   </main>

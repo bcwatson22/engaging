@@ -1,10 +1,23 @@
 import { createField } from '@bcwatson22/motes';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
 
-import { controls, initialColor, linesFor, Motes, snippetFor } from './Motes';
+import {
+  controls,
+  copiedFor,
+  initialColor,
+  linesFor,
+  Motes,
+  snippetFor,
+} from './Motes';
 
 vi.mock('@bcwatson22/motes', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@bcwatson22/motes')>()),
@@ -48,8 +61,6 @@ const setup = ({
   return { user: userEvent.setup(), ...render(<Motes />) };
 };
 
-/* Anchored, or "Size" also matches "Bubble size". The accessible name carries
-   the current value after the label, hence the trailing wildcard. */
 const sliderFor = (label: string): HTMLElement =>
   screen.getByRole('slider', { name: new RegExp(`^${label}\\b`, 'i') });
 
@@ -165,6 +176,14 @@ describe('Motes', () => {
       expect(createField).toHaveBeenCalledTimes(1);
     });
 
+    it('is named by its label alone', () => {
+      setup();
+
+      drag('Count', 1200);
+
+      expect(screen.getByRole('slider', { name: 'Count' })).toBeInTheDocument();
+    });
+
     it('reflects the value it was dragged to', () => {
       setup();
 
@@ -252,6 +271,38 @@ describe('Motes', () => {
       expect(
         await screen.findByRole('button', { name: /copied/i }),
       ).toBeInTheDocument();
+    });
+
+    it('announces the copy', async () => {
+      const { user } = setup();
+
+      expect(screen.getByRole('status')).toHaveTextContent('');
+
+      await user.click(screen.getByRole('button', { name: /copy/i }));
+
+      expect(
+        await screen.findByText('Config copied to the clipboard'),
+      ).toHaveRole('status');
+    });
+
+    it('offers to copy again after a moment', async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+
+      const { user } = setup();
+
+      await user.click(screen.getByRole('button', { name: /copy/i }));
+      await screen.findByRole('button', { name: /copied/i });
+
+      act(() => {
+        vi.advanceTimersByTime(copiedFor);
+      });
+
+      expect(
+        screen.getByRole('button', { name: 'Copy config' }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('status')).toHaveTextContent('');
+
+      vi.useRealTimers();
     });
   });
 

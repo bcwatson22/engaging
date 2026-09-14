@@ -26,7 +26,7 @@ const generateMetadata = (): Metadata => ({
 });
 
 const ContactPage = () => (
-  <main className="contact grow">
+  <main id="main" className="contact grow">
     <h1 className="sr-only">{title}</h1>
     <Suspense>
       <Particles

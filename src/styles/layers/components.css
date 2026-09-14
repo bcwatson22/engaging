@@ -1,3 +1,15 @@
 @utility main {
   @apply min-h-screen;
 }
+
+/* Visually hidden until it takes focus, then pinned top-left above
+   everything, including the fixed particle canvas. The accent pairing is the
+   nav pill's — blue on light, yellow on dark — so it reads as part of the
+   site rather than as a browser default. */
+@utility skip-link {
+  @apply sr-only;
+  @apply focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-full focus:px-4 focus:py-2;
+  @apply bg-brand-blue text-brand-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current;
+  @apply dark:bg-brand-yellow dark:text-brand-dark;
+  @apply print:hidden;
+}

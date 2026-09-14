@@ -33,7 +33,7 @@ const Error = ({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="home loading grow">
+      <main id="main" className="home loading grow">
         <h1 className="sr-only">Engaging Engineering</h1>
         <div className="mugshot w-full">
           <section
