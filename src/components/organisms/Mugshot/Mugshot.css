@@ -22,6 +22,7 @@
 }
 
 @utility coupon {
+  clip-path: circle(calc(50% + 5px));
   @apply transition-opacity duration-150;
   @apply absolute top-0 left-0 h-full w-full object-cover;
   @apply print:relative;
@@ -42,9 +43,17 @@
   @apply print:text-start print:opacity-100;
 }
 
+/* Square by aspect ratio rather than by a fixed height, so the box can
+   grow when its content needs more room: with text enlarged to 200% (WCAG
+   1.4.4) or wider text spacing (1.4.12), the info no longer fits inside the
+   circle. An aspect-ratio box keeps an automatic minimum height, so it stays
+   square until then and taller only when it must.
+
+   The circle is clipped on the portrait and the toggle rather than on this
+   section, for the same reason: clipping here cut the corners off the text
+   whenever it outgrew the circle. */
 @utility overview {
-  @apply relative mx-auto flex aspect-square h-[calc(100vw-3rem)] max-h-96 w-[calc(100vw-3rem)] max-w-96 items-center justify-center;
-  clip-path: circle(calc(50% + 5px));
+  @apply relative mx-auto flex aspect-square w-[calc(100vw-3rem)] max-w-96 items-center justify-center;
   @apply md:z-20;
   @apply print:mb-8 print:grid print:aspect-auto print:h-auto print:max-h-none print:w-auto print:max-w-none print:grid-cols-2 print:gap-8;
 
@@ -134,13 +143,14 @@
 /* Covers the whole portrait, beneath the info, so a tap anywhere on it
    toggles. Its visible part is the badge. */
 @utility mugshot-toggle {
+  clip-path: circle(50%);
   @apply absolute inset-0 z-10 flex cursor-pointer items-end justify-center rounded-full pb-4;
   @apply print:hidden;
 
   /* Drawn inside the button's own edge rather than on the badge. The badge
      fades out once the info is shown, and a ring on it went with it — leaving
      the focused toggle with no indicator at all (WCAG 2.4.7). Inset, because
-     the section's circular clip-path would cut off an outer offset. */
+     the button's own circular clip-path would cut off an outer offset. */
   &:focus-visible {
     @apply outline-3 -outline-offset-8 outline-white;
 
