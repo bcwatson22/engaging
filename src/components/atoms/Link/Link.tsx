@@ -46,7 +46,7 @@ const Link = ({ link, className, current = false, prefetch }: Props) => {
   const { target, text, icon } = link!;
 
   const isLocal = target === '/';
-  const isInternal = target.startsWith('/');
+  const isInternal = target.startsWith('/') && !/\.[a-z0-9]+$/i.test(target);
 
   let displayUrl =
     target.startsWith('tel:') || target.startsWith('mailto:') ? null : target;

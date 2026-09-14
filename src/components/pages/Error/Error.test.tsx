@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 
 import { Inner } from '@/components/atoms/Link/Link';
 import { Particles } from '@/components/atoms/Particles/Particles';
-import { Toggle } from '@/components/atoms/Toggle/Toggle';
 import { TechnologySkeleton } from '@/components/molecules/Technology/Technology';
 import { mugshot } from '@/constants/assets';
 import { mockHome } from '@/data/mock/home';
@@ -20,10 +19,6 @@ vi.mock(
     };
   },
 );
-
-vi.mock('@/components/atoms/Toggle/Toggle', () => ({
-  Toggle: vi.fn<typeof import('@/components/atoms/Toggle/Toggle').Toggle>(),
-}));
 
 vi.mock('@/components/atoms/Particles/Particles', () => ({
   Particles:
@@ -199,16 +194,10 @@ describe('Error', () => {
     expect(TechnologySkeleton).toHaveBeenCalledTimes(numberOfTechnologies);
   });
 
-  it('renders a footer', () => {
+  it('leaves the footer to the layout', () => {
     setup();
 
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-  });
-
-  it('renders a Toggle component', () => {
-    setup();
-
-    expect(Toggle).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('contentinfo')).not.toBeInTheDocument();
   });
 
   it('renders a Particles component', () => {

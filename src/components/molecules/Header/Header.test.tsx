@@ -47,6 +47,42 @@ describe('Header', () => {
     });
   });
 
+  describe('nav', () => {
+    it('names itself for the CV', () => {
+      setup();
+
+      expect(
+        screen.getByRole('navigation', { name: 'CV' }),
+      ).toBeInTheDocument();
+    });
+
+    it('offers the PDF', () => {
+      setup();
+
+      expect(screen.getByRole('link', { name: 'PDF' })).toHaveAttribute(
+        'href',
+        '/billy-watson-cv.pdf',
+      );
+    });
+
+    it('offers a download', () => {
+      setup();
+
+      expect(screen.getByRole('link', { name: 'Download' })).toHaveAttribute(
+        'href',
+        '/cv/download',
+      );
+    });
+
+    it('leaves home to the site nav', () => {
+      setup();
+
+      expect(
+        screen.queryByRole('link', { name: 'Home' }),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   describe('logoDarkBackground // logoLightBackground', () => {
     it('renders a Logo', () => {
       setup();

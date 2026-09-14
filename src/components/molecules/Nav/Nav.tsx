@@ -20,10 +20,16 @@ const download: TLink = {
   icon: 'Download',
 };
 
+const pdf: TLink = {
+  target: '/billy-watson-cv.pdf',
+  text: 'PDF',
+  icon: 'Document',
+};
+
 const cv: TLink = {
   target: '/cv',
   text: 'CV',
-  icon: 'Document',
+  icon: 'Profile',
 };
 
 const contact: TLink = {
@@ -55,4 +61,4 @@ const Nav = ({ links = siteLinks, label = 'Site', className }: Props) => {
   );
 };
 
-export { contact, cv, download, home, motes, Nav, siteLinks };
+export { contact, cv, download, home, motes, Nav, pdf, siteLinks };

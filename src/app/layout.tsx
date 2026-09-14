@@ -4,6 +4,9 @@ import type { CssVariable } from 'next/dist/compiled/@next/font';
 import { Nunito } from 'next/font/google';
 import { type ReactNode } from 'react';
 
+import { Copyright } from '@/components/atoms/Copyright/Copyright';
+import { Toggle } from '@/components/atoms/Toggle/Toggle';
+import { Nav } from '@/components/molecules/Nav/Nav';
 import { MotionProvider } from '@/components/providers/MotionProvider/MotionProvider';
 
 import '@/styles/globals.css';
@@ -26,7 +29,18 @@ const Layout = ({ children }: Props) => (
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <MotionProvider>{children}</MotionProvider>
+      <MotionProvider>
+        <div className="flex min-h-screen flex-col">
+          <header className="flex justify-center p-6 print:hidden">
+            <Nav />
+          </header>
+          {children}
+          <footer className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 p-6 print:hidden">
+            <Copyright />
+            <Toggle />
+          </footer>
+        </div>
+      </MotionProvider>
       <Analytics />
       <SpeedInsights />
     </body>
