@@ -17,7 +17,7 @@
 
 @utility mugshot {
   @apply relative;
-  @apply sm:flex sm:grow sm:flex-col sm:justify-center md:p-24;
+  @apply pt-2 sm:flex sm:grow sm:flex-col sm:justify-center md:p-24;
   @apply print:p-6;
 }
 
@@ -33,7 +33,12 @@
 
 @utility info {
   @apply transition-opacity duration-150;
-  @apply relative flex max-w-88 flex-col items-center p-2 text-center opacity-0;
+  @apply relative z-20 flex max-w-88 flex-col items-center p-2 text-center opacity-0;
+
+  /* Taps fall through to the reveal button underneath while it is hidden —
+     and while it is shown, too, everywhere but the links, so that tapping the
+     photo again closes it. */
+  @apply pointer-events-none;
   @apply print:text-start print:opacity-100;
 }
 
@@ -80,21 +85,68 @@
     }
   }
 
-  &:hover {
-    & .coupon {
-      @apply opacity-30;
-    }
+  /* Shown while the toggle is open, while a keyboard user is inside the
+     links, or on hover where there is hover to be had. The last is gated: on a
+     touch screen a tap leaves a sticky :hover behind, which would hold the
+     info open after the toggle had closed it.
 
-    & .info {
-      @apply opacity-100;
-    }
+     :focus-visible within .info rather than :focus-within on the section,
+     which a mouse click on the button would satisfy — leaving it shown after
+     a second click had closed it. */
+  &[data-open],
+  &:has(.info :focus-visible) {
+    @apply mugshot-shown;
+  }
 
-    & h2,
-    & p,
-    & li {
-      @apply translate-y-0 opacity-100;
+  @media (hover: hover) {
+    &:hover {
+      @apply mugshot-shown;
     }
   }
+}
+
+@utility mugshot-shown {
+  & .coupon {
+    @apply opacity-30;
+  }
+
+  & .info {
+    @apply opacity-100;
+
+    & a {
+      @apply pointer-events-auto;
+    }
+  }
+
+  & h2,
+  & p,
+  & li {
+    @apply translate-y-0 opacity-100;
+  }
+
+  & .mugshot-hint {
+    @apply translate-y-2 opacity-0;
+  }
+}
+
+/* Covers the whole portrait, beneath the info, so a tap anywhere on it
+   toggles. Its visible part is the badge. */
+@utility mugshot-toggle {
+  @apply absolute inset-0 z-10 flex cursor-pointer items-end justify-center rounded-full pb-8;
+  @apply print:hidden;
+
+  &:focus-visible {
+    @apply outline-none;
+
+    & .mugshot-hint {
+      @apply outline-2 outline-offset-2 outline-white;
+    }
+  }
+}
+
+@utility mugshot-hint {
+  @apply flex h-11 items-center gap-2 rounded-full border border-white/20 bg-black/60 pr-4 pl-2.5 text-base text-white backdrop-blur-sm;
+  @apply transition-all duration-300 motion-reduce:transition-none;
 }
 
 @utility overview-error {
@@ -105,7 +157,7 @@
   }
 
   & .info {
-    @apply z-20 opacity-100;
+    @apply pointer-events-auto z-20 opacity-100;
 
     & h2,
     & p,
