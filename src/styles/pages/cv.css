@@ -1,6 +1,11 @@
+/* Full width at xl, where the side margins turn auto. main is a flex column so
+   the wrapper can grow to the page's height, and a flex item with auto margins
+   on the cross axis is not stretched: it shrinks to its content. The loading
+   skeleton has very little content, so the CV used to arrive as a narrow
+   column and widen once the page swapped in. */
 @utility wrapper {
-  @apply border-brand-blue m-1 min-h-screen overflow-clip border-3 p-6;
-  @apply sm:m-6 xl:mx-auto xl:max-w-296 xl:p-16;
+  @apply border-brand-blue m-1 grow overflow-clip border-3 p-6;
+  @apply sm:m-6 xl:mx-auto xl:w-full xl:max-w-296 xl:p-16;
   @apply dark:border-brand-yellow;
   @apply print:m-0;
 }

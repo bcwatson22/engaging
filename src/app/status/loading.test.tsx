@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react';
 
-import { title } from '@/app/(site)/status/page';
+import { title } from '@/app/status/page';
 
 import LoadingStatus from './loading';
 

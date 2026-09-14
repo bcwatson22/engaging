@@ -82,6 +82,14 @@ describe('Link', () => {
         );
       });
 
+      it("doesn't render NextLink for a file", () => {
+        setup({
+          link: { ...mockLink!, target: '/billy-watson-cv.pdf' },
+        });
+
+        expect(NextLink).not.toHaveBeenCalled();
+      });
+
       it('passes prefetch to NextLink', () => {
         setup({
           link: { ...mockLink!, target: '/contact' },

@@ -1,5 +1,5 @@
 @utility main {
-  @apply min-h-screen;
+  @apply flex grow flex-col;
 }
 
 /* Visually hidden until it takes focus, then pinned top-left above

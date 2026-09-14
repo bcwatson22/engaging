@@ -2,7 +2,6 @@ import { cleanup, render, screen } from '@testing-library/react';
 import ReactMarkdown from 'react-markdown';
 import type { Mock } from 'vitest';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Details } from '@/components/molecules/Details/Details';
 import { Header } from '@/components/molecules/Header/Header';
 import { Qualification } from '@/components/molecules/Qualification/Qualification';
@@ -83,11 +82,6 @@ vi.mock('@/components/molecules/Reference/Reference', () => ({
     vi.fn<
       typeof import('@/components/molecules/Reference/Reference').Reference
     >(),
-}));
-
-vi.mock('@/components/atoms/Copyright/Copyright', () => ({
-  Copyright:
-    vi.fn<typeof import('@/components/atoms/Copyright/Copyright').Copyright>(),
 }));
 
 const {
@@ -241,12 +235,6 @@ describe('CVPage', () => {
 
     for (const [index, value] of references.entries())
       expect(Reference).toHaveBeenNthCalledWith(index + 1, value, undefined);
-  });
-
-  it('renders a Copyright component', async () => {
-    await setup();
-
-    expect(Copyright).toHaveBeenCalledTimes(1);
   });
 
   it('generates metadata', async () => {

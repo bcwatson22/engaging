@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from 'next';
-import { Suspense } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { Copyright } from '@/components/atoms/Copyright/Copyright';
 import { Details } from '@/components/molecules/Details/Details';
 import { Header } from '@/components/molecules/Header/Header';
 import { Qualification } from '@/components/molecules/Qualification/Qualification';
@@ -119,9 +117,6 @@ const CVPage = async () => {
               ))}
             </Section>
           </div>
-          <Suspense>
-            <Copyright />
-          </Suspense>
         </div>
       </div>
     </main>
