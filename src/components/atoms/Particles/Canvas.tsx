@@ -51,7 +51,7 @@ const reduced = watch(motionQuery);
 const isDarkOnServer = (): boolean => true;
 const isReducedOnServer = (): boolean => true;
 
-const ParticlesCanvas = ({
+const Canvas = ({
   color = defaultColor,
   colorDark = color,
   opacity = defaults.opacity,
@@ -115,5 +115,5 @@ const ParticlesCanvas = ({
   return <canvas ref={ref} className="particles" aria-hidden="true" />;
 };
 
-export { ParticlesCanvas, defaultColor };
-export type { Props as ParticlesCanvasProps };
+export { Canvas, defaultColor };
+export type { Props as CanvasProps };

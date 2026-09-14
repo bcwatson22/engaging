@@ -8,11 +8,7 @@ import {
   storageKey,
 } from '@/hooks/useMotionPreference/useMotionPreference';
 
-import {
-  defaultColor,
-  ParticlesCanvas,
-  type ParticlesCanvasProps,
-} from './ParticlesCanvas';
+import { defaultColor, Canvas, type CanvasProps } from './Canvas';
 
 vi.mock('@bcwatson22/motes', () => ({
   createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
@@ -49,7 +45,7 @@ const stubMediaQueries = ({ isDark = false, prefersReduced = false }) =>
 
 const setup = (
   { isDark, prefersReduced, isPaused = false, isLoading, fails }: Options = {},
-  props?: Partial<ParticlesCanvasProps>,
+  props?: Partial<CanvasProps>,
 ) => {
   stubMediaQueries({ isDark, prefersReduced });
   window.localStorage.setItem(storageKey, isPaused ? 'paused' : 'running');
@@ -61,12 +57,12 @@ const setup = (
     return Promise.resolve({ update, destroy });
   });
 
-  return render(<ParticlesCanvas {...props} />);
+  return render(<Canvas {...props} />);
 };
 
 const colorOf = (): string => (createField as Mock).mock.calls[0][1].color;
 
-describe('ParticlesCanvas', () => {
+describe('Canvas', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -255,7 +251,7 @@ describe('ParticlesCanvas', () => {
       }),
     );
 
-    const { unmount } = render(<ParticlesCanvas />);
+    const { unmount } = render(<Canvas />);
 
     await waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
 
@@ -277,8 +273,6 @@ describe('ParticlesCanvas', () => {
      not throw: useSyncExternalStore needs a server snapshot, and without one
      this component could not be rendered outside a browser at all. */
   it('renders without a scheme to read', () => {
-    expect(() =>
-      renderToString(<ParticlesCanvas color="#245385" />),
-    ).not.toThrow();
+    expect(() => renderToString(<Canvas color="#245385" />)).not.toThrow();
   });
 });
