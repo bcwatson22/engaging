@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 
-import { Bullet, type BulletProps } from './Bullet';
+import { Bullet, BulletSkeleton, type BulletProps } from './Bullet';
 
 const mockChildren = 'mock-children';
 
@@ -20,5 +20,22 @@ describe('Bullet', () => {
         name: mockChildren,
       }),
     ).toBeInTheDocument();
+  });
+
+  it('reads as its content alone', () => {
+    setup({ children: 'Shipped a thing' });
+
+    expect(screen.getByText('Bullet')).toHaveAttribute('aria-hidden', 'true');
+  });
+});
+
+describe('BulletSkeleton', () => {
+  it('hides its dot from assistive technology', () => {
+    const { container } = render(<BulletSkeleton index={0} />);
+
+    expect(container.querySelector('.bullet span')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
   });
 });

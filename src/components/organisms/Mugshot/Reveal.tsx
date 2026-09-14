@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 
 import { Icon } from '@/components/atoms/Icon/Icon';
 
@@ -11,28 +11,56 @@ type Props = {
 };
 
 const Reveal = ({ labelledBy, controls, children }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [dismissed, setDismissed] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key !== 'Escape') return;
+
+      setOpen(false);
+      setDismissed(true);
+
+      if (ref.current?.contains(document.activeElement))
+        buttonRef.current?.focus();
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
-
-    const onKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') setOpen(false);
-    };
 
     const onPointerDown = (event: PointerEvent): void => {
       if (!ref.current?.contains(event.target as Node)) setOpen(false);
     };
 
-    document.addEventListener('keydown', onKeyDown);
     document.addEventListener('pointerdown', onPointerDown);
 
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('pointerdown', onPointerDown);
-    };
+    return () => document.removeEventListener('pointerdown', onPointerDown);
   }, [open]);
+
+  useEffect(() => {
+    const section = ref.current!;
+
+    const undismiss = (): void => setDismissed(false);
+
+    const onFocusIn = ({ target }: FocusEvent): void => {
+      if (target !== buttonRef.current) undismiss();
+    };
+
+    section.addEventListener('pointerleave', undismiss);
+    section.addEventListener('focusin', onFocusIn);
+
+    return () => {
+      section.removeEventListener('pointerleave', undismiss);
+      section.removeEventListener('focusin', onFocusIn);
+    };
+  }, []);
 
   return (
     <section
@@ -40,8 +68,10 @@ const Reveal = ({ labelledBy, controls, children }: Props) => {
       aria-labelledby={labelledBy}
       className="overview"
       data-open={open || undefined}
+      data-dismissed={dismissed || undefined}
     >
       <button
+        ref={buttonRef}
         type="button"
         className="mugshot-toggle"
         aria-expanded={open}

@@ -74,12 +74,12 @@ describe('Header', () => {
 
 describe('HeaderSkeleton', () => {
   it('renders a skeleton state', () => {
-    render(<HeaderSkeleton />);
+    const { container } = render(<HeaderSkeleton />);
 
     const numOfPulses = 4;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 });

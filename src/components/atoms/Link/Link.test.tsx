@@ -179,12 +179,12 @@ describe('Link', () => {
 
 describe('LinkSkeleton', () => {
   it('renders a skeleton state', () => {
-    render(<LinkSkeleton />);
+    const { container } = render(<LinkSkeleton />);
 
     const numOfPulses = 2;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 });

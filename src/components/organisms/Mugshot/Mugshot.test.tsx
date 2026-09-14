@@ -111,13 +111,19 @@ describe('MugshotSkeleton', () => {
   });
 
   it('renders a skeleton state', () => {
-    render(<MugshotSkeleton />);
+    const { container } = render(<MugshotSkeleton />);
 
     const numOfPulses = 13;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
+  });
+
+  it('announces that it is loading', () => {
+    render(<MugshotSkeleton />);
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
   });
 
   it('renders the same wrapper as Mugshot', () => {

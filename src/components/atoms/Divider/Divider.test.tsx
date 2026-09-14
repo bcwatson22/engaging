@@ -63,6 +63,14 @@ describe('Divider', () => {
       ).toBeInTheDocument();
     });
 
+    it('is named by the heading alone', () => {
+      setup();
+
+      expect(
+        screen.getByRole('heading', { level: 2, name: `${mockHeading}:` }),
+      ).toBeInTheDocument();
+    });
+
     it('uses the initial values returned from useScrollTrigger for the heading style', () => {
       setup();
 

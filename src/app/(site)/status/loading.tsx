@@ -1,5 +1,7 @@
 import type { NextPage } from 'next';
 
+import { SkeletonStatus } from '@/components/atoms/Skeleton/Skeleton';
+
 import { title } from './page';
 
 /* Mirrors `page.tsx`, and exists because the group's loading.tsx does not.
@@ -17,6 +19,7 @@ import { title } from './page';
 const LoadingStatus: NextPage = () => (
   <main className="status grow">
     <h1 className="sr-only">{title}</h1>
+    <SkeletonStatus />
   </main>
 );
 

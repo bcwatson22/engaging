@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import type { TLink } from '@/components/atoms/Link/Link';
-import { Skeleton } from '@/components/atoms/Skeleton/Skeleton';
+import { Skeleton, SkeletonStatus } from '@/components/atoms/Skeleton/Skeleton';
 import { Details } from '@/components/molecules/Details/Details';
 import {
   Technology,
@@ -11,6 +11,7 @@ import {
 import { mugshotDimensions } from '@/constants/dimensions';
 
 import { Reveal } from './Reveal';
+import { Technologies } from './Technologies';
 
 type TMugshot = TID & {
   image: TAsset;
@@ -26,6 +27,7 @@ type Props = {
 
 const MugshotSkeleton = () => (
   <article className="mugshot">
+    <SkeletonStatus />
     <Skeleton className="overview rounded-full" />
     <ul className="technologies loading">
       {[...Array(12).keys()].map((key) => (
@@ -66,13 +68,13 @@ const Mugshot = ({
         {links && <Details links={links} />}
       </div>
     </Reveal>
-    <ul className="technologies">
+    <Technologies>
       {technologies.map((technology) => (
         <li key={technology.id}>
           <Technology {...technology} />
         </li>
       ))}
-    </ul>
+    </Technologies>
   </article>
 );
 

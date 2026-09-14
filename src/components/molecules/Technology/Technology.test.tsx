@@ -86,12 +86,12 @@ describe('Technology', () => {
 
 describe('TechnologySkeleton', () => {
   it('renders a skeleton state', () => {
-    render(<TechnologySkeleton />);
+    const { container } = render(<TechnologySkeleton />);
 
     const numOfPulses = 1;
 
-    expect(screen.getAllByRole('status', { name: 'Loading...' })).toHaveLength(
-      numOfPulses,
-    );
+    expect(
+      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
+    ).toHaveLength(numOfPulses);
   });
 });

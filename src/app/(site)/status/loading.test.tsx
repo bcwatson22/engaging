@@ -35,4 +35,10 @@ describe('LoadingStatus', () => {
       screen.queryByRole('heading', { name: 'Engaging Engineering' }),
     ).not.toBeInTheDocument();
   });
+
+  it('announces that it is loading', () => {
+    setup();
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
+  });
 });

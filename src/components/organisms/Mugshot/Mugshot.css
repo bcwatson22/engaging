@@ -94,12 +94,14 @@
      which a mouse click on the button would satisfy — leaving it shown after
      a second click had closed it. */
   &[data-open],
-  &:has(.info :focus-visible) {
+  &:not([data-dismissed]):has(.info :focus-visible) {
     @apply mugshot-shown;
   }
 
+  /* Escape sets data-dismissed, which holds the hover and focus reveals shut
+     until the pointer leaves or focus moves (WCAG 1.4.13). See Reveal. */
   @media (hover: hover) {
-    &:hover {
+    &:not([data-dismissed]):hover {
       @apply mugshot-shown;
     }
   }
@@ -135,8 +137,12 @@
   @apply absolute inset-0 z-10 flex cursor-pointer items-end justify-center rounded-full pb-4;
   @apply print:hidden;
 
+  /* Drawn inside the button's own edge rather than on the badge. The badge
+     fades out once the info is shown, and a ring on it went with it — leaving
+     the focused toggle with no indicator at all (WCAG 2.4.7). Inset, because
+     the section's circular clip-path would cut off an outer offset. */
   &:focus-visible {
-    @apply outline-none;
+    @apply outline-3 -outline-offset-8 outline-white;
 
     & .mugshot-hint {
       @apply outline-2 outline-offset-2 outline-white;
@@ -181,6 +187,18 @@
 
 @utility technologies {
   --radius: 18rem;
+
+  /* Escape pressed while hovering: back to the logo until the pointer leaves
+     (WCAG 1.4.13). Outranks the technology's own :hover rule. */
+  &[data-dismissed] .technology:hover {
+    & .logo {
+      @apply opacity-100;
+    }
+
+    & .name {
+      @apply opacity-0;
+    }
+  }
 
   @apply grid animate-[spin_240s_linear_infinite] grid-cols-3 gap-4 pt-4;
   @apply xs:grid-cols-4 max-md:animate-none sm:grid-cols-6 md:absolute md:top-0 md:left-0 md:z-10 md:block md:h-full md:w-full md:pt-0;

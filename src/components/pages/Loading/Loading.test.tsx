@@ -67,6 +67,12 @@ describe('Loading', () => {
     expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
+  it('announces that it is loading', () => {
+    setup();
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
+  });
+
   it('renders a HeaderSkeleton component', () => {
     setup();
 
