@@ -1,6 +1,7 @@
 'use client';
 
-import { useScroll, m } from 'motion/react';
+import { useScroll } from 'motion/react';
+import * as m from 'motion/react-m';
 import { type ReactNode, useRef } from 'react';
 
 import { SkeletonLine } from '../Skeleton/Skeleton';

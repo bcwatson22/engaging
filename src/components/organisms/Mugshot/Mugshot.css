@@ -132,7 +132,7 @@
 /* Covers the whole portrait, beneath the info, so a tap anywhere on it
    toggles. Its visible part is the badge. */
 @utility mugshot-toggle {
-  @apply absolute inset-0 z-10 flex cursor-pointer items-end justify-center rounded-full pb-8;
+  @apply absolute inset-0 z-10 flex cursor-pointer items-end justify-center rounded-full pb-4;
   @apply print:hidden;
 
   &:focus-visible {
