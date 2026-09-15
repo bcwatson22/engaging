@@ -20,7 +20,7 @@
   /* Above the particle canvas. It is fixed and full-screen, so without a
      stacking context of its own this form can end up underneath it — the
      canvas is pointer-events-none, but z-order still decides what paints. */
-  @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col justify-center gap-6 py-8;
+  @apply relative z-10 mx-auto flex w-full max-w-xl grow flex-col gap-6 pb-8;
 
   & form {
     @apply relative flex flex-col gap-4;

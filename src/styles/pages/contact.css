@@ -2,7 +2,10 @@
   /* No background or text colour of its own, unlike the home page, which is
      always dark by design. Leaving them off lets `body` supply the pair it
      already defines for both schemes — see layers/base.css. */
-  @apply flex flex-col justify-center overflow-hidden p-6;
+  /* Top-aligned, like every other page, rather than centred. With the nav
+     shared and pages sliding between each other, a centred form started at a
+     different height from the rest and jumped down on arrival. */
+  @apply flex flex-col overflow-hidden px-6 pb-6;
   @apply md:items-center;
 
   /* The link atom already swaps blue for yellow by scheme; this only needs to

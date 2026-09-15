@@ -1,5 +1,5 @@
 @utility motes-demo {
-  @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 py-8;
+  @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 pb-8;
 
   /* Matching the status page: the heading and its prose are a pair, spaced
      closer than the blocks below them. */

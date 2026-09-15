@@ -21,7 +21,7 @@
     --reset: var(--brand-dark);
   }
 
-  @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col gap-6 py-8;
+  @apply relative z-10 mx-auto flex w-full max-w-3xl grow flex-col gap-6 pb-8;
 
   /* The same pane the contact form puts behind its fields, for the same
      reason and by the same means: the particle field drifts past underneath,
