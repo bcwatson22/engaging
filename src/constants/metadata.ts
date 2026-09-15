@@ -12,7 +12,15 @@ const appleWebApp: AppleWebApp = {
 const metadata: Metadata = {
   metadataBase: new URL(domainName),
   openGraph: {
-    images: [{ url: ogImageUrl, width: 1200, height: 630 }],
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        type: 'image/jpeg',
+        alt: 'Engaging Engineering',
+      },
+    ],
     type: 'website',
     locale: 'en_GB',
     url: domainName,
