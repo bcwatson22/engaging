@@ -67,6 +67,24 @@ describe('Company', () => {
     });
   });
 
+  it('triggers as soon as any of the sticky header is in view', () => {
+    setup();
+
+    expect(useScrollTrigger).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ amount: 'some' }),
+    );
+  });
+
+  it('passes isImmediate on to useScrollTrigger', () => {
+    setup({}, { isImmediate: true });
+
+    expect(useScrollTrigger).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ isImmediate: true }),
+    );
+  });
+
   describe('company', () => {
     it('renders a heading', () => {
       setup();

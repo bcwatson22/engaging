@@ -123,4 +123,48 @@ describe('useScrollTrigger', () => {
       );
     });
   });
+
+  describe('amount', () => {
+    it('defaults to all of the element', () => {
+      setup({}, { amount: undefined });
+
+      expect(useInView).toHaveBeenNthCalledWith(
+        1,
+        { current: mockRef },
+        expect.objectContaining({ amount: 'all' }),
+      );
+    });
+
+    it('is passed to useInView call', () => {
+      setup({}, { amount: 'some' });
+
+      expect(useInView).toHaveBeenNthCalledWith(
+        1,
+        { current: mockRef },
+        expect.objectContaining({ amount: 'some' }),
+      );
+    });
+  });
+
+  describe('isImmediate', () => {
+    it('animates without being in view', () => {
+      const {
+        result: {
+          current: { animate },
+        },
+      } = setup({ useInView: false }, { isImmediate: true });
+
+      expect(animate).toEqual({ opacity: 1, y: 0 });
+    });
+
+    it('waits to be in view by default', () => {
+      const {
+        result: {
+          current: { animate },
+        },
+      } = setup({ useInView: false }, { isImmediate: undefined });
+
+      expect(animate).toEqual({});
+    });
+  });
 });

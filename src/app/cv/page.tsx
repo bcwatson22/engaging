@@ -99,7 +99,12 @@ const CVPage = async () => {
               </Section>
               <Section heading="Experience" margin="0px" delay={0.1}>
                 {gigs?.map((gig, index) => (
-                  <Gig key={gig.id} {...gig} delay={index === 0 ? 0.2 : 0} />
+                  <Gig
+                    key={gig.id}
+                    {...gig}
+                    delay={index === 0 ? 0.2 : 0}
+                    isImmediate={index === 0}
+                  />
                 ))}
               </Section>
               <Section heading="Skills">
