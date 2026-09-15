@@ -1,7 +1,7 @@
 export const siteName = 'Engaging Engineering';
 export const domainName = 'https://www.engaging.engineering';
 
-/* The render service. Public, and hardcoded rather than read from the
+/* engaging-service, which answers the status page. Public, and hardcoded rather than read from the
    environment for the same reason the CSP hardcodes it: a variable that is
    merely missing would produce a page that half-works instead of a build that
    fails. next.config.mjs keeps its own copy because it cannot import this —

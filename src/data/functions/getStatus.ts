@@ -3,9 +3,9 @@ import { artifacts, type TQueue, type TStatus } from '@/data/types/status';
 
 const endpoint = `${serviceOrigin}/status`;
 
-/* The service sleeps between renders and cold-boots in about twenty seconds.
-   Nobody should wait that long for a status page, and a page that renders
-   without the numbers is more useful than one that hangs. */
+/* The service stays resident, so a slow answer means a deploy or a fault
+   rather than a cold boot. Either way nobody should wait on it for a status
+   page, and a page that renders without the numbers beats one that hangs. */
 const timeout = 4000;
 
 /* Matches the endpoint's own cache-control, so the page and the service agree

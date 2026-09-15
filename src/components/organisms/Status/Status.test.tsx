@@ -368,7 +368,7 @@ describe('Status', () => {
     it('explains rather than erroring', () => {
       setup({ status: null });
 
-      expect(screen.getByText(/sleeps between renders/i)).toBeInTheDocument();
+      expect(screen.getByText(/served from storage/i)).toBeInTheDocument();
     });
 
     it('shows no queue to read', () => {

@@ -3,9 +3,9 @@
 [![CI](https://github.com/bcwatson22/engaging/actions/workflows/ci.yml/badge.svg)](https://github.com/bcwatson22/engaging/actions/workflows/ci.yml)
 ![Coverage 100%](https://img.shields.io/badge/coverage-100%25-2EBB4F?labelColor=343B42)
 
-This is a project created with [Next](https://nextjs.org/), [Node](https://nodejs.org/en), [GraphQL](https://graphql.org/), [Vitest](https://vitest.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind](https://tailwindcss.com/) and [Motion](https://motion.dev/) - powered by [Hygraph](https://hygraph.com/), deployed and hosted with [Vercel](https://vercel.com/). Linting and formatting run on [oxlint and oxfmt](https://oxc.rs/). The [Home page](https://www.engaging.engineering/) showcases technologies and expertise offered by Engaging Engineering, and the [CV page](https://www.engaging.engineering/cv) is an interactive overview of Billy Watson's vast range of skills and experience.
+This is a project created with [Next](https://nextjs.org/), [Node](https://nodejs.org/en), [GraphQL](https://graphql.org/), [Vitest](https://vitest.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind](https://tailwindcss.com/) and [Motion](https://motion.dev/) - powered by [Hygraph](https://hygraph.com/), deployed and hosted with [Vercel](https://vercel.com/). Linting and formatting run on [oxlint and oxfmt](https://oxc.rs/). The [Home page](https://www.engaging.engineering/) showcases technologies and expertise offered by Engaging Engineering, the [CV page](https://www.engaging.engineering/cv) is an interactive overview of Billy Watson's vast range of skills and experience, and there is a [Contact page](https://www.engaging.engineering/contact), a [Motes](https://www.engaging.engineering/motes) demo of the WebAssembly particle field behind the Home page, and a [Status page](https://www.engaging.engineering/status) for the render pipeline.
 
-The browser-rendered artifacts the site links to — the CV PDF and the PWA splash screens — are produced by a separate service, [engaging-service](https://github.com/bcwatson22/engaging-service), rather than at build time.
+The browser-rendered artifacts the site links to — the CV PDF and the PWA splash screens — are produced by [engaging-worker](https://github.com/bcwatson22/engaging-worker) rather than at build time. [engaging-service](https://github.com/bcwatson22/engaging-service) sits in front of it, queueing those renders and answering the contact form and the status page.
 
 To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pnpm.io/) package manager installed you can do this with `npm i -g pnpm`) and then `pnpm dev` to spin up the dev server.
 
@@ -53,7 +53,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
       <img src="https://cdn.simpleicons.org/nextdotjs/000000/FFFFFF" alt="Next icon" width="32" />
     </td>
     <td>
-      It uses Next's app router, making use of modern features like Suspense streaming, server components and dynamic favicons (via code), manifest, robots and sitemap.
+      It uses Next's app router, making use of modern features like Suspense streaming, server components, view transitions between pages, a generated Open Graph image, and manifest, robots and sitemap written as code.
     </td>
   </tr>
 </table>
@@ -79,7 +79,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
       <img src="https://cdn.simpleicons.org/nodedotjs/5FA04E/5FA04E" alt="Node icon" width="32" />
     </td>
     <td>
-      Custom Node scripts save and retrieve local snapshots of the GraphQL query responses, so a CMS outage degrades to the last known-good content rather than an error page. The snapshot is refreshed on every build.
+      A custom Node script saves local snapshots of the GraphQL query responses, so a CMS outage degrades to the last known-good content rather than an error page. The snapshot is refreshed on every build.
     </td>
   </tr>
 </table>
@@ -115,10 +115,10 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
 <table>
   <tr>
     <td width="58">
-      <img src="https://cdn.simpleicons.org/puppeteer/40B5A4/40B5A4" alt="Puppeteer icon" width="32" />
+      <img src="https://cdn.simpleicons.org/googlechrome/4285F4/4285F4" alt="Chrome icon" width="32" />
     </td>
     <td>
-      The downloadable CV PDF and the PWA splash screens are rendered by driving headless Chrome over the live site. That used to run inside <code>next build</code>, so every deploy downloaded a browser and paid for a full render. It now lives in <a href="https://github.com/bcwatson22/engaging-service">engaging-service</a>, on a queue, triggered by the same CMS publish that revalidates the site - and the artifacts are proxied back through this domain.
+      The downloadable CV PDF and the PWA splash screens are rendered by driving headless Chrome over the live site. That used to run inside <code>next build</code>, so every deploy downloaded a browser and paid for a full render. Now the same CMS publish that revalidates the site also reaches <a href="https://github.com/bcwatson22/engaging-service">engaging-service</a>, which queues the job on a Redis stream for <a href="https://github.com/bcwatson22/engaging-worker">engaging-worker</a> to render in Go. The artifacts are stored in R2 and proxied back through this domain.
     </td>
   </tr>
 </table>
@@ -183,7 +183,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
       <img src="https://cdn.simpleicons.org/vercel/000000/FFFFFF" alt="Vercel icon" width="32" />
     </td>
     <td>
-      Using Vercel to deploy and host any Next project is a dream, the use of webhooks into Hygraph publishes make it completely seamless to ensure up-to-date content and builds.
+      Using Vercel to deploy and host any Next project is a dream. Deploys are for code changes only - content reaches the site through the Hygraph publish webhook, which revalidates the cache rather than triggering a build.
     </td>
   </tr>
 </table>
