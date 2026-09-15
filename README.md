@@ -11,29 +11,42 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 26 August 2026, Lighthouse 13.4.1:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 15 September 2026, Lighthouse 13.4.1:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) — mobile | 97          | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) — mobile | 93          | 100           | 100            | 100 |
 | Home — desktop                                     | 100         | 100           | 100            | 100 |
 | [CV](https://www.engaging.engineering/cv) — mobile | 99          | 100           | 100            | 100 |
 | CV — desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
-4G, and it is what Google ranks on. Largest Contentful Paint is still the only
-metric not at full marks there — 2.6s on Home, 2.0s on the CV — with everything
-else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
-20ms).
+4G, and it is what Google ranks on. Largest Contentful Paint is the metric that
+moves there — a median of 2.6s on Home and 2.1s on the CV — with CLS at 0 on
+both and Total Blocking Time around 55ms and 20ms.
 
-Each figure is the median of three runs. A single run moves by a point or two
-either way, which is wide enough to invent an improvement that is not there.
+Each figure is a median: of three runs for the CV, and of five for Home, whose
+mobile score does not settle. Its runs came out at 85, 86, 93, 99 and 100. The
+low ones share a render delay of about two seconds on the portrait, which has
+long since downloaded: on PageSpeed's slower machines the page's JavaScript
+starts before the first paint and holds it back. A sixth run, where three
+chunks timed out and no JavaScript ran at all, scored 100 and was left out,
+but it says the same thing. That start-up cost is the next thing to take off
+the home page.
 
-The mobile numbers moved from 93 and 94, measured the same way immediately
-before the change, when the stylesheet stopped being a second request:
-`experimental.inlineCss` puts it in the document, so the critical path is one
-deep rather than two, and LCP came down by half a second on Home and nearly a
-second on the CV.
+Two regressions came and went on the way to these. The home page's mobile
+score had dropped to 87, with LCP near 4s. The cause was a 0.5s fade-in on every
+page: the portrait is the LCP element, and it is not counted as painted until
+the fade has let it be, so every load waited out the fade — and Lighthouse's
+simulated slow 4G then charged every request that started in that window to
+LCP too, which the nav's prefetching made expensive. Bisected with production
+builds of each commit and fixed in #35; the page fade is gone, and nothing on
+the LCP path may fade in.
+
+Before that, the mobile numbers moved from 93 and 94 to 97 and 99 when the
+stylesheet stopped being a second request: `experimental.inlineCss` puts it in
+the document, so the critical path is one deep rather than two, and LCP came
+down by half a second on Home and nearly a second on the CV.
 
 These are lab numbers. Field data needs enough real traffic for the Chrome UX
 Report to have a sample, and this domain does not have it, so there is nothing
