@@ -33,8 +33,16 @@ body:has(.home) {
   }
 }
 
+/* No fade-in on the page. The portrait is the Largest Contentful Paint, and
+   an element under an opacity animation does not count as painted until the
+   animation lets it — so a 0.5s fade held LCP back by that long on every
+   load, and Lighthouse's simulated slow 4G then counted every request that
+   started inside that window (the nav's prefetches, the lazy Motion
+   features) against it too. Removing it took the home page from 80 to 90-96
+   in a local A/B, with LCP from 5.3s to 2.9-3.6s. The particles still fade
+   in; they are not the LCP element. */
 @utility home {
-  @apply animate-fade-in flex flex-col px-6;
+  @apply flex flex-col px-6;
   @apply md:items-center;
   @apply print:justify-start;
 
@@ -68,10 +76,6 @@ body:has(.home) {
      that one also cut the orbit off, because nothing had reserved room for
      it. */
   @apply overflow-clip;
-
-  &.loaded {
-    @apply animate-fade-in;
-  }
 
   & a {
     @apply decoration-brand-yellow;
