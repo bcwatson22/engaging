@@ -20,7 +20,7 @@
     "verify": "pnpm lint && pnpm format:check && pnpm lint:types && pnpm typecheck && pnpm coverage"
   },
   "dependencies": {
-    "@bcwatson22/motes": "0.3.0",
+    "@bcwatson22/motes": "0.4.0",
     "@vercel/analytics": "2.0.1",
     "@vercel/speed-insights": "2.0.0",
     "motion": "13.1.0",

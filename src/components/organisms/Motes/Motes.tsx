@@ -13,7 +13,6 @@ import {
 import { Button } from '@/components/atoms/Button/Button';
 import type { TLink } from '@/components/atoms/Link/Link';
 import { Nav } from '@/components/molecules/Nav/Nav';
-import { useTouchPointer } from '@/hooks/useTouchPointer/useTouchPointer';
 
 const controls = [
   { key: 'count', label: 'Count', min: 50, max: 2000, step: 50 },
@@ -106,7 +105,6 @@ const Motes = () => {
   const headingId = useId();
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isOverridden, setIsOverridden] = useState<boolean>(false);
-  useTouchPointer();
 
   const isStill = useSyncExternalStore(
     subscribeToMotion,
@@ -180,7 +178,7 @@ const Motes = () => {
           motes
         </h2>
         <p>
-          A drifting particle field for a canvas, in 4.3KB gzipped. The
+          A drifting particle field for a canvas, in 4.4KB gzipped. The
           simulation is written in Rust and compiled to WebAssembly; the drawing
           stays in TypeScript. It is what paints the background of this site.
         </p>
@@ -190,7 +188,8 @@ const Motes = () => {
           ) : (
             <>
               Drag anything. The field updates as you go rather than restarting,
-              and your pointer pulls the particles near it. It honours{' '}
+              and your pointer, or a tap, pulls the particles near it. It
+              honours{' '}
               <code className="font-mono text-xs">prefers-reduced-motion</code>,
               so where a system asks for less motion it is drawn once and left
               still.

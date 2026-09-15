@@ -60,14 +60,13 @@ describe('StatusPage', () => {
   it('passes what the service reported to the panel', async () => {
     await setup();
 
-    expect(Status).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(Status).mock.calls[0][0]).toEqual({ status });
+    expect(Status).toHaveBeenNthCalledWith(1, { status }, undefined);
   });
 
   it('renders with nothing to report', async () => {
     await setup({ result: null });
 
-    expect(vi.mocked(Status).mock.calls[0][0]).toEqual({ status: null });
+    expect(Status).toHaveBeenNthCalledWith(1, { status: null }, undefined);
   });
 
   it('describes the page for sharing', () => {

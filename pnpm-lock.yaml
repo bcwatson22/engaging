@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@bcwatson22/motes':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 0.4.0
+        version: 0.4.0
       '@vercel/analytics':
         specifier: 2.0.1
         version: 2.0.1(next@16.3.0(@babel/core@7.29.7)(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
@@ -205,8 +205,8 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@bcwatson22/motes@0.3.0':
-    resolution: {integrity: sha512-ZjrDsMpB+1PJ8Hb4kG2p2tlo02AwRGiEfWPLzztdMKsbxHYYD6WNPm5RsUm64NFkM38vocC7T7UJhqqgVVI7Ig==}
+  '@bcwatson22/motes@0.4.0':
+    resolution: {integrity: sha512-86go1l/REim0s11wW2KZhG+PsfHwHHt1rA1XMSNjxCLkVhjtytJw74eN2Z7J3GFg7jVewUQSFJViEVnOoiZrbA==}
     engines: {node: ^24.0.0}
 
   '@bramus/specificity@2.4.2':
@@ -2444,7 +2444,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@bcwatson22/motes@0.3.0': {}
+  '@bcwatson22/motes@0.4.0': {}
 
   '@bramus/specificity@2.4.2':
     dependencies:

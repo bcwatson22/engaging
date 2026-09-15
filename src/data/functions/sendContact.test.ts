@@ -32,21 +32,6 @@ const setup = ({ status = 202, body = {}, rejects = false }: TOptions = {}) => {
   return { fetch };
 };
 
-/* fetch's own signature types init loosely, so the recorded call is narrowed
-   once here rather than asserted at every use. */
-type TSentRequest = { method: string; body: string };
-
-const requestOf = (fetch: ReturnType<typeof vi.fn>): TSentRequest => {
-  const [, init] = fetch.mock.calls[0] ?? [];
-
-  if (!init) throw new Error('fetch was never called');
-
-  return init as TSentRequest;
-};
-
-const bodyOf = (fetch: ReturnType<typeof vi.fn>): TPayload =>
-  JSON.parse(requestOf(fetch).body) as TPayload;
-
 describe('sendContact', () => {
   beforeEach(() => vi.clearAllMocks());
 
@@ -57,8 +42,11 @@ describe('sendContact', () => {
 
     await sendContact(payload);
 
-    expect(fetch.mock.calls[0][0]).toBe(endpoint);
-    expect(requestOf(fetch).method).toBe('POST');
+    expect(fetch).toHaveBeenNthCalledWith(
+      1,
+      endpoint,
+      expect.objectContaining({ method: 'POST' }),
+    );
   });
 
   it('sends the whole payload, honeypot and timing included', async () => {
@@ -66,7 +54,11 @@ describe('sendContact', () => {
 
     await sendContact(payload);
 
-    expect(bodyOf(fetch)).toEqual(payload);
+    expect(fetch).toHaveBeenNthCalledWith(
+      1,
+      endpoint,
+      expect.objectContaining({ body: JSON.stringify(payload) }),
+    );
   });
 
   it('reports an accepted message', async () => {
@@ -82,11 +74,13 @@ describe('sendContact', () => {
   });
 
   it('reports which fields the service rejected', async () => {
-    setup({ status: 400, body: { fields: ['email'] } });
+    const fields = ['email'];
+
+    setup({ status: 400, body: { fields } });
 
     await expect(sendContact(payload)).resolves.toEqual({
       outcome: 'invalid',
-      fields: ['email'],
+      fields,
     });
   });
 

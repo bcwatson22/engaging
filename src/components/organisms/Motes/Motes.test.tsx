@@ -1,4 +1,4 @@
-import { createField } from '@bcwatson22/motes';
+import { createField, defaults } from '@bcwatson22/motes';
 import {
   act,
   cleanup,
@@ -14,6 +14,7 @@ import {
   controls,
   copiedFor,
   initialColor,
+  initialValues,
   linesFor,
   Motes,
   snippetFor,
@@ -23,6 +24,10 @@ vi.mock('@bcwatson22/motes', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@bcwatson22/motes')>()),
   createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
 }));
+
+const speed = 1.5;
+const count = 1200;
+const color = '#f9fafb';
 
 const update = vi.fn<() => void>();
 const destroy = vi.fn<() => void>();
@@ -161,16 +166,16 @@ describe('Motes', () => {
 
       await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
 
-      drag('Speed', 1.5);
+      drag('Speed', speed);
 
-      expect(update).toHaveBeenNthCalledWith(1, { speed: 1.5 });
+      expect(update).toHaveBeenNthCalledWith(1, { speed });
       expect(createField).toHaveBeenCalledTimes(1);
     });
 
     it('is named by its label alone', () => {
       setup();
 
-      drag('Count', 1200);
+      drag('Count', count);
 
       expect(screen.getByRole('slider', { name: 'Count' })).toBeInTheDocument();
     });
@@ -178,9 +183,9 @@ describe('Motes', () => {
     it('reflects the value it was dragged to', () => {
       setup();
 
-      drag('Count', 1200);
+      drag('Count', count);
 
-      expect(sliderFor('Count')).toHaveValue('1200');
+      expect(sliderFor('Count')).toHaveValue(String(count));
     });
 
     it('changes the colour', async () => {
@@ -189,10 +194,10 @@ describe('Motes', () => {
       await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
 
       fireEvent.change(screen.getByLabelText(/colour/i), {
-        target: { value: '#f9fafb' },
+        target: { value: color },
       });
 
-      expect(update).toHaveBeenNthCalledWith(1, { color: '#f9fafb' });
+      expect(update).toHaveBeenNthCalledWith(1, { color });
     });
   });
 
@@ -207,9 +212,9 @@ describe('Motes', () => {
     it('adds a setting once it differs from the default', async () => {
       setup();
 
-      drag('Speed', 1.5);
+      drag('Speed', speed);
 
-      expect(snippet()).toContain('speed: 1.5');
+      expect(snippet()).toContain(`speed: ${speed}`);
     });
 
     it('keeps a defaulted line in the DOM, hidden, so it can animate', () => {
@@ -229,8 +234,8 @@ describe('Motes', () => {
     it('drops it again when it is put back', () => {
       setup();
 
-      drag('Speed', 1.5);
-      drag('Speed', 0.25);
+      drag('Speed', speed);
+      drag('Speed', defaults.speed);
 
       expect(snippet()).not.toContain('speed:');
     });
@@ -240,7 +245,7 @@ describe('Motes', () => {
     it('puts every setting back', async () => {
       const { user } = setup();
 
-      drag('Speed', 1.5);
+      drag('Speed', speed);
 
       await user.click(screen.getByRole('button', { name: /reset/i }));
 
@@ -321,17 +326,23 @@ describe('Motes', () => {
     it('rebuilds the field without the preference when asked', async () => {
       const { user } = setup({ prefersReducedMotion: true });
 
-      await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(1));
-      expect((createField as Mock).mock.calls[0][1]).toMatchObject({
-        respectReducedMotion: true,
-      });
+      await vi.waitFor(() =>
+        expect(createField).toHaveBeenNthCalledWith(
+          1,
+          expect.any(HTMLCanvasElement),
+          expect.objectContaining({ respectReducedMotion: true }),
+        ),
+      );
 
       await user.click(screen.getByRole('checkbox', { name: /animate/i }));
 
-      await vi.waitFor(() => expect(createField).toHaveBeenCalledTimes(2));
-      expect((createField as Mock).mock.calls[1][1]).toMatchObject({
-        respectReducedMotion: false,
-      });
+      await vi.waitFor(() =>
+        expect(createField).toHaveBeenNthCalledWith(
+          2,
+          expect.any(HTMLCanvasElement),
+          expect.objectContaining({ respectReducedMotion: false }),
+        ),
+      );
     });
 
     it('stops saying the field is still once it is not', async () => {
@@ -383,33 +394,27 @@ describe('Motes', () => {
   });
 
   describe('linesFor', () => {
-    const values = {
-      count: 600,
-      speed: 0.25,
-      size: 2.2,
-      opacity: 0.3,
-      bubbleSize: 4,
-      bubbleDistance: 175,
-    };
-
     it('keeps a defaulted line, so it has something to transition', () => {
-      const line = linesFor('#ffffff', values).find(
+      const line = linesFor(initialColor, initialValues).find(
         ({ key }) => key === 'count',
       );
 
-      expect(line).toMatchObject({ text: '  count: 600,', shown: false });
+      expect(line).toMatchObject({
+        text: `  count: ${defaults.count},`,
+        shown: false,
+      });
     });
 
     it('shows a line once its setting differs', () => {
-      const line = linesFor('#ffffff', { ...values, count: 1200 }).find(
+      const line = linesFor(initialColor, { ...initialValues, count }).find(
         ({ key }) => key === 'count',
       );
 
-      expect(line).toMatchObject({ text: '  count: 1200,', shown: true });
+      expect(line).toMatchObject({ text: `  count: ${count},`, shown: true });
     });
 
     it('always shows the lines that are not a setting', () => {
-      const fixed = linesFor('#ffffff', values).filter(
+      const fixed = linesFor(initialColor, initialValues).filter(
         ({ key }) => !controls.some((control) => control.key === key),
       );
 
@@ -419,30 +424,16 @@ describe('Motes', () => {
 
   describe('snippetFor', () => {
     it('omits anything left at its default', () => {
-      const result = snippetFor('#ffffff', {
-        count: 600,
-        speed: 0.25,
-        size: 2.2,
-        opacity: 0.3,
-        bubbleSize: 4,
-        bubbleDistance: 175,
-      });
+      const result = snippetFor(initialColor, initialValues);
 
-      expect(result).toContain("color: '#ffffff'");
+      expect(result).toContain(`color: '${initialColor}'`);
       expect(result).not.toContain('count:');
     });
 
     it('includes anything that differs', () => {
-      const result = snippetFor('#ffffff', {
-        count: 1200,
-        speed: 0.25,
-        size: 2.2,
-        opacity: 0.3,
-        bubbleSize: 4,
-        bubbleDistance: 175,
-      });
+      const result = snippetFor(initialColor, { ...initialValues, count });
 
-      expect(result).toContain('count: 1200');
+      expect(result).toContain(`count: ${count}`);
     });
   });
 });
