@@ -172,6 +172,40 @@
 @utility mugshot-hint {
   @apply flex h-11 items-center gap-2 rounded-full border border-white/20 bg-black/60 pr-4 pl-2.5 text-base text-white backdrop-blur-sm;
   @apply transition-all duration-300 motion-reduce:transition-none;
+
+  /* The site's link underline, so the badge reads as something to press. It
+     sits on the portrait whatever the scheme, so it takes the dark treatment:
+     yellow, filling in light on hover or focus, as the links on the home page
+     do. */
+  & span {
+    background-image:
+      linear-gradient(var(--brand-yellow), var(--brand-yellow)),
+      linear-gradient(var(--brand-light), var(--brand-light)),
+      linear-gradient(var(--brand-yellow), var(--brand-yellow));
+    background-size:
+      0 0.125rem,
+      0 0.125rem,
+      100% 0.125rem;
+    background-position:
+      0 100%,
+      0 100%,
+      0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.125s ease-out;
+    @apply motion-reduce:transition-none;
+
+    @media (forced-colors: active) {
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
+  }
+
+  :is(.mugshot-toggle:hover, .mugshot-toggle:focus-visible) & span {
+    background-size:
+      0 0.125rem,
+      100% 0.125rem,
+      100% 0.125rem;
+  }
 }
 
 @utility overview-error {

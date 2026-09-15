@@ -19,9 +19,11 @@ body:has(.home) {
   }
 
   /* The same pinning as the links inside `.home` below, for the footer's
-     motion toggle. The footer sits outside main, so that rule cannot reach
-     it, and on a light scheme it drew a blue underline on black. */
-  & footer .link span {
+     motion toggle and the nav's inactive links. Both sit outside main, so that
+     rule cannot reach them, and on a light scheme they drew a blue underline
+     on black. */
+  & footer .link span,
+  & .site-nav .link:not([aria-current='page']) span {
     background-image:
       linear-gradient(var(--brand-yellow), var(--brand-yellow)),
       linear-gradient(var(--brand-light), var(--brand-light)),

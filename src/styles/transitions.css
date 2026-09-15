@@ -103,10 +103,27 @@
   z-index: 102;
 }
 
+/* The nav items move to their new places but do not crossfade: a crossfade
+   between an inactive link and a current one showed both labels, in both
+   colours, part way through. Only the new state is drawn, at its own size —
+   left at the default it is scaled to the group's changing width, which
+   stretched the text — and clipped by the group as it widens. */
+::view-transition-old(.nav-item) {
+  display: none;
+}
+
+::view-transition-new(.nav-item) {
+  animation: none;
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  object-position: left center;
+}
+
 /* The current link's colour is chosen to sit on the pill. While the pill is
    still on its way that colour sits on the bare track instead, where it all but
-   disappears, so the link keeps the ordinary text colour for the length of
-   the transition and eases to the pill's colour once the pill is under it. */
+   disappears, so the link keeps the ordinary text colour for the length of the
+   transition and takes the pill's colour once, as the pill lands under it. */
 :root:active-view-transition .site-nav .link[aria-current='page'] {
   color: inherit;
 }

@@ -81,7 +81,7 @@ const Reveal = ({ labelledBy, controls, children }: Props) => {
         <span className="sr-only">{open ? 'Hide' : 'Show'} about me</span>
         <span className="mugshot-hint" aria-hidden>
           <Icon icon="User" className="h-6 w-6 shrink-0" />
-          About
+          <span>About</span>
         </span>
       </button>
       {children}
