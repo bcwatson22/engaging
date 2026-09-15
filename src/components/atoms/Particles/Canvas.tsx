@@ -4,7 +4,6 @@ import { createField, defaults, type Field } from '@bcwatson22/motes';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 import { useMotionPreference } from '@/hooks/useMotionPreference/useMotionPreference';
-import { useTouchPointer } from '@/hooks/useTouchPointer/useTouchPointer';
 
 type Props = {
   color?: string;
@@ -51,7 +50,6 @@ const Canvas = ({
     isReducedOnServer,
   );
   const { isPaused } = useMotionPreference();
-  useTouchPointer();
 
   const active = isDark ? colorDark : color;
   const activeOpacity = isDark ? opacityDark : opacity;

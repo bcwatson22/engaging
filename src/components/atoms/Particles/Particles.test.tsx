@@ -72,8 +72,8 @@ describe('Particles', () => {
   it('forwards its colours to the canvas', async () => {
     setup();
 
-    await waitFor(() => expect(Canvas).toHaveBeenCalled());
-
-    expect(vi.mocked(Canvas).mock.calls[0][0]).toEqual(colors);
+    await waitFor(() =>
+      expect(Canvas).toHaveBeenNthCalledWith(1, colors, undefined),
+    );
   });
 });

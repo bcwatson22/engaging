@@ -1,4 +1,8 @@
-import { createField } from '@bcwatson22/motes';
+import {
+  createField,
+  defaults,
+  type Options as FieldOptions,
+} from '@bcwatson22/motes';
 import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import type { Mock } from 'vitest';
@@ -22,6 +26,11 @@ type Options = {
   isLoading?: boolean;
   fails?: boolean;
 };
+
+const color = '#245385';
+const colorDark = '#f9fafb';
+const opacity = 0.55;
+const opacityDark = 0.8;
 
 const destroy = vi.fn<() => void>();
 const pause = vi.fn<() => void>();
@@ -55,7 +64,10 @@ const setup = (
   return render(<Canvas {...props} />);
 };
 
-const colorOf = (): string => (createField as Mock).mock.calls[0][1].color;
+const argsWith = (options: Partial<FieldOptions>): unknown[] => [
+  expect.any(HTMLCanvasElement),
+  expect.objectContaining(options),
+];
 
 describe('Canvas', () => {
   beforeEach(() => {
@@ -160,57 +172,91 @@ describe('Canvas', () => {
     it('draws in white unless told otherwise', async () => {
       setup();
 
-      await waitFor(() => expect(colorOf()).toBe(defaultColor));
+      await waitFor(() =>
+        expect(createField).toHaveBeenNthCalledWith(
+          1,
+          ...argsWith({ color: defaultColor }),
+        ),
+      );
     });
 
     it('draws in the colour it is given', async () => {
-      setup({}, { color: '#245385' });
+      setup({}, { color });
 
-      await waitFor(() => expect(colorOf()).toBe('#245385'));
+      await waitFor(() =>
+        expect(createField).toHaveBeenNthCalledWith(1, ...argsWith({ color })),
+      );
     });
 
     describe('on a dark scheme', () => {
       it('draws in the dark colour', async () => {
-        setup({ isDark: true }, { color: '#245385', colorDark: '#f9fafb' });
+        setup({ isDark: true }, { color, colorDark });
 
-        await waitFor(() => expect(colorOf()).toBe('#f9fafb'));
+        await waitFor(() =>
+          expect(createField).toHaveBeenNthCalledWith(
+            1,
+            ...argsWith({ color: colorDark }),
+          ),
+        );
       });
 
       it('falls back to the single colour when no dark one is given', async () => {
-        setup({ isDark: true }, { color: '#245385' });
+        setup({ isDark: true }, { color });
 
-        await waitFor(() => expect(colorOf()).toBe('#245385'));
+        await waitFor(() =>
+          expect(createField).toHaveBeenNthCalledWith(
+            1,
+            ...argsWith({ color }),
+          ),
+        );
       });
     });
   });
 
   describe('opacity', () => {
-    const opacityOf = (): number =>
-      (createField as Mock).mock.calls[0][1].opacity;
-
     it('rests at the default unless told otherwise', async () => {
       setup();
 
-      await waitFor(() => expect(opacityOf()).toBe(0.3));
+      await waitFor(() =>
+        expect(createField).toHaveBeenNthCalledWith(
+          1,
+          ...argsWith({ opacity: defaults.opacity }),
+        ),
+      );
     });
 
     it('rests at the opacity it is given', async () => {
-      setup({}, { opacity: 0.55 });
+      setup({}, { opacity });
 
-      await waitFor(() => expect(opacityOf()).toBe(0.55));
+      await waitFor(() =>
+        expect(createField).toHaveBeenNthCalledWith(
+          1,
+          ...argsWith({ opacity }),
+        ),
+      );
     });
 
     describe('on a dark scheme', () => {
       it('uses the dark opacity', async () => {
-        setup({ isDark: true }, { opacity: 0.55, opacityDark: 0.3 });
+        setup({ isDark: true }, { opacity, opacityDark });
 
-        await waitFor(() => expect(opacityOf()).toBe(0.3));
+        await waitFor(() =>
+          expect(createField).toHaveBeenNthCalledWith(
+            1,
+            ...argsWith({ opacity: opacityDark }),
+          ),
+        );
       });
 
       it('falls back to the single opacity when no dark one is given', async () => {
-        setup({ isDark: true }, { opacity: 0.55 });
+        setup({ isDark: true }, { opacity });
 
-        await waitFor(() => expect(opacityOf()).toBe(0.55));
+        await waitFor(() =>
+          expect(createField).toHaveBeenNthCalledWith(
+            1,
+            ...argsWith({ opacity }),
+          ),
+        );
       });
     });
   });
@@ -254,6 +300,6 @@ describe('Canvas', () => {
   });
 
   it('renders without a scheme to read', () => {
-    expect(() => renderToString(<Canvas color="#245385" />)).not.toThrow();
+    expect(() => renderToString(<Canvas color={color} />)).not.toThrow();
   });
 });

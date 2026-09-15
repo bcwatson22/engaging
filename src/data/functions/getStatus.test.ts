@@ -2,8 +2,10 @@ import type { TStatus } from '@/data/types/status';
 
 import { endpoint, getStatus, revalidate } from './getStatus';
 
+const at = '2026-08-17T12:00:00.000Z';
+
 const record = {
-  at: '2026-08-17T12:00:00.000Z',
+  at,
   result: 'https://artifacts.example.com/billy-watson-cv.pdf',
   durationMs: 14_000,
   attempts: 3,
@@ -11,14 +13,14 @@ const record = {
 };
 
 const check = {
-  at: '2026-08-17T12:00:00.000Z',
+  at,
   drifted: false,
   queued: false,
   stale: false,
 };
 
 const sweep = {
-  at: '2026-08-17T12:00:00.000Z',
+  at,
   checked: 12,
   problems: [
     {
@@ -71,7 +73,7 @@ describe('getStatus', () => {
 
     await getStatus();
 
-    expect(fetch.mock.calls[0][0]).toBe(endpoint);
+    expect(fetch).toHaveBeenNthCalledWith(1, endpoint, expect.anything());
   });
 
   it('revalidates on the same window the endpoint caches for', async () => {
@@ -79,7 +81,11 @@ describe('getStatus', () => {
 
     await getStatus();
 
-    expect(fetch.mock.calls[0][1]).toMatchObject({ next: { revalidate } });
+    expect(fetch).toHaveBeenNthCalledWith(
+      1,
+      endpoint,
+      expect.objectContaining({ next: { revalidate } }),
+    );
   });
 
   /* The service cold-boots in about twenty seconds. Nobody waits that long
@@ -89,7 +95,11 @@ describe('getStatus', () => {
 
     await getStatus();
 
-    expect(fetch.mock.calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
+    expect(fetch).toHaveBeenNthCalledWith(
+      1,
+      endpoint,
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    );
   });
 
   it('returns what the service reported', async () => {
@@ -261,22 +271,22 @@ describe('getStatus', () => {
      does not recognise is worth zero, not the entire page. */
   describe('a queue it only partly recognises', () => {
     it('reads an unknown count as zero rather than rejecting the response', async () => {
-      setup({
-        body: { ...status, queue: { waiting: 3, pending: 1, dead: 'lots' } },
-      });
+      const known = { waiting: 3, pending: 1 };
+
+      setup({ body: { ...status, queue: { ...known, dead: 'lots' } } });
 
       await expect(getStatus()).resolves.toMatchObject({
-        queue: { waiting: 3, pending: 1, dead: 0 },
+        queue: { ...known, dead: 0 },
       });
     });
 
     it('survives a service that reports counts this version has never heard of', async () => {
-      setup({
-        body: { ...status, queue: { waiting: 2, active: 1, delayed: 4 } },
-      });
+      const waiting = 2;
+
+      setup({ body: { ...status, queue: { waiting, active: 1, delayed: 4 } } });
 
       await expect(getStatus()).resolves.toMatchObject({
-        queue: { waiting: 2, pending: 0, dead: 0 },
+        queue: { waiting, pending: 0, dead: 0 },
       });
     });
 
