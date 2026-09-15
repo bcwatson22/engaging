@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/atoms/Button/Button';
 import type { TLink } from '@/components/atoms/Link/Link';
 import { Nav } from '@/components/molecules/Nav/Nav';
+import { useTouchPointer } from '@/hooks/useTouchPointer/useTouchPointer';
 
 const controls = [
   { key: 'count', label: 'Count', min: 50, max: 2000, step: 50 },
@@ -105,6 +106,7 @@ const Motes = () => {
   const headingId = useId();
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isOverridden, setIsOverridden] = useState<boolean>(false);
+  useTouchPointer();
 
   const isStill = useSyncExternalStore(
     subscribeToMotion,

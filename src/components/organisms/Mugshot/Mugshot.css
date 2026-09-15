@@ -108,9 +108,18 @@
   }
 
   /* Escape sets data-dismissed, which holds the hover and focus reveals shut
-     until the pointer leaves or focus moves (WCAG 1.4.13). See Reveal. */
+     until the pointer leaves or focus moves (WCAG 1.4.13). See Reveal.
+
+     Hover is read from the toggle, not from this section. The section is a
+     square — it stopped being clipped to a circle so enlarged text could grow
+     past it — and hovering its corners kept the info open with the pointer
+     visibly off the portrait. The toggle is still clipped to the circle, and
+     clip-path clips hit-testing as well as painting, so this is hover over
+     the portrait itself. The info passes the pointer through to the toggle
+     everywhere but its links, which count too, so moving onto one does not
+     close what it sits in. */
   @media (hover: hover) {
-    &:not([data-dismissed]):hover {
+    &:not([data-dismissed]):has(.mugshot-toggle:hover, .info a:hover) {
       @apply mugshot-shown;
     }
   }

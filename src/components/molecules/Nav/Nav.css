@@ -99,10 +99,22 @@
   }
 }
 
-@utility nav-pill {
-  @apply bg-brand-blue absolute inset-0 rounded-full;
+/* One custom property for the pill's colour, on the root so the view
+   transition's pseudo-elements — which hang off the root, not the nav — can
+   read it too. Blue on light, yellow on dark, and yellow on the home page,
+   which is dark whatever the visitor has set. */
+:root {
+  --nav-pill: var(--brand-blue);
 
   @media (prefers-color-scheme: dark) {
-    @apply bg-brand-yellow;
+    --nav-pill: var(--brand-yellow);
   }
+}
+
+:root:has(.home) {
+  --nav-pill: var(--brand-yellow);
+}
+
+@utility nav-pill {
+  @apply absolute inset-0 rounded-full bg-(--nav-pill);
 }

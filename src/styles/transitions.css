@@ -83,6 +83,22 @@
   z-index: 101;
 }
 
+/* The pill is a flat colour, so it is painted on the moving group itself
+   rather than carried as snapshots. The browser's image-pair keeps each
+   snapshot's aspect ratio as the group changes width, so a round 44px pill
+   stretched towards a 101px one grew taller on the way and shrank back. The
+   group only animates its box, and a full radius keeps the ends round at every
+   width. */
+::view-transition-group(nav-pill) {
+  border-radius: 9999px;
+  background-color: var(--nav-pill);
+}
+
+::view-transition-old(nav-pill),
+::view-transition-new(nav-pill) {
+  display: none;
+}
+
 ::view-transition-group(.nav-item) {
   z-index: 102;
 }
