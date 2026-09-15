@@ -71,6 +71,10 @@
       @apply bg-current/10;
     }
 
+    &:active:not([aria-current='page']) {
+      @apply scale-[0.98];
+    }
+
     &[aria-current='page'] {
       @apply text-brand-light;
 
