@@ -9,7 +9,7 @@ import { getStatus } from '@/data/functions/getStatus';
 
 const title = 'Status — Engaging Engineering';
 const description =
-  'What the render service behind this site last produced, and what is in its queue.';
+  'What the renders behind this site last produced, and what is queued next.';
 
 const generateMetadata = (): Metadata => ({
   title,

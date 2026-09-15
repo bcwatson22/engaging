@@ -265,7 +265,7 @@ const Status = ({ status }: Props) => (
       <p className="intro">
         {status
           ? 'The CV document and the app splash screens are rendered by a separate service when the content changes, rather than when the site is deployed. Each render waits for the site to catch up before it starts — that wait is the first half of every bar below.'
-          : 'The render service is not answering at the moment. It sleeps between renders, so this is usually nothing — the CV and splash screens are served from storage and are unaffected either way.'}
+          : 'The service that reports on renders is not answering at the moment. It stays running, so this usually means it is mid-deploy and will be back shortly — the CV and splash screens are served from storage and are unaffected either way.'}
       </p>
     </header>
 
