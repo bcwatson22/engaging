@@ -2,10 +2,13 @@
    the wrapper can grow to the page's height, and a flex item with auto margins
    on the cross axis is not stretched: it shrinks to its content. The loading
    skeleton has very little content, so the CV used to arrive as a narrow
-   column and widen once the page swapped in. */
+   column and widen once the page swapped in.
+
+   No top margin: the site header above already leaves 24px under the nav, the
+   same as above it, and a margin here doubled that. */
 @utility wrapper {
-  @apply border-brand-blue m-1 grow overflow-clip border-3 p-6;
-  @apply sm:m-6 xl:mx-auto xl:w-full xl:max-w-296 xl:p-16;
+  @apply border-brand-blue m-1 mt-0 grow overflow-clip border-3 p-6;
+  @apply sm:m-6 sm:mt-0 xl:mx-auto xl:w-full xl:max-w-296 xl:p-16;
   @apply dark:border-brand-yellow;
   @apply print:m-0;
 }

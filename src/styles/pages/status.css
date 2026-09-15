@@ -6,7 +6,7 @@
      panels taller than the viewport, and centring it pushed the first heading
      a long way down the page while the rest ran off the bottom. Top-aligned,
      it matches the motes page. */
-  @apply flex flex-col overflow-hidden p-6;
+  @apply flex flex-col overflow-hidden px-6 pb-6;
   @apply md:items-center;
 
   & a {

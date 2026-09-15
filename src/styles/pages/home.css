@@ -39,8 +39,11 @@ body:has(.home) {
    features) against it too. Removing it took the home page from 80 to 90-96
    in a local A/B, with LCP from 5.3s to 2.9-3.6s. The particles still fade
    in; they are not the LCP element. */
+/* Pulled up by the 8px the mugshot keeps above the portrait for its shadow,
+   so the circle sits the same 24px under the nav as there is above it. */
 @utility home {
-  @apply flex flex-col px-6;
+  @apply -mt-2 flex flex-col px-6;
+  @apply print:mt-0;
   @apply md:items-center;
   @apply print:justify-start;
 
