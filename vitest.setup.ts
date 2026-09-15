@@ -10,22 +10,6 @@ vi.mock('react', async (importOriginal) => ({
   ViewTransition: ({ children }: { children?: ReactNode }) => children,
 }));
 
-/* useRouter throws outside Next's app router, and components that prefetch
-   through it (the nav, via useIdlePrefetch) are rendered all over the suite.
-   Everything else in the module is the real thing; a test that cares about the
-   router mocks it itself. */
-vi.mock('next/navigation', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('next/navigation')>()),
-  useRouter: () => ({
-    back: vi.fn<() => void>(),
-    forward: vi.fn<() => void>(),
-    prefetch: vi.fn<(href: string) => void>(),
-    push: vi.fn<() => void>(),
-    refresh: vi.fn<() => void>(),
-    replace: vi.fn<() => void>(),
-  }),
-}));
-
 /* jsdom does not implement matchMedia, and anything reading a media query at
    runtime — a colour scheme, reduced motion — throws without it rather than
    falling back. Defaults to not matching, so a test that cares about the

@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { ViewTransition } from 'react';
 
 import { Link, type TLink } from '@/components/atoms/Link/Link';
-import { useIdlePrefetch } from '@/hooks/useIdlePrefetch/useIdlePrefetch';
+import { useIdle } from '@/hooks/useIdle/useIdle';
 
 type Props = {
   links: TLink[];
@@ -33,7 +33,7 @@ const List = ({ links, expand }: Props) => {
     isCurrent(pathname, link!.target),
   );
 
-  useIdlePrefetch(expand ? links.map((link) => link!.target) : []);
+  const isIdle = useIdle();
 
   return (
     <ul>
@@ -51,7 +51,7 @@ const List = ({ links, expand }: Props) => {
               link={link}
               className={expand ? 'expand' : ''}
               current={current}
-              prefetch={false}
+              prefetch={expand && isIdle}
               transitionTypes={
                 expand ? getDirection(index, currentIndex) : undefined
               }

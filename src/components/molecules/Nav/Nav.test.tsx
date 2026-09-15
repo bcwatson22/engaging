@@ -6,7 +6,6 @@ import { download, home, Nav } from './Nav';
 
 vi.mock('next/navigation', () => ({
   usePathname: vi.fn<typeof import('next/navigation').usePathname>(),
-  useRouter: () => ({ prefetch: vi.fn<(href: string) => void>() }),
 }));
 
 type Props = Parameters<typeof Nav>[0];
