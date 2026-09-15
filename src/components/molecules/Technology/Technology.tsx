@@ -35,16 +35,6 @@ const Technology = ({ id, icon, name }: Props) => {
             alt=""
             width={width}
             height={height}
-            /* No `sizes`, no preload and no `eager`, deliberately. These are
-               twelve small icons and none of them is ever the LCP element, so
-               preloading them only put twelve <link>s in the head to compete
-               with the portrait that is — and React hoists a preload for any
-               image it sees that isn't lazy, so `eager` here reintroduces
-               exactly the links we are trying to remove. They sit in the
-               viewport, which the browser loads immediately anyway.
-               Dropping `sizes` also moves Next off the w-descriptor ladder
-               onto 1x/2x candidates (144w and 280w, against a slot that is
-               98px at its widest), which was most of the document's weight. */
             loading="lazy"
           />
         )}

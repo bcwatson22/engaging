@@ -6,16 +6,9 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useMotionPreference } from '@/hooks/useMotionPreference/useMotionPreference';
 
 type Props = {
-  /* On a light scheme. */
   color?: string;
-  /* On a dark one. Defaults to `color`, so a page that looks the same in both
-     — the home page — passes one value and gets one behaviour. */
   colorDark?: string;
-  /* How solid a particle is at rest, 0 to 1. Worth raising on a light page:
-     a dark colour at the default 0.3 composites against near-white to
-     something close to grey. */
   opacity?: number;
-  /* And on a dark one. Defaults to `opacity`, matching the colour props. */
   opacityDark?: number;
 };
 
@@ -24,9 +17,6 @@ const defaultColor = '#ffffff';
 const darkQuery = '(prefers-color-scheme: dark)';
 const motionQuery = '(prefers-reduced-motion: reduce)';
 
-/* Subscribed to rather than read once: someone switching their system
-   appearance or their motion preference with the page open should see the
-   field follow, and a media query read inside an effect would not. */
 const watch = (query: string) => {
   const subscribe = (onChange: () => void): (() => void) => {
     const list = window.matchMedia(query);
@@ -44,10 +34,6 @@ const watch = (query: string) => {
 const dark = watch(darkQuery);
 const reduced = watch(motionQuery);
 
-/* Assumed where there is no media query to read. Dark rather than light
-   because the canvas is only painted after mount, so this value never reaches
-   the screen — it only has to be stable. Reduced motion is assumed on for the
-   same reason it is honoured at all: doing nothing is the safe default. */
 const isDarkOnServer = (): boolean => true;
 const isReducedOnServer = (): boolean => true;
 
@@ -78,10 +64,6 @@ const Canvas = ({
   }, [field, isPaused]);
 
   useEffect(() => {
-    /* The package honours reduced motion itself, drawing a single static
-       frame. This gate is kept anyway because it is stricter: no module is
-       instantiated and no canvas context is taken, so the preference costs
-       nothing at all rather than costing one frame. */
     if (prefersReduced || !ref.current) return;
 
     let cancelled = false;
@@ -89,7 +71,6 @@ const Canvas = ({
 
     createField(ref.current, { color: active, opacity: activeOpacity })
       .then((next) => {
-        /* Unmounted while the module was still loading. */
         if (cancelled) {
           next.destroy();
           return;
@@ -98,8 +79,6 @@ const Canvas = ({
         created = next;
         setField(next);
       })
-      /* The module failing to load is not worth an error boundary — the page
-         is correct without a decorative background. */
       .catch(() => {});
 
     return () => {
@@ -109,8 +88,6 @@ const Canvas = ({
     };
   }, [active, activeOpacity, prefersReduced]);
 
-  /* aria-hidden because it is decoration: there is nothing here to announce,
-     and a bare canvas in the accessibility tree is noise. */
   return <canvas ref={ref} className="particles" aria-hidden="true" />;
 };
 

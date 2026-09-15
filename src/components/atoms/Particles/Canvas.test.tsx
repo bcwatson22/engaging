@@ -12,8 +12,6 @@ import { defaultColor, Canvas, type CanvasProps } from './Canvas';
 
 vi.mock('@bcwatson22/motes', () => ({
   createField: vi.fn<typeof import('@bcwatson22/motes').createField>(),
-  /* Not mocked away: these are the values the component falls back to, and a
-     test asserting a default should assert the real one. */
   defaults: { opacity: 0.3 },
 }));
 
@@ -21,7 +19,6 @@ type Options = {
   isDark?: boolean;
   isPaused?: boolean;
   prefersReduced?: boolean;
-  /* Left pending to stand in for a module still downloading. */
   isLoading?: boolean;
   fails?: boolean;
 };
@@ -30,9 +27,6 @@ const destroy = vi.fn<() => void>();
 const pause = vi.fn<() => void>();
 const resume = vi.fn<() => void>();
 
-/* Answers per query rather than a flat boolean: the component reads two, and
-   a mock that matches everything would report reduced motion in every test
-   about colour. */
 const stubMediaQueries = ({ isDark = false, prefersReduced = false }) =>
   vi.spyOn(window, 'matchMedia').mockImplementation(
     (query: string) =>
@@ -77,8 +71,6 @@ describe('Canvas', () => {
     expect(container.querySelector('canvas')).toBeInTheDocument();
   });
 
-  /* Decoration. There is nothing here to announce, and a bare canvas in the
-     accessibility tree is noise. */
   it('hides the canvas from assistive technology', () => {
     const { container } = setup();
 
@@ -105,7 +97,6 @@ describe('Canvas', () => {
   });
 
   describe('reduced motion', () => {
-    /* Halted, not slowed: no loop at all rather than a slower one. */
     it('never starts the field', () => {
       setup({ prefersReduced: true });
 
@@ -185,8 +176,6 @@ describe('Canvas', () => {
         await waitFor(() => expect(colorOf()).toBe('#f9fafb'));
       });
 
-      /* A page that looks the same either way passes one colour and should
-         get it whichever way the query goes. */
       it('falls back to the single colour when no dark one is given', async () => {
         setup({ isDark: true }, { color: '#245385' });
 
@@ -212,8 +201,6 @@ describe('Canvas', () => {
     });
 
     describe('on a dark scheme', () => {
-      /* The reason the pair exists: a light page needs a solider particle to
-         keep its colour, and the same value on a dark one is too much. */
       it('uses the dark opacity', async () => {
         setup({ isDark: true }, { opacity: 0.55, opacityDark: 0.3 });
 
@@ -229,8 +216,6 @@ describe('Canvas', () => {
   });
 
   describe('when the module does not arrive', () => {
-    /* The page is correct without a decorative background, so a failed load
-       is swallowed rather than raised to an error boundary. */
     it('does not throw', async () => {
       setup({ fails: true });
 
@@ -240,8 +225,6 @@ describe('Canvas', () => {
     });
   });
 
-  /* Unmounting while the module is still downloading would otherwise leave a
-     field running with nothing to stop it. */
   it('stops a field that arrives after it unmounted', async () => {
     let settle: (field: { destroy: () => void }) => void = () => {};
 
@@ -270,9 +253,6 @@ describe('Canvas', () => {
     expect(destroy).toHaveBeenCalledTimes(0);
   });
 
-  /* Rendered where there is no media query to read. The point is that it does
-     not throw: useSyncExternalStore needs a server snapshot, and without one
-     this component could not be rendered outside a browser at all. */
   it('renders without a scheme to read', () => {
     expect(() => renderToString(<Canvas color="#245385" />)).not.toThrow();
   });

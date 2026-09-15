@@ -131,7 +131,4 @@ const CVPage = async () => {
 export default CVPage;
 export { generateMetadata, generateViewport };
 
-/* Next parses route segment config statically, so this has to be a plain
-   numeric literal here — not an import, a re-export, or arithmetic.
-   86400 = one day in seconds. */
 export const revalidate = 86400;

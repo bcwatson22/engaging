@@ -10,7 +10,6 @@ vi.mock(import('next/font/google'), async (importOriginal: Function) => {
     ...actual,
     Nunito: vi
       .fn<typeof import('next/font/google').Nunito>()
-      /* The layout only reads className off the font object. */
       .mockReturnValue({ className: 'mockClassName' } as ReturnType<
         typeof import('next/font/google').Nunito
       >),
@@ -53,8 +52,6 @@ describe('Layout', () => {
     cleanup();
   });
 
-  /* React 19 hoists <html> and <body> onto the real document rather than
-     nesting them in the container, so there is no "document" role to query. */
   it('renders a document', () => {
     setup();
 

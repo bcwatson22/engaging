@@ -29,7 +29,6 @@ const destroy = vi.fn<() => void>();
 
 type Options = {
   prefersReducedMotion?: boolean;
-  /* Left pending, to stand in for a field still instantiating. */
   isLoading?: boolean;
   fails?: boolean;
 };
@@ -64,14 +63,6 @@ const setup = ({
 const sliderFor = (label: string): HTMLElement =>
   screen.getByRole('slider', { name: new RegExp(`^${label}\\b`, 'i') });
 
-/* Two elements carry the code role — the generated config and the media
-   feature named in the note above it — so this picks the one that is a config
-   rather than reaching for a test id.
-
-   Every possible line is in the DOM so it can transition open and shut, which
-   makes textContent the wrong thing to read: it would include the lines that
-   are collapsed. Reading the shown rows is both what a visitor sees and what
-   the copy button writes. */
 const snippet = (): string => {
   const block = screen
     .getAllByRole('code')
@@ -82,8 +73,6 @@ const snippet = (): string => {
     .join('\n');
 };
 
-/* jsdom does not implement a range input's keyboard behaviour, so a change
-   event is how a slider is driven in a test. The query is still by role. */
 const drag = (label: string, value: number): void => {
   fireEvent.change(sliderFor(label), { target: { value: String(value) } });
 };
@@ -118,8 +107,6 @@ describe('Motes', () => {
     expect(destroy).toHaveBeenCalledTimes(1);
   });
 
-  /* Unmounting while the field is still instantiating would otherwise leave
-     one running with nothing holding a reference to stop it. */
   it('stops a field that arrives after it unmounted', async () => {
     let settle: (field: {
       update: () => void;
@@ -169,8 +156,6 @@ describe('Motes', () => {
       }
     });
 
-    /* update rather than a new field: recreating on every input event would
-       restart the animation on every pixel of a drag. */
     it('updates the running field rather than restarting it', async () => {
       setup();
 
@@ -264,9 +249,6 @@ describe('Motes', () => {
   });
 
   describe('copying', () => {
-    /* userEvent.setup installs its own clipboard, so the assertion reads back
-       what the button wrote rather than stubbing navigator — replacing that
-       wholesale breaks userEvent's own click handling. */
     it('writes the snippet to the clipboard and says so', async () => {
       const { user } = setup();
       const expected = snippet();
@@ -312,8 +294,6 @@ describe('Motes', () => {
     });
   });
 
-  /* The field draws a single static frame under reduced motion rather than
-     animating, which looks like a failure unless the page says otherwise. */
   describe('under reduced motion', () => {
     it('says the field is deliberately still', () => {
       setup({ prefersReducedMotion: true });
@@ -329,8 +309,6 @@ describe('Motes', () => {
       }
     });
 
-    /* Without this someone with the preference on cannot see the demo at all.
-       Opt-in, never on by default. */
     it('offers to animate anyway', () => {
       setup({ prefersReducedMotion: true });
 
@@ -365,23 +343,18 @@ describe('Motes', () => {
     });
   });
 
-  /* A switch that does nothing is worse than no switch. */
   it('does not offer to animate anyway when nothing is holding it back', () => {
     setup();
 
     expect(screen.queryByRole('checkbox', { name: /animate/i })).toBeNull();
   });
 
-  /* A section is only a landmark once it has a name, and this one takes its
-     name from the heading in its header. */
   it('names the region it occupies', () => {
     setup();
 
     expect(screen.getByRole('region', { name: /motes/i })).toBeInTheDocument();
   });
 
-  /* A second nav beside the site's own, so it needs a name of its own — and
-     it points outward, at where the package actually lives. */
   describe('the package links', () => {
     it('is a nav of its own', () => {
       setup();

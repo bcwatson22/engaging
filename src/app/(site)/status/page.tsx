@@ -24,8 +24,6 @@ const generateMetadata = (): Metadata => ({
     title,
     description,
   },
-  /* Nothing here is worth a search result — it is a page about plumbing, and
-     it changes every minute. */
   robots: {
     index: false,
     follow: true,
@@ -38,9 +36,6 @@ const StatusPage = async () => {
   return (
     <main id="main" className="status grow">
       <h1 className="sr-only">{title}</h1>
-      {/* Dimmer than the contact page's, and blurred by the page's own CSS:
-          this sits behind small text and a set of bar charts rather than
-          beside a form, so it has to stay well out of their way. */}
       <Suspense>
         <Particles
           color="var(--brand-blue)"
@@ -57,7 +52,4 @@ const StatusPage = async () => {
 export default StatusPage;
 export { generateMetadata, viewport, title, description };
 
-/* Next parses route segment config statically, so this has to be a plain
-   numeric literal — it cannot import the same constant getStatus uses. One
-   minute, matching the endpoint's own cache-control. */
 export const revalidate = 60;
