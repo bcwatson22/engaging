@@ -11,8 +11,6 @@ describe('SiteLayout', () => {
 
     await expect(container).toHaveNoViolations();
   });
-  /* The reason the group exists: one nav for every page that should have one,
-     rather than each page remembering to render it. */
   it('offers a way around the site', () => {
     setup();
 
@@ -27,9 +25,6 @@ describe('SiteLayout', () => {
     expect(screen.getByRole('main')).toHaveTextContent('Contact');
   });
 
-  /* Both are landmarks only when they sit outside main — nesting either inside
-     it disqualifies them, which is what was happening while each page rendered
-     its own footer. */
   it('offers a banner and a contentinfo landmark', () => {
     setup();
 

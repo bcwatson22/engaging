@@ -11,9 +11,6 @@ import { sendContact, type TResult } from '@/data/functions/sendContact';
 
 import { Contact } from './Contact';
 
-/* The underlying function, not global fetch: the component and the hook are
-   the things under test, and mocking one layer down keeps the assertions
-   about what a person did rather than about a Response shape. */
 vi.mock('@/data/functions/sendContact', () => ({
   sendContact:
     vi.fn<typeof import('@/data/functions/sendContact').sendContact>(),
@@ -176,10 +173,6 @@ describe('Contact', () => {
       expect(field(/email/i)).toHaveAttribute('aria-invalid', 'false');
     });
 
-    /* Asserted as a constraint rather than by typing something short: jsdom
-       does not implement minlength validation, so a browser would mark this
-       and the test environment would not. The attribute is what a browser
-       acts on, and what must stay in step with the service. */
     it('declares the shortest message the service will accept', () => {
       setup();
 
@@ -269,9 +262,6 @@ describe('Contact', () => {
       await complete(user);
       await submit(user);
 
-      /* By role rather than by text: the message sits in a child of the
-         region now that the region transitions open, so the text matches the
-         span while the focus is on the output around it. */
       await waitFor(() => expect(screen.getByRole('status')).toHaveFocus());
 
       expect(screen.getByRole('status')).toHaveTextContent(messages.sent);

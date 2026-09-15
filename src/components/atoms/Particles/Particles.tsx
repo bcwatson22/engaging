@@ -5,23 +5,13 @@ import { useEffect, useState } from 'react';
 
 import type { CanvasProps } from './Canvas';
 
-/* ssr: false because there is nothing to render on the server — the canvas is
-   painted by the engine after mount — and because it keeps the engine out of
-   the initial client bundle entirely. */
 const Canvas = dynamic(async () => (await import('./Canvas')).Canvas, {
   ssr: false,
 });
 
-/* Background decoration, so it has no business competing with the page for
-   bandwidth or main thread while that page is still painting. Waiting for
-   idle pushes both the chunk and the engine's setup past LCP. The timeout is
-   the backstop for a browser that never goes idle; the setTimeout branch is
-   for Safari, which only shipped requestIdleCallback in 18.4. */
 const idleTimeout = 2000;
 const fallbackDelay = 200;
 
-/* Props are forwarded rather than owned: the gate decides *when* the field
-   appears, the canvas decides what it looks like. */
 const Particles = (props: CanvasProps) => {
   const [isReady, setIsReady] = useState<boolean>(false);
 

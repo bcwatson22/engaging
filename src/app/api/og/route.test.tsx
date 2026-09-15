@@ -12,8 +12,6 @@ vi.mock('@/data/functions/getData', () => ({
 
 const webpUrl = 'https://example.com/asset/output=format:webp/id';
 
-/* mockHome's fixture URLs carry no format segment, so the webp → png rewrite
-   is given URLs that actually exercise it. */
 const setup = () => {
   (getData as Mock).mockResolvedValue({
     ...mockHome,
@@ -35,7 +33,6 @@ describe('dynamic Open Graph image', () => {
     expect((await GET()) instanceof ImageResponse).toBe(true);
   });
 
-  /* Satori cannot decode webp, so every asset URL has to reach it as png. */
   it('rewrites asset URLs from webp to png', async () => {
     const { mugshot, technologies } = await getImageProps();
 

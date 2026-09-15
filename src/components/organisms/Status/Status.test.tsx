@@ -111,8 +111,6 @@ describe('Status', () => {
       expect(screen.getAllByText('3 hours ago')).toHaveLength(2);
     });
 
-    /* The loose reading is for people; the exact moment stays
-       machine-readable beside it. */
     it('keeps the exact moment in the markup', () => {
       setup();
 
@@ -130,9 +128,6 @@ describe('Status', () => {
   });
 
   describe('the wait-and-render bar', () => {
-    /* Identity never rests on colour — the palette's contrast check obliges
-       labels rather than merely suggesting them, and the bar itself is hidden
-       because these carry everything it draws. */
     it('states both segments in text', () => {
       setup();
 
@@ -183,7 +178,6 @@ describe('Status', () => {
       expect(within(table).getByText('10s')).toBeInTheDocument();
     });
 
-    /* One render is a number, not a history — a chart of it says nothing. */
     it('draws nothing until there is more than one render', () => {
       setup();
 
@@ -205,8 +199,6 @@ describe('Status', () => {
     });
   });
 
-  /* Status rather than a series: an icon and a sentence carry it, so the
-     colour is reinforcement rather than the message. */
   describe('the integrity check', () => {
     it('says when an artifact still matches its page', () => {
       setup();
@@ -222,8 +214,6 @@ describe('Status', () => {
       expect(screen.getByText(states.queued.says)).toBeInTheDocument();
     });
 
-    /* The one worth catching an eye — re-rendering has already been tried
-       and did not fix it. */
     it('says when a re-render did not put it right', () => {
       setup({
         status: withCheck(check({ drifted: true, stale: true })),
@@ -247,7 +237,6 @@ describe('Status', () => {
     });
 
     it('gives no time for a check that has never run', () => {
-      /* Both, because the other card's check would otherwise answer for it. */
       setup({
         status: {
           ...status,
@@ -259,8 +248,6 @@ describe('Status', () => {
     });
   });
 
-  /* Reported, never alarmed about — a host refusing a robot is not a link
-     that has gone. */
   describe('the outbound links', () => {
     it('reassures with a count when they all answered', () => {
       setup();
@@ -298,7 +285,6 @@ describe('Status', () => {
       expect(screen.getByText(/did not answer \(404\)/i)).toBeInTheDocument();
     });
 
-    /* Listed, but not counted as broken and not coloured as an alarm. */
     it('shows a blocked host without calling it broken', () => {
       setup({
         status: {
@@ -378,8 +364,6 @@ describe('Status', () => {
     });
   });
 
-  /* Being unreachable is the service's ordinary resting state — it sleeps
-     between renders — so this is not an error page. */
   describe('when the service cannot be reached', () => {
     it('explains rather than erroring', () => {
       setup({ status: null });
@@ -408,8 +392,6 @@ describe('stateOf', () => {
     expect(stateOf(check({ drifted: true, queued: true }))).toBe('queued');
   });
 
-  /* Stale outranks drifted: both are true at once, and stale is the one that
-     means re-rendering will not help. */
   it('is stale when a render was already tried and did not help', () => {
     expect(stateOf(check({ drifted: true, queued: false, stale: true }))).toBe(
       'stale',
@@ -422,8 +404,6 @@ describe('waitOf', () => {
     expect(waitOf(recordAt('2026-08-17T09:00:00.000Z'))).toBe(35_000);
   });
 
-  /* Two clocks produce these numbers, so the difference can come out
-     backwards. A negative wait is not a thing. */
   it('never goes below nothing', () => {
     expect(waitOf(recordAt('x', { elapsedMs: 1_000, durationMs: 5_000 }))).toBe(
       0,
@@ -446,8 +426,6 @@ describe('renderShare', () => {
 });
 
 describe('the render-time chart', () => {
-  /* The bars give a shape and no scale: an eight-fold difference in height
-     says nothing about whether the tallest is five seconds or five minutes. */
   it('writes out the range the bars are drawn against', () => {
     setup({
       status: {
@@ -465,8 +443,6 @@ describe('the render-time chart', () => {
     expect(screen.getByText('5s to 38s')).toBeInTheDocument();
   });
 
-  /* The most interesting fact about the system, and the chart cannot show it
-     on its own. */
   it('explains a spread wide enough to need it', () => {
     setup({
       status: {
@@ -484,8 +460,6 @@ describe('the render-time chart', () => {
     expect(screen.getByText(/the machine waking/i)).toBeInTheDocument();
   });
 
-  /* The splash screens swing 67s to 100s, which is a normal amount of
-     variation and explaining it would be noise. */
   it('says nothing about a spread that is ordinary', () => {
     setup({
       status: {

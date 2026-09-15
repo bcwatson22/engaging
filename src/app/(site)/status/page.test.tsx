@@ -64,7 +64,6 @@ describe('StatusPage', () => {
     expect(vi.mocked(Status).mock.calls[0][0]).toEqual({ status });
   });
 
-  /* The page renders either way — a sleeping service is not an error. */
   it('renders with nothing to report', async () => {
     await setup({ result: null });
 
@@ -78,8 +77,6 @@ describe('StatusPage', () => {
     expect(meta.description).toBe(description);
   });
 
-  /* A page about plumbing that changes every minute has no business in a
-     search result. */
   it('keeps itself out of search results', () => {
     expect(generateMetadata().robots).toMatchObject({ index: false });
   });

@@ -1,5 +1,4 @@
-/* oxlint-disable next/no-img-element -- rendered by next/og's ImageResponse
-   via satori, which resolves plain <img> only; next/image cannot run there. */
+/* oxlint-disable next/no-img-element */
 
 import type { THome } from '@/data/types/home';
 

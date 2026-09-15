@@ -62,8 +62,6 @@ const iconMap: Record<
   ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, 'ref'>>
 > = {
   Check: CheckIcon,
-  /* A circled tick, distinct from the bare `Check` the copy button uses: the
-     status page is reporting a state, not confirming an action. */
   CheckCircle: CheckCircleIcon,
   Copy: ClipboardDocumentIcon,
   Cross: XMarkIcon,

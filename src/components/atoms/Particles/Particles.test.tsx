@@ -44,8 +44,6 @@ describe('Particles', () => {
     vi.clearAllMocks();
   });
 
-  /* Unmount before the stubs go, or React runs the effect's teardown against
-     a window that no longer has cancelIdleCallback on it. */
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
@@ -54,9 +52,6 @@ describe('Particles', () => {
   it("doesn't render the canvas before the browser is idle", async () => {
     setup({ isIdle: false });
 
-    /* Flush what a successful render would resolve — the gate never mounts
-       the lazy component, so without this the assertion passes merely because
-       the dynamic import hasn't settled yet, and holds even if the gate goes. */
     await act(async () => {});
 
     expect(Canvas).not.toHaveBeenCalled();
@@ -74,15 +69,11 @@ describe('Particles', () => {
     await waitFor(() => expect(Canvas).toHaveBeenCalledTimes(1));
   });
 
-  /* The gate decides when the field appears; the canvas decides what it looks
-     like. Swallowing the colours here would leave a page unable to say. */
   it('forwards its colours to the canvas', async () => {
     setup();
 
     await waitFor(() => expect(Canvas).toHaveBeenCalled());
 
-    /* The props themselves, not the whole call: React hands a second argument
-       through the dynamic wrapper that is an implementation detail. */
     expect(vi.mocked(Canvas).mock.calls[0][0]).toEqual(colors);
   });
 });

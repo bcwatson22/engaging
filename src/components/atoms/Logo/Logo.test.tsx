@@ -39,9 +39,6 @@ describe('Logo', () => {
       expect.stringContaining(logoLightBackground.url),
     );
 
-    /* The name comes from the figcaption. Real screen readers derive it per
-       HTML-AAM, but dom-accessibility-api does not compute it, so assert the
-       caption directly rather than via the accessible name. */
     expect(within(figure).getByText(alt)).toBeInTheDocument();
   });
 });

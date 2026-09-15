@@ -19,8 +19,6 @@ describe('Button', () => {
     expect(screen.getByRole('button', { name: 'Send' })).toBeInTheDocument();
   });
 
-  /* A button inside a form submits it otherwise, which is the default nobody
-     wants and everybody forgets. */
   it('does not submit unless asked to', () => {
     setup();
 
@@ -51,8 +49,6 @@ describe('Button', () => {
     expect(onClick).toHaveBeenCalledTimes(0);
   });
 
-  /* The icon is decoration beside a label that already says the same thing,
-     so it should not reach the accessibility tree. */
   it('hides its icon from assistive technology', () => {
     const { container } = setup();
 
