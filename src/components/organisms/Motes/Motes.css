@@ -38,6 +38,13 @@
        backing store the engine sized for a previous layout. Left alone it
        grows past the column beside it and never comes back down. */
     @apply md:min-h-0;
+
+    /* A finger dragged across the stage is claimed by the browser for
+       scrolling, which cancels the pointer events the field follows — so on a
+       phone the particles never moved. Vertical drags still scroll the page,
+       so the stage cannot trap anyone mid-scroll; taps and sideways drags
+       reach the field. */
+    touch-action: pan-y;
   }
 
   /* A fieldset carries a border, padding and a min-width of min-content by

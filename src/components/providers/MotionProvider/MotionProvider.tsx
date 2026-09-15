@@ -8,7 +8,7 @@ type Props = {
 };
 
 const loadFeatures = () =>
-  import('./domMaxFeatures').then((module) => module.default);
+  import('./domAnimationFeatures').then((module) => module.default);
 
 const MotionProvider = ({ children }: Props) => (
   <LazyMotion features={loadFeatures}>{children}</LazyMotion>

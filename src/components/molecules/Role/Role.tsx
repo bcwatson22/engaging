@@ -39,7 +39,7 @@ const getLinkClassNames = (
 };
 
 const RoleSkeleton = () => (
-  <div className="role mt-9">
+  <div className="role">
     <SkeletonHeading level="h4" className="w-56" />
     <SkeletonLine className="mt-2 mb-6 w-68" />
     {[...Array(7).keys()].map((key, index) => (

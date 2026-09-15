@@ -3,9 +3,9 @@
    zero-width, overflow-clipped span is still read out, so every link keeps its
    accessible name.
 
-   Its width is not transitioned. The pill and its neighbours are moved by
-   Motion's layout animation, which measures the finished layout up front; a
-   width still easing towards it would be measured part way. */
+   Its width is not transitioned. The pill and its neighbours are moved by a
+   view transition, which snapshots the finished layout; a width still easing
+   towards it would be captured part way. */
 @utility expand {
   & span {
     @apply max-w-0 overflow-hidden whitespace-nowrap opacity-0;
@@ -14,14 +14,12 @@
 
   &[aria-current='page'] span {
     @apply max-w-32 opacity-100;
-    @apply transition-opacity delay-100 duration-200 motion-reduce:transition-none;
   }
 }
 
 /* A track of pills, so that it reads as a nav and not as a row of loose icons.
-   The filled pill behind the current page is one element, handed from link to
-   link by a shared layoutId, so it slides and stretches across on a route
-   change. */
+   The filled pill behind the current page carries one view-transition name,
+   so on a route change the browser morphs it from the old link to the new. */
 @utility site-nav {
   & ul {
     @apply flex items-center gap-1 rounded-full border border-current/20 bg-current/5 p-1;
@@ -35,7 +33,11 @@
     /* 44px square: a 24px icon and 10px either side. Anything wider and an
        icon-only pill is an oval rather than a circle. */
     @apply relative z-10 flex h-11 min-w-11 items-center justify-center rounded-full px-2.5;
-    @apply transition-colors duration-150 motion-reduce:transition-none;
+
+    /* No colour or opacity transitions on the link or its label. A route
+       change swaps them inside a view transition, which already decides when
+       they change; a transition of their own on top replayed as a flash —
+       once when the link became current and again when the transition ended. */
 
     /* The icon atom positions its vector absolutely against a left padding.
        In a pill that padding stacks on the pill's own, so the icon is put back
@@ -44,35 +46,49 @@
       @apply static shrink-0 translate-y-0;
     }
 
-    /* The pill is the hover state here; the underline would be a second one.
+    /* Inactive links keep the link atom's underline, so the nav reads as the
+       same kind of link as every other on the site, and its hover and focus
+       states are that underline drawing across rather than a wash of their
+       own. The current link has the pill instead, and no underline.
 
        The margins live here, not on .expand, because the link atom's own
        `ml-2` on the same span otherwise wins — and 8px of margin on an empty
        label is what stretched an icon-only pill into an oval. */
     & span {
-      background-image: none;
       @apply ml-0;
       @apply xs:mr-1.5 xs:ml-2;
     }
 
     &[aria-current='page'] span {
+      background-image: none;
       @apply mr-1.5 ml-2;
     }
 
-    /* Hover only where there is hover. A tap on a touch screen leaves a sticky
-       :hover behind, which painted a grey pill over the link just left. */
+    /* The hover wash is its own layer behind the icon and label, so it can grow
+       in and press down without scaling the text with it — scaling the whole
+       link blurred the label mid-transition. Behind the content rather than
+       above: the link is its own stacking context (z-10), so -z-10 here sits
+       inside it, above the pill and below the icon and text. Hover only where
+       there is hover, since a tap on a touch screen leaves a sticky :hover
+       behind; keyboard focus shows it too, alongside the underline. */
+    &:not([aria-current='page'])::before {
+      content: '';
+      @apply absolute inset-0 -z-10 scale-75 rounded-full bg-current/10 opacity-0;
+      @apply transition-[opacity,scale] duration-150 ease-out motion-reduce:transition-none;
+    }
+
     @media (hover: hover) {
-      &:hover:not([aria-current='page']) {
-        @apply bg-current/10;
+      &:hover:not([aria-current='page'])::before {
+        @apply scale-100 opacity-100;
       }
     }
 
-    &:focus-visible:not([aria-current='page']) {
-      @apply bg-current/10;
+    &:focus-visible:not([aria-current='page'])::before {
+      @apply scale-100 opacity-100;
     }
 
-    &:active:not([aria-current='page']) {
-      @apply scale-[0.98];
+    &:active:not([aria-current='page'])::before {
+      @apply scale-90 opacity-100;
     }
 
     &[aria-current='page'] {
@@ -100,10 +116,22 @@
   }
 }
 
-@utility nav-pill {
-  @apply bg-brand-blue absolute inset-0;
+/* One custom property for the pill's colour, on the root so the view
+   transition's pseudo-elements — which hang off the root, not the nav — can
+   read it too. Blue on light, yellow on dark, and yellow on the home page,
+   which is dark whatever the visitor has set. */
+:root {
+  --nav-pill: var(--brand-blue);
 
   @media (prefers-color-scheme: dark) {
-    @apply bg-brand-yellow;
+    --nav-pill: var(--brand-yellow);
   }
+}
+
+:root:has(.home) {
+  --nav-pill: var(--brand-yellow);
+}
+
+@utility nav-pill {
+  @apply absolute inset-0 rounded-full bg-(--nav-pill);
 }

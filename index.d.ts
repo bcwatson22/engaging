@@ -1,3 +1,5 @@
+/// <reference types="react/canary" />
+
 type TID = {
   id?: string;
   __typename?: string;
@@ -21,4 +23,6 @@ type TPosition = {
 type TScroll = {
   delay?: Orchestration['delay'];
   margin?: UseInViewOptions['margin'];
+  amount?: UseInViewOptions['amount'];
+  isImmediate?: boolean;
 };

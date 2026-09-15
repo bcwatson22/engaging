@@ -33,9 +33,21 @@ const CompanySkeleton = () => (
   </div>
 );
 
-const Company = ({ company, city, logo, sectionId, delay }: Props) => {
+const Company = ({
+  company,
+  city,
+  logo,
+  sectionId,
+  delay,
+  isImmediate,
+}: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const triggerProps = useScrollTrigger({ ref, delay });
+  const triggerProps = useScrollTrigger({
+    ref,
+    delay,
+    isImmediate,
+    amount: 'some',
+  });
 
   const alt = `${company} logo`;
 

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { Particles } from '@/components/atoms/Particles/Particles';
+import { Transition } from '@/components/atoms/Transition/Transition';
 import { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 import { appleWebApp, metadata, viewport } from '@/constants/metadata';
 import { getStartupImages } from '@/constants/startupImages';
@@ -54,13 +55,15 @@ const HomePage = async () => {
   } = data;
 
   return (
-    <main id="main" className="home grow">
-      <h1 className="sr-only">{title}</h1>
-      <Mugshot mugshot={mugshot} technologies={technologies} />
-      <Suspense>
-        <Particles />
-      </Suspense>
-    </main>
+    <Transition>
+      <main id="main" className="home grow">
+        <h1 className="sr-only">{title}</h1>
+        <Mugshot mugshot={mugshot} technologies={technologies} />
+        <Suspense>
+          <Particles />
+        </Suspense>
+      </main>
+    </Transition>
   );
 };
 

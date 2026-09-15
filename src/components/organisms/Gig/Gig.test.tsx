@@ -61,6 +61,26 @@ describe('Gig', () => {
       );
     });
 
+    it('passes isImmediate on to the Company', () => {
+      setup({ isImmediate: true });
+
+      expect(Company).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ isImmediate: true }),
+        undefined,
+      );
+    });
+
+    it('waits to be scrolled to by default', () => {
+      setup({ isImmediate: undefined });
+
+      expect(Company).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ isImmediate: false }),
+        undefined,
+      );
+    });
+
     it('defaults to no delay when not provided', () => {
       setup({ delay: undefined });
 

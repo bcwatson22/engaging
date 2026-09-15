@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { Particles } from '@/components/atoms/Particles/Particles';
+import { Transition } from '@/components/atoms/Transition/Transition';
 import { Status } from '@/components/organisms/Status/Status';
 import { metadata as shared, viewport } from '@/constants/metadata';
 import { getStatus } from '@/data/functions/getStatus';
@@ -34,18 +35,20 @@ const StatusPage = async () => {
   const status = await getStatus();
 
   return (
-    <main id="main" className="status grow">
-      <h1 className="sr-only">{title}</h1>
-      <Suspense>
-        <Particles
-          color="var(--brand-blue)"
-          colorDark="var(--brand-light)"
-          opacity={0.35}
-          opacityDark={0.2}
-        />
-      </Suspense>
-      <Status status={status} />
-    </main>
+    <Transition>
+      <main id="main" className="status grow">
+        <h1 className="sr-only">{title}</h1>
+        <Suspense>
+          <Particles
+            color="var(--brand-blue)"
+            colorDark="var(--brand-light)"
+            opacity={0.35}
+            opacityDark={0.2}
+          />
+        </Suspense>
+        <Status status={status} />
+      </main>
+    </Transition>
   );
 };
 

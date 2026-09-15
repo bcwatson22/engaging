@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { Particles } from '@/components/atoms/Particles/Particles';
+import { Transition } from '@/components/atoms/Transition/Transition';
 import { Contact } from '@/components/organisms/Contact/Contact';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
@@ -26,18 +27,20 @@ const generateMetadata = (): Metadata => ({
 });
 
 const ContactPage = () => (
-  <main id="main" className="contact grow">
-    <h1 className="sr-only">{title}</h1>
-    <Suspense>
-      <Particles
-        color="var(--brand-blue)"
-        colorDark="var(--brand-light)"
-        opacity={0.55}
-        opacityDark={0.3}
-      />
-    </Suspense>
-    <Contact />
-  </main>
+  <Transition>
+    <main id="main" className="contact grow">
+      <h1 className="sr-only">{title}</h1>
+      <Suspense>
+        <Particles
+          color="var(--brand-blue)"
+          colorDark="var(--brand-light)"
+          opacity={0.55}
+          opacityDark={0.3}
+        />
+      </Suspense>
+      <Contact />
+    </main>
+  </Transition>
 );
 
 export default ContactPage;

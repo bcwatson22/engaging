@@ -194,7 +194,7 @@ describe('CVPage', () => {
     for (const [index, value] of gigs.entries())
       expect(Gig).toHaveBeenNthCalledWith(
         index + 1,
-        { ...value, delay: index === 0 ? 0.2 : 0 },
+        { ...value, delay: index === 0 ? 0.2 : 0, isImmediate: index === 0 },
         undefined,
       );
   });

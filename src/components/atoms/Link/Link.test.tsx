@@ -90,6 +90,19 @@ describe('Link', () => {
         expect(NextLink).not.toHaveBeenCalled();
       });
 
+      it('passes transitionTypes to NextLink', () => {
+        setup({
+          link: { ...mockLink!, target: '/contact' },
+          transitionTypes: ['nav-forward'],
+        });
+
+        expect(NextLink).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ transitionTypes: ['nav-forward'] }),
+          undefined,
+        );
+      });
+
       it('passes prefetch to NextLink', () => {
         setup({
           link: { ...mockLink!, target: '/contact' },
@@ -169,6 +182,37 @@ describe('Link', () => {
       expect(screen.getByRole('link', { name: text })).not.toHaveAttribute(
         'aria-current',
       );
+    });
+  });
+
+  describe('newTab', () => {
+    it('opens in a new tab', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      expect(screen.getByRole('link')).toHaveAttribute('target', '_blank');
+    });
+
+    it('cuts the new page off from this one', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      expect(screen.getByRole('link')).toHaveAttribute(
+        'rel',
+        'noopener noreferrer',
+      );
+    });
+
+    it('says so to a screen reader', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      expect(
+        screen.getByRole('link', { name: `${text} (opens in new tab)` }),
+      ).toBeInTheDocument();
+    });
+
+    it('stays in the same tab by default', () => {
+      setup();
+
+      expect(screen.getByRole('link')).not.toHaveAttribute('target');
     });
   });
 

@@ -25,7 +25,14 @@ const GigSkeleton = () => (
   </div>
 );
 
-const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
+const Gig = ({
+  company,
+  logo,
+  city,
+  roles,
+  delay = 0,
+  isImmediate = false,
+}: Props) => {
   const sectionId = useId();
 
   const companyProps: TCompany = {
@@ -34,6 +41,7 @@ const Gig = ({ company, logo, city, roles, delay = 0 }: Props) => {
     city,
     sectionId,
     delay,
+    isImmediate,
   };
 
   return (

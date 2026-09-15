@@ -108,9 +108,18 @@
   }
 
   /* Escape sets data-dismissed, which holds the hover and focus reveals shut
-     until the pointer leaves or focus moves (WCAG 1.4.13). See Reveal. */
+     until the pointer leaves or focus moves (WCAG 1.4.13). See Reveal.
+
+     Hover is read from the toggle, not from this section. The section is a
+     square — it stopped being clipped to a circle so enlarged text could grow
+     past it — and hovering its corners kept the info open with the pointer
+     visibly off the portrait. The toggle is still clipped to the circle, and
+     clip-path clips hit-testing as well as painting, so this is hover over
+     the portrait itself. The info passes the pointer through to the toggle
+     everywhere but its links, which count too, so moving onto one does not
+     close what it sits in. */
   @media (hover: hover) {
-    &:not([data-dismissed]):hover {
+    &:not([data-dismissed]):has(.mugshot-toggle:hover, .info:hover) {
       @apply mugshot-shown;
     }
   }
@@ -125,6 +134,18 @@
     @apply opacity-100;
 
     & a {
+      @apply pointer-events-auto;
+    }
+
+    /* Once shown, the info itself holds the reveal open on a device with
+       hover, so the pointer can move onto it without it vanishing (WCAG 1.4.13,
+       hoverable). At normal sizes it sits inside the circle and changes
+       nothing; with text enlarged it spills past the circle, and without this
+       moving onto the overflow closed it. It only takes the pointer while shown
+       — hidden, it is transparent to it, so the reveal still starts on the
+       portrait — and never on touch, where a tap on the text should reach the
+       toggle beneath and close it. */
+    @media (hover: hover) {
       @apply pointer-events-auto;
     }
   }
@@ -163,6 +184,40 @@
 @utility mugshot-hint {
   @apply flex h-11 items-center gap-2 rounded-full border border-white/20 bg-black/60 pr-4 pl-2.5 text-base text-white backdrop-blur-sm;
   @apply transition-all duration-300 motion-reduce:transition-none;
+
+  /* The site's link underline, so the badge reads as something to press. It
+     sits on the portrait whatever the scheme, so it takes the dark treatment:
+     yellow, filling in light on hover or focus, as the links on the home page
+     do. */
+  & span {
+    background-image:
+      linear-gradient(var(--brand-yellow), var(--brand-yellow)),
+      linear-gradient(var(--brand-light), var(--brand-light)),
+      linear-gradient(var(--brand-yellow), var(--brand-yellow));
+    background-size:
+      0 0.125rem,
+      0 0.125rem,
+      100% 0.125rem;
+    background-position:
+      0 100%,
+      0 100%,
+      0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.125s ease-out;
+    @apply motion-reduce:transition-none;
+
+    @media (forced-colors: active) {
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
+  }
+
+  :is(.mugshot-toggle:hover, .mugshot-toggle:focus-visible) & span {
+    background-size:
+      0 0.125rem,
+      100% 0.125rem,
+      100% 0.125rem;
+  }
 }
 
 @utility overview-error {

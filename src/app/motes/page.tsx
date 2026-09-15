@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { Transition } from '@/components/atoms/Transition/Transition';
 import { Motes } from '@/components/organisms/Motes/Motes';
 import { metadata as shared, viewport } from '@/constants/metadata';
 
@@ -24,10 +25,12 @@ const generateMetadata = (): Metadata => ({
 });
 
 const MotesPage = () => (
-  <main id="main" className="motes grow">
-    <h1 className="sr-only">{title}</h1>
-    <Motes />
-  </main>
+  <Transition>
+    <main id="main" className="motes grow">
+      <h1 className="sr-only">{title}</h1>
+      <Motes />
+    </main>
+  </Transition>
 );
 
 export default MotesPage;

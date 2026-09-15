@@ -24,6 +24,7 @@ const pdf: TLink = {
   target: '/billy-watson-cv.pdf',
   text: 'PDF',
   icon: 'Document',
+  newTab: true,
 };
 
 const cv: TLink = {
