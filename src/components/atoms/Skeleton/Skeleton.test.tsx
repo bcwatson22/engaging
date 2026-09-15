@@ -98,6 +98,12 @@ describe('SkeletonParagraph', () => {
     expect(hiddenBlocks(container)).toHaveLength(numberOfLines);
   });
 
+  it('renders four lines by default', () => {
+    const { container } = render(<SkeletonParagraph />);
+
+    expect(hiddenBlocks(container)).toHaveLength(4);
+  });
+
   describe('className', () => {
     it('renders if provided', () => {
       const mockClassName = 'mockClassName';

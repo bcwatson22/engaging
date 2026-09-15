@@ -59,10 +59,17 @@ describe('Header', () => {
     it('offers the PDF', () => {
       setup();
 
-      expect(screen.getByRole('link', { name: 'PDF' })).toHaveAttribute(
-        'href',
-        '/billy-watson-cv.pdf',
-      );
+      expect(
+        screen.getByRole('link', { name: 'PDF (opens in new tab)' }),
+      ).toHaveAttribute('href', '/billy-watson-cv.pdf');
+    });
+
+    it('opens the PDF in a new tab', () => {
+      setup();
+
+      expect(
+        screen.getByRole('link', { name: 'PDF (opens in new tab)' }),
+      ).toHaveAttribute('target', '_blank');
     });
 
     it('offers a download', () => {
@@ -112,10 +119,16 @@ describe('HeaderSkeleton', () => {
   it('renders a skeleton state', () => {
     const { container } = render(<HeaderSkeleton />);
 
-    const numOfPulses = 4;
+    const numOfPulses = 9;
 
     expect(
       container.querySelectorAll('.skeleton[aria-hidden="true"]'),
     ).toHaveLength(numOfPulses);
+  });
+
+  it('renders the CV nav, so the page does not shift when it arrives', () => {
+    render(<HeaderSkeleton />);
+
+    expect(screen.getByRole('navigation', { name: 'CV' })).toBeInTheDocument();
   });
 });

@@ -10,7 +10,7 @@ const Loading = () => (
     <div className="wrapper">
       <div className="inner">
         <HeaderSkeleton />
-        <div className="sections mt-[130px] lg:mt-[116px]">
+        <div className="sections">
           <Section heading="Digits" margin="0px">
             <DetailsSkeleton hasParagraph={true} />
           </Section>

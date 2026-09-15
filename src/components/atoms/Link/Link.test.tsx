@@ -185,6 +185,37 @@ describe('Link', () => {
     });
   });
 
+  describe('newTab', () => {
+    it('opens in a new tab', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      expect(screen.getByRole('link')).toHaveAttribute('target', '_blank');
+    });
+
+    it('cuts the new page off from this one', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      expect(screen.getByRole('link')).toHaveAttribute(
+        'rel',
+        'noopener noreferrer',
+      );
+    });
+
+    it('says so to a screen reader', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      expect(
+        screen.getByRole('link', { name: `${text} (opens in new tab)` }),
+      ).toBeInTheDocument();
+    });
+
+    it('stays in the same tab by default', () => {
+      setup();
+
+      expect(screen.getByRole('link')).not.toHaveAttribute('target');
+    });
+  });
+
   describe('className', () => {
     it('renders if provided', () => {
       const mockClassName = 'mockClassName';

@@ -7,6 +7,7 @@ import { Skeleton, SkeletonLine } from '@/components/atoms/Skeleton/Skeleton';
 type TInner = {
   text: string;
   icon: TIcon;
+  newTab?: boolean;
 };
 
 type TLink =
@@ -30,16 +31,24 @@ type TShared = Omit<ComponentPropsWithRef<'a'>, 'href'> & {
 };
 
 const LinkSkeleton = () => (
-  <div className="link icon relative">
+  <div className="link icon relative flex h-6 items-center">
     <Skeleton className="vector rounded-full" />
-    <SkeletonLine className="w-27" />
+    <SkeletonLine className="ml-2 w-27" />
   </div>
 );
 
-const Inner = ({ text, icon }: TInner) => (
+const Inner = ({ text, icon, newTab = false }: TInner) => (
   <>
     <Icon icon={icon} className="vector" />
-    <span>{text}</span>
+    <span>
+      {text}
+      {newTab && (
+        <>
+          {' '}
+          <span className="sr-only">(opens in new tab)</span>
+        </>
+      )}
+    </span>
   </>
 );
 
@@ -50,7 +59,7 @@ const Link = ({
   prefetch,
   transitionTypes,
 }: Props) => {
-  const { target, text, icon } = link!;
+  const { target, text, icon, newTab = false } = link!;
 
   const isLocal = target === '/';
   const isInternal = target.startsWith('/') && !/\.[a-z0-9]+$/i.test(target);
@@ -69,11 +78,13 @@ const Link = ({
     }`,
     'data-url': displayUrl,
     'aria-current': current ? 'page' : undefined,
+    ...(newTab && { target: '_blank', rel: 'noopener noreferrer' }),
   };
 
   const innerProps: TInner = {
     text,
     icon,
+    newTab,
   };
 
   return isInternal ? (

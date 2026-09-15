@@ -16,9 +16,15 @@ const DetailsSkeleton = ({
   hasParagraph = false,
   numOfLinks = 2,
 }: SkeletonProps) => (
-  <div className="details py-px">
-    {hasParagraph && <SkeletonLine className="mb-6 w-[16rem]" />}
-    <div className="flex gap-8">
+  <div className="details">
+    {hasParagraph && (
+      <div className="flex h-6 items-center">
+        <SkeletonLine className="w-[16rem] max-w-full" />
+      </div>
+    )}
+    <div
+      className={`xs:flex-row flex flex-col gap-x-8 xs:flex-wrap${hasParagraph ? ' mt-2 md:mt-4' : ''}`}
+    >
       {[...Array(numOfLinks).keys()].map((key) => (
         <LinkSkeleton key={key} />
       ))}
