@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import sharp, { type JpegOptions } from 'sharp';
 
 import {
   OgImage,
@@ -45,11 +46,17 @@ const getImageProps = async (): Promise<OgImageProps> => {
 const cacheControl =
   'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800';
 
-const GET = async () =>
-  new ImageResponse(<OgImage {...await getImageProps()} />, {
+/* ImageResponse only emits PNG, and the portrait compresses badly in it: the
+   card came out at 211KB. WhatsApp fetches previews from the sender's phone,
+   over whatever connection it has, so those bytes are the visible delay.
+   Re-encoded as JPEG it is ~42KB with no difference at thumbnail size. This
+   runs at build and on revalidation only; visitors get the cached result. */
+const jpegOptions: JpegOptions = { quality: 80, mozjpeg: true };
+
+const GET = async (): Promise<Response> => {
+  const png = new ImageResponse(<OgImage {...await getImageProps()} />, {
     width: 1200,
     height: 630,
-    headers: { 'cache-control': cacheControl },
     fonts: [
       {
         name: fontFamily,
@@ -59,6 +66,15 @@ const GET = async () =>
     ],
   });
 
-export { GET, getImageProps, cacheControl };
+  const jpeg = await sharp(Buffer.from(await png.arrayBuffer()))
+    .jpeg(jpegOptions)
+    .toBuffer();
+
+  return new Response(new Uint8Array(jpeg), {
+    headers: { 'content-type': 'image/jpeg', 'cache-control': cacheControl },
+  });
+};
+
+export { GET, getImageProps, cacheControl, jpegOptions };
 
 export const revalidate = 86400;
