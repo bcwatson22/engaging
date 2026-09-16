@@ -58,8 +58,8 @@
      The aspect ratio is only for the stacked layout, where there is no
      neighbouring column to take a height from. */
   & .stage {
-    @apply bg-brand-dark border-brand-blue relative aspect-video w-full overflow-hidden rounded-lg border-2;
-    @apply md:aspect-auto md:w-1/2;
+    @apply bg-brand-dark border-brand-blue relative aspect-square w-full overflow-hidden rounded-lg border-2;
+    @apply sm:aspect-video md:aspect-auto md:w-1/2;
     @apply dark:border-brand-yellow;
 
     /* Flex items default to min-height:auto, so this could not shrink below
