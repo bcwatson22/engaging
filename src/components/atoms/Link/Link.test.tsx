@@ -204,9 +204,19 @@ describe('Link', () => {
     it('says so to a screen reader', () => {
       setup({ link: { ...mockLink!, newTab: true } });
 
-      expect(
-        screen.getByRole('link', { name: `${text} (opens in new tab)` }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('link')).toHaveTextContent(
+        `${text} (opens in new tab)`,
+        { normalizeWhitespace: false },
+      );
+    });
+
+    it('keeps the visible label free of trailing space', () => {
+      setup({ link: { ...mockLink!, newTab: true } });
+
+      const [label] = screen.getByRole('link').querySelectorAll('span');
+
+      expect(label.firstChild).toHaveProperty('textContent', text);
+      expect(label.childNodes).toHaveLength(2);
     });
 
     it('stays in the same tab by default', () => {
