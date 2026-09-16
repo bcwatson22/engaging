@@ -7,10 +7,32 @@
    No top margin: the site header above already leaves 24px under the nav, the
    same as above it, and a margin here doubled that. */
 @utility wrapper {
-  @apply border-brand-blue m-1 mt-0 grow overflow-clip border-3 p-6;
+  @apply border-brand-blue relative z-10 m-1 mt-0 grow overflow-clip border-3 p-6;
   @apply sm:m-6 sm:mt-0 xl:mx-auto xl:w-full xl:max-w-296 xl:p-16;
   @apply dark:border-brand-yellow;
   @apply print:m-0;
+
+  /* The pane the contact form and the status panels sit on, so the particle
+     field drifts behind the CV rather than through its text: the page's own
+     colour at 70%, fading out past the edge instead of stopping at a line.
+
+     Those pages draw it as a blurred ::before larger than their content. That
+     would be cut off here — the wrapper clips its overflow, and a pseudo
+     element is part of it — so the wrapper is the pane itself, and the fade is
+     a box-shadow in the same colour, which the clip does not reach. The border
+     sits crisply on top of it. z-10 lifts it above the fixed canvas.
+
+     --reset is the page's background in either scheme, the name the contact
+     and status pages already use for it. */
+  --reset: var(--brand-light);
+
+  @media (prefers-color-scheme: dark) {
+    --reset: var(--brand-dark);
+  }
+
+  background: color-mix(in oklab, var(--reset) 70%, transparent);
+  box-shadow: 0 0 16px 8px color-mix(in oklab, var(--reset) 70%, transparent);
+  @apply print:bg-transparent print:shadow-none;
 }
 
 @utility inner {

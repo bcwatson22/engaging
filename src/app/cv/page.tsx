@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
 import ReactMarkdown from 'react-markdown';
 
+import { Particles } from '@/components/atoms/Particles/Particles';
 import { Transition } from '@/components/atoms/Transition/Transition';
 import { Details } from '@/components/molecules/Details/Details';
 import { Header } from '@/components/molecules/Header/Header';
@@ -85,6 +87,14 @@ const CVPage = async () => {
   return (
     <Transition>
       <main id="main" className="cv main">
+        <Suspense>
+          <Particles
+            color="var(--brand-blue)"
+            colorDark="var(--brand-light)"
+            opacity={0.55}
+            opacityDark={0.3}
+          />
+        </Suspense>
         <div className="wrapper">
           <div className="inner">
             <Header
