@@ -30,6 +30,7 @@
     "id": "cm2okptsmag4108mo3xu62vbj",
     "streetAddress": "20 Perigree Road",
     "locality": "Sheffield",
+    "region": "South Yorkshire",
     "countryName": "United Kingdom",
     "postalCode": "S8 0NE"
   },
@@ -70,7 +71,7 @@
             "Partnered with other principals to prioritise the roadmap and share ownership of tech debt",
             "Triaged incoming bugs, ensuring they were refined and ready to fix before hitting squads",
             "Ran a site-wide accessibility audit, lifting WCAG compliance, usability, conversion and SEO",
-            "Piloted AI tools (Copilot, Claude and Cursor) to accelerate delivery and solve complex problems",
+            "Piloted AI tools (Copilot, Claude and Cursor) to accelerate delivery and assist complex problem-solving",
             "Migrated linting and formatting from ESLint/Prettier to OxLint/OxFmt, saving an estimated 15+ hours a week, locally and in CI"
           ]
         },

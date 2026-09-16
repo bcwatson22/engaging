@@ -1,22 +1,35 @@
 type TAddress = TID & {
   streetAddress: string;
   locality: string;
+  region: string;
   countryName: string;
   postalCode: string;
 };
 
 type Props = {
   address: TAddress;
+  isFull?: boolean;
 };
 
 const Address = ({
-  address: { streetAddress, locality, countryName, postalCode },
+  address: { streetAddress, locality, region, countryName, postalCode },
+  isFull = false,
 }: Props) => (
   <p className="h-adr">
-    <span className="p-street-address">{streetAddress}</span>
+    {isFull ? (
+      <span className="p-street-address">{streetAddress}</span>
+    ) : (
+      'Based in '
+    )}
     <span className="p-locality">{locality}</span>
-    <span className="p-country-name sr-only">{countryName}</span>
-    <span className="p-postal-code">{postalCode}</span>
+    {isFull ? (
+      <>
+        <span className="p-postal-code">{postalCode}</span>
+        <span className="p-country-name sr-only">{countryName}</span>
+      </>
+    ) : (
+      <span className="p-region">{region}</span>
+    )}
   </p>
 );
 

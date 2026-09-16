@@ -1,5 +1,34 @@
 @utility motes-demo {
-  @apply mx-auto flex w-full max-w-5xl grow flex-col gap-6 pb-8;
+  @apply relative z-10 mx-auto flex w-full max-w-5xl grow flex-col gap-6 pb-8;
+
+  /* The pane the contact form, the status panels and the CV sit on, so the
+     page's particle field drifts behind the demo rather than through its
+     prose and controls: the page's own colour, blurred so a particle fades
+     behind it instead of stopping at a line, with the larger inset absorbing
+     the falloff. z-10 lifts the demo above the fixed canvas.
+
+     80% here rather than the 70% the other pages use. The slider values are
+     small grey text, and with a particle directly behind one at the doubled
+     opacity it takes under the pointer, 70% left them at 4.43:1 on the light
+     scheme, under AA's 4.5:1. 80% holds them at 5.27:1 light and 5.81:1 dark.
+
+     --reset is the page's background in either scheme, the name the other
+     pages already use for it. */
+  --reset: var(--brand-light);
+
+  @media (prefers-color-scheme: dark) {
+    --reset: var(--brand-dark);
+  }
+
+  &::before {
+    content: '';
+
+    @apply pointer-events-none absolute -inset-4 -z-10 rounded-2xl;
+
+    background: color-mix(in oklab, var(--reset) 80%, transparent);
+
+    filter: blur(16px);
+  }
 
   /* Matching the status page: the heading and its prose are a pair, spaced
      closer than the blocks below them. */

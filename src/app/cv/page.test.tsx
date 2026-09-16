@@ -2,6 +2,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import ReactMarkdown from 'react-markdown';
 import type { Mock } from 'vitest';
 
+import { Particles } from '@/components/atoms/Particles/Particles';
 import { Details } from '@/components/molecules/Details/Details';
 import { Header } from '@/components/molecules/Header/Header';
 import { Qualification } from '@/components/molecules/Qualification/Qualification';
@@ -21,6 +22,11 @@ vi.mock('react-markdown', () => ({
   default: vi
     .fn<typeof import('react-markdown').default>()
     .mockImplementation(({ children }) => <>{children}</>),
+}));
+
+vi.mock('@/components/atoms/Particles/Particles', () => ({
+  Particles:
+    vi.fn<typeof import('@/components/atoms/Particles/Particles').Particles>(),
 }));
 
 vi.mock('@/data/functions/getData', () => ({
@@ -113,6 +119,21 @@ describe('CVPage', () => {
     vi.useFakeTimers();
     vi.setSystemTime(mockToday);
     cleanup();
+  });
+
+  it('carries the same particle field as the contact page', async () => {
+    await setup();
+
+    expect(Particles).toHaveBeenNthCalledWith(
+      1,
+      {
+        color: 'var(--brand-blue)',
+        colorDark: 'var(--brand-light)',
+        opacity: 0.55,
+        opacityDark: 0.3,
+      },
+      undefined,
+    );
   });
 
   it('has no detectable WCAG A or AA violations', async () => {

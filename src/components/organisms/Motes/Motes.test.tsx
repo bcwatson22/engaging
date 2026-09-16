@@ -396,13 +396,25 @@ describe('Motes', () => {
   describe('linesFor', () => {
     it('keeps a defaulted line, so it has something to transition', () => {
       const line = linesFor(initialColor, initialValues).find(
-        ({ key }) => key === 'count',
+        ({ key }) => key === 'speed',
       );
 
       expect(line).toMatchObject({
-        text: `  count: ${defaults.count},`,
+        text: `  speed: ${defaults.speed},`,
         shown: false,
       });
+    });
+
+    it('starts the demo with more particles than the library default', () => {
+      expect(initialValues.count).toBe(1600);
+    });
+
+    it('shows the demo count, so a copied snippet matches the stage', () => {
+      const line = linesFor(initialColor, initialValues).find(
+        ({ key }) => key === 'count',
+      );
+
+      expect(line).toMatchObject({ text: '  count: 1600,', shown: true });
     });
 
     it('shows a line once its setting differs', () => {
@@ -427,7 +439,7 @@ describe('Motes', () => {
       const result = snippetFor(initialColor, initialValues);
 
       expect(result).toContain(`color: '${initialColor}'`);
-      expect(result).not.toContain('count:');
+      expect(result).not.toContain('speed:');
     });
 
     it('includes anything that differs', () => {

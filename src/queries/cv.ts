@@ -40,6 +40,7 @@ export const queryCV = `
         id
         streetAddress
         locality
+        region
         countryName
         postalCode
       }

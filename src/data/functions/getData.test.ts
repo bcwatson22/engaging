@@ -56,7 +56,7 @@ describe('getData', () => {
     expect(unstable_cache).toHaveBeenNthCalledWith(
       1,
       expect.any(Function),
-      [key],
+      [key, queryHome],
       { tags: [cmsTag], revalidate },
     );
   });
