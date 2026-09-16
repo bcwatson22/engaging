@@ -1,14 +1,14 @@
-import type { TCV } from './cv';
-import type { THome } from './home';
+import type { CV } from './cv';
+import type { Home } from './home';
 
 type HomesData = {
-  homes: THome[];
+  homes: Home[];
 };
 
 type CVData = {
-  cvs: TCV[];
+  cvs: CV[];
 };
 
-export type TData = {
+export type Data = {
   data: HomesData | CVData;
 };

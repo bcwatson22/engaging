@@ -1,9 +1,9 @@
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 
-import { Icon, type TIcon } from '@/components/atoms/Icon/Icon';
+import { Icon } from '@/components/atoms/Icon/Icon';
 
 type Props = ComponentPropsWithRef<'button'> & {
-  icon: TIcon;
+  icon: Icon;
   children: ReactNode;
 };
 

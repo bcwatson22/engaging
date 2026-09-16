@@ -7,11 +7,11 @@ import {
   minMessage,
   patternMessage,
   rejectedMessage,
-  type TValues,
+  type Values,
 } from '@/constants/contact';
-import { sendContact, type TResult } from '@/data/functions/sendContact';
+import { sendContact, type Result } from '@/data/functions/sendContact';
 
-import { useContact, type TControl } from './useContact';
+import { useContact, type Control } from './useContact';
 
 vi.mock('@/data/functions/sendContact', () => ({
   sendContact:
@@ -19,10 +19,10 @@ vi.mock('@/data/functions/sendContact', () => ({
 }));
 
 type SetupOptions = {
-  result: TResult;
+  result: Result;
 };
 
-const filled: TValues = {
+const filled: Values = {
   name: 'Tom Tollafield',
   email: 'tom@example.com',
   message: 'I would like to talk to you about a role.',
@@ -75,8 +75,8 @@ const setup = (options?: Partial<SetupOptions>) => {
 
   rendered.result.current.formRef.current = form;
 
-  const control = (field: string): TControl =>
-    form.elements.namedItem(field) as TControl;
+  const control = (field: string): Control =>
+    form.elements.namedItem(field) as Control;
 
   /* Mirrors what a controlled input does: the DOM value changes, then the
      hook is told. Keeps the hook's state and the form's validity in step,
@@ -88,7 +88,7 @@ const setup = (options?: Partial<SetupOptions>) => {
     act(() =>
       rendered.result.current.onChange({
         target,
-      } as ChangeEvent<TControl>),
+      } as ChangeEvent<Control>),
     );
   };
 
@@ -96,7 +96,7 @@ const setup = (options?: Partial<SetupOptions>) => {
     act(() =>
       rendered.result.current.onBlur({
         target: control(field),
-      } as FocusEvent<TControl>),
+      } as FocusEvent<Control>),
     );
 
   const complete = () =>

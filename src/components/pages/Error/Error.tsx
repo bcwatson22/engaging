@@ -6,14 +6,14 @@ import { useId, type ReactNode } from 'react';
 import { Inner } from '@/components/atoms/Link/Link';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { TechnologySkeleton } from '@/components/molecules/Technology/Technology';
-import { type TMugshot } from '@/components/organisms/Mugshot/Mugshot';
+import { type Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 import { mugshot } from '@/constants/assets';
 import { mugshotDimensions } from '@/constants/dimensions';
 
 type Props = {
   heading?: string;
   children?: ReactNode;
-  content?: Pick<TMugshot, 'image' | 'heading'>;
+  content?: Pick<Mugshot, 'image' | 'heading'>;
   reset?: () => void;
 };
 

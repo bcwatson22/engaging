@@ -1,31 +1,31 @@
 import NextLink from 'next/link';
 import { ComponentPropsWithRef, HTMLAttributeAnchorTarget } from 'react';
 
-import { Icon, type TIcon } from '@/components/atoms/Icon/Icon';
+import { Icon } from '@/components/atoms/Icon/Icon';
 import { Skeleton, SkeletonLine } from '@/components/atoms/Skeleton/Skeleton';
 
-type TInner = {
+type Inner = {
   text: string;
-  icon: TIcon;
+  icon: Icon;
   newTab?: boolean;
 };
 
-type TLink =
-  | (TID &
-      TInner & {
+type Link =
+  | (ID &
+      Inner & {
         target: string;
       })
   | null;
 
 type Props = {
-  link: TLink;
+  link: Link;
   className?: string;
   current?: boolean;
   prefetch?: boolean;
   transitionTypes?: string[];
 };
 
-type TShared = Omit<ComponentPropsWithRef<'a'>, 'href'> & {
+type Shared = Omit<ComponentPropsWithRef<'a'>, 'href'> & {
   href: HTMLAttributeAnchorTarget;
   'data-url': string | null;
 };
@@ -37,7 +37,7 @@ const LinkSkeleton = () => (
   </div>
 );
 
-const Inner = ({ text, icon, newTab = false }: TInner) => (
+const Inner = ({ text, icon, newTab = false }: Inner) => (
   <>
     <Icon icon={icon} className="vector" />
     <span>
@@ -66,7 +66,7 @@ const Link = ({
 
   if (target.startsWith('https://')) displayUrl = target.split('https://')[1];
 
-  const outerProps: TShared = {
+  const outerProps: Shared = {
     href: target,
     className: `link icon${displayUrl ? ' url' : ''}${
       className ? ' ' + className : ''
@@ -76,7 +76,7 @@ const Link = ({
     ...(newTab && { target: '_blank', rel: 'noopener noreferrer' }),
   };
 
-  const innerProps: TInner = {
+  const innerProps: Inner = {
     text,
     icon,
     newTab,
@@ -98,4 +98,4 @@ const Link = ({
 };
 
 export { Link, LinkSkeleton, Inner };
-export type { TLink, Props as LinkProps };
+export type { Props as LinkProps };

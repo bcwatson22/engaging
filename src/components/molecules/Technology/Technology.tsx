@@ -1,16 +1,16 @@
 import Image from 'next/image';
 
-import type { TLink } from '@/components/atoms/Link/Link';
+import type { Link } from '@/components/atoms/Link/Link';
 import { Skeleton } from '@/components/atoms/Skeleton/Skeleton';
 import { techIconDimensions } from '@/constants/dimensions';
 
-type TTechnology = TID & {
+type Technology = ID & {
   name: string;
-  icon: TAsset;
-  link?: TLink;
+  icon: Asset;
+  link?: Link;
 };
 
-type Props = TTechnology;
+type Props = Technology;
 
 const TechnologySkeleton = () => (
   <div className="technology p-3">
@@ -54,4 +54,4 @@ const Technology = ({ id, icon, name }: Props) => {
 };
 
 export { Technology, TechnologySkeleton };
-export type { TTechnology, Props as TechnologyProps };
+export type { Props as TechnologyProps };

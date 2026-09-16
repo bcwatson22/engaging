@@ -1,4 +1,4 @@
-type TAddress = TID & {
+type Address = ID & {
   streetAddress: string;
   locality: string;
   region: string;
@@ -7,7 +7,7 @@ type TAddress = TID & {
 };
 
 type Props = {
-  address: TAddress;
+  address: Address;
   isFull?: boolean;
 };
 
@@ -33,4 +33,4 @@ const Address = ({
 );
 
 export { Address };
-export type { TAddress, Props as AddressProps };
+export type { Props as AddressProps };

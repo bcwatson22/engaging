@@ -1,4 +1,4 @@
-import type { TMugshot } from '@/components/organisms/Mugshot/Mugshot';
+import type { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 
 import { siteName } from './common';
 
@@ -8,15 +8,15 @@ import { siteName } from './common';
 
 const assetHost = 'https://eu-west-2.graphassets.com/clua49x6o2fv607l98axy16wb';
 
-const logoDarkBackground: TAsset = {
+const logoDarkBackground: Asset = {
   url: `${assetHost}/resize=fit:scale,width:896/output=format:webp/cm60oelf4h2g007js2owzxjwv`,
 };
 
-const logoLightBackground: TAsset = {
+const logoLightBackground: Asset = {
   url: `${assetHost}/resize=fit:scale,width:896/output=format:webp/cm60obbpqh36k07js1noabjnu`,
 };
 
-const mugshot: Pick<TMugshot, 'image' | 'heading'> = {
+const mugshot: Pick<Mugshot, 'image' | 'heading'> = {
   image: {
     url: `${assetHost}/resize=fit:scale,width:768/output=format:webp/cm3h7t43hbj9607l7ggon7yd6`,
   },

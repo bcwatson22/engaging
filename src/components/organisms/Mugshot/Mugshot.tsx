@@ -1,28 +1,27 @@
 import Image from 'next/image';
 
-import type { TLink } from '@/components/atoms/Link/Link';
+import type { Link } from '@/components/atoms/Link/Link';
 import { Skeleton, SkeletonStatus } from '@/components/atoms/Skeleton/Skeleton';
 import { Details } from '@/components/molecules/Details/Details';
 import {
   Technology,
   TechnologySkeleton,
-  type TTechnology,
 } from '@/components/molecules/Technology/Technology';
 import { mugshotDimensions } from '@/constants/dimensions';
 
 import { Reveal } from './Reveal';
 import { Technologies } from './Technologies';
 
-type TMugshot = TID & {
-  image: TAsset;
+type Mugshot = ID & {
+  image: Asset;
   heading: string;
   description: string;
-  links?: TLink[];
+  links?: Link[];
 };
 
 type Props = {
-  mugshot: TMugshot;
-  technologies: TTechnology[];
+  mugshot: Mugshot;
+  technologies: Technology[];
 };
 
 const MugshotSkeleton = () => (
@@ -79,4 +78,4 @@ const Mugshot = ({
 );
 
 export { Mugshot, MugshotSkeleton };
-export type { TMugshot, Props as MugshotProps };
+export type { Props as MugshotProps };

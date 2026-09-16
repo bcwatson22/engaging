@@ -1,4 +1,4 @@
-import type { TStatus } from '@/data/types/status';
+import type { Status } from '@/data/types/status';
 
 import { endpoint, getStatus, revalidate } from './getStatus';
 
@@ -31,24 +31,20 @@ const sweep = {
   ],
 };
 
-const status: TStatus = {
+const status: Status = {
   links: sweep,
   artifacts: { 'cv-pdf': [record], 'startup-images': [] },
   integrity: { 'cv-pdf': check, 'startup-images': null },
   queue: { waiting: 0, pending: 0, dead: 0 },
 };
 
-type TOptions = {
+type Options = {
   ok?: boolean;
   body?: unknown;
   rejects?: boolean;
 };
 
-const setup = ({
-  ok = true,
-  body = status,
-  rejects = false,
-}: TOptions = {}) => {
+const setup = ({ ok = true, body = status, rejects = false }: Options = {}) => {
   const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(() =>
     rejects
       ? Promise.reject(new Error('unreachable'))

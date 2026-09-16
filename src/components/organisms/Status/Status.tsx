@@ -1,22 +1,14 @@
-import { Icon, type TIcon } from '@/components/atoms/Icon/Icon';
-import type {
-  TArtifact,
-  TCheck,
-  TLinkState,
-  TQueue,
-  TRecord,
-  TStatus,
-  TSweep,
-} from '@/data/types/status';
+import { Icon } from '@/components/atoms/Icon/Icon';
+import type * as Service from '@/data/types/status';
 import { formatDuration } from '@/utils/formatDuration';
 import { formatRelative } from '@/utils/formatRelative';
 
-const labels: Record<TArtifact, { name: string; icon: TIcon }> = {
+const labels: Record<Service.Artifact, { name: string; icon: Icon }> = {
   'cv-pdf': { name: 'CV document', icon: 'Document' },
   'startup-images': { name: 'App splash screens', icon: 'Website' },
 };
 
-const counts: { key: keyof TQueue; name: string }[] = [
+const counts: { key: keyof Service.Queue; name: string }[] = [
   { key: 'dead', name: 'Failed' },
   { key: 'pending', name: 'Rendering' },
   { key: 'waiting', name: 'Waiting' },
@@ -24,16 +16,16 @@ const counts: { key: keyof TQueue; name: string }[] = [
 
 const shown = 12;
 
-type TState = 'unchecked' | 'current' | 'queued' | 'stale';
+type State = 'unchecked' | 'current' | 'queued' | 'stale';
 
-const states: Record<TState, { icon: TIcon; says: string }> = {
+const states: Record<State, { icon: Icon; says: string }> = {
   unchecked: { icon: 'Retry', says: 'Not checked yet' },
   current: { icon: 'CheckCircle', says: 'Matches the live page' },
   queued: { icon: 'Retry', says: 'Page changed — a re-render is queued' },
   stale: { icon: 'Warning', says: 'Still out of date after a re-render' },
 };
 
-const stateOf = (check: TCheck | null): TState => {
+const stateOf = (check: Service.Check | null): State => {
   if (check === null) return 'unchecked';
   if (check.stale) return 'stale';
   if (check.drifted) return 'queued';
@@ -41,7 +33,7 @@ const stateOf = (check: TCheck | null): TState => {
   return 'current';
 };
 
-const Integrity = ({ check }: { check: TCheck | null }) => {
+const Integrity = ({ check }: { check: Service.Check | null }) => {
   const state = stateOf(check);
   const { icon, says } = states[state];
 
@@ -57,19 +49,19 @@ const Integrity = ({ check }: { check: TCheck | null }) => {
 };
 
 type Props = {
-  status: TStatus | null;
+  status: Service.Status | null;
 };
 
-const waitOf = ({ elapsedMs, durationMs }: TRecord): number =>
+const waitOf = ({ elapsedMs, durationMs }: Service.Render): number =>
   Math.max(elapsedMs - durationMs, 0);
 
-const renderShare = (record: TRecord): number => {
+const renderShare = (record: Service.Render): number => {
   const total = waitOf(record) + record.durationMs;
 
   return total === 0 ? 100 : (record.durationMs / total) * 100;
 };
 
-const Ladder = ({ record }: { record: TRecord }) => {
+const Ladder = ({ record }: { record: Service.Render }) => {
   const wait = waitOf(record);
   const share = renderShare(record);
 
@@ -104,7 +96,7 @@ const Ladder = ({ record }: { record: TRecord }) => {
 const varies = (fastest: number, slowest: number): boolean =>
   fastest > 0 && slowest >= fastest * 2;
 
-const Durations = ({ history }: { history: TRecord[] }) => {
+const Durations = ({ history }: { history: Service.Render[] }) => {
   const recent = history.slice(0, shown).reverse();
   const durations = recent.map(({ durationMs }) => durationMs);
   const slowest = Math.max(...durations);
@@ -159,14 +151,14 @@ const Durations = ({ history }: { history: TRecord[] }) => {
 };
 
 const linkStates: Record<
-  Exclude<TLinkState, 'ok'>,
-  { icon: TIcon; says: string }
+  Exclude<Service.LinkState, 'ok'>,
+  { icon: Icon; says: string }
 > = {
   broken: { icon: 'Warning', says: 'did not answer' },
   blocked: { icon: 'Cross', says: 'refused an automated check' },
 };
 
-const Links = ({ sweep }: { sweep: TSweep | null }) => {
+const Links = ({ sweep }: { sweep: Service.Sweep | null }) => {
   if (sweep === null) {
     return (
       <p className="sweep-summary" data-state="muted">
@@ -198,7 +190,7 @@ const Links = ({ sweep }: { sweep: TSweep | null }) => {
         <ul className="sweep-problems">
           {sweep.problems.map(({ url, status, state }) => {
             const { icon, says } =
-              linkStates[state as Exclude<TLinkState, 'ok'>];
+              linkStates[state as Exclude<Service.LinkState, 'ok'>];
 
             return (
               <li key={url} data-state={state}>
@@ -222,9 +214,9 @@ const Artifact = ({
   history,
   check,
 }: {
-  artifact: TArtifact;
-  history: TRecord[];
-  check: TCheck | null;
+  artifact: Service.Artifact;
+  history: Service.Render[];
+  check: Service.Check | null;
 }) => {
   const { name, icon } = labels[artifact];
   const [latest] = history;
@@ -272,7 +264,7 @@ const Status = ({ status }: Props) => (
     {status && (
       <>
         <ul className="artifacts">
-          {(Object.keys(labels) as TArtifact[]).map((artifact) => (
+          {(Object.keys(labels) as Service.Artifact[]).map((artifact) => (
             <Artifact
               key={artifact}
               artifact={artifact}

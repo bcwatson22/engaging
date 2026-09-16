@@ -1,4 +1,4 @@
-import type { TIcon } from '@/components/atoms/Icon/Icon';
+import type { Icon } from '@/components/atoms/Icon/Icon';
 
 /* Shared by the hook that validates and the component that renders, so the
    constraints in the markup and the messages shown when they fail cannot
@@ -12,11 +12,11 @@ const honeypotField = 'website';
 
 const fields = ['name', 'email', 'message'] as const;
 
-type TField = (typeof fields)[number];
-type TValues = Record<TField, string>;
-type TErrors = Partial<Record<TField, string>>;
+type Field = (typeof fields)[number];
+type Values = Record<Field, string>;
+type Errors = Partial<Record<Field, string>>;
 
-const empty: TValues = { name: '', email: '', message: '' };
+const empty: Values = { name: '', email: '', message: '' };
 
 const minMessage = 10;
 const maxMessage = 5000;
@@ -44,14 +44,14 @@ const rejectedMessage = 'This was not accepted.';
 
 /* `invalid` is only ever the server disagreeing with the browser —
    client-side failures never reach the network. */
-type TOutcome = 'idle' | 'sent' | 'invalid' | 'limited' | 'failed';
+type Outcome = 'idle' | 'sent' | 'invalid' | 'limited' | 'failed';
 
 /* How each outcome reads, for the shared `outcome-summary` treatment. `sent`
    is the only good news; the two the sender can act on are warnings rather
    than failures, because trying again genuinely helps. `failed` is ours. */
 const outcomes: Record<
-  Exclude<TOutcome, 'idle'>,
-  { state: 'ok' | 'warn' | 'bad'; icon: TIcon }
+  Exclude<Outcome, 'idle'>,
+  { state: 'ok' | 'warn' | 'bad'; icon: Icon }
 > = {
   sent: { state: 'ok', icon: 'CheckCircle' },
   invalid: { state: 'warn', icon: 'Warning' },
@@ -59,7 +59,7 @@ const outcomes: Record<
   failed: { state: 'bad', icon: 'Cross' },
 };
 
-const messages: Record<Exclude<TOutcome, 'idle'>, string> = {
+const messages: Record<Exclude<Outcome, 'idle'>, string> = {
   sent: 'Thanks for your message. I will reply as soon as I can.',
   invalid: 'Hmm, some of the details might need another gander.',
   limited:
@@ -81,4 +81,4 @@ export {
   messages,
   outcomes,
 };
-export type { TField, TValues, TErrors, TOutcome };
+export type { Field, Values, Errors, Outcome };

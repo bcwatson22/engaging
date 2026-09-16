@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
 
-type TMotion = 'paused' | 'running';
+type Motion = 'paused' | 'running';
 
 type Return = {
   isPaused: boolean;
@@ -21,7 +21,7 @@ const changeEvent = 'motionchange';
    tabs — so a custom one is dispatched alongside every write, and both are
    listened for. That keeps every consumer on the page (the toggle, the
    particle field) in step with the one that changed it. */
-const read = (): TMotion => {
+const read = (): Motion => {
   try {
     return window.localStorage.getItem(storageKey) === 'paused'
       ? 'paused'
@@ -44,9 +44,9 @@ const subscribe = (onChange: () => void): (() => void) => {
 
 /* Running on the server: the stored choice cannot be known there, and the
    CSS pause only applies once the attribute below is set. */
-const readOnServer = (): TMotion => 'running';
+const readOnServer = (): Motion => 'running';
 
-const write = (motion: TMotion): void => {
+const write = (motion: Motion): void => {
   try {
     window.localStorage.setItem(storageKey, motion);
   } catch {
@@ -75,4 +75,4 @@ const useMotionPreference = (): Return => {
 };
 
 export { useMotionPreference, storageKey, changeEvent };
-export type { Return, TMotion };
+export type { Return, Motion };

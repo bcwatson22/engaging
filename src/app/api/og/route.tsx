@@ -7,7 +7,7 @@ import {
 } from '@/components/organisms/OgImage/OgImage';
 import { getData } from '@/data/functions/getData';
 import { snapshotHome } from '@/data/snapshot/snapshot';
-import type { THome } from '@/data/types/home';
+import type { Home } from '@/data/types/home';
 import { queryHome } from '@/queries/home';
 import { formatExperience } from '@/utils/formatExperience';
 import { fontFamily, loadFont } from '@/utils/loadFont';
@@ -19,7 +19,7 @@ const replaceImageFormat = (
 ): string => value.replace(current, target);
 
 const getImageProps = async (): Promise<OgImageProps> => {
-  const home = await getData<THome>(queryHome, 'homes', snapshotHome);
+  const home = await getData<Home>(queryHome, 'homes', snapshotHome);
 
   return {
     ...home,

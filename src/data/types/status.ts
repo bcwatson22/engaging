@@ -5,7 +5,7 @@
 
 const artifacts = ['cv-pdf', 'startup-images'] as const;
 
-type TArtifact = (typeof artifacts)[number];
+type Artifact = (typeof artifacts)[number];
 
 /* `result` is a string rather than a URL: the PDF has one public URL, the
    startup images have twenty-two and no single one between them, so the
@@ -14,7 +14,7 @@ type TArtifact = (typeof artifacts)[number];
    `durationMs` is the render itself; `elapsedMs` is enqueue to finish, so the
    difference between them is how long the site took to catch up after a
    publish — the race the service's content check retries through. */
-type TRecord = {
+type Render = {
   at: string;
   result: string;
   durationMs: number;
@@ -29,7 +29,7 @@ type TRecord = {
    `stale`   — it drifted, a render was already queued by an earlier check, and
                it is still drifting. Something is wrong that re-rendering will
                not fix, which is the one state worth looking at. */
-type TCheck = {
+type Check = {
   at: string;
   drifted: boolean;
   queued: boolean;
@@ -41,20 +41,20 @@ type TCheck = {
    `blocked` is a host refusing a robot rather than a link that is gone —
    LinkedIn answers 999 to anything automated. Worth showing, but not worth
    alarming anyone about, or the report becomes noise nobody reads. */
-type TLinkState = 'ok' | 'blocked' | 'broken';
+type LinkState = 'ok' | 'blocked' | 'broken';
 
-type TLinkResult = {
+type LinkResult = {
   url: string;
   status: number;
-  state: TLinkState;
+  state: LinkState;
 };
 
 /* `checked` is the count; `problems` holds only the links that were not fine.
    Recording that a link still works, weekly, is a fact nobody reads. */
-type TSweep = {
+type Sweep = {
   at: string;
   checked: number;
-  problems: TLinkResult[];
+  problems: LinkResult[];
 };
 
 /* What a Redis stream can answer, which is not what BullMQ used to. `waiting`
@@ -65,7 +65,7 @@ type TSweep = {
    There is no `delayed`: the worker's retry ladder runs inside its own
    process rather than in Redis, so a job waiting to be retried is simply one
    the worker is still holding. */
-type TQueue = {
+type Queue = {
   waiting: number;
   pending: number;
   dead: number;
@@ -73,24 +73,24 @@ type TQueue = {
 
 /* Newest first. The head is "when was this last rendered"; the tail is the
    history the page draws. */
-type TStatus = {
-  artifacts: Record<TArtifact, TRecord[]>;
+type Status = {
+  artifacts: Record<Artifact, Render[]>;
   /* Null where a check has not run yet — the schedule is weekly, so that is
      the ordinary state for the first few days after a deploy. */
-  integrity: Record<TArtifact, TCheck | null>;
+  integrity: Record<Artifact, Check | null>;
   /* Null before a sweep has run. */
-  links: TSweep | null;
-  queue: TQueue;
+  links: Sweep | null;
+  queue: Queue;
 };
 
 export { artifacts };
 export type {
-  TStatus,
-  TRecord,
-  TCheck,
-  TSweep,
-  TLinkResult,
-  TLinkState,
-  TQueue,
-  TArtifact,
+  Status,
+  Render,
+  Check,
+  Sweep,
+  LinkResult,
+  LinkState,
+  Queue,
+  Artifact,
 };

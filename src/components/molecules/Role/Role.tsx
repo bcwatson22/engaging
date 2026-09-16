@@ -7,14 +7,14 @@ import {
   SkeletonLine,
 } from '@/components/atoms/Skeleton/Skeleton';
 
-type TRole = TID &
-  Pick<TPosition, 'role'> & {
+type Role = ID &
+  Pick<Position, 'role'> & {
     dates: string[];
     bullets: string[];
     capacity: string;
   };
 
-type Props = TRole & {
+type Props = Role & {
   index: number;
   total: number;
 };
@@ -79,4 +79,4 @@ const Role = ({ role, dates, capacity, bullets, index, total }: Props) => {
 };
 
 export { Role, RoleSkeleton, getLinkClassNames };
-export type { TRole, Props as RoleProps };
+export type { Props as RoleProps };

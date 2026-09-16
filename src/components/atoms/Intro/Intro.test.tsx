@@ -2,16 +2,16 @@ import { cleanup, render, screen } from '@testing-library/react';
 
 import { mockCV } from '@/data/mock/cv';
 
-import { Intro, type TIntro } from './Intro';
+import { Intro } from './Intro';
 
 const mockSplit = mockCV.intro.split('\n\n');
 const mockToday = new Date('2025-01-08');
 
-const defaultProps: TIntro = {
+const defaultProps: Intro = {
   intro: mockSplit[1],
 };
 
-const setup = (props?: Partial<TIntro>) =>
+const setup = (props?: Partial<Intro>) =>
   render(<Intro {...defaultProps} {...props} />);
 
 describe('Intro', () => {

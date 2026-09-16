@@ -2,14 +2,14 @@ import { Suspense, useId } from 'react';
 
 import { Dates } from '@/components/atoms/Dates/Dates';
 
-type TQualification = TID & {
+type Qualification = ID & {
   institution: string;
   location: string;
   dates: string[];
   description: string;
 };
 
-type Props = TQualification;
+type Props = Qualification;
 
 const Qualification = ({ institution, dates, description }: Props) => {
   const sectionId = useId();
@@ -26,4 +26,4 @@ const Qualification = ({ institution, dates, description }: Props) => {
 };
 
 export { Qualification };
-export type { TQualification, Props as QualificationProps };
+export type { Props as QualificationProps };

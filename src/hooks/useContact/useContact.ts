@@ -16,25 +16,25 @@ import {
   honeypotField,
   patternMessage,
   rejectedMessage,
-  type TErrors,
-  type TField,
-  type TOutcome,
-  type TValues,
+  type Errors,
+  type Field,
+  type Outcome,
+  type Values,
 } from '@/constants/contact';
 import { sendContact } from '@/data/functions/sendContact';
 
-type TControl = HTMLInputElement | HTMLTextAreaElement;
+type Control = HTMLInputElement | HTMLTextAreaElement;
 
 type Return = {
-  values: TValues;
-  errors: TErrors;
-  outcome: TOutcome;
+  values: Values;
+  errors: Errors;
+  outcome: Outcome;
   isPending: boolean;
   formRef: RefObject<HTMLFormElement | null>;
   statusRef: RefObject<HTMLOutputElement | null>;
   submit: (payload: FormData) => void;
-  onChange: (event: ChangeEvent<TControl>) => void;
-  onBlur: (event: FocusEvent<TControl>) => void;
+  onChange: (event: ChangeEvent<Control>) => void;
+  onBlur: (event: FocusEvent<Control>) => void;
 };
 
 /* The browser's own messages, rather than strings written here: already
@@ -44,7 +44,7 @@ type Return = {
 const errorFor = ({
   validity: { valid, patternMismatch },
   validationMessage,
-}: TControl): string => {
+}: Control): string => {
   if (valid) return '';
 
   return patternMismatch ? patternMessage : validationMessage;
@@ -57,15 +57,15 @@ const useContact = (): Return => {
   /* Controlled, so React 19's automatic form reset after an action cannot
      discard what someone typed when the send fails. Losing a message to a
      rate limit would be a worse bug than the rate limit. */
-  const [values, setValues] = useState<TValues>(empty);
-  const [errors, setErrors] = useState<TErrors>({});
+  const [values, setValues] = useState<Values>(empty);
+  const [errors, setErrors] = useState<Errors>({});
 
   /* Which fields have been left at least once. A field is not judged until
      someone has finished with it — being told your email is invalid while
      still typing the first character is the thing everyone hates about form
      validation. After that first blur it revalidates on every keystroke, so a
      correction clears as soon as it is right. */
-  const [touched, setTouched] = useState<Partial<Record<TField, boolean>>>({});
+  const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
 
   /* Counts rejected submits. Focus cannot be moved from inside the action —
      React commits the resulting render afterwards and the call is lost — so
@@ -82,13 +82,10 @@ const useContact = (): Return => {
     renderedAt.current = Date.now();
   }, []);
 
-  const controlFor = (form: HTMLFormElement, field: TField): TControl =>
-    form.elements.namedItem(field) as TControl;
+  const controlFor = (form: HTMLFormElement, field: Field): Control =>
+    form.elements.namedItem(field) as Control;
 
-  const send = async (
-    _previous: TOutcome,
-    data: FormData,
-  ): Promise<TOutcome> => {
+  const send = async (_previous: Outcome, data: FormData): Promise<Outcome> => {
     const form = formRef.current;
 
     /* Checked here as well as on blur, because a field never visited was
@@ -136,7 +133,7 @@ const useContact = (): Return => {
     return result.outcome;
   };
 
-  const [outcome, submit, isPending] = useActionState<TOutcome, FormData>(
+  const [outcome, submit, isPending] = useActionState<Outcome, FormData>(
     send,
     'idle',
   );
@@ -169,17 +166,17 @@ const useContact = (): Return => {
       ?.focus();
   }, [rejections]);
 
-  const onBlur = ({ target }: FocusEvent<TControl>) => {
+  const onBlur = ({ target }: FocusEvent<Control>) => {
     setTouched((previous) => ({ ...previous, [target.name]: true }));
     setErrors((previous) => ({ ...previous, [target.name]: errorFor(target) }));
   };
 
-  const onChange = ({ target }: ChangeEvent<TControl>) => {
+  const onChange = ({ target }: ChangeEvent<Control>) => {
     setValues((previous) => ({ ...previous, [target.name]: target.value }));
 
     /* Only once touched. `target.validity` already reflects the keystroke
        being handled, so this needs no separate read of the new value. */
-    if (touched[target.name as TField])
+    if (touched[target.name as Field])
       setErrors((previous) => ({
         ...previous,
         [target.name]: errorFor(target),
@@ -200,4 +197,4 @@ const useContact = (): Return => {
 };
 
 export { useContact, errorFor };
-export type { Return, TControl };
+export type { Return, Control };

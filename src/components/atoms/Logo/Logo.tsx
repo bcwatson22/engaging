@@ -2,15 +2,15 @@ import { getImageProps, type ImageProps } from 'next/image';
 
 import { personalLogoDimensions } from '@/constants/dimensions';
 
-type TLogo = {
-  logoLightBackground: TAsset;
-  logoDarkBackground: TAsset;
+type Logo = {
+  logoLightBackground: Asset;
+  logoDarkBackground: Asset;
 };
 
 const { width, height } = personalLogoDimensions;
 const alt = 'Billy Watson logo';
 
-const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
+const Logo = ({ logoDarkBackground, logoLightBackground }: Logo) => {
   const commonImageProps: ImageProps = {
     src: logoLightBackground?.url,
     alt,
@@ -53,4 +53,3 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: TLogo) => {
 };
 
 export { Logo, alt };
-export type { TLogo };
