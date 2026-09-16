@@ -29,6 +29,7 @@ export const mockCV: TCV = {
   address: {
     streetAddress: '20 Perigree Road',
     locality: 'Sheffield',
+    region: 'South Yorkshire',
     countryName: 'United Kingdom',
     postalCode: 'S8 0NE',
   },

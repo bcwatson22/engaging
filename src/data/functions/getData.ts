@@ -27,17 +27,26 @@ const fetchData = async <Data>(query: string, key: string): Promise<Data> => {
    keyParts must include `key`: the cache key is the callback source plus the
    parts, and the arrow body stringifies identically at both call sites, so
    ["homes"] vs ["cvs"] is the only thing stopping CV data being served to the
-   home page. */
+   home page.
+
+   And the query: without it, adding a field to a query changed nothing that
+   the cache could see, so the response cached before the change kept being
+   served — for up to a day, or until the CMS webhook revalidated — without the
+   new field. */
 const getData = async <Data>(
   query: string,
   key: string,
   fallback: Data,
 ): Promise<Data> => {
   try {
-    return await unstable_cache(() => fetchData<Data>(query, key), [key], {
-      tags: [cmsTag],
-      revalidate,
-    })();
+    return await unstable_cache(
+      () => fetchData<Data>(query, key),
+      [key, query],
+      {
+        tags: [cmsTag],
+        revalidate,
+      },
+    )();
   } catch (error) {
     console.error(errorMessage, error);
 

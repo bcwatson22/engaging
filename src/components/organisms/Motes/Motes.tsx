@@ -35,8 +35,10 @@ type Values = Record<Setting, number>;
 
 const initialColor = '#ffffff';
 
+const demoCount = 1600;
+
 const initialValues: Values = {
-  count: defaults.count,
+  count: demoCount,
   speed: defaults.speed,
   size: defaults.size,
   opacity: defaults.opacity,
