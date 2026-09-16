@@ -22,13 +22,12 @@ const Address = ({
       'Based in '
     )}
     <span className="p-locality">{locality}</span>
-    {isFull ? (
+    <span className="p-region">{region}</span>
+    {isFull && (
       <>
         <span className="p-postal-code">{postalCode}</span>
         <span className="p-country-name sr-only">{countryName}</span>
       </>
-    ) : (
-      <span className="p-region">{region}</span>
     )}
   </p>
 );
