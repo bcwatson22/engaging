@@ -1,4 +1,4 @@
-type TResponse<Data> = {
+type CmsResponse<Data> = {
   data?: Record<string, Data[]>;
   errors?: { message: string }[];
 };
@@ -8,7 +8,7 @@ type TResponse<Data> = {
    in the dynamic /api/og route. Rather than depend on that resolving
    favourably, caching is left entirely to unstable_cache in getData, which
    caches the result and so is transport- and context-independent. */
-const fetchCms = async <Data>(query: string): Promise<TResponse<Data>> => {
+const fetchCms = async <Data>(query: string): Promise<CmsResponse<Data>> => {
   const response = await fetch(process.env.HYGRAPH_ENDPOINT!, {
     method: 'POST',
     headers: {
@@ -26,4 +26,4 @@ const fetchCms = async <Data>(query: string): Promise<TResponse<Data>> => {
 };
 
 export { fetchCms };
-export type { TResponse };
+export type { CmsResponse };

@@ -4,7 +4,7 @@ import { useId } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
 import { Icon } from '@/components/atoms/Icon/Icon';
-import { Link, type TLink } from '@/components/atoms/Link/Link';
+import { Link } from '@/components/atoms/Link/Link';
 import {
   emailPattern,
   honeypotField,
@@ -13,11 +13,11 @@ import {
   messages,
   minMessage,
   outcomes,
-  type TField,
+  type Field,
 } from '@/constants/contact';
 import { useContact } from '@/hooks/useContact/useContact';
 
-const fallback: TLink = {
+const fallback: Link = {
   id: 'contact-fallback',
   target:
     'mailto:hello@engaging.engineering?subject=Engaging%20Engineering%20Enquiry',
@@ -40,7 +40,7 @@ const Contact = () => {
   const headingId = useId();
   const statusId = useId();
   const requiredId = useId();
-  const ids: Record<TField, string> = {
+  const ids: Record<Field, string> = {
     name: useId(),
     email: useId(),
     message: useId(),
@@ -58,10 +58,10 @@ const Contact = () => {
     onBlur,
   } = useContact();
 
-  const describedBy = (field: TField): string | undefined =>
+  const describedBy = (field: Field): string | undefined =>
     errors[field] ? `${ids[field]}-error` : undefined;
 
-  const shared = (field: TField) => ({
+  const shared = (field: Field) => ({
     name: field,
     required: true,
     value: values[field],

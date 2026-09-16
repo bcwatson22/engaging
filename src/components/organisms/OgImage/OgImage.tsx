@@ -1,8 +1,8 @@
 /* oxlint-disable next/no-img-element */
 
-import type { THome } from '@/data/types/home';
+import type { Home } from '@/data/types/home';
 
-type Props = THome;
+type Props = Home;
 
 const OgImage = ({
   meta: { title },

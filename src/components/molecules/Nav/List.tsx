@@ -3,11 +3,11 @@
 import { usePathname } from 'next/navigation';
 import { ViewTransition } from 'react';
 
-import { Link, type TLink } from '@/components/atoms/Link/Link';
+import { Link } from '@/components/atoms/Link/Link';
 import { useIdle } from '@/hooks/useIdle/useIdle';
 
 type Props = {
-  links: TLink[];
+  links: Link[];
   expand: boolean;
 };
 

@@ -49,16 +49,16 @@ const iconOptions = [
   'Website',
 ] as const;
 
-type TIcon = (typeof iconOptions)[number];
+type Icon = (typeof iconOptions)[number];
 
 type Props = {
-  icon: TIcon;
+  icon: Icon;
   className?: string;
   isHidden?: boolean;
 };
 
 const iconMap: Record<
-  TIcon,
+  Icon,
   ForwardRefExoticComponent<Omit<SVGProps<SVGSVGElement>, 'ref'>>
 > = {
   Check: CheckIcon,
@@ -99,4 +99,4 @@ const Icon = ({ icon, className, isHidden = true }: Props) => {
 };
 
 export { Icon, iconOptions };
-export type { TIcon, Props as IconProps };
+export type { Props as IconProps };

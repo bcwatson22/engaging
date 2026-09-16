@@ -3,7 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { Particles } from '@/components/atoms/Particles/Particles';
 import { Status } from '@/components/organisms/Status/Status';
 import { getStatus } from '@/data/functions/getStatus';
-import type { TStatus } from '@/data/types/status';
+import type * as Service from '@/data/types/status';
 
 import StatusPage, { description, generateMetadata, title } from './page';
 
@@ -20,14 +20,14 @@ vi.mock('@/data/functions/getStatus', () => ({
   getStatus: vi.fn<typeof import('@/data/functions/getStatus').getStatus>(),
 }));
 
-const status: TStatus = {
+const status: Service.Status = {
   artifacts: { 'cv-pdf': [], 'startup-images': [] },
   integrity: { 'cv-pdf': null, 'startup-images': null },
   links: null,
   queue: { waiting: 0, pending: 0, dead: 0 },
 };
 
-const setup = async ({ result = status as TStatus | null } = {}) => {
+const setup = async ({ result = status as Service.Status | null } = {}) => {
   vi.mocked(getStatus).mockResolvedValue(result);
 
   return render(await StatusPage());

@@ -1,26 +1,26 @@
 /// <reference types="react/canary" />
 
-type TID = {
+type ID = {
   id?: string;
   __typename?: string;
 };
 
-type TAsset = TID & {
+type Asset = ID & {
   url: string;
 };
 
-type TMeta = TID & {
+type Meta = ID & {
   title: string;
   description: string;
   keywords: string[];
 };
 
-type TPosition = {
+type Position = {
   role: string;
   company: string;
 };
 
-type TScroll = {
+type Scroll = {
   delay?: Orchestration['delay'];
   margin?: UseInViewOptions['margin'];
   amount?: UseInViewOptions['amount'];

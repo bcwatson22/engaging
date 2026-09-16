@@ -2,16 +2,16 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 
 import { mockCV } from '@/data/mock/cv';
 
-import { Logo, type TLogo, alt } from './Logo';
+import { Logo, alt } from './Logo';
 
 const { logoLightBackground, logoDarkBackground } = mockCV;
 
-const defaultProps: TLogo = {
+const defaultProps: Logo = {
   logoLightBackground,
   logoDarkBackground,
 };
 
-const setup = (props?: Partial<TLogo>) =>
+const setup = (props?: Partial<Logo>) =>
   render(<Logo {...defaultProps} {...props} />);
 
 describe('Logo', () => {

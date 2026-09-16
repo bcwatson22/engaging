@@ -1,7 +1,7 @@
 import { type MotionProps, useInView } from 'motion/react';
 import type { RefObject } from 'react';
 
-type Params = TScroll & {
+type Params = Scroll & {
   ref: RefObject<HTMLDivElement | null>;
 };
 

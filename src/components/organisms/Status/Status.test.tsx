@@ -1,6 +1,6 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
 
-import type { TCheck, TRecord, TStatus, TSweep } from '@/data/types/status';
+import type * as Service from '@/data/types/status';
 
 import {
   renderShare,
@@ -15,7 +15,10 @@ import {
 
 const pdfUrl = 'https://artifacts.example.com/billy-watson-cv.pdf';
 
-const recordAt = (at: string, overrides: Partial<TRecord> = {}): TRecord => ({
+const recordAt = (
+  at: string,
+  overrides: Partial<Service.Render> = {},
+): Service.Render => ({
   at,
   result: pdfUrl,
   durationMs: 14_000,
@@ -24,7 +27,7 @@ const recordAt = (at: string, overrides: Partial<TRecord> = {}): TRecord => ({
   ...overrides,
 });
 
-const check = (overrides: Partial<TCheck> = {}): TCheck => ({
+const check = (overrides: Partial<Service.Check> = {}): Service.Check => ({
   at: '2026-08-17T11:00:00.000Z',
   drifted: false,
   queued: false,
@@ -32,14 +35,14 @@ const check = (overrides: Partial<TCheck> = {}): TCheck => ({
   ...overrides,
 });
 
-const sweep = (overrides: Partial<TSweep> = {}): TSweep => ({
+const sweep = (overrides: Partial<Service.Sweep> = {}): Service.Sweep => ({
   at: '2026-08-17T11:00:00.000Z',
   checked: 12,
   problems: [],
   ...overrides,
 });
 
-const status: TStatus = {
+const status: Service.Status = {
   links: sweep(),
   integrity: { 'cv-pdf': check(), 'startup-images': check() },
   artifacts: {
@@ -54,12 +57,12 @@ const status: TStatus = {
 const setup = (props?: Partial<StatusProps>) =>
   render(<Status status={status} {...props} />);
 
-const withHistory = (history: TRecord[]): TStatus => ({
+const withHistory = (history: Service.Render[]): Service.Status => ({
   ...status,
   artifacts: { ...status.artifacts, 'cv-pdf': history },
 });
 
-const withCheck = (found: TCheck | null): TStatus => ({
+const withCheck = (found: Service.Check | null): Service.Status => ({
   ...status,
   integrity: { ...status.integrity, 'cv-pdf': found },
 });

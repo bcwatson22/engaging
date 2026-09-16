@@ -1,6 +1,6 @@
-import type { THome } from '../types/home';
+import type { Home } from '../types/home';
 
-export const mockHome: THome = {
+export const mockHome: Home = {
   meta: {
     title: 'Engaging Engineering',
     description:

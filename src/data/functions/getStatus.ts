@@ -1,5 +1,5 @@
 import { serviceOrigin } from '@/constants/common';
-import { artifacts, type TQueue, type TStatus } from '@/data/types/status';
+import { artifacts, type Queue, type Status } from '@/data/types/status';
 
 const endpoint = `${serviceOrigin}/status`;
 
@@ -50,7 +50,7 @@ const isCheck = (value: unknown): boolean => {
    "the shape I expect" is an assumption about another process at another
    version — and rendering `undefined` into a page is a worse failure than
    showing that the status could not be read. */
-const isStatus = (value: unknown): value is TStatus => {
+const isStatus = (value: unknown): value is Status => {
   if (typeof value !== 'object' || value === null) return false;
 
   const {
@@ -58,7 +58,7 @@ const isStatus = (value: unknown): value is TStatus => {
     integrity,
     links,
     queue,
-  } = value as Partial<TStatus>;
+  } = value as Partial<Status>;
 
   if (typeof records !== 'object' || records === null) return false;
   if (typeof queue !== 'object' || queue === null) return false;
@@ -118,10 +118,10 @@ const isSweep = (value: unknown): boolean => {
    The same reasoning already applied to integrity and links a few lines up;
    the queue was the one place the response had to be perfect. A count this
    version does not know reads as zero, and the rest of the page survives. */
-const countIn = (queue: Partial<TQueue>, key: keyof TQueue): number =>
+const countIn = (queue: Partial<Queue>, key: keyof Queue): number =>
   isNumber(queue[key]) ? (queue[key] as number) : 0;
 
-const queueIn = ({ queue }: TStatus): TQueue => ({
+const queueIn = ({ queue }: Status): Queue => ({
   waiting: countIn(queue, 'waiting'),
   pending: countIn(queue, 'pending'),
   dead: countIn(queue, 'dead'),
@@ -129,16 +129,16 @@ const queueIn = ({ queue }: TStatus): TQueue => ({
 
 /* A service too old to run integrity checks reports the same thing as one
    that has not run any yet: nothing found, for either artifact. */
-const checksIn = ({ integrity }: TStatus): TStatus['integrity'] =>
+const checksIn = ({ integrity }: Status): Status['integrity'] =>
   integrity ??
   (Object.fromEntries(
     artifacts.map((name) => [name, null]),
-  ) as TStatus['integrity']);
+  ) as Status['integrity']);
 
 /* Returns null rather than throwing, on any failure — asleep, unreachable, or
    answering something this page does not recognise. The page renders either
    way; see the Status component for what it says when there is nothing. */
-const getStatus = async (): Promise<TStatus | null> => {
+const getStatus = async (): Promise<Status | null> => {
   try {
     const response = await fetch(endpoint, {
       signal: AbortSignal.timeout(timeout),

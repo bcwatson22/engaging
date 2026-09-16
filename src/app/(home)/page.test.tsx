@@ -6,7 +6,7 @@ import { Mugshot } from '@/components/organisms/Mugshot/Mugshot';
 import { getStartupImages } from '@/constants/startupImages';
 import { getData } from '@/data/functions/getData';
 import { mockHome } from '@/data/mock/home';
-import type { THome } from '@/data/types/home';
+import type { Home } from '@/data/types/home';
 import { queryHome } from '@/queries/home';
 
 import HomePage, { generateMetadata } from './page';
@@ -40,7 +40,7 @@ const {
   technologies,
 } = mockHome;
 
-const setup = async (mockedResolvedValue: THome | {} = mockHome) => {
+const setup = async (mockedResolvedValue: Home | {} = mockHome) => {
   (getData as Mock).mockResolvedValue(mockedResolvedValue);
 
   return render(await (async () => await HomePage())());

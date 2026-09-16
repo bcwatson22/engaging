@@ -1,14 +1,14 @@
 import { honeypotField } from '@/constants/contact';
 
-import { endpoint, sendContact, type TPayload } from './sendContact';
+import { endpoint, sendContact, type Payload } from './sendContact';
 
-type TOptions = {
+type Options = {
   status?: number;
   body?: unknown;
   rejects?: boolean;
 };
 
-const payload: TPayload = {
+const payload: Payload = {
   name: 'Tom Tollafield',
   email: 'tom@example.com',
   message: 'I would like to talk to you about a role.',
@@ -16,7 +16,7 @@ const payload: TPayload = {
   renderedAt: 1_760_000_000_000,
 };
 
-const setup = ({ status = 202, body = {}, rejects = false }: TOptions = {}) => {
+const setup = ({ status = 202, body = {}, rejects = false }: Options = {}) => {
   const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(() =>
     rejects
       ? Promise.reject(new Error('network'))

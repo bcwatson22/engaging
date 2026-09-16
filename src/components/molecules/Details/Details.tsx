@@ -1,10 +1,10 @@
-import { Address, type TAddress } from '@/components/atoms/Address/Address';
-import { Link, LinkSkeleton, type TLink } from '@/components/atoms/Link/Link';
+import { Address } from '@/components/atoms/Address/Address';
+import { Link, LinkSkeleton } from '@/components/atoms/Link/Link';
 import { SkeletonLine } from '@/components/atoms/Skeleton/Skeleton';
 
 type Props = {
-  address?: TAddress;
-  links: TLink[];
+  address?: Address;
+  links: Link[];
 };
 
 type SkeletonProps = {

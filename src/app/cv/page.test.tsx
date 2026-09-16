@@ -13,7 +13,7 @@ import { themeColor } from '@/constants/metadata';
 import { getStartupImages } from '@/constants/startupImages';
 import { getData } from '@/data/functions/getData';
 import { mockCV } from '@/data/mock/cv';
-import type { TCV } from '@/data/types/cv';
+import type { CV } from '@/data/types/cv';
 import { queryCV } from '@/queries/cv';
 
 import CVPage, { generateMetadata, generateViewport } from './page';
@@ -107,7 +107,7 @@ const {
 const mockToday = new Date('2025-01-08');
 const expectedDescription = description.replace('{{experience}}', '12');
 
-const setup = async (mockedResolvedValue: TCV | {} = mockCV) => {
+const setup = async (mockedResolvedValue: CV | {} = mockCV) => {
   (getData as Mock).mockResolvedValue(mockedResolvedValue);
 
   return render(await (async () => await CVPage())());

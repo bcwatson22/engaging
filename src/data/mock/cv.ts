@@ -1,6 +1,6 @@
-import type { TCV } from '../types/cv';
+import type { CV } from '../types/cv';
 
-export const mockCV: TCV = {
+export const mockCV: CV = {
   meta: {
     title: 'Billy Watson',
     description:

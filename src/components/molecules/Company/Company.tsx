@@ -12,14 +12,14 @@ import {
 import { companyLogoDimensions } from '@/constants/dimensions';
 import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
-type TCompany = TScroll &
-  Pick<TPosition, 'company'> & {
+type Company = Scroll &
+  Pick<Position, 'company'> & {
     city: string;
-    logo: TAsset;
+    logo: Asset;
     sectionId: string;
   };
 
-type Props = TCompany;
+type Props = Company;
 
 const { width, height } = companyLogoDimensions;
 
@@ -84,4 +84,4 @@ const Company = ({
 };
 
 export { Company, CompanySkeleton };
-export type { TCompany, Props as CompanyProps };
+export type { Props as CompanyProps };

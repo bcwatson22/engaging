@@ -6,7 +6,7 @@ import { useRef } from 'react';
 
 import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
-type Props = TScroll & {
+type Props = Scroll & {
   heading: string;
 };
 

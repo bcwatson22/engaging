@@ -7,7 +7,7 @@ import {
   minMessage,
   patternMessage,
 } from '@/constants/contact';
-import { sendContact, type TResult } from '@/data/functions/sendContact';
+import { sendContact, type Result } from '@/data/functions/sendContact';
 
 import { Contact } from './Contact';
 
@@ -22,7 +22,7 @@ const filled = {
   message: 'I would like to talk to you about a role.',
 };
 
-const setup = ({ result = { outcome: 'sent' } as TResult } = {}) => {
+const setup = ({ result = { outcome: 'sent' } as Result } = {}) => {
   vi.mocked(sendContact).mockResolvedValue(result);
 
   return { ...render(<Contact />), user: userEvent.setup() };

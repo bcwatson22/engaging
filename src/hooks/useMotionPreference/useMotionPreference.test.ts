@@ -6,11 +6,11 @@ import {
   changeEvent,
   storageKey,
   useMotionPreference,
-  type TMotion,
+  type Motion,
 } from './useMotionPreference';
 
 type SetupOptions = {
-  stored?: TMotion;
+  stored?: Motion;
   isStorageBlocked?: boolean;
 };
 

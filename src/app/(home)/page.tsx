@@ -8,7 +8,7 @@ import { appleWebApp, metadata, viewport } from '@/constants/metadata';
 import { getStartupImages } from '@/constants/startupImages';
 import { getData } from '@/data/functions/getData';
 import { snapshotHome } from '@/data/snapshot/snapshot';
-import type { THome } from '@/data/types/home';
+import type { Home } from '@/data/types/home';
 import { queryHome } from '@/queries/home';
 import { formatExperience } from '@/utils/formatExperience';
 
@@ -18,7 +18,7 @@ const pageNamePlural = 'homes';
 const generateMetadata = async (): Promise<Metadata> => {
   const {
     meta: { title, description, keywords },
-  } = await getData<THome>(queryHome, pageNamePlural, snapshotHome);
+  } = await getData<Home>(queryHome, pageNamePlural, snapshotHome);
 
   const formattedDescription = formatExperience(description);
 
@@ -46,7 +46,7 @@ const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const HomePage = async () => {
-  const data = await getData<THome>(queryHome, pageNamePlural, snapshotHome);
+  const data = await getData<Home>(queryHome, pageNamePlural, snapshotHome);
 
   const {
     meta: { title },

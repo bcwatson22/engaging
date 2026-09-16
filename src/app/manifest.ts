@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 import { themeColor } from '@/constants/metadata';
 import { getData } from '@/data/functions/getData';
 import { snapshotHome } from '@/data/snapshot/snapshot';
-import type { THome } from '@/data/types/home';
+import type { Home } from '@/data/types/home';
 import { queryHome } from '@/queries/home';
 import { formatExperience } from '@/utils/formatExperience';
 
@@ -12,7 +12,7 @@ const iconSizes = [192, 512];
 const manifest = async (): Promise<MetadataRoute.Manifest> => {
   const {
     meta: { title, description },
-  } = await getData<THome>(queryHome, 'homes', snapshotHome);
+  } = await getData<Home>(queryHome, 'homes', snapshotHome);
 
   return {
     name: title,

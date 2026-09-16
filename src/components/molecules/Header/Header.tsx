@@ -1,13 +1,13 @@
 import { Suspense } from 'react';
 
-import { Intro, type TIntro } from '@/components/atoms/Intro/Intro';
-import { Logo, type TLogo } from '@/components/atoms/Logo/Logo';
+import { Intro } from '@/components/atoms/Intro/Intro';
+import { Logo } from '@/components/atoms/Logo/Logo';
 import { SkeletonLine } from '@/components/atoms/Skeleton/Skeleton';
 import { logoDarkBackground, logoLightBackground } from '@/constants/assets';
 
 import { download, Nav, pdf } from '../Nav/Nav';
 
-type Props = Pick<TMeta, 'title'> & TLogo & TIntro;
+type Props = Pick<Meta, 'title'> & Logo & Intro;
 
 const whereFourLines = 'sm:max-md:hidden lg:hidden';
 const whereFiveLines = 'xs:max-md:hidden min-[880px]:hidden';

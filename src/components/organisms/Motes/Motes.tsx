@@ -11,7 +11,7 @@ import {
 } from 'react';
 
 import { Button } from '@/components/atoms/Button/Button';
-import type { TLink } from '@/components/atoms/Link/Link';
+import type { Link } from '@/components/atoms/Link/Link';
 import { Nav } from '@/components/molecules/Nav/Nav';
 
 const controls = [
@@ -46,7 +46,7 @@ const initialValues: Values = {
   bubbleDistance: defaults.bubbleDistance,
 };
 
-const packageLinks: TLink[] = [
+const packageLinks: Link[] = [
   {
     target: 'https://www.npmjs.com/package/@bcwatson22/motes',
     text: 'npm',
