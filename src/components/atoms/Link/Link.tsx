@@ -42,12 +42,7 @@ const Inner = ({ text, icon, newTab = false }: TInner) => (
     <Icon icon={icon} className="vector" />
     <span>
       {text}
-      {newTab && (
-        <>
-          {' '}
-          <span className="sr-only">(opens in new tab)</span>
-        </>
-      )}
+      {newTab && <span className="sr-only"> (opens in new tab)</span>}
     </span>
   </>
 );

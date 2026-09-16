@@ -60,7 +60,7 @@ describe('Header', () => {
       setup();
 
       expect(
-        screen.getByRole('link', { name: 'PDF (opens in new tab)' }),
+        screen.getByRole('link', { name: /^PDF ?\(opens in new tab\)$/ }),
       ).toHaveAttribute('href', '/billy-watson-cv.pdf');
     });
 
@@ -68,7 +68,7 @@ describe('Header', () => {
       setup();
 
       expect(
-        screen.getByRole('link', { name: 'PDF (opens in new tab)' }),
+        screen.getByRole('link', { name: /^PDF ?\(opens in new tab\)$/ }),
       ).toHaveAttribute('target', '_blank');
     });
 
