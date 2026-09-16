@@ -118,7 +118,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
       <img src="https://cdn.simpleicons.org/googlechrome/4285F4/4285F4" alt="Chrome icon" width="32" />
     </td>
     <td>
-      The downloadable CV PDF and the PWA splash screens are rendered by driving headless Chrome over the live site. That used to run inside <code>next build</code>, so every deploy downloaded a browser and paid for a full render. Now the same CMS publish that revalidates the site also reaches <a href="https://github.com/bcwatson22/engaging-service">engaging-service</a>, which queues the job on a Redis stream for <a href="https://github.com/bcwatson22/engaging-worker">engaging-worker</a> to render in Go. The artifacts are stored in R2 and proxied back through this domain.
+      The downloadable CV PDF and the PWA splash screens are rendered by driving headless Chrome over the live site. That used to run inside <code>next build</code>, so every deploy downloaded a browser and paid for a full render. Now the same CMS publish that revalidates the site also reaches <a href="https://github.com/bcwatson22/engaging-service">engaging-service</a>, which queues the job on a Redis stream for <a href="https://github.com/bcwatson22/engaging-worker">engaging-worker</a> to render in Go. A production deploy of this site asks the same service to check the artifacts against the pages it just shipped, so a code change reaches the PDF too, not only a content change. The artifacts are stored in R2 and proxied back through this domain.
     </td>
   </tr>
 </table>

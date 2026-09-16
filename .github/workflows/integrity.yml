@@ -1,0 +1,34 @@
+name: Integrity
+
+# The CV PDF and the PWA splash screens are rendered from the live site by
+# engaging-worker. The CMS webhook re-renders them when content is published,
+# but a change shipped from this repo — a component, a stylesheet, a font —
+# alters the pages without touching the CMS, so the artifacts kept showing the
+# site from before the deploy.
+#
+# Vercel reports each deploy to GitHub as a deployment. Once a production one
+# is live, this asks engaging-service to run its integrity check, which hashes
+# the live pages and queues a render only for an artifact whose pages changed.
+# A deploy that touches neither the home page nor the CV queues nothing.
+on: deployment_status
+
+permissions: {}
+
+jobs:
+  check:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+
+    steps:
+      # --fail-with-body so a rejected secret or a missing route fails the run
+      # and prints why; the retries ride out the service restarting mid-deploy.
+      - name: Check the artifacts against the live site
+        env:
+          RENDER_SECRET: ${{ secrets.RENDER_SECRET }}
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --retry 3 --retry-all-errors --retry-delay 10 --max-time 60 \
+            -X POST https://engaging-service.fly.dev/integrity \
+            -H "x-render-secret: $RENDER_SECRET"
