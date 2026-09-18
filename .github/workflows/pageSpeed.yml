@@ -1,0 +1,98 @@
+name: PageSpeed
+
+# The README quotes Lighthouse scores with a date against them, and a quoted
+# number ages quietly: nothing breaks, it just stops being true. This measures
+# the live site monthly and opens a PR when the figures have actually moved.
+#
+# The split is deliberate. The script measures and takes the median of three
+# runs per page, because that is arithmetic and a model is the wrong tool for
+# arithmetic you cannot check. Claude reads the result and decides whether a
+# change is real or run-to-run noise, then writes the prose — which is the part
+# no script does well.
+on:
+  schedule:
+    # 06:00 UTC on the 1st. Monthly, because the site changes in bursts and a
+    # weekly PR nobody reads is how a routine becomes noise.
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+# Never two at once: both would branch from the same main and open competing
+# PRs against the same table.
+concurrency:
+  group: pageSpeed
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          # Tracks .nvmrc, like CI. The script is TypeScript run directly by
+          # Node, so nothing is installed or built.
+          node-version-file: .nvmrc
+
+      # Twelve PageSpeed calls, one at a time, so this takes a few minutes.
+      - name: Measure
+        env:
+          PAGESPEED_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
+        run: node src/scripts/pageSpeed.ts
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --model claude-sonnet-5
+            --max-turns 20
+            --allowedTools "Read,Edit,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*)"
+          prompt: |
+            pageSpeed.json in the repository root holds a fresh measurement of
+            the live site: the median of three PageSpeed runs per page and
+            strategy, plus LCP, CLS and TBT. The README's "## Performance"
+            section quotes the previous ones.
+
+            Compare them and decide whether anything has actually changed.
+
+            Treat as noise, and do nothing at all:
+            - a category score that moved by 1 point
+            - LCP that moved by less than 0.2s
+            - CLS or TBT changes that do not alter what the prose claims
+
+            Treat as real, and worth a PR:
+            - any category score that moved by 2 points or more
+            - LCP that moved by 0.2s or more
+            - a score reaching or leaving 100
+            - a Lighthouse major version different from the one quoted
+
+            If it is only noise, change nothing, print one line saying the
+            numbers held and which way they drifted, and stop. That is the
+            normal outcome and it is a success, not a failure.
+
+            If it is real:
+            - Update the table, the date and the Lighthouse version in the
+              "## Performance" section.
+            - Update the prose under it so it still matches the numbers,
+              including the LCP, CLS and TBT sentence. Keep its voice: plain,
+              specific, no marketing words. Do not add a changelog of this run.
+            - Leave the paragraph about the inlineCss change alone; it is
+              history, not a current measurement.
+            - Do not touch pageSpeed.json, any other file, or any other part of
+              the README.
+            - Commit on a branch named chore/page-speed-<yyyy-mm>, and open a PR
+              with `gh pr create`. Title: "docs: refresh the PageSpeed table for
+              <Month Year>". Body: what moved, by how much, in which direction,
+              and your judgement on whether it looks like a real change in the
+              site or a change in how Google measures. Say plainly if you are
+              unsure. No attribution trailers.
+
+            You are measuring a live site you did not deploy, so never change
+            application code, and never present a regression as an improvement.

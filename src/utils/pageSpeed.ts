@@ -1,0 +1,178 @@
+/* Measures the four figures the README quotes, the way the README says they
+   were measured: the median of three runs per page and strategy.
+
+   The median matters more than it looks. A single PageSpeed run moves by a
+   point or two either way, so a routine that published one run would invent
+   improvements and regressions that are not there — and this file exists to
+   keep a table honest, not to fill it. */
+
+const endpoint = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
+
+/* Three, matching what the README claims. An even count would need a rule for
+   averaging the middle pair, and an average is exactly the thing a median is
+   chosen to avoid. */
+const runs = 3;
+
+const categories = [
+  'performance',
+  'accessibility',
+  'best-practices',
+  'seo',
+] as const;
+
+const strategies = ['mobile', 'desktop'] as const;
+
+const pages = [
+  { name: 'Home', path: '/' },
+  { name: 'CV', path: '/cv' },
+] as const;
+
+type Category = (typeof categories)[number];
+type Strategy = (typeof strategies)[number];
+type PageName = (typeof pages)[number]['name'];
+
+/* Only the fields this reads. The full response is megabytes of audit detail,
+   and typing the parts we ignore would be a schema to maintain for nothing. */
+type Response = {
+  lighthouseResult?: {
+    lighthouseVersion?: string;
+    categories?: Record<string, { score?: number | null } | undefined>;
+    audits?: Record<string, { numericValue?: number } | undefined>;
+  };
+};
+
+type Scores = Record<Category, number>;
+
+/* The three the README's prose quotes alongside the table, so a change in the
+   numbers can be explained rather than just reported. */
+type Metrics = { lcpMs: number; clsScore: number; tbtMs: number };
+
+type Measurement = {
+  page: PageName;
+  strategy: Strategy;
+  scores: Scores;
+  metrics: Metrics;
+};
+
+type Report = {
+  measuredAt: string;
+  siteUrl: string;
+  lighthouseVersion: string;
+  runs: number;
+  measurements: Measurement[];
+};
+
+type Fetch = typeof globalThis.fetch;
+
+const query = (url: string, strategy: Strategy, key?: string): string => {
+  const params = new URLSearchParams({ url, strategy });
+
+  for (const category of categories) params.append('category', category);
+  if (key) params.set('key', key);
+
+  return `${endpoint}?${params.toString()}`;
+};
+
+/* Lighthouse reports a score as 0–1, and a missing category as null. A missing
+   score is not zero — zero is a real, terrible score — so it fails loudly
+   rather than quietly publishing a nought. */
+const scoreOf = (response: Response, category: Category): number => {
+  const score = response.lighthouseResult?.categories?.[category]?.score;
+
+  if (typeof score !== 'number')
+    throw new Error(`No ${category} score in the response`);
+
+  return Math.round(score * 100);
+};
+
+const metricOf = (response: Response, audit: string): number => {
+  const value = response.lighthouseResult?.audits?.[audit]?.numericValue;
+
+  if (typeof value !== 'number')
+    throw new Error(`No ${audit} value in the response`);
+
+  return value;
+};
+
+const median = (values: number[]): number =>
+  [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]!;
+
+type Run = { scores: Scores; metrics: Metrics; version: string };
+
+const run = async (
+  url: string,
+  strategy: Strategy,
+  key: string | undefined,
+  fetcher: Fetch,
+): Promise<Run> => {
+  const response = await fetcher(query(url, strategy, key));
+
+  if (!response.ok)
+    throw new Error(`PageSpeed answered ${response.status} for ${url}`);
+
+  const body = (await response.json()) as Response;
+
+  return {
+    scores: Object.fromEntries(
+      categories.map((category) => [category, scoreOf(body, category)]),
+    ) as Scores,
+    metrics: {
+      lcpMs: metricOf(body, 'largest-contentful-paint'),
+      clsScore: metricOf(body, 'cumulative-layout-shift'),
+      tbtMs: metricOf(body, 'total-blocking-time'),
+    },
+    version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
+  };
+};
+
+/* One request at a time. Twelve runs take minutes and nothing is waiting on
+   them, while firing them in parallel is how a free API key meets its rate
+   limit — the same reasoning as the CV's link sweep. */
+const measure = async (
+  siteUrl: string,
+  key?: string,
+  fetcher: Fetch = globalThis.fetch,
+): Promise<Report> => {
+  const measurements: Measurement[] = [];
+  let lighthouseVersion = 'unknown';
+
+  for (const page of pages) {
+    for (const strategy of strategies) {
+      const results: Run[] = [];
+
+      for (let attempt = 0; attempt < runs; attempt++)
+        results.push(
+          await run(`${siteUrl}${page.path}`, strategy, key, fetcher),
+        );
+
+      lighthouseVersion = results[0]!.version;
+
+      measurements.push({
+        page: page.name,
+        strategy,
+        scores: Object.fromEntries(
+          categories.map((category) => [
+            category,
+            median(results.map(({ scores }) => scores[category])),
+          ]),
+        ) as Scores,
+        metrics: {
+          lcpMs: median(results.map(({ metrics }) => metrics.lcpMs)),
+          clsScore: median(results.map(({ metrics }) => metrics.clsScore)),
+          tbtMs: median(results.map(({ metrics }) => metrics.tbtMs)),
+        },
+      });
+    }
+  }
+
+  return {
+    measuredAt: new Date().toISOString(),
+    siteUrl,
+    lighthouseVersion,
+    runs,
+    measurements,
+  };
+};
+
+export { measure, median, query, runs, categories, strategies, pages };
+export type { Report, Measurement, Scores, Metrics, Strategy, Category };
