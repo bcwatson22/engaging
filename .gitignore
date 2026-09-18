@@ -40,3 +40,6 @@ AGENTS.md
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pageSpeed — the monthly measurement, read by the workflow and not kept
+pageSpeed.json
