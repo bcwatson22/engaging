@@ -127,12 +127,16 @@ const reasonFrom = (body: string): string => {
 /* Carries the status so the retry can tell a bad run from a bad key without
    reading the message back out of a string. */
 class PageSpeedError extends Error {
-  constructor(
-    readonly status: number,
-    message: string,
-  ) {
+  /* Declared and assigned rather than a constructor parameter property: Node
+     runs this file by stripping its types, and a parameter property is the one
+     TypeScript feature that needs code emitted rather than text removed. The
+     tests compile through SWC and never noticed. */
+  status: number;
+
+  constructor(status: number, message: string) {
     super(message);
     this.name = 'PageSpeedError';
+    this.status = status;
   }
 }
 

@@ -17,7 +17,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "typecheck": "tsc --pretty --noEmit",
-    "verify": "pnpm lint && pnpm format:check && pnpm lint:types && pnpm typecheck && pnpm coverage"
+    "check:scripts": "node --input-type=module -e \"await import('./src/utils/pageSpeed.ts'); await import('./src/utils/saveSnapshot.ts')\"",
+    "verify": "pnpm lint && pnpm format:check && pnpm lint:types && pnpm typecheck && pnpm check:scripts && pnpm coverage"
   },
   "dependencies": {
     "@bcwatson22/motes": "0.4.0",
