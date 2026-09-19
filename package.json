@@ -17,7 +17,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "typecheck": "tsc --pretty --noEmit",
-    "check:scripts": "node --input-type=module -e \"await import('./src/utils/pageSpeed.ts'); await import('./src/utils/saveSnapshot.ts')\"",
+    "check:scripts": "node --input-type=module -e \"await import('./src/utils/pageSpeed.ts'); await import('./src/utils/saveSnapshot.ts'); await import('./src/utils/dependencies.ts')\"",
     "verify": "pnpm lint && pnpm format:check && pnpm lint:types && pnpm typecheck && pnpm check:scripts && pnpm coverage"
   },
   "dependencies": {
