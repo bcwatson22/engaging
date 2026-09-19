@@ -32,10 +32,19 @@ type Options = {
   responses?: RunValues[];
   ok?: boolean;
   status?: number;
+  /* What a refused request answers with. Google sends JSON; a proxy or an
+     error page does not. */
+  errorBody?: string;
   omit?: 'score' | 'metric' | 'version';
 };
 
-const setup = ({ responses, ok = true, status = 200, omit }: Options = {}) => {
+const setup = ({
+  responses,
+  ok = true,
+  status = 200,
+  errorBody = '{"error":{"message":"API key not valid"}}',
+  omit,
+}: Options = {}) => {
   let call = 0;
 
   const fetcher = vi.fn<typeof globalThis.fetch>().mockImplementation(() => {
@@ -52,6 +61,7 @@ const setup = ({ responses, ok = true, status = 200, omit }: Options = {}) => {
       ok,
       status,
       json: () => Promise.resolve(payload),
+      text: () => Promise.resolve(errorBody),
     } as Response);
   });
 
@@ -175,6 +185,42 @@ describe('measure', () => {
     await expect(
       measure('https://example.com', undefined, fetcher),
     ).rejects.toThrow('429');
+  });
+
+  /* Nobody watches a monthly run, so the one line it leaves has to say what
+     to fix. A 403 alone does not distinguish a key the project never enabled
+     from one restricted to a referrer. */
+  it('reports what the API said, not just the status', async () => {
+    const { fetcher } = setup({ ok: false, status: 403 });
+
+    await expect(
+      measure('https://example.com', undefined, fetcher),
+    ).rejects.toThrow('API key not valid');
+  });
+
+  /* JSON, but not Google's shape — a proxy or a gateway in front of it. */
+  it('falls back to the raw body when the JSON carries no message', async () => {
+    const { fetcher } = setup({
+      ok: false,
+      status: 403,
+      errorBody: '{"denied":"by policy"}',
+    });
+
+    await expect(
+      measure('https://example.com', undefined, fetcher),
+    ).rejects.toThrow('denied');
+  });
+
+  it('falls back to the raw body when it is not the JSON Google sends', async () => {
+    const { fetcher } = setup({
+      ok: false,
+      status: 502,
+      errorBody: '<html>Bad gateway</html>',
+    });
+
+    await expect(
+      measure('https://example.com', undefined, fetcher),
+    ).rejects.toThrow('Bad gateway');
   });
 
   /* A missing score is not a zero — zero is a real and terrible score — so it
