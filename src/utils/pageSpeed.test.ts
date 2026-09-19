@@ -141,7 +141,7 @@ describe('measure', () => {
 
     await measure('https://example.com');
 
-    expect(fetcher).toHaveBeenCalledTimes(12);
+    expect(fetcher).toHaveBeenCalledTimes(16);
 
     vi.unstubAllGlobals();
   });
@@ -163,12 +163,33 @@ describe('measure', () => {
     expect(home?.scores.performance).toBe(97);
   });
 
-  it('runs three times per page and strategy', async () => {
+  /* Four pairs, each a discarded warm-up plus the three that count. */
+  it('runs three times per page and strategy, after a warm-up', async () => {
     const { fetcher } = setup();
 
     await measure('https://example.com', undefined, fetcher);
 
-    expect(fetcher).toHaveBeenCalledTimes(12);
+    expect(fetcher).toHaveBeenCalledTimes(16);
+  });
+
+  /* The warm-up exists because the first request pays for a cold image cache:
+     20ms warm against 311ms cold, on the element the metric is about. Its
+     result has to be thrown away, or it is just a fourth run dragging the
+     median back down. */
+  it('throws the warm-up away rather than counting it', async () => {
+    const { fetcher } = setup({
+      responses: [
+        { performance: 0.5 },
+        { performance: 0.99 },
+        { performance: 0.99 },
+        { performance: 0.99 },
+      ],
+    });
+
+    const [home] = (await measure('https://example.com', undefined, fetcher))
+      .measurements;
+
+    expect(home?.scores.performance).toBe(99);
   });
 
   it('reports the metrics the prose quotes', async () => {
@@ -249,7 +270,7 @@ describe('measure', () => {
     );
 
     expect(report.measurements).toHaveLength(4);
-    expect(fetcher).toHaveBeenCalledTimes(13);
+    expect(fetcher).toHaveBeenCalledTimes(17);
     expect(wait).toHaveBeenCalledTimes(1);
   });
 

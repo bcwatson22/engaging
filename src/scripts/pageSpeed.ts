@@ -16,7 +16,10 @@ const report = await measure(siteUrl, process.env.PAGESPEED_API_KEY);
 
 await writeFile(out, `${JSON.stringify(report, null, indent)}\n`);
 
-console.log(`Lighthouse ${report.lighthouseVersion}, median of ${report.runs}`);
+console.log(
+  `Lighthouse ${report.lighthouseVersion}, median of ${report.runs} ` +
+    `after ${report.warmUps} discarded warm-up run per page`,
+);
 
 for (const { page, strategy, scores, metrics } of report.measurements)
   console.log(
