@@ -50,10 +50,15 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Same as the repo's own settings: no attribution trailers on the
+          # commit or the PR body. The action does not add them today; this
+          # makes that a setting rather than something the prompt has to keep
+          # asking for.
+          settings: '{"attribution":{"commit":"","pr":""}}'
           claude_args: |
             --model claude-sonnet-5
             --max-turns 20
-            --allowedTools "Read,Edit,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*)"
+            --allowedTools "Read,Edit,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*),Bash(gh pr edit:*)"
           prompt: |
             pageSpeed.json in the repository root holds a fresh measurement of
             the live site: the median of three PageSpeed runs per page and
@@ -88,11 +93,15 @@ jobs:
             - Do not touch pageSpeed.json, any other file, or any other part of
               the README.
             - Commit on a branch named chore/page-speed-<yyyy-mm>, and open a PR
-              with `gh pr create`. Title: "docs: refresh the PageSpeed table for
-              <Month Year>". Body: what moved, by how much, in which direction,
-              and your judgement on whether it looks like a real change in the
-              site or a change in how Google measures. Say plainly if you are
-              unsure. No attribution trailers.
+              with `gh pr create --assignee bcwatson22`, so it reaches the one
+              person who reviews it whatever their watch settings say.
+              Title: "docs: refresh the PageSpeed table for <Month Year>".
+              Body: what moved, by how much, in which direction, and your
+              judgement on whether it looks like a real change in the site or a
+              change in how Google measures. Say plainly if you are unsure.
+              No attribution trailers, and no test-plan checklist: the diff is
+              four numbers and a sentence, and a checklist of things you did
+              not do is noise in a repo whose PR bodies are prose.
 
             You are measuring a live site you did not deploy, so never change
             application code, and never present a regression as an improvement.
