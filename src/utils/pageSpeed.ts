@@ -22,6 +22,10 @@ const categories = [
 
 const strategies = ['mobile', 'desktop'] as const;
 
+/* Enough of an unparseable body to identify it, without pasting a Google
+   error page into a workflow log. */
+const limit = 200;
+
 const pages = [
   { name: 'Home', path: '/' },
   { name: 'CV', path: '/cv' },
@@ -99,6 +103,21 @@ const median = (values: number[]): number =>
 
 type Run = { scores: Scores; metrics: Metrics; version: string };
 
+/* Google says why in the body, and the status alone does not: a 403 is a key
+   the project has not enabled, a key restricted to a referrer, or a key that
+   has been revoked, and they are fixed in three different places. Nobody is
+   watching a monthly run, so the log line it leaves has to be enough to act
+   on a month later. */
+const reasonFrom = (body: string): string => {
+  try {
+    const parsed = JSON.parse(body) as { error?: { message?: string } };
+
+    return parsed.error?.message ?? body.slice(0, limit);
+  } catch {
+    return body.slice(0, limit);
+  }
+};
+
 const run = async (
   url: string,
   strategy: Strategy,
@@ -108,7 +127,10 @@ const run = async (
   const response = await fetcher(query(url, strategy, key));
 
   if (!response.ok)
-    throw new Error(`PageSpeed answered ${response.status} for ${url}`);
+    throw new Error(
+      `PageSpeed answered ${response.status} for ${url}: ` +
+        reasonFrom(await response.text()),
+    );
 
   const body = (await response.json()) as Response;
 
