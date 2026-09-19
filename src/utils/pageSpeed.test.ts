@@ -1,4 +1,4 @@
-import { categories, measure, median, query } from './pageSpeed';
+import { categories, measure, median, pause, query } from './pageSpeed';
 
 type RunValues = {
   performance?: number;
@@ -65,7 +65,11 @@ const setup = ({
     } as Response);
   });
 
-  return { fetcher };
+  /* Retries are real seconds in production and none here, so a test of the
+     giving-up path costs nothing. */
+  const wait = vi.fn<(ms: number) => Promise<void>>().mockResolvedValue();
+
+  return { fetcher, wait };
 };
 
 describe('median', () => {
@@ -80,6 +84,21 @@ describe('median', () => {
     median(values);
 
     expect(values).toEqual([99, 97, 98]);
+  });
+});
+
+/* The real gap between attempts, which every other test replaces with a stub
+   so a giving-up path costs no wall-clock seconds. */
+describe('pause', () => {
+  it('resolves once the time has passed', async () => {
+    vi.useFakeTimers();
+
+    const waited = pause(10_000);
+    vi.advanceTimersByTime(10_000);
+
+    await expect(waited).resolves.toBeUndefined();
+
+    vi.useRealTimers();
   });
 });
 
@@ -198,6 +217,65 @@ describe('measure', () => {
     ).rejects.toThrow('API key not valid');
   });
 
+  /* Lighthouse drives a real browser against a live site. The first real run
+     of this died on net::ERR_TIMED_OUT loading the CV, taking eleven good
+     runs down with it. */
+  it('retries a run that failed for a reason the next one might not', async () => {
+    let call = 0;
+    const wait = vi.fn<(ms: number) => Promise<void>>().mockResolvedValue();
+    const fetcher = vi.fn<typeof globalThis.fetch>().mockImplementation(() => {
+      call++;
+
+      if (call === 1)
+        return Promise.resolve({
+          ok: false,
+          status: 400,
+          text: () => Promise.resolve('{"error":{"message":"ERR_TIMED_OUT"}}'),
+        } as Response);
+
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(body()),
+        text: () => Promise.resolve(''),
+      } as unknown as Response);
+    });
+
+    const report = await measure(
+      'https://example.com',
+      undefined,
+      fetcher,
+      wait,
+    );
+
+    expect(report.measurements).toHaveLength(4);
+    expect(fetcher).toHaveBeenCalledTimes(13);
+    expect(wait).toHaveBeenCalledTimes(1);
+  });
+
+  it('gives up on a run that keeps failing', async () => {
+    const { fetcher, wait } = setup({ ok: false, status: 500 });
+
+    await expect(
+      measure('https://example.com', undefined, fetcher, wait),
+    ).rejects.toThrow('500');
+
+    expect(fetcher).toHaveBeenCalledTimes(3);
+  });
+
+  /* A refused key or an exhausted quota is a settled answer, and asking twice
+     more only spends the quota that is already gone. */
+  it('does not retry a refused key', async () => {
+    const { fetcher, wait } = setup({ ok: false, status: 403 });
+
+    await expect(
+      measure('https://example.com', undefined, fetcher, wait),
+    ).rejects.toThrow('403');
+
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    expect(wait).not.toHaveBeenCalled();
+  });
+
   /* JSON, but not Google's shape — a proxy or a gateway in front of it. */
   it('falls back to the raw body when the JSON carries no message', async () => {
     const { fetcher } = setup({
@@ -212,32 +290,32 @@ describe('measure', () => {
   });
 
   it('falls back to the raw body when it is not the JSON Google sends', async () => {
-    const { fetcher } = setup({
+    const { fetcher, wait } = setup({
       ok: false,
       status: 502,
       errorBody: '<html>Bad gateway</html>',
     });
 
     await expect(
-      measure('https://example.com', undefined, fetcher),
+      measure('https://example.com', undefined, fetcher, wait),
     ).rejects.toThrow('Bad gateway');
   });
 
   /* A missing score is not a zero — zero is a real and terrible score — so it
      has to stop the run rather than become a table entry. */
   it('refuses a response with no score', async () => {
-    const { fetcher } = setup({ omit: 'score' });
+    const { fetcher, wait } = setup({ omit: 'score' });
 
     await expect(
-      measure('https://example.com', undefined, fetcher),
+      measure('https://example.com', undefined, fetcher, wait),
     ).rejects.toThrow('performance');
   });
 
   it('refuses a response with no metrics', async () => {
-    const { fetcher } = setup({ omit: 'metric' });
+    const { fetcher, wait } = setup({ omit: 'metric' });
 
     await expect(
-      measure('https://example.com', undefined, fetcher),
+      measure('https://example.com', undefined, fetcher, wait),
     ).rejects.toThrow('largest-contentful-paint');
   });
 });

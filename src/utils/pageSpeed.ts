@@ -26,6 +26,12 @@ const strategies = ['mobile', 'desktop'] as const;
    error page into a workflow log. */
 const limit = 200;
 
+/* Attempts per run, and the gap between them. Ten seconds because the failure
+   this handles is a page that did not load in time, and asking again
+   immediately asks the same busy moment. */
+const tries = 3;
+const retryDelay = 10_000;
+
 const pages = [
   { name: 'Home', path: '/' },
   { name: 'CV', path: '/cv' },
@@ -118,6 +124,26 @@ const reasonFrom = (body: string): string => {
   }
 };
 
+/* Carries the status so the retry can tell a bad run from a bad key without
+   reading the message back out of a string. */
+class PageSpeedError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'PageSpeedError';
+  }
+}
+
+/* Lighthouse drives a real browser against a live site, so a run fails from
+   time to time for reasons the next one will not repeat — the first attempt
+   here died on net::ERR_TIMED_OUT loading the CV. Refusing the key, exhausting
+   the quota or asking for a URL Google will not accept are settled answers,
+   and asking again only wastes the machine and the quota. */
+const isTransient = (error: unknown): boolean =>
+  !(error instanceof PageSpeedError) || ![401, 403, 429].includes(error.status);
+
 const run = async (
   url: string,
   strategy: Strategy,
@@ -127,7 +153,8 @@ const run = async (
   const response = await fetcher(query(url, strategy, key));
 
   if (!response.ok)
-    throw new Error(
+    throw new PageSpeedError(
+      response.status,
       `PageSpeed answered ${response.status} for ${url}: ` +
         reasonFrom(await response.text()),
     );
@@ -147,6 +174,32 @@ const run = async (
   };
 };
 
+type Wait = (ms: number) => Promise<void>;
+
+const pause: Wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/* Retries the run itself rather than the whole measurement, so one bad load
+   costs seconds instead of the eleven good runs around it. Three attempts,
+   because a page that will not load twice in a row is a page worth failing
+   over rather than measuring. */
+const attempted = async (
+  url: string,
+  strategy: Strategy,
+  key: string | undefined,
+  fetcher: Fetch,
+  wait: Wait,
+): Promise<Run> => {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await run(url, strategy, key, fetcher);
+    } catch (error) {
+      if (attempt >= tries || !isTransient(error)) throw error;
+
+      await wait(retryDelay);
+    }
+  }
+};
+
 /* One request at a time. Twelve runs take minutes and nothing is waiting on
    them, while firing them in parallel is how a free API key meets its rate
    limit — the same reasoning as the CV's link sweep. */
@@ -154,6 +207,7 @@ const measure = async (
   siteUrl: string,
   key?: string,
   fetcher: Fetch = globalThis.fetch,
+  wait: Wait = pause,
 ): Promise<Report> => {
   const measurements: Measurement[] = [];
   let lighthouseVersion = 'unknown';
@@ -164,7 +218,13 @@ const measure = async (
 
       for (let attempt = 0; attempt < runs; attempt++)
         results.push(
-          await run(`${siteUrl}${page.path}`, strategy, key, fetcher),
+          await attempted(
+            `${siteUrl}${page.path}`,
+            strategy,
+            key,
+            fetcher,
+            wait,
+          ),
         );
 
       lighthouseVersion = results[0]!.version;
@@ -196,5 +256,5 @@ const measure = async (
   };
 };
 
-export { measure, median, query, runs, categories, strategies, pages };
+export { measure, median, pause, query, runs, categories, strategies, pages };
 export type { Report, Measurement, Scores, Metrics, Strategy, Category };
