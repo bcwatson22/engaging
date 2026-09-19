@@ -41,7 +41,9 @@ jobs:
           # Node, so nothing is installed or built.
           node-version-file: .nvmrc
 
-      # Twelve PageSpeed calls, one at a time, so this takes a few minutes.
+      # Sixteen PageSpeed calls, one at a time: four pairs of page and
+      # strategy, each a discarded warm-up plus the three that count. Five
+      # minutes or so.
       - name: Measure
         env:
           PAGESPEED_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
@@ -57,7 +59,8 @@ jobs:
           prompt: |
             pageSpeed.json in the repository root holds a fresh measurement of
             the live site: the median of three PageSpeed runs per page and
-            strategy, plus LCP, CLS and TBT. The README's "## Performance"
+            strategy, taken after a discarded warm-up run, plus LCP, CLS and
+            TBT. The README's "## Performance"
             section quotes the previous ones.
 
             Compare them and decide whether anything has actually changed.

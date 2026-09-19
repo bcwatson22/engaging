@@ -13,6 +13,19 @@ const endpoint = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
    chosen to avoid. */
 const runs = 3;
 
+/* One run per page and strategy whose result is thrown away.
+
+   The LCP element is an image served through /_next/image, and the difference
+   between a warm edge cache and a cold one was measured at 20ms against
+   311ms — on the one resource the metric is about. Nothing else requests that
+   image for weeks at a time, so a monthly routine always arrives cold, and
+   six measurements of unchanged code ranged from 90 to 100 depending on it.
+
+   A warm-up costs four extra runs and about a minute, and it measures the
+   page rather than the state of a cache nobody visiting the site would
+   share. */
+const warmUps = 1;
+
 const categories = [
   'performance',
   'accessibility',
@@ -69,6 +82,9 @@ type Report = {
   siteUrl: string;
   lighthouseVersion: string;
   runs: number;
+  /* Recorded so a reader of the JSON can tell these numbers apart from the
+     ones measured before the warm-up existed. */
+  warmUps: number;
   measurements: Measurement[];
 };
 
@@ -220,6 +236,9 @@ const measure = async (
     for (const strategy of strategies) {
       const results: Run[] = [];
 
+      for (let warmUp = 0; warmUp < warmUps; warmUp++)
+        await attempted(`${siteUrl}${page.path}`, strategy, key, fetcher, wait);
+
       for (let attempt = 0; attempt < runs; attempt++)
         results.push(
           await attempted(
@@ -256,9 +275,20 @@ const measure = async (
     siteUrl,
     lighthouseVersion,
     runs,
+    warmUps,
     measurements,
   };
 };
 
-export { measure, median, pause, query, runs, categories, strategies, pages };
+export {
+  measure,
+  median,
+  pause,
+  query,
+  runs,
+  warmUps,
+  categories,
+  strategies,
+  pages,
+};
 export type { Report, Measurement, Scores, Metrics, Strategy, Category };
