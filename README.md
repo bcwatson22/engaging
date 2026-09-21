@@ -68,7 +68,8 @@ code.
 patch and minor version, runs `pnpm verify`, and opens a PR if it passes. If it
 fails, Claude finds the package that broke it, drops that one, and ships the
 rest with the error that caused it — the first month's run would have dropped
-jsdom 30.1.0 for exactly this. It may only edit `package.json` and the lockfile.
+jsdom 30.1.0 for exactly this. It may only edit `package.json` and the lockfile, and a check after it enforces
+that: a branch that changes anything else is closed and the run fails.
 
 Majors are never applied by that routine. The monthly PR lists them and how
 long each has been held back, and `.github/workflows/dependencyMajor.yml` takes
