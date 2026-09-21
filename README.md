@@ -26,8 +26,14 @@ metric not at full marks there — 2.6s on Home, 2.0s on the CV — with everyth
 else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
 20ms).
 
-Each figure is the median of three runs. A single run moves by a point or two
-either way, which is wide enough to invent an improvement that is not there.
+Each figure is the median of three runs, taken after one discarded warm-up run
+per page. A single run moves by a point or two either way, which is wide enough
+to invent an improvement that is not there — and the warm-up matters more than
+that: the LCP element is an image served through `/_next/image`, which took
+311ms against a cold edge cache and about 20ms against a warm one. Six
+measurements of unchanged code once ranged from 90 to 100 on that alone. The
+table is refreshed monthly by a routine, described under
+[Maintenance](#maintenance).
 
 The mobile numbers moved from 93 and 94, measured the same way immediately
 before the change, when the stylesheet stopped being a second request:
@@ -42,6 +48,48 @@ to publish there yet.
 Run it yourself with the link above rather than taking these on trust — and note
 Chrome's own Lighthouse tab will disagree, mostly because it runs on your machine
 and inside your extensions. PageSpeed Insights is the reproducible one.
+
+## Maintenance
+
+Two routines run monthly in GitHub Actions, and both open a pull request rather
+than changing anything themselves. Each splits the work the same way: a script
+does what can be decided — measuring, taking a median, reading version numbers —
+and Claude does the part that needs judgement, then explains it in the PR.
+
+**PageSpeed** (`.github/workflows/pageSpeed.yml`, the 1st of each month) measures
+both pages on both strategies as described above, and compares the result with
+the table here. A point of movement, or less than 0.2s of LCP, is treated as
+noise and the run does nothing, which is the usual outcome. Anything larger
+opens a PR updating the table and the sentence under it, saying what moved and
+whether it looks like the site or the measurement. It cannot touch application
+code.
+
+**Dependencies** (`.github/workflows/dependencies.yml`, the 2nd) raises every
+patch and minor version, runs `pnpm verify`, and opens a PR if it passes. If it
+fails, Claude finds the package that broke it, drops that one, and ships the
+rest with the error that caused it — the first month's run would have dropped
+jsdom 30.1.0 for exactly this. It may only edit `package.json` and the lockfile.
+
+Majors are never applied by that routine. The monthly PR lists them and how
+long each has been held back, and `.github/workflows/dependencyMajor.yml` takes
+one on when asked by name:
+
+```bash
+gh workflow run dependencyMajor.yml -f packages="vitest,@vitest/coverage-v8,@vitest/coverage-istanbul"
+```
+
+That one may change code, because a major usually needs it — under a rule
+against weakening any check to reach green. If the only way through is a lower
+threshold or a skipped test, it opens no PR and explains why instead.
+
+The line between the two is the point: unattended, an agent may only raise
+versions and drop what breaks, so a bad call is a PR nobody merges. Anything
+that edits code to satisfy a dependency is something asked for by name, and
+reviewed.
+
+Versions are pinned exactly, and `.npmrc` sets `save-exact` so `pnpm add` keeps
+it that way. A version only moves when one of these routines, or a person,
+decides it should.
 
 ## Stack
 
