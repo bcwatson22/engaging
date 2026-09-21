@@ -1,5 +1,7 @@
 @utility company {
-  @apply sticky top-2 z-20 -ml-9 flex items-center gap-4;
+  /* Sticks below the status bar, which iOS draws the page behind; see the
+     scrim in base.css. The inset is 0 wherever there is no status bar. */
+  @apply sticky top-[calc(env(safe-area-inset-top)+0.5rem)] z-20 -ml-9 flex items-center gap-4;
   @apply md:-ml-12 lg:gap-6;
   @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:relative print:top-0 print:-ml-8 print:transform-none! print:opacity-100!;
 

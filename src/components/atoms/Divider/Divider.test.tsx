@@ -82,4 +82,36 @@ describe('Divider', () => {
       });
     });
   });
+
+  describe('scroll trigger', () => {
+    it('defaults to no delay', () => {
+      setup();
+
+      expect(useScrollTrigger).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ delay: 0 }),
+      );
+    });
+
+    it('passes its options to useScrollTrigger', () => {
+      const mockMargin = '5px';
+
+      setup(undefined, {
+        delay: 2,
+        margin: mockMargin,
+        amount: 'some',
+        isImmediate: true,
+      });
+
+      expect(useScrollTrigger).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({
+          delay: 2,
+          margin: mockMargin,
+          amount: 'some',
+          isImmediate: true,
+        }),
+      );
+    });
+  });
 });
