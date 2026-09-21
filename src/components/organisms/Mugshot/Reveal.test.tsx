@@ -124,11 +124,48 @@ describe('Reveal', () => {
       );
     });
 
-    it('stays open on a tap inside', async () => {
+    it('closes on a tap inside the region but off the portrait', async () => {
       const { user } = setup();
 
       await user.click(screen.getByRole('button'));
-      await user.click(screen.getByRole('heading', { level: 2 }));
+      await user.click(screen.getByRole('region', { name: 'Mock heading' }));
+
+      expect(screen.getByRole('button')).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      );
+    });
+
+    it('stays open on a tap on a link in the info', async () => {
+      const { user } = setup({
+        children: (
+          <div id="mock-info">
+            <h2 id="mock-heading">Mock heading</h2>
+            <a href="#mock">Mock link</a>
+          </div>
+        ),
+      });
+
+      await user.click(screen.getByRole('button'));
+      await user.pointer({
+        keys: '[MouseLeft>]',
+        target: screen.getByRole('link', { name: 'Mock link' }),
+      });
+
+      expect(screen.getByRole('button')).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
+    });
+
+    it('stays open on a tap on the hint inside the portrait', async () => {
+      const { user } = setup();
+
+      await user.click(screen.getByRole('button'));
+      await user.pointer({
+        keys: '[MouseLeft>]',
+        target: screen.getByText('About'),
+      });
 
       expect(screen.getByRole('button')).toHaveAttribute(
         'aria-expanded',

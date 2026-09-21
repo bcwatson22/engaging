@@ -35,8 +35,13 @@ const Reveal = ({ labelledBy, controls, children }: Props) => {
   useEffect(() => {
     if (!open) return;
 
-    const onPointerDown = (event: PointerEvent): void => {
-      if (!ref.current?.contains(event.target as Node)) setOpen(false);
+    const onPointerDown = ({ target }: PointerEvent): void => {
+      const element = target as Element;
+      const isOnPortrait = buttonRef.current?.contains(element);
+      const isOnInfoLink =
+        ref.current?.contains(element) && element.closest('a') !== null;
+
+      if (!isOnPortrait && !isOnInfoLink) setOpen(false);
     };
 
     document.addEventListener('pointerdown', onPointerDown);
