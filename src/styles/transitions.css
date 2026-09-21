@@ -34,19 +34,18 @@
     350ms ease-in-out both slide;
 }
 
-/* On a phone the pages crossfade in place instead. The CV is long, with a
-   live particle canvas and a glowing pane, and translating a snapshot that
-   size stuttered on iOS Safari; the fade alone is cheap. The pill still morphs,
-   since it is small and carries the sense of direction on its own. */
+/* On a phone the page does not get a snapshot of its own. A named element is
+   captured whole, not just the part on screen, and the CV is some 9,000px
+   tall: at 3x that is a texture around 1,125 by 27,000 pixels with a live
+   particle canvas inside it. On an iPhone the transition into the CV
+   stuttered, and the pill with it, since the pill is part of the same
+   transition and cannot start until every snapshot has been taken. Unnamed, the page falls into the root snapshot, which is
+   the size of the screen, and takes the browser's own crossfade. React names
+   the page with an inline style for the length of the transition, so only an
+   important rule outranks it. */
 @media (width < 48rem) {
-  ::view-transition-old(.nav-forward),
-  ::view-transition-old(.nav-back) {
-    animation: 150ms ease-in both fade reverse;
-  }
-
-  ::view-transition-new(.nav-forward),
-  ::view-transition-new(.nav-back) {
-    animation: 210ms ease-out 150ms both fade;
+  #main {
+    view-transition-name: none !important;
   }
 }
 
