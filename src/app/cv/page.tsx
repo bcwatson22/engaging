@@ -104,7 +104,7 @@ const CVPage = async () => {
               intro={intro}
             />
             <div className="sections">
-              <Section heading="Digits" margin="0px">
+              <Section heading="Digits" isImmediate>
                 <Details address={address} links={contactLinks} />
               </Section>
               <Section heading="Experience" margin="0px" delay={0.1}>

@@ -5,6 +5,19 @@
     @apply text-brand-dark bg-brand-light selection:bg-brand-blue selection:text-brand-light text-base;
     @apply dark:text-brand-light dark:bg-brand-dark;
     @apply print:text-xs;
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+
+    /* The viewport covers the whole screen (viewport-fit=cover), so iOS draws
+       the page behind the status bar. A fixed strip the height of that inset,
+       in the page colour, keeps scrolling content from showing through it, as
+       a native app's safe area does. Its height is 0 wherever there is no
+       status bar, including print. */
+    &::before {
+      content: '';
+      @apply bg-brand-light fixed inset-x-0 top-0 z-40 block;
+      @apply dark:bg-brand-dark;
+      height: env(safe-area-inset-top);
+    }
   }
 
   h1,

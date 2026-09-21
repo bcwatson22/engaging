@@ -10,13 +10,25 @@ type Props = Scroll & {
   heading: string;
 };
 
-const Divider = ({ heading, delay = 0 }: Props) => {
+const Divider = ({
+  heading,
+  delay = 0,
+  margin,
+  amount,
+  isImmediate,
+}: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['end end', 'start center'],
   });
-  const triggerProps = useScrollTrigger({ ref, delay });
+  const triggerProps = useScrollTrigger({
+    ref,
+    delay,
+    margin,
+    amount,
+    isImmediate,
+  });
 
   return (
     <div ref={ref}>

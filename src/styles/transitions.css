@@ -34,6 +34,22 @@
     350ms ease-in-out both slide;
 }
 
+/* On a phone the pages crossfade in place instead. The CV is long, with a
+   live particle canvas and a glowing pane, and translating a snapshot that
+   size stuttered on iOS Safari; the fade alone is cheap. The pill still morphs,
+   since it is small and carries the sense of direction on its own. */
+@media (width < 48rem) {
+  ::view-transition-old(.nav-forward),
+  ::view-transition-old(.nav-back) {
+    animation: 150ms ease-in both fade reverse;
+  }
+
+  ::view-transition-new(.nav-forward),
+  ::view-transition-new(.nav-back) {
+    animation: 210ms ease-out 150ms both fade;
+  }
+}
+
 @keyframes slide {
   from {
     translate: var(--slide-offset);

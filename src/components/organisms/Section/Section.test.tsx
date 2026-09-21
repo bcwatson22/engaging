@@ -48,6 +48,22 @@ describe('Section', () => {
         undefined,
       );
     });
+
+    it('passes the scroll trigger options to the Divider', () => {
+      const mockMargin = '5px';
+
+      setup({ margin: mockMargin, amount: 'some', isImmediate: true });
+
+      expect(Divider).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({
+          margin: mockMargin,
+          amount: 'some',
+          isImmediate: true,
+        }),
+        undefined,
+      );
+    });
   });
 
   describe('children', () => {

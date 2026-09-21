@@ -199,6 +199,16 @@ describe('CVPage', () => {
       );
   });
 
+  it('animates the Digits heading in on load', async () => {
+    await setup();
+
+    expect(Section).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ heading: 'Digits', isImmediate: true }),
+      undefined,
+    );
+  });
+
   it('renders a Details component for contact details', async () => {
     await setup();
 
@@ -282,6 +292,7 @@ describe('CVPage', () => {
 
     expect(result).toEqual(
       expect.objectContaining({
+        viewportFit: 'cover',
         themeColor: expect.arrayContaining([
           {
             media: '(prefers-color-scheme: dark)',
