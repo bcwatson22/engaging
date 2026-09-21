@@ -28,6 +28,11 @@ const scriptEval =
     ? "'unsafe-eval'"
     : "'wasm-unsafe-eval'";
 
+/* The dev server is plain HTTP, so upgrading its requests only works where the
+   browser treats the host as secure, which means localhost. On a phone
+   pointed at the Mac's LAN address every stylesheet and script was sent to an
+   https:// that nothing answers, and the page arrived unstyled. Production is
+   HTTPS end to end and keeps the upgrade. */
 const cspHeader = `
     default-src 'self';
     script-src 'self' ${scriptEval} 'unsafe-inline' *.vercel-scripts.com *.vercel-insights.com;
@@ -39,7 +44,7 @@ const cspHeader = `
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    upgrade-insecure-requests;
+    ${process.env.NODE_ENV === 'development' ? '' : 'upgrade-insecure-requests;'}
 `;
 
 /* The CV PDF and splash screens are rendered by engaging-worker and stored in
@@ -58,6 +63,12 @@ const artifacts = 'https://pub-53c526b0d6a84a57afc0b459064235fd.r2.dev';
    NextConfig object, and only showed up once that string was interpolated. */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  /* The dev server only serves its assets to the host it started on. Set
+     DEV_ORIGIN in .env.local (the Mac's LAN address, e.g. 192.168.1.20) to
+     open it from a phone. Read from the environment rather than hardcoded, as the
+     router hands out a new one now and then and it means nothing to anyone
+     else. Dev only: production never reads it. */
+  allowedDevOrigins: process.env.DEV_ORIGIN ? [process.env.DEV_ORIGIN] : [],
   /* Automatic memoisation, so components stop re-rendering on identical props
      without useMemo/useCallback scattered through the tree. Stable as of Next
      16 — it was experimental before that, and is still off by default while
