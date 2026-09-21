@@ -14,6 +14,12 @@
   &:before {
     content: '';
     @apply bg-brand-light shadow-brand-light absolute top-0 -left-2 block h-[calc(100%+0.5rem)] w-[calc(100%+1rem)] shadow-[0_3px_5px_3px];
+    /* On a phone the role markers sit just outside the band's left edge, so
+       they showed beside a stuck heading while everything else scrolled
+       beneath it. Out to the pane's inner edge covers them; the pane clips
+       the rest. Not from md, where the band already covers them and wider
+       would reach the section headings' column. */
+    @apply max-md:-left-9 max-md:w-[calc(100%+2.75rem)];
     @apply dark:bg-brand-dark dark:shadow-brand-dark;
     @apply print:content-none;
   }
