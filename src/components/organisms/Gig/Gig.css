@@ -8,6 +8,25 @@
     @apply print:-mt-4;
   }
 
+  /* Covers the strip Safari 26 draws above the top of the viewport, where a
+     stuck company heading cannot reach: stuck means stuck at the viewport's
+     top edge, and the text scrolling past above it stayed visible under the
+     status bar. A fixed cover is not painted up there, but scrolling content
+     is, so this is sticky rather than fixed. It sits behind the heading in the
+     flow, hidden and taking no room, and once the heading has stuck it scrolls
+     on another 5rem and sticks just above the viewport, for as long as the
+     heading stays. 5rem clears the 62px strip measured on an iPhone and stays
+     inside the heading's own height, and it spans the same width as the
+     heading's band (see Company), so it never shows in the flow. */
+  &::before {
+    content: '';
+    @apply bg-brand-light sticky z-20 -mr-2 -mb-20 -ml-18 block h-20;
+    @apply md:-ml-14;
+    @apply dark:bg-brand-dark;
+    @apply print:hidden;
+    top: -5rem;
+  }
+
   &:not(:last-of-type) {
     @apply mb-8 pb-4;
     @apply lg:mb-12;
