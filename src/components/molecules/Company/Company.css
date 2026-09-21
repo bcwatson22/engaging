@@ -1,13 +1,19 @@
 @utility company {
-  /* Sticks below the status bar, which iOS draws the page behind; see the
-     scrim in base.css. The inset is 0 wherever there is no status bar. */
-  @apply sticky top-[calc(env(safe-area-inset-top)+0.5rem)] z-20 -ml-9 flex items-center gap-4;
+  /* Stuck flush to the top of the viewport, with its own background. Safari 26
+     draws the page behind the status bar, and fills that area from a fixed or
+     sticky element whose background meets the top edge; otherwise it shows
+     whatever is scrolling past. Stuck 8px down, with the colour only on a
+     pseudo-element, the heading left a strip of the job beneath it showing
+     through. The top padding and matching negative margin keep the old
+     spacing, so nothing moves in the flow. */
+  @apply bg-brand-light sticky top-0 z-20 -mt-2 -ml-9 flex items-center gap-4 pt-2;
+  @apply dark:bg-brand-dark;
   @apply md:-ml-12 lg:gap-6;
-  @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:relative print:top-0 print:-ml-8 print:transform-none! print:opacity-100!;
+  @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:relative print:top-0 print:mt-0 print:-ml-8 print:transform-none! print:bg-transparent print:pt-0 print:opacity-100!;
 
   &:before {
     content: '';
-    @apply bg-brand-light shadow-brand-light absolute -top-2 -left-2 block h-[calc(100%+1rem)] w-[calc(100%+1rem)] shadow-[0_3px_5px_3px];
+    @apply bg-brand-light shadow-brand-light absolute top-0 -left-2 block h-[calc(100%+0.5rem)] w-[calc(100%+1rem)] shadow-[0_3px_5px_3px];
     @apply dark:bg-brand-dark dark:shadow-brand-dark;
     @apply print:content-none;
   }
