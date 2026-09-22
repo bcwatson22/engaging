@@ -14,7 +14,9 @@
   }
 
   @apply relative flex cursor-pointer items-center gap-2 self-start rounded-sm border-2 px-4 py-2;
-  @apply focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
+  /* The press shrink is not transitioned, so with motion off it would snap
+     rather than move. The colour wipe is feedback enough there. */
+  @apply motion-off:active:scale-none! focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98];
   @apply disabled:cursor-not-allowed disabled:opacity-60;
 
   border-color: var(--accent);
