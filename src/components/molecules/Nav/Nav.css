@@ -118,11 +118,27 @@
 
 /* The pause control stops the wash too. Written out rather than as
    motion-off: inside the utility the selector is wrapped in :is(), which
-   cannot hold a pseudo-element, and the rule came out empty. */
+   cannot hold a pseudo-element, and the rule came out empty.
+
+   With motion off the press keeps the wash at full size. Without its
+   transition the press-down snapped to 90%, which still reads as movement;
+   the wash's opacity is feedback enough. */
 :where(:root[data-motion='paused'])
   .site-nav
   .link:not([aria-current='page'])::before {
   transition: none;
+}
+
+:where(:root[data-motion='paused'])
+  .site-nav
+  .link:active:not([aria-current='page'])::before {
+  scale: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav .link:active:not([aria-current='page'])::before {
+    scale: none;
+  }
 }
 
 /* One custom property for the pill's colour, on the root so the view
