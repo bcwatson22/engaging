@@ -16,7 +16,7 @@
       0 100%;
     background-repeat: no-repeat;
     transition: background-size 0.125s ease-out;
-    @apply motion-reduce:transition-none;
+    @apply motion-off:transition-none;
 
     @media (prefers-color-scheme: dark) {
       background-image:

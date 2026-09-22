@@ -1,11 +1,11 @@
 @utility divider {
   @apply text-brand-blue relative inline-block whitespace-nowrap;
   @apply dark:text-brand-yellow;
-  @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:transform-none! print:opacity-100!;
+  @apply motion-off:transform-none! motion-off:opacity-100! print:transform-none! print:opacity-100!;
 
   & > span {
     @apply border-brand-blue indent-full absolute right-0 bottom-[-12px] h-0 w-screen border-b-3;
     @apply dark:border-brand-yellow;
-    @apply motion-reduce:transform-none! print:transform-none!;
+    @apply motion-off:transform-none! print:transform-none!;
   }
 }

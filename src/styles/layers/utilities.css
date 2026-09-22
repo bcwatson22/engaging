@@ -91,9 +91,7 @@
     user-select: none;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+  @apply motion-off:transition-none;
 }
 
 /* A one-line outcome: an icon, a sentence, and optionally a quieter aside

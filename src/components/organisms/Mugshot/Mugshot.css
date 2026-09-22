@@ -61,7 +61,7 @@
   & p,
   & li {
     @apply translate-y-2 opacity-0 transition-all duration-300;
-    @apply motion-reduce:translate-y-0 motion-reduce:opacity-100;
+    @apply motion-off:translate-y-0 motion-off:opacity-100;
   }
 
   & h2 {
@@ -187,7 +187,7 @@
      a border sits inside the box and nudged the icon and label 1px off the
      nav's. */
   @apply flex h-11 items-center gap-2 rounded-full bg-black/60 pr-4 pl-2.5 text-base text-white inset-ring inset-ring-white/20 backdrop-blur-sm;
-  @apply transition-all duration-300 motion-reduce:transition-none;
+  @apply motion-off:transition-none transition-all duration-300;
 
   /* The site's link underline, so the badge reads as something to press. It
      sits on the portrait whatever the scheme, so it takes the dark treatment:
@@ -208,7 +208,7 @@
       0 100%;
     background-repeat: no-repeat;
     transition: background-size 0.125s ease-out;
-    @apply motion-reduce:transition-none;
+    @apply motion-off:transition-none;
 
     @media (forced-colors: active) {
       text-decoration: underline;

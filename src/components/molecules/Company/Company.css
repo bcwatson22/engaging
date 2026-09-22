@@ -9,7 +9,7 @@
   @apply bg-brand-light sticky top-0 z-20 -mt-2 -ml-9 flex items-center gap-4 pt-2;
   @apply dark:bg-brand-dark;
   @apply md:-ml-12 lg:gap-6;
-  @apply motion-reduce:transform-none! motion-reduce:opacity-100! print:relative print:top-0 print:mt-0 print:-ml-8 print:transform-none! print:bg-transparent print:pt-0 print:opacity-100!;
+  @apply motion-off:transform-none! motion-off:opacity-100! print:relative print:top-0 print:mt-0 print:-ml-8 print:transform-none! print:bg-transparent print:pt-0 print:opacity-100!;
 
   &:before {
     content: '';
