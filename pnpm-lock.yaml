@@ -73,9 +73,6 @@ importers:
       '@vitest/coverage-istanbul':
         specifier: 5.0.1
         version: 5.0.1(vitest@5.0.1)
-      '@vitest/coverage-v8':
-        specifier: 5.0.1
-        version: 5.0.1(vitest@5.0.1)
       axe-core:
         specifier: 4.13.0
         version: 4.13.0
@@ -2466,7 +2463,8 @@ snapshots:
       '@babel/helper-string-parser': 8.0.6
       '@babel/helper-validator-identifier': 8.0.6
 
-  '@bcoe/v8-coverage@1.0.2': {}
+  '@bcoe/v8-coverage@1.0.2':
+    optional: true
 
   '@bcwatson22/motes@0.4.0': {}
 
@@ -3137,6 +3135,7 @@ snapshots:
       std-env: 4.2.0
       tinyrainbow: 3.1.1
       vitest: 5.0.1(@types/node@22.20.1)(@vitest/coverage-istanbul@5.0.1)(@vitest/coverage-v8@5.0.1)(jsdom@30.0.1)(vite@8.3.0(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.8.0))
+    optional: true
 
   '@vitest/istanbul-lib-coverage@1.0.1': {}
 
@@ -3196,6 +3195,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       estree-walker: 3.0.3
       js-tokens: 10.0.0
+    optional: true
 
   axe-core@4.13.0: {}
 
