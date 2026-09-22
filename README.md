@@ -76,7 +76,7 @@ long each has been held back, and `.github/workflows/dependencyMajor.yml` takes
 one on when asked by name:
 
 ```bash
-gh workflow run dependencyMajor.yml -f packages="vitest,@vitest/coverage-v8,@vitest/coverage-istanbul"
+gh workflow run dependencyMajor.yml -f packages="vitest,@vitest/coverage-istanbul"
 ```
 
 That one may change code, because a major usually needs it — under a rule
