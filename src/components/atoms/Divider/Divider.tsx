@@ -1,9 +1,9 @@
 'use client';
 
-import { useScroll } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useRef } from 'react';
 
+import { useScrollProgress } from '@/hooks/useScrollProgress/useScrollProgress';
 import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
 type Props = Scroll & {
@@ -18,10 +18,7 @@ const Divider = ({
   isImmediate,
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['end end', 'start center'],
-  });
+  useScrollProgress({ ref, offset: ['end end', 'start center'] });
   const triggerProps = useScrollTrigger({
     ref,
     delay,
@@ -33,10 +30,7 @@ const Divider = ({
   return (
     <div ref={ref}>
       <m.h2 className="divider" {...triggerProps}>
-        {heading}:{' '}
-        <m.span style={{ scaleX: scrollYProgress }} aria-hidden="true">
-          Divider
-        </m.span>
+        {heading}: <span aria-hidden="true">Divider</span>
       </m.h2>
     </div>
   );

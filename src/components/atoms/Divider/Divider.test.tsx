@@ -2,6 +2,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import type { Target } from 'motion/react';
 import type { Mock } from 'vitest';
 
+import { useScrollProgress } from '@/hooks/useScrollProgress/useScrollProgress';
 import { useScrollTrigger } from '@/hooks/useScrollTrigger/useScrollTrigger';
 
 import { Divider, type DividerProps } from './Divider';
@@ -10,6 +11,13 @@ vi.mock('@/hooks/useScrollTrigger/useScrollTrigger', () => ({
   useScrollTrigger:
     vi.fn<
       typeof import('@/hooks/useScrollTrigger/useScrollTrigger').useScrollTrigger
+    >(),
+}));
+
+vi.mock('@/hooks/useScrollProgress/useScrollProgress', () => ({
+  useScrollProgress:
+    vi.fn<
+      typeof import('@/hooks/useScrollProgress/useScrollProgress').useScrollProgress
     >(),
 }));
 
@@ -79,6 +87,19 @@ describe('Divider', () => {
       expect(screen.getByRole('heading')).toHaveStyle({
         opacity,
         transform: `translateY(${y})`,
+      });
+    });
+  });
+
+  describe('underline', () => {
+    it('draws across as the heading rises to the middle of the viewport', () => {
+      setup();
+
+      expect(useScrollProgress).toHaveBeenNthCalledWith(1, {
+        ref: expect.objectContaining({
+          current: screen.getByRole('heading').parentElement,
+        }),
+        offset: ['end end', 'start center'],
       });
     });
   });

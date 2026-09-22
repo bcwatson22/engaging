@@ -1,6 +1,15 @@
 import { render, screen, within } from '@testing-library/react';
 
+import { useScrollProgress } from '@/hooks/useScrollProgress/useScrollProgress';
+
 import { Bullet, BulletSkeleton, type BulletProps } from './Bullet';
+
+vi.mock('@/hooks/useScrollProgress/useScrollProgress', () => ({
+  useScrollProgress:
+    vi.fn<
+      typeof import('@/hooks/useScrollProgress/useScrollProgress').useScrollProgress
+    >(),
+}));
 
 const mockChildren = 'mock-children';
 
@@ -12,6 +21,17 @@ const setup = (props?: Partial<BulletProps>) =>
   render(<Bullet {...defaultProps} {...props} />);
 
 describe('Bullet', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it('scales its dot in as it rises into the bottom fifth of the viewport', () => {
+    setup();
+
+    expect(useScrollProgress).toHaveBeenNthCalledWith(1, {
+      ref: expect.objectContaining({ current: screen.getByRole('listitem') }),
+      offset: ['end end', 'start 80vh'],
+    });
+  });
+
   it('renders a listitem', () => {
     setup();
 

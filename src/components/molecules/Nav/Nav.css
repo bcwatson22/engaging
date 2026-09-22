@@ -116,6 +116,15 @@
   }
 }
 
+/* The pause control stops the wash too. Written out rather than as
+   motion-off: inside the utility the selector is wrapped in :is(), which
+   cannot hold a pseudo-element, and the rule came out empty. */
+:where(:root[data-motion='paused'])
+  .site-nav
+  .link:not([aria-current='page'])::before {
+  transition: none;
+}
+
 /* One custom property for the pill's colour, on the root so the view
    transition's pseudo-elements — which hang off the root, not the nav — can
    read it too. Blue on light, yellow on dark, and yellow on the home page,

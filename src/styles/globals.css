@@ -34,6 +34,25 @@
   }
 }
 
+/* Motion is off when the system asks for less of it or the site's own pause
+   control is on (see useMotionPreference). The button says "Pause motion", so
+   it has to stop the short effects too, not only the loops WCAG 2.2.2 names.
+   A variant of its own rather than a redefined motion-reduce: the loops use
+   motion-reduce:animate-none, and the pause holds those where they are, so
+   they carry on from there instead of snapping back to their start. :where()
+   keeps the paused branch at the specificity of the media query branch, and
+   it goes in front of the selector because a suffix after ::before is
+   invalid, which drops the whole rule. */
+@custom-variant motion-off {
+  @media (prefers-reduced-motion: reduce) {
+    @slot;
+  }
+
+  :where(:root[data-motion='paused']) & {
+    @slot;
+  }
+}
+
 /* No text-indent namespace in v4, so the named utility is declared directly. */
 @utility indent-full {
   text-indent: -99999rem;
@@ -96,10 +115,10 @@
 
 /* The site's own pause control — see useMotionPreference. Paused rather than
    removed, so resuming carries on from where it stopped instead of snapping
-   the orbit back to its start. Anything that can run for more than five
-   seconds belongs in this list — skeletons included, since the error page
-   keeps its pulsing placeholder orbit indefinitely rather than while
-   loading. */
+   the orbit back to its start. Every loop belongs in this list — skeletons
+   included, since the error page keeps its pulsing placeholder orbit
+   indefinitely rather than while loading. Transitions and scroll effects are
+   stopped where they are declared, with the motion-off variant. */
 :root[data-motion='paused'] {
   & .technologies,
   & .technologies li div,

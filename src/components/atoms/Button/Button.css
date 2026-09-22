@@ -46,7 +46,7 @@
     background-size 0.125s ease-out,
     color 0.125s ease-out;
 
-  @apply motion-reduce:transition-none;
+  @apply motion-off:transition-none;
 
   &:hover,
   &:focus-visible {

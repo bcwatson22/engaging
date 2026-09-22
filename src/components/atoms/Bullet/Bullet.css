@@ -1,9 +1,12 @@
 @utility bullet {
   @apply relative;
 
+  /* --progress is written by useScrollProgress. Until it is, the dot is not
+     drawn, as it was when the scale came from Motion's server render. */
   & span {
+    scale: var(--progress, 0);
     @apply indent-full absolute top-1.5 -left-6 block h-3 w-3 rounded-full;
-    @apply motion-reduce:transform-none! print:top-0.5 print:-left-5 print:h-2.5 print:w-2.5 print:transform-none!;
+    @apply motion-off:scale-none! print:top-0.5 print:-left-5 print:h-2.5 print:w-2.5 print:scale-none!;
   }
 
   &:nth-of-type(4n + 1) span {
