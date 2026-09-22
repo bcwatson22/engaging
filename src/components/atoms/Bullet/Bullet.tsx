@@ -1,8 +1,8 @@
 'use client';
 
-import { useScroll } from 'motion/react';
-import * as m from 'motion/react-m';
 import { type ReactNode, useRef } from 'react';
+
+import { useScrollProgress } from '@/hooks/useScrollProgress/useScrollProgress';
 
 import { SkeletonLine } from '../Skeleton/Skeleton';
 
@@ -42,16 +42,11 @@ const BulletSkeleton = ({ index }: SkeletonProps) => (
 
 const Bullet = ({ children }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['end end', 'start 80vh'],
-  });
+  useScrollProgress({ ref, offset: ['end end', 'start 80vh'] });
 
   return (
     <li ref={ref} className="bullet">
-      <m.span style={{ scale: scrollYProgress }} aria-hidden="true">
-        Bullet
-      </m.span>
+      <span aria-hidden="true">Bullet</span>
       {children}
     </li>
   );

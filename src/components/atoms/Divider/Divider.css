@@ -3,9 +3,12 @@
   @apply dark:text-brand-yellow;
   @apply motion-off:transform-none! motion-off:opacity-100! print:transform-none! print:opacity-100!;
 
+  /* --progress is written by useScrollProgress, on the wrapper above the
+     heading. */
   & > span {
+    scale: var(--progress, 0) 1;
     @apply border-brand-blue indent-full absolute right-0 bottom-[-12px] h-0 w-screen border-b-3;
     @apply dark:border-brand-yellow;
-    @apply motion-off:transform-none! print:transform-none!;
+    @apply motion-off:scale-none! print:scale-none!;
   }
 }
