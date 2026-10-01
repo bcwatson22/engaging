@@ -11,20 +11,19 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 26 August 2026, Lighthouse 13.4.1:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 1 October 2026, Lighthouse 13.5.0:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) — mobile | 97          | 100           | 100            | 100 |
-| Home — desktop                                     | 100         | 100           | 100            | 100 |
-| [CV](https://www.engaging.engineering/cv) — mobile | 99          | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) — mobile | 91          | 100           | 96             | 100 |
+| Home — desktop                                     | 69          | 100           | 96             | 100 |
+| [CV](https://www.engaging.engineering/cv) — mobile | 96          | 100           | 100            | 100 |
 | CV — desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
 4G, and it is what Google ranks on. Largest Contentful Paint is still the only
-metric not at full marks there — 2.6s on Home, 2.0s on the CV — with everything
-else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
-20ms).
+metric not at full marks there — 3.2s on Home, 2.8s on the CV — with everything
+else passing comfortably (CLS 0 on both, Total Blocking Time 18ms and 6ms).
 
 Each figure is the median of three runs, taken after one discarded warm-up run
 per page. A single run moves by a point or two either way, which is wide enough
