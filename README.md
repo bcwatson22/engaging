@@ -62,7 +62,15 @@ the table here. A point of movement, or less than 0.2s of LCP, is treated as
 noise and the run does nothing, which is the usual outcome. Anything larger
 opens a PR updating the table and the sentence under it, saying what moved and
 whether it looks like the site or the measurement. It cannot touch application
-code.
+code. Every run keeps its raw measurement as a build artifact for 90 days, and
+a run can be asked to produce one without judging it or opening anything:
+
+```bash
+gh workflow run pageSpeed.yml -f measureOnly=true
+```
+
+That is how a figure that looks like measurement noise gets checked rather than
+argued about.
 
 **Dependencies** (`.github/workflows/dependencies.yml`, the 2nd) raises every
 patch and minor version, runs `pnpm verify`, and opens a PR if it passes. If it
