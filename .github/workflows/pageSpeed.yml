@@ -15,6 +15,15 @@ on:
     # weekly PR nobody reads is how a routine becomes noise.
     - cron: '0 6 1 * *'
   workflow_dispatch:
+    inputs:
+      measureOnly:
+        description: >-
+          Measure and keep the report without judging it or opening a PR. For
+          a second opinion on a figure an earlier run published, and for
+          producing a report to use as a test fixture.
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -49,7 +58,22 @@ jobs:
           PAGESPEED_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
         run: node src/scripts/pageSpeed.ts
 
-      - uses: anthropics/claude-code-action@v1
+      # The measurement itself, kept. #78 reported Home desktop at 69 on a
+      # Total Blocking Time of 1023ms and said in its own PR body that this
+      # looked like contention on the runner rather than the site — and by then
+      # the only evidence either way had been thrown away with the machine.
+      # Ninety days is the maximum a public repository can retain.
+      - name: Keep the measurement
+        uses: actions/upload-artifact@v7
+        with:
+          name: pageSpeed-report
+          path: pageSpeed.json
+          retention-days: 90
+
+      # Skipped by a measure-only run, which exists to produce a report and
+      # nothing else. On the schedule `inputs` is empty, so this is true.
+      - if: ${{ !inputs.measureOnly }}
+        uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # Same as the repo's own settings: no attribution trailers on the
