@@ -33,11 +33,19 @@ that: the LCP element is an image served through `/_next/image`, which took
 311ms against a cold edge cache and about 20ms against a warm one. Six
 measurements of unchanged code once ranged from 90 to 100 on that alone.
 
-The warm-up narrowed that but did not close it, so the range of the three runs
-is now recorded beside every median. A median on its own cannot be questioned;
-with the range next to it, a reader can see whether the measurement agreed with
-itself. The monthly routine decides what to publish on exactly that basis, and
-is described under [Maintenance](#maintenance).
+The warm-up narrowed that but did not close it. Two sittings 27 minutes apart
+on the same commit later read 99 and 91 on Home mobile, with LCPs of 2.0s and
+3.3s, and the three runs inside each sitting agreed with each other to within a
+point. Across four sittings that figure reads 2.6s, 3.2s, 2.0s and 3.3s: two
+clusters about 1.2s apart rather than scatter, so something switches between
+states rather than wobbling. What, is still open: the LCP image is 23KB and
+preloaded in the first 350 bytes, while the document is 322KB, which is itself
+over a second of transfer on the profile mobile is scored against.
+
+So the site is now measured twice with a gap, and each figure records both
+sittings and the range across every run. A single sitting cannot be questioned;
+two can disagree, and when they do the routine publishes nothing. It is
+described under [Maintenance](#maintenance).
 
 The mobile numbers moved from 93 and 94, measured the same way immediately
 before the change, when the stylesheet stopped being a second request:
@@ -65,14 +73,15 @@ both pages on both strategies as described above, and compares the result with
 the table here, under the rules in `.github/prompts/pageSpeed.md`. There are
 three outcomes, and two of them change nothing:
 
-- **Held** — nothing moved by more than a point, or 0.2s of LCP. The usual
-  month.
-- **Unconfirmed** — something moved, but by no more than the three runs behind
-  it disagreed with each other. The run says so in its summary and publishes
-  nothing, because a figure the measurement cannot support is not a figure.
-- **Moved** — something moved by more than its own spread. The run updates the
-  table and the sentence under it and opens a PR, quoting the spread behind
-  every number it is claiming moved.
+- **Held** - the two sittings agree, and nothing moved by more than a point or
+  0.2s of LCP. The usual month.
+- **Unconfirmed** - either the two sittings disagree with each other, or a
+  figure moved by no more than its individual runs wandered. The run says which
+  of the two in its summary, and publishes nothing: a figure the measurement
+  cannot support is not a figure.
+- **Moved** - the sittings agree, and the figure moved further than the runs
+  wandered. The run updates the table and the sentence under it and opens a PR,
+  quoting both sittings behind every number it claims moved.
 
 It cannot touch application code. Every run keeps its raw measurement as a
 build artifact for 90 days, and a run can be asked to produce one without
@@ -83,11 +92,14 @@ gh workflow run pageSpeed.yml -f measureOnly=true
 ```
 
 That is how a figure that looks like measurement noise gets checked rather than
-argued about — and it is how the third outcome came to exist. An earlier run
+argued about, and it is where both rules above came from. An earlier run
 published a desktop score of 69 while saying in its own PR body that it did not
-believe it; a re-measure eight days later read 100, with Total Blocking Time at
-0ms against the 1023ms that produced the 69. The rules at the time had nowhere
-to put a number that was flagged but not trusted, so now they do.
+believe it; a re-measure read 100, with Total Blocking Time at 0ms against the
+1023ms behind the 69. The fix after that compared a move against the spread
+within a single sitting, and the very next sitting disagreed with its
+predecessor by eight points while being internally consistent to within one.
+Hence two sittings: the only disagreement worth trusting is between
+measurements taken far enough apart to be separate questions.
 
 **Dependencies** (`.github/workflows/dependencies.yml`, the 2nd) raises every
 patch and minor version, runs `pnpm verify`, and opens a PR if it passes. If it

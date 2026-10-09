@@ -1,4 +1,13 @@
-import { bounds, categories, measure, median, pause, query } from './pageSpeed';
+import {
+  bounds,
+  categories,
+  gap,
+  measure,
+  median,
+  pause,
+  query,
+  sittings,
+} from './pageSpeed';
 
 type RunValues = {
   performance?: number;
@@ -26,9 +35,10 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
 });
 
 type Options = {
-  /* One entry per request, in order. Twelve requests is four page/strategy
-     pairs times three runs, so a test can describe a whole measurement as a
-     list. Shorter lists repeat their last entry. */
+  /* One entry per request, in order. Thirty-two requests is two sittings of
+     four page/strategy pairs, each a warm-up plus three counted runs, so a
+     test can describe a whole measurement as a list. Shorter lists repeat
+     their last entry. */
   responses?: RunValues[];
   ok?: boolean;
   status?: number;
@@ -132,12 +142,13 @@ describe('query', () => {
 
 describe('measure', () => {
   it('reports both pages on both strategies', async () => {
-    const { fetcher } = setup();
+    const { fetcher, wait } = setup();
 
     const { measurements } = await measure(
       'https://example.com',
       undefined,
       fetcher,
+      wait,
     );
 
     expect(
@@ -148,12 +159,12 @@ describe('measure', () => {
   /* The injected fetch is for the tests; the script calls this with none, so
      the default has to reach the real global. */
   it('falls back to the global fetch', async () => {
-    const { fetcher } = setup();
+    const { fetcher, wait } = setup();
     vi.stubGlobal('fetch', fetcher);
 
-    await measure('https://example.com');
+    await measure('https://example.com', undefined, undefined, wait);
 
-    expect(fetcher).toHaveBeenCalledTimes(16);
+    expect(fetcher).toHaveBeenCalledTimes(32);
 
     vi.unstubAllGlobals();
   });
@@ -161,7 +172,7 @@ describe('measure', () => {
   /* The README's central claim about its own numbers: each figure is the
      median of three runs, so one unusually good run cannot become the table. */
   it('publishes the median of three runs, not the best', async () => {
-    const { fetcher } = setup({
+    const { fetcher, wait } = setup({
       responses: [
         { performance: 0.93 },
         { performance: 1 },
@@ -169,19 +180,56 @@ describe('measure', () => {
       ],
     });
 
-    const [home] = (await measure('https://example.com', undefined, fetcher))
-      .measurements;
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
 
-    expect(home?.scores.performance).toBe(97);
+    expect(home?.scores.performance.sittings[0]).toBe(97);
   });
 
-  /* Four pairs, each a discarded warm-up plus the three that count. */
-  it('runs three times per page and strategy, after a warm-up', async () => {
-    const { fetcher } = setup();
+  /* Two sittings of four pairs, each a discarded warm-up plus three counted. */
+  it('runs three times per page and strategy, twice, after a warm-up', async () => {
+    const { fetcher, wait } = setup();
 
-    await measure('https://example.com', undefined, fetcher);
+    await measure('https://example.com', undefined, fetcher, wait);
 
-    expect(fetcher).toHaveBeenCalledTimes(16);
+    expect(fetcher).toHaveBeenCalledTimes(32);
+  });
+
+  /* The whole reason for two sittings. On 2026-10-09 the same commit measured
+     Home mobile at 99 and then 91 twenty-seven minutes later, and the three
+     runs inside each sitting agreed with each other. A figure has to carry
+     both medians, or the disagreement that matters is the one nobody sees. */
+  it('keeps each sitting separate rather than pooling them', async () => {
+    const quick = Array.from({ length: 16 }, () => ({
+      performance: 0.99,
+      lcpMs: 2000,
+    }));
+    const slow = Array.from({ length: 16 }, () => ({
+      performance: 0.91,
+      lcpMs: 3300,
+    }));
+
+    const { fetcher, wait } = setup({ responses: [...quick, ...slow] });
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.scores.performance.sittings).toEqual([99, 91]);
+    expect(home?.scores.performance).toMatchObject({ min: 91, max: 99 });
+    expect(home?.metrics.lcpMs.sittings).toEqual([2000, 3300]);
+  });
+
+  /* Sequential sittings with no gap would be one long sitting, which is the
+     thing being measured away from. */
+  it('waits between sittings, and not before the first', async () => {
+    const { fetcher, wait } = setup();
+
+    await measure('https://example.com', undefined, fetcher, wait);
+
+    expect(wait).toHaveBeenNthCalledWith(1, gap);
+    expect(wait).toHaveBeenCalledTimes(sittings - 1);
   });
 
   /* The warm-up exists because the first request pays for a cold image cache:
@@ -189,7 +237,7 @@ describe('measure', () => {
      result has to be thrown away, or it is just a fourth run dragging the
      median back down. */
   it('throws the warm-up away rather than counting it', async () => {
-    const { fetcher } = setup({
+    const { fetcher, wait } = setup({
       responses: [
         { performance: 0.5 },
         { performance: 0.99 },
@@ -198,19 +246,21 @@ describe('measure', () => {
       ],
     });
 
-    const [home] = (await measure('https://example.com', undefined, fetcher))
-      .measurements;
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
 
-    expect(home?.scores.performance).toBe(99);
+    expect(home?.scores.performance.sittings[0]).toBe(99);
+    expect(home?.scores.performance.min).toBe(99);
   });
 
   /* The median alone let #78 publish a desktop score of 69 that the next run
-     measured at 100. The spread is what makes that answerable rather than
-     arguable, so it travels with every figure, not just the volatile ones. */
+     measured at 100. The bounds are what make that answerable rather than
+     arguable, so they travel with every figure, not just the volatile ones. */
   it('records the range behind every median, not just the median', async () => {
-    const { fetcher } = setup({
+    const { fetcher, wait } = setup({
       responses: [
-        /* The warm-up, thrown away — so its 0.5 must not reach the range. */
+        /* The warm-up, thrown away - so its 0.5 must not reach the range. */
         { performance: 0.5 },
         { performance: 0.94, lcpMs: 2000 },
         { performance: 1, lcpMs: 3200 },
@@ -218,28 +268,37 @@ describe('measure', () => {
       ],
     });
 
-    const [home] = (await measure('https://example.com', undefined, fetcher))
-      .measurements;
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
 
-    expect(home?.scores.performance).toBe(97);
-    expect(home?.spread.scores.performance).toEqual({ min: 94, max: 100 });
-    expect(home?.spread.metrics.lcpMs).toEqual({ min: 2000, max: 3200 });
-    expect(home?.spread.scores.seo).toEqual({ min: 100, max: 100 });
+    expect(home?.scores.performance.sittings[0]).toBe(97);
+    expect(home?.scores.performance).toMatchObject({ min: 94, max: 100 });
+    expect(home?.metrics.lcpMs).toMatchObject({ min: 2000, max: 3200 });
+    expect(home?.scores.seo).toMatchObject({ min: 100, max: 100 });
   });
 
   it('reports the metrics the prose quotes', async () => {
-    const { fetcher } = setup({ responses: [{ lcpMs: 2600 }] });
+    const { fetcher, wait } = setup({ responses: [{ lcpMs: 2600 }] });
 
-    const [home] = (await measure('https://example.com', undefined, fetcher))
-      .measurements;
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
 
-    expect(home?.metrics).toEqual({ lcpMs: 2600, clsScore: 0, tbtMs: 40 });
+    expect(home?.metrics.lcpMs.sittings).toEqual([2600, 2600]);
+    expect(home?.metrics.clsScore.sittings).toEqual([0, 0]);
+    expect(home?.metrics.tbtMs.sittings).toEqual([40, 40]);
   });
 
   it('records the Lighthouse version the numbers came from', async () => {
-    const { fetcher } = setup();
+    const { fetcher, wait } = setup();
 
-    const report = await measure('https://example.com', undefined, fetcher);
+    const report = await measure(
+      'https://example.com',
+      undefined,
+      fetcher,
+      wait,
+    );
 
     expect(report.lighthouseVersion).toBe('13.4.1');
   });
@@ -247,9 +306,14 @@ describe('measure', () => {
   /* Cosmetic, unlike a missing score: the version only labels the table, so a
      response without one is still a usable measurement. */
   it('says so when the response carries no version', async () => {
-    const { fetcher } = setup({ omit: 'version' });
+    const { fetcher, wait } = setup({ omit: 'version' });
 
-    const report = await measure('https://example.com', undefined, fetcher);
+    const report = await measure(
+      'https://example.com',
+      undefined,
+      fetcher,
+      wait,
+    );
 
     expect(report.lighthouseVersion).toBe('unknown');
   });
@@ -305,8 +369,9 @@ describe('measure', () => {
     );
 
     expect(report.measurements).toHaveLength(4);
-    expect(fetcher).toHaveBeenCalledTimes(17);
-    expect(wait).toHaveBeenCalledTimes(1);
+    expect(fetcher).toHaveBeenCalledTimes(33);
+    /* The retry, then the gap before the second sitting. */
+    expect(wait).toHaveBeenCalledTimes(2);
   });
 
   it('gives up on a run that keeps failing', async () => {
