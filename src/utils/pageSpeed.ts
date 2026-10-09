@@ -10,10 +10,16 @@
 
    Across four sittings that figure now reads 2.6s, 3.2s, 2.0s, 3.3s: two
    clusters about 1.2s apart, steady within a sitting and jumping between them.
-   That is a cold edge cache on the LCP image rather than scatter, so the fix
-   belongs in how the site serves it. Until that lands, this file's job is to
-   notice the disagreement rather than publish whichever mode it happened to
-   catch. */
+   Two clusters is not scatter, so something switches between states rather than
+   wobbling - but what, is not established. The LCP image is 23KB with its
+   preload in the first 350 bytes of the document, while the document itself is
+   322KB, which is over a second of transfer on the throttled profile mobile is
+   scored against. A cold image cache was measured at 311ms once, and cannot
+   account for 1.2s on its own.
+
+   Until that is understood, this file's job is to notice the disagreement
+   rather than publish whichever state it happened to catch. That holds however
+   the cause turns out. */
 
 const endpoint = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
 
@@ -38,9 +44,9 @@ const runs = 3;
    sitting hides the cold mode that a real first visitor gets, which is a
    number worth knowing. Dropping the warm-up instead would put a cold run in
    every sitting and widen every spread permanently, so the routine would
-   refuse to publish anything. Neither is right. The honest resolution is to
-   stop the cold mode existing, which is a change to how the image is served,
-   not to how it is measured. */
+   refuse to publish anything. Neither is right, and which is less wrong
+   depends on a cause nobody has pinned down yet - so this stays as it is, and
+   stays written down. */
 const warmUps = 1;
 
 /* Two sittings, and the gap between them.

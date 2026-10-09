@@ -37,8 +37,10 @@ The warm-up narrowed that but did not close it. Two sittings 27 minutes apart
 on the same commit later read 99 and 91 on Home mobile, with LCPs of 2.0s and
 3.3s, and the three runs inside each sitting agreed with each other to within a
 point. Across four sittings that figure reads 2.6s, 3.2s, 2.0s and 3.3s: two
-clusters about 1.2s apart rather than scatter, which is a cold edge cache on the
-LCP image rather than a wandering measurement.
+clusters about 1.2s apart rather than scatter, so something switches between
+states rather than wobbling. What, is still open: the LCP image is 23KB and
+preloaded in the first 350 bytes, while the document is 322KB, which is itself
+over a second of transfer on the profile mobile is scored against.
 
 So the site is now measured twice with a gap, and each figure records both
 sittings and the range across every run. A single sitting cannot be questioned;

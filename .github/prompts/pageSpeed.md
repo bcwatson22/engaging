@@ -106,7 +106,8 @@ and a run that opens no PR otherwise leaves nothing to read.
 
 For Unconfirmed, name which gate each figure failed - the two sittings
 disagreeing is a different problem from the individual runs wandering, and
-only the first points at cache state. Then say what would settle it:
+only the first means the site served two different experiences fifteen minutes
+apart. Then say what would settle it:
 
 ```bash
 gh workflow run pageSpeed.yml -f measureOnly=true
