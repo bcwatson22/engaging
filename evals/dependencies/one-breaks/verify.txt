@@ -1,0 +1,17 @@
+> engaging@1.1.0 coverage
+> vitest run --coverage
+
+ Test Files  71 passed (71)
+      Tests  646 passed (646)
+
+Unhandled Errors
+
+ Vitest caught 1 unhandled error during the test run.
+
+RangeError: Selector exceeds maximum allowed length of 2048
+ ❯ node_modules/@asamuzakjp/dom-selector/dist/cjs/index.js:1:24180
+ ❯ Document.querySelector node_modules/jsdom/lib/jsdom/living/interfaces.js:1
+ ❯ ImagePreload node_modules/next/dist/client/image-component.js:214:31
+ ❯ src/components/pages/Error/Error.test.tsx:38:11
+
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,0 +1,17 @@
+> engaging@1.1.0 coverage
+> vitest run --coverage
+
+ Test Files  71 passed (71)
+      Tests  646 passed (646)
+
+ % Coverage report from istanbul
+----------------------|---------|----------|---------|---------|------------------
+File                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------------|---------|----------|---------|---------|------------------
+ src/utils            |   100   |    99.3  |   100   |   100   |
+  getData.ts          |   100   |    97.1  |   100   |   100   | 48
+----------------------|---------|----------|---------|---------|------------------
+
+ERROR: Coverage for branches (99.3%) does not meet global threshold (100%)
+
+ ELIFECYCLE  Command failed with exit code 1.
