@@ -5,6 +5,8 @@
   "sortImports": true,
   "ignorePatterns": [
     ".claude/**",
+    "evals/pagespeed/**/prompt.md",
+    "evals/results/**",
     "src/data/snapshot/**",
     "src/tests/coverage/**"
   ],

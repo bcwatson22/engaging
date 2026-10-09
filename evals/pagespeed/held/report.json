@@ -1,0 +1,183 @@
+{
+  "measuredAt": "2026-11-01T06:04:11.000Z",
+  "siteUrl": "https://www.engaging.engineering",
+  "lighthouseVersion": "13.4.1",
+  "runs": 3,
+  "warmUps": 1,
+  "sittings": 2,
+  "gapMs": 900000,
+  "measurements": [
+    {
+      "page": "Home",
+      "strategy": "mobile",
+      "scores": {
+        "performance": {
+          "sittings": [97, 97],
+          "min": 97,
+          "max": 97
+        },
+        "accessibility": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "best-practices": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        }
+      },
+      "metrics": {
+        "lcpMs": {
+          "sittings": [2600, 2600],
+          "min": 2500,
+          "max": 2700
+        },
+        "clsScore": {
+          "sittings": [0, 0],
+          "min": 0,
+          "max": 0
+        },
+        "tbtMs": {
+          "sittings": [40, 40],
+          "min": 36,
+          "max": 46
+        }
+      }
+    },
+    {
+      "page": "Home",
+      "strategy": "desktop",
+      "scores": {
+        "performance": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "accessibility": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "best-practices": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        }
+      },
+      "metrics": {
+        "lcpMs": {
+          "sittings": [500, 500],
+          "min": 400,
+          "max": 600
+        },
+        "clsScore": {
+          "sittings": [0, 0],
+          "min": 0,
+          "max": 0
+        },
+        "tbtMs": {
+          "sittings": [8, 8],
+          "min": 4,
+          "max": 14
+        }
+      }
+    },
+    {
+      "page": "CV",
+      "strategy": "mobile",
+      "scores": {
+        "performance": {
+          "sittings": [99, 99],
+          "min": 99,
+          "max": 99
+        },
+        "accessibility": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "best-practices": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        }
+      },
+      "metrics": {
+        "lcpMs": {
+          "sittings": [2000, 2000],
+          "min": 1900,
+          "max": 2100
+        },
+        "clsScore": {
+          "sittings": [0, 0],
+          "min": 0,
+          "max": 0
+        },
+        "tbtMs": {
+          "sittings": [20, 20],
+          "min": 16,
+          "max": 26
+        }
+      }
+    },
+    {
+      "page": "CV",
+      "strategy": "desktop",
+      "scores": {
+        "performance": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "accessibility": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "best-practices": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        },
+        "seo": {
+          "sittings": [100, 100],
+          "min": 100,
+          "max": 100
+        }
+      },
+      "metrics": {
+        "lcpMs": {
+          "sittings": [400, 400],
+          "min": 300,
+          "max": 500
+        },
+        "clsScore": {
+          "sittings": [0, 0],
+          "min": 0,
+          "max": 0
+        },
+        "tbtMs": {
+          "sittings": [9, 9],
+          "min": 5,
+          "max": 15
+        }
+      }
+    }
+  ]
+}
