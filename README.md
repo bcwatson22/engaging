@@ -31,9 +31,13 @@ per page. A single run moves by a point or two either way, which is wide enough
 to invent an improvement that is not there — and the warm-up matters more than
 that: the LCP element is an image served through `/_next/image`, which took
 311ms against a cold edge cache and about 20ms against a warm one. Six
-measurements of unchanged code once ranged from 90 to 100 on that alone. The
-table is refreshed monthly by a routine, described under
-[Maintenance](#maintenance).
+measurements of unchanged code once ranged from 90 to 100 on that alone.
+
+The warm-up narrowed that but did not close it, so the range of the three runs
+is now recorded beside every median. A median on its own cannot be questioned;
+with the range next to it, a reader can see whether the measurement agreed with
+itself. The monthly routine decides what to publish on exactly that basis, and
+is described under [Maintenance](#maintenance).
 
 The mobile numbers moved from 93 and 94, measured the same way immediately
 before the change, when the stylesheet stopped being a second request:
@@ -58,19 +62,32 @@ and Claude does the part that needs judgement, then explains it in the PR.
 
 **PageSpeed** (`.github/workflows/pageSpeed.yml`, the 1st of each month) measures
 both pages on both strategies as described above, and compares the result with
-the table here. A point of movement, or less than 0.2s of LCP, is treated as
-noise and the run does nothing, which is the usual outcome. Anything larger
-opens a PR updating the table and the sentence under it, saying what moved and
-whether it looks like the site or the measurement. It cannot touch application
-code. Every run keeps its raw measurement as a build artifact for 90 days, and
-a run can be asked to produce one without judging it or opening anything:
+the table here, under the rules in `.github/prompts/pageSpeed.md`. There are
+three outcomes, and two of them change nothing:
+
+- **Held** — nothing moved by more than a point, or 0.2s of LCP. The usual
+  month.
+- **Unconfirmed** — something moved, but by no more than the three runs behind
+  it disagreed with each other. The run says so in its summary and publishes
+  nothing, because a figure the measurement cannot support is not a figure.
+- **Moved** — something moved by more than its own spread. The run updates the
+  table and the sentence under it and opens a PR, quoting the spread behind
+  every number it is claiming moved.
+
+It cannot touch application code. Every run keeps its raw measurement as a
+build artifact for 90 days, and a run can be asked to produce one without
+judging it or opening anything:
 
 ```bash
 gh workflow run pageSpeed.yml -f measureOnly=true
 ```
 
 That is how a figure that looks like measurement noise gets checked rather than
-argued about.
+argued about — and it is how the third outcome came to exist. An earlier run
+published a desktop score of 69 while saying in its own PR body that it did not
+believe it; a re-measure eight days later read 100, with Total Blocking Time at
+0ms against the 1023ms that produced the 69. The rules at the time had nowhere
+to put a number that was flagged but not trusted, so now they do.
 
 **Dependencies** (`.github/workflows/dependencies.yml`, the 2nd) raises every
 patch and minor version, runs `pnpm verify`, and opens a PR if it passes. If it

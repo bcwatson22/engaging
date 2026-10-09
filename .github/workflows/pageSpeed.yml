@@ -81,18 +81,35 @@ jobs:
           # makes that a setting rather than something the prompt has to keep
           # asking for.
           settings: '{"attribution":{"commit":"","pr":""}}'
+          # Write is for the report in RUNNER_TEMP, which is the only place the
+          # reasoning of a run that opens no PR survives. This value is a block
+          # scalar, so a # line inside it would be an argument, not a comment.
           claude_args: |
             --model claude-sonnet-5
             --max-turns 20
-            --allowedTools "Read,Edit,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*),Bash(gh pr edit:*)"
+            --allowedTools "Read,Edit,Write,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*),Bash(gh pr edit:*)"
           # The rules live in .github/prompts/pageSpeed.md, so this run and the
           # eval suite that tests the same judgement read one file. A copy here
           # would drift from the copy the suite exercises, and a suite passing
           # against a stale duplicate is worse than no suite.
           prompt: |
             Read .github/prompts/pageSpeed.md and follow it exactly. It holds
-            the whole task: what to compare, which changes count as noise,
-            which count as real, and what to do in either case.
+            the whole task: what to compare, how to tell a real change from the
+            measurement disagreeing with itself, and what to do in each of the
+            three outcomes it describes.
 
             If that file is missing or unreadable, stop and say so. Do not
             infer the rules from this prompt or from the README.
+
+      # Claude's own output is hidden by the action, and two of the three
+      # outcomes open no PR, so without this a held or unconfirmed month leaves
+      # nothing anybody can read. Same mechanism as dependencyMajor.yml.
+      - name: Publish the report
+        if: ${{ always() && !inputs.measureOnly }}
+        run: |
+          if [ -s "$RUNNER_TEMP/report.md" ]; then
+            cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No report was written. Read the job log, and treat a missing" >> "$GITHUB_STEP_SUMMARY"
+            echo "report as a bug in this workflow rather than a quiet success." >> "$GITHUB_STEP_SUMMARY"
+          fi

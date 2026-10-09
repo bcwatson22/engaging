@@ -70,11 +70,32 @@ type Scores = Record<Category, number>;
    numbers can be explained rather than just reported. */
 type Metrics = { lcpMs: number; clsScore: number; tbtMs: number };
 
+/* The lowest and highest of the three runs behind a median.
+
+   This is the instrument's own disagreement, and without it a comparison is
+   guesswork. The rules treated a 2-point move as a real change for two months
+   while identical code measured Home mobile at 90, 91, 97, 99 and 100 — so the
+   band was narrower than the spread, and the judging could not have been right
+   whatever it decided. #78 published a desktop score of 69 on that basis,
+   while saying in the same breath that it did not believe it.
+
+   Recorded per figure rather than as one number per measurement, because the
+   figures do not move together: a Total Blocking Time that tripled while every
+   score held is the shape of a contended runner, and that is only visible per
+   figure. */
+type Bounds = { min: number; max: number };
+
+type Spread = {
+  scores: Record<Category, Bounds>;
+  metrics: Record<keyof Metrics, Bounds>;
+};
+
 type Measurement = {
   page: PageName;
   strategy: Strategy;
   scores: Scores;
   metrics: Metrics;
+  spread: Spread;
 };
 
 type Report = {
@@ -123,7 +144,49 @@ const metricOf = (response: Response, audit: string): number => {
 const median = (values: number[]): number =>
   [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]!;
 
+const bounds = (values: number[]): Bounds => ({
+  min: Math.min(...values),
+  max: Math.max(...values),
+});
+
 type Run = { scores: Scores; metrics: Metrics; version: string };
+
+/* Three runs in, one measurement out: the median of each figure, and the range
+   the three covered. Both are taken from the same arrays, which is the point —
+   a median published without the spread it came from is a number that cannot
+   be questioned. */
+const summarise = (
+  page: PageName,
+  strategy: Strategy,
+  results: Run[],
+): Measurement => {
+  const scored = (category: Category): number[] =>
+    results.map(({ scores }) => scores[category]);
+
+  const timed = (metric: keyof Metrics): number[] =>
+    results.map(({ metrics }) => metrics[metric]);
+
+  const metrics = ['lcpMs', 'clsScore', 'tbtMs'] as const;
+
+  const per = <T>(take: (values: number[]) => T) => ({
+    scores: Object.fromEntries(
+      categories.map((category) => [category, take(scored(category))]),
+    ) as Record<Category, T>,
+    metrics: Object.fromEntries(
+      metrics.map((metric) => [metric, take(timed(metric))]),
+    ) as Record<keyof Metrics, T>,
+  });
+
+  const middle = per(median);
+
+  return {
+    page,
+    strategy,
+    scores: middle.scores,
+    metrics: middle.metrics,
+    spread: per(bounds),
+  };
+};
 
 /* Google says why in the body, and the status alone does not: a 403 is a key
    the project has not enabled, a key restricted to a referrer, or a key that
@@ -252,21 +315,7 @@ const measure = async (
 
       lighthouseVersion = results[0]!.version;
 
-      measurements.push({
-        page: page.name,
-        strategy,
-        scores: Object.fromEntries(
-          categories.map((category) => [
-            category,
-            median(results.map(({ scores }) => scores[category])),
-          ]),
-        ) as Scores,
-        metrics: {
-          lcpMs: median(results.map(({ metrics }) => metrics.lcpMs)),
-          clsScore: median(results.map(({ metrics }) => metrics.clsScore)),
-          tbtMs: median(results.map(({ metrics }) => metrics.tbtMs)),
-        },
-      });
+      measurements.push(summarise(page.name, strategy, results));
     }
   }
 
@@ -281,6 +330,7 @@ const measure = async (
 };
 
 export {
+  bounds,
   measure,
   median,
   pause,
@@ -291,4 +341,13 @@ export {
   strategies,
   pages,
 };
-export type { Report, Measurement, Scores, Metrics, Strategy, Category };
+export type {
+  Report,
+  Measurement,
+  Scores,
+  Metrics,
+  Spread,
+  Bounds,
+  Strategy,
+  Category,
+};
