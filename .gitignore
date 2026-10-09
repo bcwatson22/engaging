@@ -41,6 +41,14 @@ AGENTS.md
 *.tsbuildinfo
 next-env.d.ts
 
-# pageSpeed — the monthly measurement, read by the workflow and not kept
-pageSpeed.json
-dependencies.json
+# pageSpeed — the monthly measurement, read by the workflow and not kept.
+# Anchored to the root: unanchored, these names also match a test fixture
+# called pageSpeed.json anywhere below, which is a file silently missing from
+# a clone rather than an error anyone would see.
+/pageSpeed.json
+/dependencies.json
+
+# eval runs — one directory per run of `claude plugin eval`, holding
+# transcripts, grader verdicts and what each run cost. Reproducible from the
+# cases, so there is nothing to keep.
+/evals/results/
