@@ -1,0 +1,41 @@
+{
+  "apply": [
+    {
+      "name": "oxlint",
+      "from": "1.86.0",
+      "to": "1.87.0",
+      "change": "minor",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "sharp",
+      "from": "0.35.5",
+      "to": "0.35.6",
+      "change": "patch",
+      "dependencyType": "dependencies"
+    },
+    {
+      "name": "vite",
+      "from": "8.3.2",
+      "to": "8.3.4",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    }
+  ],
+  "hold": [
+    {
+      "name": "@types/node",
+      "from": "22.20.1",
+      "to": "26.6.4",
+      "change": "major",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "motion",
+      "from": "13.4.0",
+      "to": "14.0.0",
+      "change": "major",
+      "dependencyType": "dependencies"
+    }
+  ]
+}

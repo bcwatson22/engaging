@@ -1,0 +1,26 @@
+{
+  "apply": [
+    {
+      "name": "oxlint",
+      "from": "1.86.0",
+      "to": "1.87.0",
+      "change": "minor",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "oxlint-tsgolint",
+      "from": "7.0.2003",
+      "to": "7.1.0",
+      "change": "minor",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "sharp",
+      "from": "0.35.5",
+      "to": "0.35.6",
+      "change": "patch",
+      "dependencyType": "dependencies"
+    }
+  ],
+  "hold": []
+}

@@ -1,0 +1,82 @@
+{
+  "apply": [
+    {
+      "name": "jsdom",
+      "from": "30.0.1",
+      "to": "30.1.1",
+      "change": "minor",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "next",
+      "from": "16.3.8",
+      "to": "16.3.9",
+      "change": "patch",
+      "dependencyType": "dependencies"
+    },
+    {
+      "name": "@next/bundle-analyzer",
+      "from": "16.3.8",
+      "to": "16.3.9",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "vitest",
+      "from": "5.0.3",
+      "to": "5.0.4",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "@vitest/coverage-istanbul",
+      "from": "5.0.3",
+      "to": "5.0.4",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "oxfmt",
+      "from": "0.71.0",
+      "to": "0.72.0",
+      "change": "minor",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "oxlint",
+      "from": "1.86.0",
+      "to": "1.87.0",
+      "change": "minor",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "@types/react",
+      "from": "19.3.0",
+      "to": "19.3.1",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "@types/react-dom",
+      "from": "19.3.0",
+      "to": "19.3.1",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    },
+    {
+      "name": "sharp",
+      "from": "0.35.5",
+      "to": "0.35.6",
+      "change": "patch",
+      "dependencyType": "dependencies"
+    },
+    {
+      "name": "vite",
+      "from": "8.3.2",
+      "to": "8.3.4",
+      "change": "patch",
+      "dependencyType": "devDependencies"
+    }
+  ],
+  "hold": []
+}

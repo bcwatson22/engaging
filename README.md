@@ -125,6 +125,15 @@ versions and drop what breaks, so a bad call is a PR nobody merges. Anything
 that edits code to satisfy a dependency is something asked for by name, and
 reviewed.
 
+Both routines keep their rules in `.github/prompts/`, read by the workflow and
+by an eval suite under `evals/` that scores the same judgement against recorded
+inputs - a measurement that disagreed with itself, a plan whose bumps break the
+coverage floor. `pnpm eval` runs it, `.github/workflows/evals.yml` runs it in
+CI, and `pnpm verify` fails if a rule changes without the suite's prompts being
+rebuilt from it. The suites do not gate a commit: they cost money and they are
+not deterministic, which is the same reason the routines themselves open PRs
+instead of merging.
+
 Versions are pinned exactly, and `.npmrc` sets `save-exact` so `pnpm add` keeps
 it that way. A version only moves when one of these routines, or a person,
 decides it should.

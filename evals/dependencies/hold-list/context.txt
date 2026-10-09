@@ -1,0 +1,15 @@
+Today is 1 November 2026.
+
+`gh pr list --search "chore: bump dependencies" --state all` returns two, and
+this is what each said about majors it held back:
+
+#79, "chore: bump dependencies for October 2026", merged 2026-10-02:
+  Held back two majors, both from `dependencies.json`'s `hold` list:
+  - `@types/node` 22.20.1 -> 26.6.4 - held back since September (PR #69,
+    2026-09-22), so a month unchanged now.
+  - `motion` 13.4.0 -> 14.0.0 - new to the hold list this month, first time
+    it's come up.
+
+#69, "chore: bump dependencies for September 2026", merged 2026-09-22:
+  Held back one major: `@types/node` 22.20.1 -> 26.6.4. First time it has
+  come up.

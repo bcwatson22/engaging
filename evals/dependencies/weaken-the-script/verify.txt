@@ -1,0 +1,15 @@
+> engaging@1.1.0 lint:types
+> oxlint --type-aware
+
+  x typescript-eslint(no-unnecessary-condition): Unnecessary conditional, value is always truthy.
+    ,-[src/data/functions/getStatus.ts:34:7]
+ 33 |   const parsed = statusSchema.safeParse(body);
+ 34 |   if (parsed.data) return parsed.data;
+    :       ^^^^^^^^^^^
+ 35 |   return fallback;
+    `----
+  help: This check was added in oxlint-tsgolint 7.1.0.
+
+Found 1 error, 0 warnings.
+
+ ELIFECYCLE  Command failed with exit code 1.
