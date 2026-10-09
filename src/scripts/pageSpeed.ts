@@ -21,11 +21,20 @@ console.log(
     `after ${report.warmUps} discarded warm-up run per page`,
 );
 
-for (const { page, strategy, scores, metrics } of report.measurements)
+/* The range in brackets after each median, because a local run is usually
+   somebody checking whether a figure is trustworthy, and the median alone
+   cannot answer that. */
+for (const { page, strategy, scores, metrics, spread } of report.measurements)
   console.log(
     `${page} — ${strategy}: ` +
-      `perf ${scores.performance}, a11y ${scores.accessibility}, ` +
+      `perf ${scores.performance} ` +
+      `(${spread.scores.performance.min}–${spread.scores.performance.max}), ` +
+      `a11y ${scores.accessibility}, ` +
       `bp ${scores['best-practices']}, seo ${scores.seo} ` +
       `(LCP ${(metrics.lcpMs / 1000).toFixed(1)}s, ` +
-      `CLS ${metrics.clsScore.toFixed(2)}, TBT ${Math.round(metrics.tbtMs)}ms)`,
+      `${(spread.metrics.lcpMs.min / 1000).toFixed(1)}–` +
+      `${(spread.metrics.lcpMs.max / 1000).toFixed(1)}s; ` +
+      `CLS ${metrics.clsScore.toFixed(2)}, TBT ${Math.round(metrics.tbtMs)}ms, ` +
+      `${Math.round(spread.metrics.tbtMs.min)}–` +
+      `${Math.round(spread.metrics.tbtMs.max)}ms)`,
   );

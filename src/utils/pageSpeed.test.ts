@@ -1,4 +1,4 @@
-import { categories, measure, median, pause, query } from './pageSpeed';
+import { bounds, categories, measure, median, pause, query } from './pageSpeed';
 
 type RunValues = {
   performance?: number;
@@ -84,6 +84,18 @@ describe('median', () => {
     median(values);
 
     expect(values).toEqual([99, 97, 98]);
+  });
+});
+
+describe('bounds', () => {
+  it('reports the range the runs covered', () => {
+    expect(bounds([99, 97, 100])).toEqual({ min: 97, max: 100 });
+  });
+
+  /* Three identical runs are the only evidence that a figure is stable, so
+     they have to read as a range of nothing rather than as a missing one. */
+  it('reports no range when every run agreed', () => {
+    expect(bounds([100, 100, 100])).toEqual({ min: 100, max: 100 });
   });
 });
 
@@ -190,6 +202,29 @@ describe('measure', () => {
       .measurements;
 
     expect(home?.scores.performance).toBe(99);
+  });
+
+  /* The median alone let #78 publish a desktop score of 69 that the next run
+     measured at 100. The spread is what makes that answerable rather than
+     arguable, so it travels with every figure, not just the volatile ones. */
+  it('records the range behind every median, not just the median', async () => {
+    const { fetcher } = setup({
+      responses: [
+        /* The warm-up, thrown away — so its 0.5 must not reach the range. */
+        { performance: 0.5 },
+        { performance: 0.94, lcpMs: 2000 },
+        { performance: 1, lcpMs: 3200 },
+        { performance: 0.97, lcpMs: 2600 },
+      ],
+    });
+
+    const [home] = (await measure('https://example.com', undefined, fetcher))
+      .measurements;
+
+    expect(home?.scores.performance).toBe(97);
+    expect(home?.spread.scores.performance).toEqual({ min: 94, max: 100 });
+    expect(home?.spread.metrics.lcpMs).toEqual({ min: 2000, max: 3200 });
+    expect(home?.spread.scores.seo).toEqual({ min: 100, max: 100 });
   });
 
   it('reports the metrics the prose quotes', async () => {
