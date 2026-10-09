@@ -1,0 +1,109 @@
+name: Evals
+
+# Scores the PageSpeed judgement against fixed reports. Dispatch only, and
+# never a gate on a commit: every case spends real tokens and the answers are
+# not deterministic, so a red run here means "read it", not "you broke it".
+#
+# The deterministic half of the suite does gate. `pnpm check:evals` is in
+# verify, and it fails if a generated prompt no longer matches the rules file
+# it was built from - no model, no cost, no flake.
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: >-
+          Runs per case. Three is the default and enough to see a case that
+          only passes sometimes, which is the thing worth knowing.
+        required: false
+        default: '3'
+        type: string
+      case:
+        description: >-
+          Glob to run one case instead of all of them, e.g. leaving-100*.
+          Empty runs the suite.
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evals
+  cancel-in-progress: false
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      # The suite needs none of the project's dependencies: the prompts are
+      # markdown and the builder is TypeScript run straight by Node. Only the
+      # CLI that scores them has to be installed, and it is not the one the
+      # other workflows use - they call claude-code-action, which runs a
+      # prompt, while this runs a command.
+      - name: Install the CLI
+        run: npm install --global @anthropic-ai/claude-code
+
+      - name: Check the prompts match the rules
+        run: node evals/pagespeed/build.ts --check
+
+      # --threshold 1 fails the run if any case scores below full marks, which
+      # is the right bar while every case is a verdict with one correct answer.
+      # --max-cost-usd is a stop, not a budget: five cases at three runs costs
+      # about $1.50, so $5 only catches something going wrong.
+      - name: Score the suite
+        env:
+          # The same token the other workflows hand to claude-code-action. The
+          # CLI reads it straight from the environment.
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude plugin eval . \
+            --eval-dir evals \
+            --runs "${{ inputs.runs }}" \
+            ${{ inputs.case && format('--case {0}', inputs.case) || '' }} \
+            --ablation none \
+            --threshold 1 \
+            --max-cost-usd 5 \
+            --no-publish \
+            --trust-plugin \
+            --report "$RUNNER_TEMP/report.html" \
+            --json "$RUNNER_TEMP/result.json"
+
+      # The scores, in the run summary, whether or not the run passed. A suite
+      # whose result lives only in a job log is a suite nobody reads.
+      - name: Publish the scores
+        if: always()
+        run: |
+          if [ -s "$RUNNER_TEMP/result.json" ]; then
+            node -e '
+              const r = require(process.env.RUNNER_TEMP + "/result.json");
+              const rows = r.cases.map((c) =>
+                `| ${c.name} | ${c.aggregates.score.toFixed(2)} | ${Math.round(c.aggregates.passRate * 100)}% |`,
+              );
+              console.log("## Eval scores\n");
+              console.log("| case | score | pass rate |");
+              console.log("| --- | --- | --- |");
+              console.log(rows.join("\n"));
+              console.log(`\nTotal $${r.costUsd.toFixed(2)} over ${r.durationSeconds}s.`);
+            ' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No result was written, so the run failed before scoring." >> "$GITHUB_STEP_SUMMARY"
+            echo "Read the job log." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: eval-report
+          path: ${{ runner.temp }}/report.html
+          retention-days: 90
+          if-no-files-found: ignore
