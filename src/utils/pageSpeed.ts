@@ -1,10 +1,19 @@
-/* Measures the four figures the README quotes, the way the README says they
-   were measured: the median of three runs per page and strategy.
+/* Measures the four figures the README quotes: three runs per page and
+   strategy, twice, with a gap between.
 
-   The median matters more than it looks. A single PageSpeed run moves by a
-   point or two either way, so a routine that published one run would invent
-   improvements and regressions that are not there — and this file exists to
-   keep a table honest, not to fill it. */
+   Two sittings rather than one because the variance that matters turned out to
+   be between them, not inside them. On 2026-10-09, 27 minutes apart on the
+   same commit, Home mobile measured 99 with an LCP of 2.0s and then 91 with an
+   LCP of 3.3s - and the three runs inside the second sitting agreed with each
+   other to within a point. A routine reading one sitting sees three numbers
+   nodding along and calls it evidence.
+
+   Across four sittings that figure now reads 2.6s, 3.2s, 2.0s, 3.3s: two
+   clusters about 1.2s apart, steady within a sitting and jumping between them.
+   That is a cold edge cache on the LCP image rather than scatter, so the fix
+   belongs in how the site serves it. Until that lands, this file's job is to
+   notice the disagreement rather than publish whichever mode it happened to
+   catch. */
 
 const endpoint = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
 
@@ -23,8 +32,27 @@ const runs = 3;
 
    A warm-up costs four extra runs and about a minute, and it measures the
    page rather than the state of a cache nobody visiting the site would
-   share. */
+   share.
+
+   It is kept per sitting, and that is a deliberate tension: warming each
+   sitting hides the cold mode that a real first visitor gets, which is a
+   number worth knowing. Dropping the warm-up instead would put a cold run in
+   every sitting and widen every spread permanently, so the routine would
+   refuse to publish anything. Neither is right. The honest resolution is to
+   stop the cold mode existing, which is a change to how the image is served,
+   not to how it is measured. */
 const warmUps = 1;
+
+/* Two sittings, and the gap between them.
+
+   Fifteen minutes is long enough that the second sitting is a separate
+   question rather than the tail of the first, and short enough to fit a
+   45-minute job alongside 32 API calls. It is a guess informed by one
+   observation - 27 minutes caught both modes - so if two sittings start
+   agreeing while the figure still wanders month to month, widen this before
+   concluding the method works. */
+const sittings = 2;
+const gap = 15 * 60_000;
 
 const categories = [
   'performance',
@@ -70,42 +98,38 @@ type Scores = Record<Category, number>;
    numbers can be explained rather than just reported. */
 type Metrics = { lcpMs: number; clsScore: number; tbtMs: number };
 
-/* The lowest and highest of the three runs behind a median.
-
-   This is the instrument's own disagreement, and without it a comparison is
-   guesswork. The rules treated a 2-point move as a real change for two months
-   while identical code measured Home mobile at 90, 91, 97, 99 and 100 — so the
-   band was narrower than the spread, and the judging could not have been right
-   whatever it decided. #78 published a desktop score of 69 on that basis,
-   while saying in the same breath that it did not believe it.
-
-   Recorded per figure rather than as one number per measurement, because the
-   figures do not move together: a Total Blocking Time that tripled while every
-   score held is the shape of a contended runner, and that is only visible per
-   figure. */
 type Bounds = { min: number; max: number };
 
-type Spread = {
-  scores: Record<Category, Bounds>;
-  metrics: Record<keyof Metrics, Bounds>;
-};
+/* One figure - a score or a metric - as every run saw it.
+
+   `sittings` holds one median per sitting, in order, and that pair is the
+   thing a decision gets made on: two sittings agreeing is evidence, and two
+   disagreeing is a reason to publish nothing. `min` and `max` span every run
+   of every sitting, so they carry both kinds of disagreement at once.
+
+   Per figure rather than one number per measurement, because the figures do
+   not move together. A Total Blocking Time that tripled while every score held
+   steady is the signature of a contended runner, and that is only visible one
+   figure at a time. */
+type Figure = Bounds & { sittings: number[] };
 
 type Measurement = {
   page: PageName;
   strategy: Strategy;
-  scores: Scores;
-  metrics: Metrics;
-  spread: Spread;
+  scores: Record<Category, Figure>;
+  metrics: Record<keyof Metrics, Figure>;
 };
 
 type Report = {
   measuredAt: string;
   siteUrl: string;
   lighthouseVersion: string;
+  /* Per sitting, not in total, and recorded so a reader of the JSON can tell
+     these numbers apart from the ones measured under earlier rules. */
   runs: number;
-  /* Recorded so a reader of the JSON can tell these numbers apart from the
-     ones measured before the warm-up existed. */
   warmUps: number;
+  sittings: number;
+  gapMs: number;
   measurements: Measurement[];
 };
 
@@ -151,40 +175,37 @@ const bounds = (values: number[]): Bounds => ({
 
 type Run = { scores: Scores; metrics: Metrics; version: string };
 
-/* Three runs in, one measurement out: the median of each figure, and the range
-   the three covered. Both are taken from the same arrays, which is the point —
-   a median published without the spread it came from is a number that cannot
-   be questioned. */
+const metricNames = ['lcpMs', 'clsScore', 'tbtMs'] as const;
+
+/* A figure's median in each sitting, and its bounds across the lot. Both come
+   from the same runs, which is the point: a median published without the
+   disagreement behind it is a number nobody can question. */
+const figureOf = (perSitting: number[][]): Figure => ({
+  sittings: perSitting.map(median),
+  ...bounds(perSitting.flat()),
+});
+
+/* Every sitting's runs for one page and strategy, in one measurement. */
 const summarise = (
   page: PageName,
   strategy: Strategy,
-  results: Run[],
+  perSitting: Run[][],
 ): Measurement => {
-  const scored = (category: Category): number[] =>
-    results.map(({ scores }) => scores[category]);
+  const scored = (category: Category): number[][] =>
+    perSitting.map((results) => results.map(({ scores }) => scores[category]));
 
-  const timed = (metric: keyof Metrics): number[] =>
-    results.map(({ metrics }) => metrics[metric]);
-
-  const metrics = ['lcpMs', 'clsScore', 'tbtMs'] as const;
-
-  const per = <T>(take: (values: number[]) => T) => ({
-    scores: Object.fromEntries(
-      categories.map((category) => [category, take(scored(category))]),
-    ) as Record<Category, T>,
-    metrics: Object.fromEntries(
-      metrics.map((metric) => [metric, take(timed(metric))]),
-    ) as Record<keyof Metrics, T>,
-  });
-
-  const middle = per(median);
+  const timed = (metric: keyof Metrics): number[][] =>
+    perSitting.map((results) => results.map(({ metrics }) => metrics[metric]));
 
   return {
     page,
     strategy,
-    scores: middle.scores,
-    metrics: middle.metrics,
-    spread: per(bounds),
+    scores: Object.fromEntries(
+      categories.map((category) => [category, figureOf(scored(category))]),
+    ) as Record<Category, Figure>,
+    metrics: Object.fromEntries(
+      metricNames.map((metric) => [metric, figureOf(timed(metric))]),
+    ) as Record<keyof Metrics, Figure>,
   };
 };
 
@@ -283,61 +304,86 @@ const attempted = async (
   }
 };
 
-/* One request at a time. Twelve runs take minutes and nothing is waiting on
+/* Every page and strategy, in a fixed order both the sittings and the merge
+   rely on. */
+const pairs = pages.flatMap((page) =>
+  strategies.map((strategy) => ({ ...page, strategy })),
+);
+
+/* One sitting: a discarded warm-up then the runs that count, for each pair.
+
+   One request at a time. Sixteen runs take minutes and nothing is waiting on
    them, while firing them in parallel is how a free API key meets its rate
-   limit — the same reasoning as the CV's link sweep. */
+   limit - the same reasoning as the CV's link sweep. */
+const sit = async (
+  siteUrl: string,
+  key: string | undefined,
+  fetcher: Fetch,
+  wait: Wait,
+): Promise<Run[][]> => {
+  const sitting: Run[][] = [];
+
+  for (const { path, strategy } of pairs) {
+    const results: Run[] = [];
+    const url = `${siteUrl}${path}`;
+
+    for (let warmUp = 0; warmUp < warmUps; warmUp++)
+      await attempted(url, strategy, key, fetcher, wait);
+
+    for (let attempt = 0; attempt < runs; attempt++)
+      results.push(await attempted(url, strategy, key, fetcher, wait));
+
+    sitting.push(results);
+  }
+
+  return sitting;
+};
+
 const measure = async (
   siteUrl: string,
   key?: string,
   fetcher: Fetch = globalThis.fetch,
   wait: Wait = pause,
 ): Promise<Report> => {
-  const measurements: Measurement[] = [];
-  let lighthouseVersion = 'unknown';
+  const taken: Run[][][] = [];
 
-  for (const page of pages) {
-    for (const strategy of strategies) {
-      const results: Run[] = [];
+  for (let sitting = 0; sitting < sittings; sitting++) {
+    /* Before the second and any after it, never before the first. */
+    if (sitting) await wait(gap);
 
-      for (let warmUp = 0; warmUp < warmUps; warmUp++)
-        await attempted(`${siteUrl}${page.path}`, strategy, key, fetcher, wait);
-
-      for (let attempt = 0; attempt < runs; attempt++)
-        results.push(
-          await attempted(
-            `${siteUrl}${page.path}`,
-            strategy,
-            key,
-            fetcher,
-            wait,
-          ),
-        );
-
-      lighthouseVersion = results[0]!.version;
-
-      measurements.push(summarise(page.name, strategy, results));
-    }
+    taken.push(await sit(siteUrl, key, fetcher, wait));
   }
 
   return {
     measuredAt: new Date().toISOString(),
     siteUrl,
-    lighthouseVersion,
+    lighthouseVersion: taken[0]![0]![0]!.version,
     runs,
     warmUps,
-    measurements,
+    sittings,
+    gapMs: gap,
+    measurements: pairs.map(({ name, strategy }, pair) =>
+      summarise(
+        name,
+        strategy,
+        taken.map((sitting) => sitting[pair]!),
+      ),
+    ),
   };
 };
 
 export {
   bounds,
+  gap,
   measure,
   median,
   pause,
   query,
   runs,
+  sittings,
   warmUps,
   categories,
+  metricNames,
   strategies,
   pages,
 };
@@ -346,7 +392,7 @@ export type {
   Measurement,
   Scores,
   Metrics,
-  Spread,
+  Figure,
   Bounds,
   Strategy,
   Category,

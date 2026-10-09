@@ -39,7 +39,9 @@ concurrency:
 jobs:
   measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Two sittings of about five minutes with fifteen between them, then the
+    # judging. Thirty was enough for one sitting and is not for two.
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v7
@@ -50,9 +52,11 @@ jobs:
           # Node, so nothing is installed or built.
           node-version-file: .nvmrc
 
-      # Sixteen PageSpeed calls, one at a time: four pairs of page and
-      # strategy, each a discarded warm-up plus the three that count. Five
-      # minutes or so.
+      # Thirty-two PageSpeed calls, one at a time: two sittings of four pairs
+      # of page and strategy, each pair a discarded warm-up plus the three that
+      # count, with fifteen minutes between the sittings. Twenty-five minutes
+      # or so, nearly all of it the gap - which is the point, because the
+      # variance worth catching only appears between sittings.
       - name: Measure
         env:
           PAGESPEED_API_KEY: ${{ secrets.PAGESPEED_API_KEY }}
