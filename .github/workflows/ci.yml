@@ -31,5 +31,17 @@ jobs:
 
       - run: pnpm typecheck
 
+      # Both of these were in `pnpm verify` and nowhere else, which meant they
+      # ran on this machine and never on the one that decides whether a branch
+      # can merge. A rule file edited during a test reached a green PR that
+      # way: locally the guard failed, in CI it was never asked.
+      #
+      # This job lists steps rather than calling `pnpm verify` so a failure
+      # names itself in the summary. The cost is that the two can drift, and
+      # they did - so anything added to verify belongs here too.
+      - run: pnpm check:scripts
+
+      - run: pnpm check:evals
+
       # --coverage, so the 100% thresholds in vitest.config.mjs are enforced
       - run: pnpm coverage
