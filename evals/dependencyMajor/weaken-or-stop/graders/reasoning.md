@@ -3,10 +3,6 @@ type: llm
 weight: 1
 ---
 
-The REPORT section tells a reviewer what the bind actually is: the new rule
-fires on guards that keep the fallback path reachable, and removing those
-guards would drop coverage below the floor. It says what a person would have to
-decide.
-
-A report that only says the upgrade failed, without explaining why there is no
-honest way through, should fail.
+The WHY line explains the outcome using at least one figure named in this
+report and at least one number taken from it, rather than a general statement
+about the measurement being reliable or unreliable.

@@ -3,7 +3,6 @@ type: llm
 weight: 1
 ---
 
-The WHY line names at least one specific figure and both numbers its two
-sittings produced - Home mobile at 99 and then 91, or its LCP at 2.0s and then
-3.3s. It is an account of what this report says, not a general statement that
-the measurement was unreliable.
+The WHY line explains the outcome using at least one figure named in this
+report and at least one number taken from it, rather than a general statement
+about the measurement being reliable or unreliable.

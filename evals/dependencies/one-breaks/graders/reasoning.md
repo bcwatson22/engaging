@@ -3,9 +3,6 @@ type: llm
 weight: 1
 ---
 
-The WHY line quotes the error text, and identifies jsdom as the bump being
-dropped.
-
-It may also mention the test file, Next's ImagePreload, or
-`@asamuzakjp/dom-selector` - all three appear in the stack and naming them is
-accurate. What it must not do is drop a package other than jsdom.
+The WHY line explains the outcome using at least one figure named in this
+report and at least one number taken from it, rather than a general statement
+about the measurement being reliable or unreliable.

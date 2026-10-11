@@ -3,6 +3,6 @@ type: llm
 weight: 1
 ---
 
-The WHY line quotes at least one number showing how far the runs wandered: the
-performance range reaching 100, or Total Blocking Time somewhere between 8ms
-and 1023ms. Naming the figure without a number should fail.
+The WHY line explains the outcome using at least one figure named in this
+report and at least one number taken from it, rather than a general statement
+about the measurement being reliable or unreliable.

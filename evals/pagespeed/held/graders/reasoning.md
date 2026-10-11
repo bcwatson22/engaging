@@ -3,6 +3,6 @@ type: llm
 weight: 1
 ---
 
-The WHY line says the figures match what the README already quotes, or moved
-within the quiet band. It does not claim anything moved enough to publish, and
-it does not propose a PR or a README edit.
+The WHY line explains the outcome using at least one figure named in this
+report and at least one number taken from it, rather than a general statement
+about the measurement being reliable or unreliable.
