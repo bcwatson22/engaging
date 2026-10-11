@@ -1,0 +1,13 @@
+> engaging@1.1.0 typecheck
+> tsc --pretty --noEmit
+
+src/components/organisms/Mugshot/Reveal.tsx:18:38 - error TS2353: Object literal
+may only specify known properties, and 'once' does not exist in type
+'UseInViewOptions'.
+
+18   const inView = useInView(ref, { once: true, amount: 0.4 });
+                                      ~~~~
+
+Found 1 error in src/components/organisms/Mugshot/Reveal.tsx:18
+
+ ELIFECYCLE  Command failed with exit code 1.

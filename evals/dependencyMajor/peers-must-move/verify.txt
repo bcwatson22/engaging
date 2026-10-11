@@ -1,0 +1,16 @@
+> engaging@1.1.0 coverage
+> vitest run --coverage
+
+ Test Files  71 passed (71)
+      Tests  646 passed (646)
+
+ % Coverage report from istanbul
+----------------------|---------|----------|---------|---------|------------------
+File                  | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------------------|---------|----------|---------|---------|------------------
+All files             |       0 |        0 |       0 |       0 |
+----------------------|---------|----------|---------|---------|------------------
+
+ERROR: Coverage for statements (0%) does not meet global threshold (100%)
+
+ ELIFECYCLE  Command failed with exit code 1.

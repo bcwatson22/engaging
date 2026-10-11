@@ -1,21 +1,18 @@
 /* Writes each case's prompt.md from three sources: the real judging rules, the
    README section they are judged against, and the case's own report.json.
 
-   Generated rather than written by hand for the reason .github/prompts
-   exists at all: a second copy of the rules drifts from the first, and a suite
-   passing against a stale copy reports confidence it has not earned. `pnpm
-   verify` fails if a prompt.md here is not what this script would write, so
-   editing the rules and forgetting the suite is a failing check rather than a
-   quiet lie.
+   Generated rather than written by hand for the reason .github/prompts exists
+   at all: a second copy of the rules drifts from the first, and a suite passing
+   against a stale copy reports confidence it has not earned. `pnpm verify`
+   fails if a prompt.md here is not what this script would write.
 
    Run: node evals/pagespeed/build.ts [--check] */
-import { readdir, readFile, writeFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import path from 'path';
 
+import { buildSuite } from '../suite.ts';
+
 const here = path.dirname(new URL(import.meta.url).pathname);
-const root = path.resolve(here, '../..');
-const rulesPath = path.join(root, '.github/prompts/pageSpeed.md');
-const check = process.argv.includes('--check');
 
 const section = (readme: string, heading: string): string => {
   const start = readme.indexOf(`## ${heading}`);
@@ -57,56 +54,16 @@ ${report}
 \`\`\`
 `;
 
-const [rules, readme] = await Promise.all([
-  readFile(rulesPath, 'utf8'),
-  readFile(path.join(root, 'README.md'), 'utf8'),
-]);
+/* The README is read once rather than per case: every case is judged against
+   the same table. */
+const performance = section(
+  await readFile(path.resolve(here, '../../README.md'), 'utf8'),
+  'Performance',
+);
 
-const performance = section(readme, 'Performance');
-/* A case is a directory holding a report.json. Anything else below here is
-   not one, so it is skipped rather than failing the build. */
-const isCase = async (name: string): Promise<boolean> =>
-  readFile(path.join(here, name, 'report.json'), 'utf8').then(
-    () => true,
-    () => false,
-  );
-
-const dirs = (await readdir(here, { withFileTypes: true }))
-  .filter((entry) => entry.isDirectory())
-  .map(({ name }) => name)
-  .sort();
-
-const cases = (
-  await Promise.all(
-    dirs.map(async (name) => ((await isCase(name)) ? name : '')),
-  )
-).filter(Boolean);
-
-let stale = 0;
-
-for (const name of cases) {
-  const report = (
-    await readFile(path.join(here, name, 'report.json'), 'utf8')
-  ).trim();
-  const wanted = promptFor(rules, performance, report);
-  const target = path.join(here, name, 'prompt.md');
-  const current = await readFile(target, 'utf8').catch(() => '');
-
-  if (current === wanted) continue;
-
-  if (check) {
-    console.error(`stale: evals/pagespeed/${name}/prompt.md`);
-    stale++;
-    continue;
-  }
-
-  await writeFile(target, wanted);
-  console.log(`wrote evals/pagespeed/${name}/prompt.md`);
-}
-
-if (stale)
-  throw new Error(
-    `${stale} prompt(s) do not match the rules. Run: node evals/pagespeed/build.ts`,
-  );
-
-if (!stale && check) console.log(`${cases.length} prompt(s) up to date`);
+await buildSuite({
+  dir: here,
+  rules: '.github/prompts/pageSpeed.md',
+  required: 'report.json',
+  render: (rules, report) => promptFor(rules, performance, report),
+});
