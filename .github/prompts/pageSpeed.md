@@ -43,7 +43,7 @@ other is not evidence. Sittings separated in time, agreeing, is.
 Used at two of the three gates below, so it is worth stating once. Two numbers
 for the same figure are **within the quiet band** when they differ by:
 
-- 5 points or less, for a category score
+- 1 point or less, for a category score
 - less than 0.2s, for LCP
 - anything that does not alter what the prose claims, for CLS and TBT
 

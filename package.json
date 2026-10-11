@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://github.com/bcwatson22/engaging#readme",
   "author": "Billy Watson <hello@engaging.engineering> (https://www.engaging.engineering)",
+  "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development next dev",
     "build": "pnpm snapshot && NODE_ENV=production next build",
