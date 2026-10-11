@@ -1,0 +1,14 @@
+> engaging@1.1.0 lint:types
+> oxlint --type-aware
+
+  x typescript-eslint(no-unnecessary-condition): Unnecessary conditional, value is always truthy.
+    ,-[src/data/functions/getHome.ts:41:7]
+ 41 |   if (parsed.data) return parsed.data;
+    :       ^^^^^^^^^^^
+    `----
+
+  ... 33 more errors of the same rule in src/data/functions/
+
+Found 34 errors, 0 warnings.
+
+ ELIFECYCLE  Command failed with exit code 1.

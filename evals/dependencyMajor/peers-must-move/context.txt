@@ -1,0 +1,3 @@
+`npm view @vitest/coverage-istanbul version` returns 6.0.0, published the same
+day as vitest 6.0.0. `npm view @vitest/coverage-istanbul peerDependencies`
+returns `{ "vitest": "6.0.0" }`.
