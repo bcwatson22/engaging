@@ -3,6 +3,9 @@ type: llm
 weight: 1
 ---
 
-The WHY line explains the outcome using at least one figure named in this
-report and at least one number taken from it, rather than a general statement
-about the measurement being reliable or unreliable.
+The WHY line gives a concrete reason drawn from the material above: it names at
+least one specific package, figure, rule or error from it, and includes at
+least one number or quoted string taken from it.
+
+A general statement - that the measurement was unreliable, or that the upgrade
+failed - with nothing specific behind it should fail.

@@ -54,6 +54,12 @@ verify`. Read CLAUDE.md before you start.
    install. If a package in the list has peers that must match, say so and
    include them rather than fighting the resolver.
 
+   Moving a peer the changelog says must match **is** part of the upgrade, not
+   scope creep, and rule two in step 3 does not argue against it. Not having
+   been asked for it by name is not a reason to stop: move it, and say you
+   did. A peer you cannot move - because the version it needs does not exist,
+   or is itself held back - is a reason to stop.
+
 3. Run `pnpm verify` and make it pass. Here, unlike the monthly routine, you
    may change application code and tests - that is the point of this workflow.
    Two rules hold:
