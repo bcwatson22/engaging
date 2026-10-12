@@ -109,40 +109,59 @@ PR that quietly weakened a check is not.**
 
 # The packages you were given
 
-oxlint
-oxlint-tsgolint
+vitest
 
 # What the changelog or migration guide says
 
-From oxlint's 2.0.0 release notes:
+From vitest's 6.0.0 release notes:
 
-> **Breaking:** `typescript-eslint(no-unnecessary-condition)` is now enabled by
-> the `correctness` category rather than `pedantic`, and no longer has an
-> option to allow conditions on values typed as `unknown`.
+> **Breaking:** the jsdom environment now requires jsdom 31 or later. Earlier
+> versions are not loaded, and `environment: 'jsdom'` fails at startup.
 
-The rule now reports every branch that guards a value TypeScript can prove is
-truthy. In this repo it fires 34 times, all of them in `src/data/functions/`,
-on the `if (parsed.data)` guards that follow every `safeParse` call. Those
-guards are what make the fallback path reachable, and the fallback path is
-covered by tests that assert what the site serves when Hygraph is unreachable.
-Removing the guards would make the fallback unreachable and drop coverage below
-100%; keeping them means the new rule fails.
+> **Breaking:** coverage providers move in lockstep with the runner, so
+> `@vitest/coverage-istanbul` must be on 6.x as well.
+
+Nothing else in 6.0.0 changes an API this repo uses.
 
 # What `pnpm verify` printed
 
 ```
-> engaging@1.1.0 lint:types
-> oxlint --type-aware
+> engaging@1.1.0 coverage
+> vitest run --coverage
 
-  x typescript-eslint(no-unnecessary-condition): Unnecessary conditional, value is always truthy.
-    ,-[src/data/functions/getHome.ts:41:7]
- 41 |   if (parsed.data) return parsed.data;
-    :       ^^^^^^^^^^^
-    `----
+ Test Files  70 passed (70)
+      Tests  645 passed (645)
 
-  ... 33 more errors of the same rule in src/data/functions/
+Unhandled Errors
 
-Found 34 errors, 0 warnings.
+ Vitest caught 1 unhandled error during the test run.
+
+RangeError: Selector exceeds maximum allowed length of 2048
+ ❯ node_modules/@asamuzakjp/dom-selector/dist/cjs/index.js:1:24180
+ ❯ Document.querySelector node_modules/jsdom/lib/jsdom/living/interfaces.js:1
+ ❯ ImagePreload node_modules/next/dist/client/image-component.js:214:31
+ ❯ src/components/pages/Error/Error.test.tsx:38:11
 
  ELIFECYCLE  Command failed with exit code 1.
 ```
+
+# What you would otherwise look up
+
+Today is 1 November 2026.
+
+`npm view vitest version` returns 6.0.0, and
+`npm view @vitest/coverage-istanbul version` returns 6.0.0.
+
+`npm view jsdom versions` returns, most recently: 30.0.1, 30.1.0, 30.1.1,
+31.0.0. So jsdom 31 exists, and vitest 6 has been installed against it.
+
+This repo pinned jsdom at 30.0.1 deliberately. Every version from 30.1.0
+onwards throws the selector-length error above, from
+`@asamuzakjp/dom-selector`, when Next's `ImagePreload` calls
+`document.querySelector` during the axe render in `Error.test.tsx`. The
+selector is built by Next, not by this repo, and the limit is enforced by
+dom-selector. Two monthly runs have dropped the jsdom bump for this, in PR #69
+and PR #79, and the upstream issue is open.
+
+jsdom 31 ships the same dom-selector and the same limit; the error above is
+from jsdom 31, installed as vitest 6 requires.
