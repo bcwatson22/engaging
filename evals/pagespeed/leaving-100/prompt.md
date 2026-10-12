@@ -301,7 +301,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
       "scores": {
         "performance": {
           "sittings": [99, 99],
-          "min": 99,
+          "min": 95,
           "max": 99
         },
         "accessibility": {
