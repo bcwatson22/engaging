@@ -59,44 +59,49 @@ jobs:
       # is the right bar while every case is a verdict with one correct answer.
       # --max-cost-usd is a stop, not a budget: five cases at three runs costs
       # about $1.50, so $5 only catches something going wrong.
+      # Deliberately does not fail here. The CLI's exit code alone cannot tell
+      # a run that scored badly from one that never got to score, so it is
+      # handed to the next step, which can look at the result and say which.
       - name: Score the suite
+        id: score
         env:
           # The same token the other workflows hand to claude-code-action. The
           # CLI reads it straight from the environment.
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
+          set +e
           claude plugin eval . \
             --eval-dir evals \
             --runs "${{ inputs.runs }}" \
             ${{ inputs.case && format('--case {0}', inputs.case) || '' }} \
             --ablation none \
             --threshold 1 \
-            --max-cost-usd 5 \
+            --max-cost-usd 8 \
             --no-publish \
             --trust-plugin \
             --report "$RUNNER_TEMP/report.html" \
             --json "$RUNNER_TEMP/result.json"
+          echo "code=$?" >> "$GITHUB_OUTPUT"
 
-      # The scores, in the run summary, whether or not the run passed. A suite
-      # whose result lives only in a job log is a suite nobody reads.
+      # The scores and a verdict, in the run summary, whether or not the run
+      # passed - and this step's exit code is what fails the job. The first CI
+      # run of the full suite scored nine cases of twelve and stopped, and the
+      # summary said nothing about the three that never ran: the only honest
+      # reading of it was "something happened". evals/summarise.ts tells the
+      # three cases apart - blocked, stopped early, or scored and failed - and
+      # it is tested against the real result files of each.
       - name: Publish the scores
         if: always()
         run: |
           if [ -s "$RUNNER_TEMP/result.json" ]; then
-            node -e '
-              const r = require(process.env.RUNNER_TEMP + "/result.json");
-              const rows = r.cases.map((c) =>
-                `| ${c.name} | ${c.aggregates.score.toFixed(2)} | ${Math.round(c.aggregates.passRate * 100)}% |`,
-              );
-              console.log("## Eval scores\n");
-              console.log("| case | score | pass rate |");
-              console.log("| --- | --- | --- |");
-              console.log(rows.join("\n"));
-              console.log(`\nTotal $${r.costUsd.toFixed(2)} over ${r.durationSeconds}s.`);
-            ' >> "$GITHUB_STEP_SUMMARY"
+            node evals/summarise.ts "$RUNNER_TEMP/result.json" \
+              "${{ steps.score.outputs.code || 1 }}" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "No result was written, so the run failed before scoring." >> "$GITHUB_STEP_SUMMARY"
-            echo "Read the job log." >> "$GITHUB_STEP_SUMMARY"
+            echo "## The run failed before writing a result" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Read the job log. This is a fault in the workflow or the" >> "$GITHUB_STEP_SUMMARY"
+            echo "credential, not a finding about the suite." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
           fi
 
       - name: Keep the report
