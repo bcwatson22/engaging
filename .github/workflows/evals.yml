@@ -94,8 +94,13 @@ jobs:
         if: always()
         run: |
           if [ -s "$RUNNER_TEMP/result.json" ]; then
+            # tee, not >>. The summary is the readable place, but it cannot be
+            # fetched with `gh` - only opened in a browser - so the verdict
+            # went into the one place nobody can read from a terminal. The log
+            # gets a copy.
             node evals/summarise.ts "$RUNNER_TEMP/result.json" \
-              "${{ steps.score.outputs.code || 1 }}" >> "$GITHUB_STEP_SUMMARY"
+              "${{ steps.score.outputs.code || 1 }}" \
+              | tee -a "$GITHUB_STEP_SUMMARY"
           else
             echo "## The run failed before writing a result" >> "$GITHUB_STEP_SUMMARY"
             echo "" >> "$GITHUB_STEP_SUMMARY"
@@ -104,11 +109,17 @@ jobs:
             exit 1
           fi
 
+      # Both, and result.json especially: the HTML is for reading, the JSON is
+      # the only thing a later question can be answered from. Scraping scores
+      # back out of the HTML works until a case fails, and then the row it
+      # renders is shaped differently and the scrape quietly drops it.
       - name: Keep the report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: eval-report
-          path: ${{ runner.temp }}/report.html
+          path: |
+            ${{ runner.temp }}/report.html
+            ${{ runner.temp }}/result.json
           retention-days: 90
           if-no-files-found: ignore
