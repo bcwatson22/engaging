@@ -1,6 +1,6 @@
 import { writeFile } from 'fs/promises';
 
-import { measure } from '../utils/pageSpeed.ts';
+import { measure, phaseOrder } from '../utils/pageSpeed.ts';
 import type { Figure } from '../utils/pageSpeed.ts';
 
 /* Entry point for the monthly routine in .github/workflows/pageSpeed.yml. The
@@ -35,7 +35,20 @@ const show = (
 const seconds = (ms: number): string => `${(ms / 1000).toFixed(1)}s`;
 const exact = (value: number): string => value.toFixed(2);
 
-for (const { page, strategy, scores, metrics } of report.measurements)
+/* The LCP breakdown on its own line, because it is the diagnostic rather than
+   the result: which phase differs between the two sittings is the question
+   the bimodal figure has been waiting on. */
+const breakdown = (phases: Record<string, Figure> | undefined): string =>
+  phases
+    ? `\n    LCP phases: ${phaseOrder
+        .map(
+          (phase) =>
+            `${phase.replace('Ms', '')} ${show(phases[phase]!, seconds)}`,
+        )
+        .join(', ')}`
+    : '\n    LCP phases: not reported';
+
+for (const { page, strategy, scores, metrics, phases } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
       `perf ${show(scores.performance)}, ` +
@@ -44,5 +57,6 @@ for (const { page, strategy, scores, metrics } of report.measurements)
       `seo ${show(scores.seo)} ` +
       `(LCP ${show(metrics.lcpMs, seconds)}, ` +
       `CLS ${show(metrics.clsScore, exact)}, ` +
-      `TBT ${show(metrics.tbtMs)}ms)`,
+      `TBT ${show(metrics.tbtMs)}ms)` +
+      breakdown(phases),
   );

@@ -1,5 +1,6 @@
 import {
   bounds,
+  phasesOf,
   categories,
   gap,
   measure,
@@ -30,6 +31,23 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
       'largest-contentful-paint': { numericValue: lcpMs },
       'cumulative-layout-shift': { numericValue: 0 },
       'total-blocking-time': { numericValue: 40 },
+      /* Two tables, as the real audit returns: the element, then the phase
+         breakdown nested a level down. */
+      'largest-contentful-paint-element': {
+        details: {
+          items: [
+            { type: 'element', node: {} },
+            {
+              items: [
+                { phase: 'Time to First Byte', timing: 210 },
+                { phase: 'Load Delay', timing: 40 },
+                { phase: 'Load Time', timing: 300 },
+                { phase: 'Render Delay', timing: 150 },
+              ],
+            },
+          ],
+        },
+      },
     },
   },
 });
@@ -45,7 +63,7 @@ type Options = {
   /* What a refused request answers with. Google sends JSON; a proxy or an
      error page does not. */
   errorBody?: string;
-  omit?: 'score' | 'metric' | 'version';
+  omit?: 'score' | 'metric' | 'version' | 'phases';
 };
 
 const setup = ({
@@ -66,6 +84,10 @@ const setup = ({
     if (omit === 'score') delete payload.lighthouseResult.categories;
     if (omit === 'metric') delete payload.lighthouseResult.audits;
     if (omit === 'version') delete payload.lighthouseResult.lighthouseVersion;
+    if (omit === 'phases')
+      delete (payload.lighthouseResult.audits as Record<string, unknown>)[
+        'largest-contentful-paint-element'
+      ];
 
     return Promise.resolve({
       ok,
@@ -94,6 +116,70 @@ describe('median', () => {
     median(values);
 
     expect(values).toEqual([99, 97, 98]);
+  });
+});
+
+/* Read straight from the response rather than through measure, because the
+   shapes worth testing are the malformed ones: Lighthouse returns a list of
+   tables whose contents vary by run, and the breakdown has to be ignored
+   rather than trusted when it is not there. */
+describe('phasesOf', () => {
+  const audit = (items: unknown[]) => ({
+    lighthouseResult: {
+      audits: { 'largest-contentful-paint-element': { details: { items } } },
+    },
+  });
+
+  const phases = [
+    { phase: 'Time to First Byte', timing: 210 },
+    { phase: 'Load Delay', timing: 40 },
+    { phase: 'Load Time', timing: 300 },
+    { phase: 'Render Delay', timing: 150 },
+  ];
+
+  it('reads the four phases out of the nested table', () => {
+    expect(phasesOf(audit([{ type: 'element' }, { items: phases }]))).toEqual({
+      ttfbMs: 210,
+      loadDelayMs: 40,
+      loadDurationMs: 300,
+      renderDelayMs: 150,
+    });
+  });
+
+  /* Lighthouse has renamed this column before, so the match is on the
+     distinctive word rather than the whole label. */
+  it('accepts Load Duration as well as Load Time', () => {
+    const renamed = phases.map((row) =>
+      row.phase === 'Load Time' ? { ...row, phase: 'Load Duration' } : row,
+    );
+
+    expect(phasesOf(audit([{ items: renamed }]))?.loadDurationMs).toBe(300);
+  });
+
+  it('ignores entries that are not tables', () => {
+    expect(phasesOf(audit([null, 'a string', 7, { items: phases }]))).toEqual({
+      ttfbMs: 210,
+      loadDelayMs: 40,
+      loadDurationMs: 300,
+      renderDelayMs: 150,
+    });
+  });
+
+  /* All four or none: they are only meaningful against each other. */
+  it('gives nothing when a phase is missing', () => {
+    expect(phasesOf(audit([{ items: phases.slice(1) }]))).toBeNull();
+  });
+
+  it('gives nothing when a timing is not a number', () => {
+    const broken = phases.map((row) =>
+      row.phase === 'Load Delay' ? { ...row, timing: 'n/a' } : row,
+    );
+
+    expect(phasesOf(audit([{ items: broken }]))).toBeNull();
+  });
+
+  it('gives nothing when the audit is absent', () => {
+    expect(phasesOf({ lighthouseResult: { audits: {} } })).toBeNull();
   });
 });
 
@@ -430,6 +516,35 @@ describe('measure', () => {
     await expect(
       measure('https://example.com', undefined, fetcher, wait),
     ).rejects.toThrow('performance');
+  });
+
+  /* The figure this exists to explain is bimodal, and the four phases say
+     which part of it moves. They travel per sitting like everything else, so
+     two sittings can be compared phase by phase. */
+  it('records the LCP breakdown per sitting', async () => {
+    const { fetcher, wait } = setup();
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.phases?.ttfbMs.sittings).toEqual([210, 210]);
+    expect(home?.phases?.loadDurationMs.sittings).toEqual([300, 300]);
+    expect(home?.phases?.renderDelayMs).toMatchObject({ min: 150, max: 150 });
+  });
+
+  /* Unlike a missing score, which is a corrupt measurement. A month without
+     the diagnostic is a month without a clue, not a reason to publish
+     nothing. */
+  it('still measures when the breakdown is missing', async () => {
+    const { fetcher, wait } = setup({ omit: 'phases' });
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.scores.performance.sittings).toEqual([97, 97]);
+    expect(home?.phases).toBeUndefined();
   });
 
   it('refuses a response with no metrics', async () => {
