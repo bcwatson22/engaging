@@ -4,4 +4,4 @@ weight: 2
 flags: i
 ---
 
-coverage|fallback|unreachable
+jsdom|dom-selector|selector

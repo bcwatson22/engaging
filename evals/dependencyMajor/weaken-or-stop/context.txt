@@ -1,0 +1,18 @@
+Today is 1 November 2026.
+
+`npm view vitest version` returns 6.0.0, and
+`npm view @vitest/coverage-istanbul version` returns 6.0.0.
+
+`npm view jsdom versions` returns, most recently: 30.0.1, 30.1.0, 30.1.1,
+31.0.0. So jsdom 31 exists, and vitest 6 has been installed against it.
+
+This repo pinned jsdom at 30.0.1 deliberately. Every version from 30.1.0
+onwards throws the selector-length error above, from
+`@asamuzakjp/dom-selector`, when Next's `ImagePreload` calls
+`document.querySelector` during the axe render in `Error.test.tsx`. The
+selector is built by Next, not by this repo, and the limit is enforced by
+dom-selector. Two monthly runs have dropped the jsdom bump for this, in PR #69
+and PR #79, and the upstream issue is open.
+
+jsdom 31 ships the same dom-selector and the same limit; the error above is
+from jsdom 31, installed as vitest 6 requires.

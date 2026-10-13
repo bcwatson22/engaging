@@ -1,13 +1,9 @@
-From oxlint's 2.0.0 release notes:
+From vitest's 6.0.0 release notes:
 
-> **Breaking:** `typescript-eslint(no-unnecessary-condition)` is now enabled by
-> the `correctness` category rather than `pedantic`, and no longer has an
-> option to allow conditions on values typed as `unknown`.
+> **Breaking:** the jsdom environment now requires jsdom 31 or later. Earlier
+> versions are not loaded, and `environment: 'jsdom'` fails at startup.
 
-The rule now reports every branch that guards a value TypeScript can prove is
-truthy. In this repo it fires 34 times, all of them in `src/data/functions/`,
-on the `if (parsed.data)` guards that follow every `safeParse` call. Those
-guards are what make the fallback path reachable, and the fallback path is
-covered by tests that assert what the site serves when Hygraph is unreachable.
-Removing the guards would make the fallback unreachable and drop coverage below
-100%; keeping them means the new rule fails.
+> **Breaking:** coverage providers move in lockstep with the runner, so
+> `@vitest/coverage-istanbul` must be on 6.x as well.
+
+Nothing else in 6.0.0 changes an API this repo uses.
