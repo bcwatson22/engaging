@@ -208,17 +208,22 @@ const metricOf = (response: Response, audit: string): number => {
   return value;
 };
 
-/* Lighthouse names the phases in prose, and the wording has changed before.
-   Matched on a distinctive word rather than the whole label, so a rename from
-   "Load Time" to "Load Duration" does not silently drop a column. */
-const phaseNames: Record<keyof Phases, RegExp> = {
-  ttfbMs: /first byte|ttfb/i,
-  loadDelayMs: /load delay/i,
-  loadDurationMs: /load (time|duration)/i,
-  renderDelayMs: /render delay/i,
+/* The audit is lcp-breakdown-insight, which is where Lighthouse 13 keeps
+   this. An earlier version of this reader looked in
+   largest-contentful-paint-element and matched prose labels with regexes;
+   both were wrong, and a live run reporting nothing is how that was found.
+
+   Each row carries a `subpart` - a stable identifier - alongside the prose
+   `label`, so the match is on the identifier. A renamed label is then a
+   cosmetic change rather than a silent loss. */
+const phaseSubparts: Record<keyof Phases, string> = {
+  ttfbMs: 'timeToFirstByte',
+  loadDelayMs: 'resourceLoadDelay',
+  loadDurationMs: 'resourceLoadDuration',
+  renderDelayMs: 'elementRenderDelay',
 };
 
-type PhaseRow = { phase?: unknown; timing?: unknown };
+type PhaseRow = { subpart?: unknown; duration?: unknown };
 
 const isRow = (row: unknown): row is PhaseRow =>
   typeof row === 'object' && row !== null;
@@ -263,20 +268,18 @@ const phasesOf = (response: Response): Phases | null => {
   };
 
   const rows = (
-    response.lighthouseResult?.audits?.['largest-contentful-paint-element']
-      ?.details?.items ?? []
+    response.lighthouseResult?.audits?.['lcp-breakdown-insight']?.details
+      ?.items ?? []
   )
     .flatMap(flatten)
     .filter(isRow);
 
-  const found = Object.entries(phaseNames).map(([name, pattern]) => {
-    const row = rows.find(
-      ({ phase }) => typeof phase === 'string' && pattern.test(phase),
-    );
+  const found = Object.entries(phaseSubparts).map(([name, subpart]) => {
+    const row = rows.find((candidate) => candidate.subpart === subpart);
 
     return [
       name,
-      typeof row?.timing === 'number' ? row.timing : undefined,
+      typeof row?.duration === 'number' ? row.duration : undefined,
     ] as const;
   });
 

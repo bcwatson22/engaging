@@ -32,20 +32,22 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
       'largest-contentful-paint': { numericValue: lcpMs },
       'cumulative-layout-shift': { numericValue: 0 },
       'total-blocking-time': { numericValue: 40 },
-      /* Two tables, as the real audit returns: the element, then the phase
-         breakdown nested a level down. */
-      'largest-contentful-paint-element': {
+      /* As lcp-breakdown-insight returns it: a list whose first entry is
+         the subpart table. */
+      'lcp-breakdown-insight': {
         details: {
+          type: 'list',
           items: [
-            { type: 'element', node: {} },
             {
+              type: 'table',
               items: [
-                { phase: 'Time to First Byte', timing: 210 },
-                { phase: 'Load Delay', timing: 40 },
-                { phase: 'Load Time', timing: 300 },
-                { phase: 'Render Delay', timing: 150 },
+                { subpart: 'timeToFirstByte', duration: 210 },
+                { subpart: 'resourceLoadDelay', duration: 40 },
+                { subpart: 'resourceLoadDuration', duration: 300 },
+                { subpart: 'elementRenderDelay', duration: 150 },
               ],
             },
+            { snippet: '<img ...>' },
           ],
         },
       },
@@ -87,7 +89,7 @@ const setup = ({
     if (omit === 'version') delete payload.lighthouseResult.lighthouseVersion;
     if (omit === 'phases')
       delete (payload.lighthouseResult.audits as Record<string, unknown>)[
-        'largest-contentful-paint-element'
+        'lcp-breakdown-insight'
       ];
 
     return Promise.resolve({
@@ -125,58 +127,86 @@ describe('median', () => {
    tables whose contents vary by run, and the breakdown has to be ignored
    rather than trusted when it is not there. */
 describe('phasesOf', () => {
+  /* The shape a live run returned on 2026-10-13, trimmed. The identifiers and
+     the two keys are what matter: an earlier reader looked for `phase` and
+     `timing` in largest-contentful-paint-element and found nothing. */
   const audit = (items: unknown[]) => ({
     lighthouseResult: {
-      audits: { 'largest-contentful-paint-element': { details: { items } } },
+      audits: { 'lcp-breakdown-insight': { details: { type: 'list', items } } },
     },
   });
 
-  const phases = [
-    { phase: 'Time to First Byte', timing: 210 },
-    { phase: 'Load Delay', timing: 40 },
-    { phase: 'Load Time', timing: 300 },
-    { phase: 'Render Delay', timing: 150 },
-  ];
+  const table = {
+    type: 'table',
+    headings: [
+      { label: 'Subpart', key: 'label', valueType: 'text' },
+      { label: 'Duration', key: 'duration', valueType: 'ms' },
+    ],
+    items: [
+      {
+        duration: 9.247,
+        subpart: 'timeToFirstByte',
+        label: 'Time to first byte',
+      },
+      {
+        subpart: 'resourceLoadDelay',
+        duration: 650.719,
+        label: 'Resource load delay',
+      },
+      {
+        subpart: 'resourceLoadDuration',
+        duration: 287.358,
+        label: 'Resource load duration',
+      },
+      {
+        subpart: 'elementRenderDelay',
+        label: 'Element render delay',
+        duration: 22.647,
+      },
+    ],
+  };
 
-  it('reads the four phases out of the nested table', () => {
-    expect(phasesOf(audit([{ type: 'element' }, { items: phases }]))).toEqual({
-      ttfbMs: 210,
-      loadDelayMs: 40,
-      loadDurationMs: 300,
-      renderDelayMs: 150,
+  it('reads the four subparts out of the nested table', () => {
+    expect(phasesOf(audit([table, { snippet: '<img ...>' }]))).toEqual({
+      ttfbMs: 9.247,
+      loadDelayMs: 650.719,
+      loadDurationMs: 287.358,
+      renderDelayMs: 22.647,
     });
   });
 
-  /* Lighthouse has renamed this column before, so the match is on the
-     distinctive word rather than the whole label. */
-  it('accepts Load Duration as well as Load Time', () => {
-    const renamed = phases.map((row) =>
-      row.phase === 'Load Time' ? { ...row, phase: 'Load Duration' } : row,
-    );
+  /* The identifier is the contract, not the prose beside it. */
+  it('ignores the label entirely', () => {
+    const relabelled = {
+      ...table,
+      items: table.items.map((row) => ({ ...row, label: 'Renamed by Google' })),
+    };
 
-    expect(phasesOf(audit([{ items: renamed }]))?.loadDurationMs).toBe(300);
+    expect(phasesOf(audit([relabelled]))?.loadDelayMs).toBe(650.719);
   });
 
   it('ignores entries that are not tables', () => {
-    expect(phasesOf(audit([null, 'a string', 7, { items: phases }]))).toEqual({
-      ttfbMs: 210,
-      loadDelayMs: 40,
-      loadDurationMs: 300,
-      renderDelayMs: 150,
-    });
+    expect(phasesOf(audit([null, 'a string', 7, table]))?.ttfbMs).toBe(9.247);
   });
 
   /* All four or none: they are only meaningful against each other. */
-  it('gives nothing when a phase is missing', () => {
-    expect(phasesOf(audit([{ items: phases.slice(1) }]))).toBeNull();
+  it('gives nothing when a subpart is missing', () => {
+    expect(
+      phasesOf(audit([{ ...table, items: table.items.slice(1) }])),
+    ).toBeNull();
   });
 
-  it('gives nothing when a timing is not a number', () => {
-    const broken = phases.map((row) =>
-      row.phase === 'Load Delay' ? { ...row, timing: 'n/a' } : row,
-    );
+  it('gives nothing when a duration is not a number', () => {
+    const broken = {
+      ...table,
+      items: table.items.map((row) =>
+        row.subpart === 'elementRenderDelay'
+          ? { ...row, duration: 'n/a' }
+          : row,
+      ),
+    };
 
-    expect(phasesOf(audit([{ items: broken }]))).toBeNull();
+    expect(phasesOf(audit([broken]))).toBeNull();
   });
 
   it('gives nothing when the audit is absent', () => {
@@ -184,24 +214,24 @@ describe('phasesOf', () => {
   });
 });
 
-/* The reader guessed the audit's shape from memory once and came back empty
-   on a live run, which cost a measurement and taught nothing. This is what
-   stops that happening twice. */
+/* The reader guessed the audit's name and its keys from memory, and a live
+   run came back empty twice over. This is what turns a third wrong guess into
+   a sentence in the next run's output. */
 describe('shapeOf', () => {
   it('quotes the details of every audit that might have held it', () => {
     const described = shapeOf({
       lighthouseResult: {
         audits: {
-          'largest-contentful-paint-element': {
-            details: { items: [{ phase: 'Something New', timing: 1 }] },
+          'lcp-breakdown-insight': {
+            details: { items: [{ subpart: 'somethingNew', duration: 1 }] },
           },
           'total-blocking-time': { numericValue: 40 },
         },
       },
     });
 
-    expect(described).toContain('largest-contentful-paint-element');
-    expect(described).toContain('Something New');
+    expect(described).toContain('lcp-breakdown-insight');
+    expect(described).toContain('somethingNew');
     expect(described).not.toContain('total-blocking-time');
   });
 
