@@ -46,9 +46,19 @@ const breakdown = (phases: Record<string, Figure> | undefined): string =>
             `${phase.replace('Ms', '')} ${show(phases[phase]!, seconds)}`,
         )
         .join(', ')}`
-    : '\n    LCP phases: not reported';
+    : '';
 
-for (const { page, strategy, scores, metrics, phases } of report.measurements)
+const missing = (why: string | undefined): string =>
+  why ? `\n    LCP phases: not reported. The audit held: ${why}` : '';
+
+for (const {
+  page,
+  strategy,
+  scores,
+  metrics,
+  phases,
+  phasesMissing,
+} of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
       `perf ${show(scores.performance)}, ` +
@@ -58,5 +68,6 @@ for (const { page, strategy, scores, metrics, phases } of report.measurements)
       `(LCP ${show(metrics.lcpMs, seconds)}, ` +
       `CLS ${show(metrics.clsScore, exact)}, ` +
       `TBT ${show(metrics.tbtMs)}ms)` +
-      breakdown(phases),
+      breakdown(phases) +
+      missing(phasesMissing),
   );

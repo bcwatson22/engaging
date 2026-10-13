@@ -158,6 +158,9 @@ type Measurement = {
      Partial phases would be worse than none: the four are only meaningful
      against each other. */
   phases?: Record<keyof Phases, Figure>;
+  /* And when they are absent, what was there instead - so the next run
+     answers the question rather than repeating it. */
+  phasesMissing?: string;
 };
 
 type Report = {
@@ -220,6 +223,29 @@ type PhaseRow = { phase?: unknown; timing?: unknown };
 const isRow = (row: unknown): row is PhaseRow =>
   typeof row === 'object' && row !== null;
 
+/* Enough of the audit to recognise its shape, when the reader found nothing
+   in it. The first attempt at phasesOf guessed the shape from memory and came
+   back empty on a live run, which cost a 25-minute measurement and told us
+   only that the guess was wrong. Rather than guess again, the measurement now
+   carries what it saw. */
+const sample = 600;
+
+const shapeOf = (response: Response): string => {
+  const audits = response.lighthouseResult?.audits ?? {};
+  const named = Object.keys(audits).filter((key) =>
+    /contentful|lcp/i.test(key),
+  );
+
+  if (named.length === 0) return 'no audit name matched /contentful|lcp/';
+
+  return named
+    .map(
+      (key) =>
+        `${key}: ${JSON.stringify(audits[key]?.details ?? null).slice(0, sample)}`,
+    )
+    .join('\n');
+};
+
 /* Returns null rather than throwing when the breakdown is absent, unlike
    every other reader here. A score that goes missing is a corrupt
    measurement and has to stop the run; a diagnostic that goes missing is a
@@ -271,6 +297,8 @@ type Run = {
   scores: Scores;
   metrics: Metrics;
   phases: Phases | null;
+  /* Only set when phases is null, and only to say why. */
+  shape: string | null;
   version: string;
 };
 
@@ -304,10 +332,9 @@ const summarise = (
   const timed = (metric: keyof Metrics): number[][] =>
     perSitting.map((results) => results.map(({ metrics }) => metrics[metric]));
 
-  /* Every run of every sitting, or nothing. */
-  const everyPhase = perSitting.every((results) =>
-    results.every(({ phases }) => phases !== null),
-  );
+  /* One entry per run that could not read the breakdown, so the two branches
+     below come from the same fact rather than two tests of it. */
+  const unread = perSitting.flat().flatMap(({ shape }) => shape ?? []);
 
   const phased = (phase: keyof Phases): number[][] =>
     perSitting.map((results) => results.map(({ phases }) => phases![phase]));
@@ -321,11 +348,13 @@ const summarise = (
     metrics: Object.fromEntries(
       metricNames.map((metric) => [metric, figureOf(timed(metric))]),
     ) as Record<keyof Metrics, Figure>,
-    ...(everyPhase && {
-      phases: Object.fromEntries(
-        phaseOrder.map((phase) => [phase, figureOf(phased(phase))]),
-      ) as Record<keyof Phases, Figure>,
-    }),
+    ...(unread.length === 0
+      ? {
+          phases: Object.fromEntries(
+            phaseOrder.map((phase) => [phase, figureOf(phased(phase))]),
+          ) as Record<keyof Phases, Figure>,
+        }
+      : { phasesMissing: unread[0]! }),
   };
 };
 
@@ -395,6 +424,7 @@ const run = async (
       tbtMs: metricOf(body, 'total-blocking-time'),
     },
     phases: phasesOf(body),
+    shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
 };
@@ -498,6 +528,7 @@ export {
   gap,
   phaseOrder,
   phasesOf,
+  shapeOf,
   measure,
   median,
   pause,

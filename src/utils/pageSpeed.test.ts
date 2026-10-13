@@ -1,6 +1,7 @@
 import {
   bounds,
   phasesOf,
+  shapeOf,
   categories,
   gap,
   measure,
@@ -180,6 +181,38 @@ describe('phasesOf', () => {
 
   it('gives nothing when the audit is absent', () => {
     expect(phasesOf({ lighthouseResult: { audits: {} } })).toBeNull();
+  });
+});
+
+/* The reader guessed the audit's shape from memory once and came back empty
+   on a live run, which cost a measurement and taught nothing. This is what
+   stops that happening twice. */
+describe('shapeOf', () => {
+  it('quotes the details of every audit that might have held it', () => {
+    const described = shapeOf({
+      lighthouseResult: {
+        audits: {
+          'largest-contentful-paint-element': {
+            details: { items: [{ phase: 'Something New', timing: 1 }] },
+          },
+          'total-blocking-time': { numericValue: 40 },
+        },
+      },
+    });
+
+    expect(described).toContain('largest-contentful-paint-element');
+    expect(described).toContain('Something New');
+    expect(described).not.toContain('total-blocking-time');
+  });
+
+  it('copes with a response carrying no audits at all', () => {
+    expect(shapeOf({})).toBe('no audit name matched /contentful|lcp/');
+  });
+
+  it('says so when no audit looks like the right one', () => {
+    expect(shapeOf({ lighthouseResult: { audits: { seo: {} } } })).toBe(
+      'no audit name matched /contentful|lcp/',
+    );
   });
 });
 
