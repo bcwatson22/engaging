@@ -94,7 +94,18 @@ type Response = {
   lighthouseResult?: {
     lighthouseVersion?: string;
     categories?: Record<string, { score?: number | null } | undefined>;
-    audits?: Record<string, { numericValue?: number } | undefined>;
+    audits?: Record<
+      string,
+      | {
+          numericValue?: number;
+          /* The LCP element audit carries a second table breaking the metric
+             into its four phases. Typed loosely because it is one shape among
+             several the audit can return, and the reader below checks rather
+             than assumes. */
+          details?: { items?: unknown[] };
+        }
+      | undefined
+    >;
   };
 };
 
@@ -103,6 +114,25 @@ type Scores = Record<Category, number>;
 /* The three the README's prose quotes alongside the table, so a change in the
    numbers can be explained rather than just reported. */
 type Metrics = { lcpMs: number; clsScore: number; tbtMs: number };
+
+/* Largest Contentful Paint, split the way Lighthouse splits it: how long the
+   document took to start arriving, how long the browser waited before asking
+   for the LCP resource, how long that resource took, and how long after
+   arriving it took to paint.
+
+   Recorded because the figure is bimodal and nothing so far says why. Home
+   mobile reads 2.0s or 3.3s on the same commit, and the four phases say which
+   part moves: load duration points at the image, time to first byte or render
+   delay points at the 322KB document. Guessing between those two cost a day
+   and produced a wrong answer that reached a merged README.
+
+   Diagnostic only. The rules do not read it and no case is judged on it. */
+type Phases = {
+  ttfbMs: number;
+  loadDelayMs: number;
+  loadDurationMs: number;
+  renderDelayMs: number;
+};
 
 type Bounds = { min: number; max: number };
 
@@ -124,6 +154,10 @@ type Measurement = {
   strategy: Strategy;
   scores: Record<Category, Figure>;
   metrics: Record<keyof Metrics, Figure>;
+  /* Absent when any run of the measurement did not report the breakdown.
+     Partial phases would be worse than none: the four are only meaningful
+     against each other. */
+  phases?: Record<keyof Phases, Figure>;
 };
 
 type Report = {
@@ -171,6 +205,60 @@ const metricOf = (response: Response, audit: string): number => {
   return value;
 };
 
+/* Lighthouse names the phases in prose, and the wording has changed before.
+   Matched on a distinctive word rather than the whole label, so a rename from
+   "Load Time" to "Load Duration" does not silently drop a column. */
+const phaseNames: Record<keyof Phases, RegExp> = {
+  ttfbMs: /first byte|ttfb/i,
+  loadDelayMs: /load delay/i,
+  loadDurationMs: /load (time|duration)/i,
+  renderDelayMs: /render delay/i,
+};
+
+type PhaseRow = { phase?: unknown; timing?: unknown };
+
+const isRow = (row: unknown): row is PhaseRow =>
+  typeof row === 'object' && row !== null;
+
+/* Returns null rather than throwing when the breakdown is absent, unlike
+   every other reader here. A score that goes missing is a corrupt
+   measurement and has to stop the run; a diagnostic that goes missing is a
+   month without a clue, which is worth a quiet note and nothing more. */
+const phasesOf = (response: Response): Phases | null => {
+  /* The audit returns a list of tables, and the phases are a table nested
+     inside one of them. Flattened one level so the reader does not care
+     which position it arrives in. */
+  const flatten = (item: unknown): unknown[] => {
+    if (!isRow(item)) return [item];
+
+    const { items } = item as { items?: unknown[] };
+
+    return Array.isArray(items) ? items : [item];
+  };
+
+  const rows = (
+    response.lighthouseResult?.audits?.['largest-contentful-paint-element']
+      ?.details?.items ?? []
+  )
+    .flatMap(flatten)
+    .filter(isRow);
+
+  const found = Object.entries(phaseNames).map(([name, pattern]) => {
+    const row = rows.find(
+      ({ phase }) => typeof phase === 'string' && pattern.test(phase),
+    );
+
+    return [
+      name,
+      typeof row?.timing === 'number' ? row.timing : undefined,
+    ] as const;
+  });
+
+  if (found.some(([, timing]) => timing === undefined)) return null;
+
+  return Object.fromEntries(found) as unknown as Phases;
+};
+
 const median = (values: number[]): number =>
   [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]!;
 
@@ -179,9 +267,22 @@ const bounds = (values: number[]): Bounds => ({
   max: Math.max(...values),
 });
 
-type Run = { scores: Scores; metrics: Metrics; version: string };
+type Run = {
+  scores: Scores;
+  metrics: Metrics;
+  phases: Phases | null;
+  version: string;
+};
 
 const metricNames = ['lcpMs', 'clsScore', 'tbtMs'] as const;
+
+/* The order they happen in, which is the order worth reading them in. */
+const phaseOrder = [
+  'ttfbMs',
+  'loadDelayMs',
+  'loadDurationMs',
+  'renderDelayMs',
+] as const;
 
 /* A figure's median in each sitting, and its bounds across the lot. Both come
    from the same runs, which is the point: a median published without the
@@ -203,6 +304,14 @@ const summarise = (
   const timed = (metric: keyof Metrics): number[][] =>
     perSitting.map((results) => results.map(({ metrics }) => metrics[metric]));
 
+  /* Every run of every sitting, or nothing. */
+  const everyPhase = perSitting.every((results) =>
+    results.every(({ phases }) => phases !== null),
+  );
+
+  const phased = (phase: keyof Phases): number[][] =>
+    perSitting.map((results) => results.map(({ phases }) => phases![phase]));
+
   return {
     page,
     strategy,
@@ -212,6 +321,11 @@ const summarise = (
     metrics: Object.fromEntries(
       metricNames.map((metric) => [metric, figureOf(timed(metric))]),
     ) as Record<keyof Metrics, Figure>,
+    ...(everyPhase && {
+      phases: Object.fromEntries(
+        phaseOrder.map((phase) => [phase, figureOf(phased(phase))]),
+      ) as Record<keyof Phases, Figure>,
+    }),
   };
 };
 
@@ -280,6 +394,7 @@ const run = async (
       clsScore: metricOf(body, 'cumulative-layout-shift'),
       tbtMs: metricOf(body, 'total-blocking-time'),
     },
+    phases: phasesOf(body),
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
 };
@@ -381,6 +496,8 @@ const measure = async (
 export {
   bounds,
   gap,
+  phaseOrder,
+  phasesOf,
   measure,
   median,
   pause,
@@ -398,6 +515,7 @@ export type {
   Measurement,
   Scores,
   Metrics,
+  Phases,
   Figure,
   Bounds,
   Strategy,
