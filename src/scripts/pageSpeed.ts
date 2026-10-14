@@ -48,6 +48,26 @@ const breakdown = (phases: Record<string, Figure> | undefined): string =>
         .join(', ')}`
     : '';
 
+/* Which element LCP chose, per sitting, with a count when runs disagree. The
+   change from one sitting to the next is the clue, so it is printed even when
+   every run agrees. */
+const chosen = (sittings: (string | null)[][]): string =>
+  '\n    LCP element: ' +
+  sittings
+    .map((runs, index) => {
+      const counts = new Map<string, number>();
+
+      for (const run of runs) {
+        const name = run ?? 'not reported';
+        counts.set(name, (counts.get(name) ?? 0) + 1);
+      }
+
+      return `sitting ${index + 1} ${[...counts]
+        .map(([name, count]) => (count > 1 ? `${name} x${count}` : name))
+        .join(', ')}`;
+    })
+    .join(' | ');
+
 const missing = (why: string | undefined): string =>
   why ? `\n    LCP phases: not reported. The audit held: ${why}` : '';
 
@@ -58,6 +78,7 @@ for (const {
   metrics,
   phases,
   phasesMissing,
+  lcpElements,
 } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
@@ -69,5 +90,6 @@ for (const {
       `CLS ${show(metrics.clsScore, exact)}, ` +
       `TBT ${show(metrics.tbtMs)}ms)` +
       breakdown(phases) +
-      missing(phasesMissing),
+      missing(phasesMissing) +
+      chosen(lcpElements),
   );

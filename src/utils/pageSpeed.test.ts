@@ -1,5 +1,6 @@
 import {
   bounds,
+  elementOf,
   phasesOf,
   shapeOf,
   categories,
@@ -47,7 +48,12 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
                 { subpart: 'elementRenderDelay', duration: 150 },
               ],
             },
-            { snippet: '<img ...>' },
+            {
+              type: 'node',
+              nodeLabel: 'Portrait of Engaging Engineering',
+              selector: 'article.mugshot img',
+              snippet: '<img ...>',
+            },
           ],
         },
       },
@@ -242,6 +248,46 @@ describe('shapeOf', () => {
   it('says so when no audit looks like the right one', () => {
     expect(shapeOf({ lighthouseResult: { audits: { seo: {} } } })).toBe(
       'no audit name matched /contentful|lcp/',
+    );
+  });
+});
+
+describe('elementOf', () => {
+  const audit = (items: unknown[]) => ({
+    lighthouseResult: {
+      audits: { 'lcp-breakdown-insight': { details: { items } } },
+    },
+  });
+
+  it('names the element by its label', () => {
+    expect(
+      elementOf(
+        audit([{ type: 'table' }, { type: 'node', nodeLabel: 'Logo' }]),
+      ),
+    ).toBe('Logo');
+  });
+
+  /* A node with no accessible label still has a selector, which is enough to
+     find it in the page. */
+  it('falls back to the selector', () => {
+    expect(
+      elementOf(
+        audit([{ type: 'node', nodeLabel: '', selector: 'header img' }]),
+      ),
+    ).toBe('header img');
+  });
+
+  it('gives nothing when the audit names no element', () => {
+    expect(elementOf(audit([{ type: 'table' }, null, 'text']))).toBeNull();
+    expect(elementOf({})).toBeNull();
+  });
+
+  /* A paragraph's label is its text, which can run to hundreds of words. */
+  it('keeps a long label short enough to read in a log', () => {
+    const long = 'word '.repeat(80);
+
+    expect(elementOf(audit([{ type: 'node', nodeLabel: long }]))?.length).toBe(
+      120,
     );
   });
 });
@@ -599,6 +645,22 @@ describe('measure', () => {
   /* Unlike a missing score, which is a corrupt measurement. A month without
      the diagnostic is a month without a clue, not a reason to publish
      nothing. */
+  /* LCP is the largest paint, not the first, so the element can change from
+     one run to the next. One name per counted run, one list per sitting, so
+     a change shows up as a change. */
+  it('records which element LCP chose in every counted run', async () => {
+    const { fetcher, wait } = setup();
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.lcpElements).toEqual([
+      Array(3).fill('Portrait of Engaging Engineering'),
+      Array(3).fill('Portrait of Engaging Engineering'),
+    ]);
+  });
+
   it('still measures when the breakdown is missing', async () => {
     const { fetcher, wait } = setup({ omit: 'phases' });
 
