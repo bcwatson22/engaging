@@ -1,6 +1,10 @@
 import {
   bounds,
   elementOf,
+  longTasksOf,
+  rowsOf,
+  windowOf,
+  workOf,
   phasesOf,
   shapeOf,
   categories,
@@ -33,6 +37,30 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
       'largest-contentful-paint': { numericValue: lcpMs },
       'cumulative-layout-shift': { numericValue: 0 },
       'total-blocking-time': { numericValue: 40 },
+      'long-tasks': {
+        details: {
+          items: [
+            {
+              url: 'https://example.com/_next/chunk.js',
+              startTime: 600,
+              duration: 900,
+            },
+            {
+              url: 'https://example.com/other.js',
+              startTime: 100,
+              duration: 80,
+            },
+          ],
+        },
+      },
+      'mainthread-work-breakdown': {
+        details: {
+          items: [
+            { group: 'scriptEvaluation', duration: 1200 },
+            { group: 'styleLayout', duration: 300 },
+          ],
+        },
+      },
       /* As lcp-breakdown-insight returns it: a list whose first entry is
          the subpart table. */
       'lcp-breakdown-insight': {
@@ -72,7 +100,7 @@ type Options = {
   /* What a refused request answers with. Google sends JSON; a proxy or an
      error page does not. */
   errorBody?: string;
-  omit?: 'score' | 'metric' | 'version' | 'phases';
+  omit?: 'score' | 'metric' | 'version' | 'phases' | 'thread';
 };
 
 const setup = ({
@@ -93,6 +121,11 @@ const setup = ({
     if (omit === 'score') delete payload.lighthouseResult.categories;
     if (omit === 'metric') delete payload.lighthouseResult.audits;
     if (omit === 'version') delete payload.lighthouseResult.lighthouseVersion;
+    if (omit === 'thread') {
+      const audits = payload.lighthouseResult.audits as Record<string, unknown>;
+      delete audits['long-tasks'];
+      delete audits['mainthread-work-breakdown'];
+    }
     if (omit === 'phases')
       delete (payload.lighthouseResult.audits as Record<string, unknown>)[
         'lcp-breakdown-insight'
@@ -289,6 +322,102 @@ describe('elementOf', () => {
     expect(elementOf(audit([{ type: 'node', nodeLabel: long }]))?.length).toBe(
       120,
     );
+  });
+});
+
+describe('rowsOf', () => {
+  /* A list of tables and a flat table should read the same. */
+  it('flattens a nested table and passes a flat one through', () => {
+    const nested = {
+      lighthouseResult: {
+        audits: {
+          a: { details: { items: [{ items: [{ x: 1 }, { x: 2 }] }] } },
+        },
+      },
+    };
+    const flat = {
+      lighthouseResult: { audits: { a: { details: { items: [{ x: 1 }] } } } },
+    };
+
+    expect(rowsOf(nested, 'a')).toEqual([{ x: 1 }, { x: 2 }]);
+    expect(rowsOf(flat, 'a')).toEqual([{ x: 1 }]);
+    expect(rowsOf({}, 'a')).toEqual([]);
+  });
+});
+
+describe('longTasksOf', () => {
+  const audit = (items: unknown[]) => ({
+    lighthouseResult: { audits: { 'long-tasks': { details: { items } } } },
+  });
+
+  it('keeps the longest first', () => {
+    const tasks = longTasksOf(
+      audit([
+        { url: 'a.js', startTime: 10, duration: 60 },
+        { url: 'b.js', startTime: 20, duration: 400 },
+      ]),
+    );
+
+    expect(tasks.map(({ url }) => url)).toEqual(['b.js', 'a.js']);
+  });
+
+  /* A task with no attribution is still a task; one with no start time can
+     still be compared on size. Only one with no duration is unusable. */
+  it('tolerates missing attribution and start time, and drops a row with no duration', () => {
+    expect(
+      longTasksOf(
+        audit([{ duration: 70 }, { url: 'x.js', startTime: 5 }, null]),
+      ),
+    ).toEqual([{ url: '', startMs: null, durationMs: 70 }]);
+  });
+
+  it('keeps no more than eight', () => {
+    const many = Array.from({ length: 12 }, (_, index) => ({
+      url: `${index}.js`,
+      startTime: index,
+      duration: 50 + index,
+    }));
+
+    expect(longTasksOf(audit(many))).toHaveLength(8);
+  });
+});
+
+describe('workOf', () => {
+  it('maps each category to its time, and skips rows that are not one', () => {
+    expect(
+      workOf({
+        lighthouseResult: {
+          audits: {
+            'mainthread-work-breakdown': {
+              details: {
+                items: [
+                  { group: 'scriptEvaluation', duration: 900 },
+                  { group: 'other' },
+                  { duration: 40 },
+                ],
+              },
+            },
+          },
+        },
+      }),
+    ).toEqual({ scriptEvaluation: 900 });
+  });
+});
+
+describe('windowOf', () => {
+  it('spans from the element arriving to it being painted', () => {
+    expect(
+      windowOf({
+        ttfbMs: 10,
+        loadDelayMs: 300,
+        loadDurationMs: 90,
+        renderDelayMs: 1000,
+      }),
+    ).toEqual([400, 1400]);
+  });
+
+  it('is absent without a breakdown', () => {
+    expect(windowOf(null)).toBeNull();
   });
 });
 
@@ -659,6 +788,45 @@ describe('measure', () => {
       Array(3).fill('Portrait of Engaging Engineering'),
       Array(3).fill('Portrait of Engaging Engineering'),
     ]);
+  });
+
+  /* The question this exists to answer: in a slow sitting, did a long task
+     from the page's own script land inside the wait between the LCP element
+     arriving and being painted. The window and the tasks travel together. */
+  it('records the main thread beside the LCP wait, per run', async () => {
+    const { fetcher, wait } = setup();
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+    const [first] = home?.mainThread[0] ?? [];
+
+    expect(home?.mainThread).toHaveLength(2);
+    expect(home?.mainThread[1]).toHaveLength(3);
+    expect(first?.window).toEqual([550, 700]);
+    expect(first?.longTasks[0]).toEqual({
+      url: 'https://example.com/_next/chunk.js',
+      startMs: 600,
+      durationMs: 900,
+    });
+    expect(first?.work).toEqual({ scriptEvaluation: 1200, styleLayout: 300 });
+    expect(home?.mainThreadMissing).toBeUndefined();
+  });
+
+  /* The readers were written from memory, as three before them were and got
+     wrong. When they find nothing, the measurement says what was there. */
+  it('records the raw audits when the main thread cannot be read', async () => {
+    const { fetcher, wait } = setup({ omit: 'thread' });
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.mainThread[0]?.[0]?.longTasks).toEqual([]);
+    expect(home?.mainThreadMissing).toContain('long-tasks: null');
+    expect(home?.mainThreadMissing).toContain(
+      'mainthread-work-breakdown: null',
+    );
   });
 
   it('still measures when the breakdown is missing', async () => {

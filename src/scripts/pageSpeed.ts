@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 
 import { measure, phaseOrder } from '../utils/pageSpeed.ts';
-import type { Figure } from '../utils/pageSpeed.ts';
+import type { Figure, MainThread } from '../utils/pageSpeed.ts';
 
 /* Entry point for the monthly routine in .github/workflows/pageSpeed.yml. The
    measuring lives in utils, where it is tested; this only reads the
@@ -68,6 +68,43 @@ const chosen = (sittings: (string | null)[][]): string =>
     })
     .join(' | ');
 
+/* One line per counted run: the stretch where the LCP element had arrived and
+   was waiting to paint, the longest task and whether it fell inside that
+   stretch, and the two largest categories of main-thread work. The top two by
+   size rather than named categories, because the names are Lighthouse's and
+   this file has guessed Lighthouse's shapes wrong three times. */
+const ms = (value: number): string => `${Math.round(value)}ms`;
+
+const overlaps = (
+  { startMs, durationMs }: MainThread['longTasks'][number],
+  [from, to]: [number, number],
+): boolean => startMs !== null && startMs < to && startMs + durationMs > from;
+
+const thread = (sittings: MainThread[][]): string =>
+  sittings
+    .flatMap((runs, sitting) =>
+      runs.map(({ window, longTasks, work }, run) => {
+        const longest = longTasks[0];
+        const waiting = window
+          ? `waiting ${ms(window[0])}-${ms(window[1])}`
+          : 'no wait recorded';
+        const task = longest
+          ? `longest task ${ms(longest.durationMs)}` +
+            (longest.startMs === null ? '' : ` at ${ms(longest.startMs)}`) +
+            ` from ${longest.url.split('/').pop() || 'unattributed'}` +
+            (window && overlaps(longest, window) ? ', INSIDE the wait' : '')
+          : 'no long tasks';
+        const top = Object.entries(work)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 2)
+          .map(([group, value]) => `${group} ${ms(value)}`)
+          .join(', ');
+
+        return `\n    sitting ${sitting + 1} run ${run + 1}: ${waiting}; ${task}; ${top || 'no work breakdown'}`;
+      }),
+    )
+    .join('');
+
 const missing = (why: string | undefined): string =>
   why ? `\n    LCP phases: not reported. The audit held: ${why}` : '';
 
@@ -79,6 +116,8 @@ for (const {
   phases,
   phasesMissing,
   lcpElements,
+  mainThread,
+  mainThreadMissing,
 } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
@@ -91,5 +130,9 @@ for (const {
       `TBT ${show(metrics.tbtMs)}ms)` +
       breakdown(phases) +
       missing(phasesMissing) +
-      chosen(lcpElements),
+      chosen(lcpElements) +
+      thread(mainThread) +
+      (mainThreadMissing
+        ? `\n    main thread: not reported. The audits held: ${mainThreadMissing}`
+        : ''),
   );
