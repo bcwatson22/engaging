@@ -165,6 +165,11 @@ type Measurement = {
      rather than a single name because it can change from run to run, and the
      change is the thing being looked for. */
   lcpElements: (string | null)[][];
+  /* Per sitting, per counted run, so a slow sitting can be laid beside a
+     fast one task by task. */
+  mainThread: MainThread[][];
+  /* When no run could read the main-thread audits, what they held instead. */
+  mainThreadMissing?: string;
 };
 
 type Report = {
@@ -286,24 +291,24 @@ const shapeOf = (response: Response): string => {
    every other reader here. A score that goes missing is a corrupt
    measurement and has to stop the run; a diagnostic that goes missing is a
    month without a clue, which is worth a quiet note and nothing more. */
-const phasesOf = (response: Response): Phases | null => {
-  /* The audit returns a list of tables, and the phases are a table nested
-     inside one of them. Flattened one level so the reader does not care
-     which position it arrives in. */
-  const flatten = (item: unknown): unknown[] => {
-    if (!isRow(item)) return [item];
+/* An audit's rows, flattened one level. Lighthouse returns some details as a
+   list of tables and some as a table, and the readers here should not care
+   which: a nested table's rows and a flat table's rows come out the same. */
+const flatten = (item: unknown): unknown[] => {
+  if (!isRow(item)) return [item];
 
-    const { items } = item as { items?: unknown[] };
+  const { items } = item as { items?: unknown[] };
 
-    return Array.isArray(items) ? items : [item];
-  };
+  return Array.isArray(items) ? items : [item];
+};
 
-  const rows = (
-    response.lighthouseResult?.audits?.['lcp-breakdown-insight']?.details
-      ?.items ?? []
-  )
+const rowsOf = (response: Response, audit: string): Record<string, unknown>[] =>
+  (response.lighthouseResult?.audits?.[audit]?.details?.items ?? [])
     .flatMap(flatten)
-    .filter(isRow);
+    .filter(isRow) as Record<string, unknown>[];
+
+const phasesOf = (response: Response): Phases | null => {
+  const rows = rowsOf(response, 'lcp-breakdown-insight');
 
   const found = Object.entries(phaseSubparts).map(([name, subpart]) => {
     const row = rows.find((candidate) => candidate.subpart === subpart);
@@ -319,6 +324,93 @@ const phasesOf = (response: Response): Phases | null => {
   return Object.fromEntries(found) as unknown as Phases;
 };
 
+/* What the main thread was doing, recorded because the remaining question
+   about the LCP spikes is whether the paint waits on this page's own work or
+   on PageSpeed's machine being busy for that one request. The element is in
+   the initial HTML, visible and downloaded, and still takes up to two
+   seconds to paint on mobile; a long task from the site's own script landing
+   inside that wait would name the cause, and its absence would point away
+   from the site altogether.
+
+   Read tolerantly and backed by the raw audit, because the last three
+   readers written from memory of Lighthouse's shapes were wrong on their
+   first live run. */
+type LongTask = { url: string; startMs: number | null; durationMs: number };
+
+/* Enough to see what dominates without carrying every task of every run. */
+const keep = 8;
+
+const longTasksOf = (response: Response): LongTask[] =>
+  rowsOf(response, 'long-tasks')
+    .flatMap(({ url, startTime, duration }) =>
+      typeof duration === 'number'
+        ? [
+            {
+              url: typeof url === 'string' ? url : '',
+              startMs: typeof startTime === 'number' ? startTime : null,
+              durationMs: duration,
+            },
+          ]
+        : [],
+    )
+    .sort((a, b) => b.durationMs - a.durationMs)
+    .slice(0, keep);
+
+/* Main-thread time by category: script evaluation, style and layout,
+   painting, parsing, garbage collection. Whether a slow run spent its extra
+   time in this page's script or spread evenly across everything is the
+   difference between a fixable page and a busy host. */
+const workOf = (response: Response): Record<string, number> =>
+  Object.fromEntries(
+    rowsOf(response, 'mainthread-work-breakdown').flatMap(
+      ({ group, duration }) =>
+        typeof group === 'string' && typeof duration === 'number'
+          ? [[group, duration]]
+          : [],
+    ),
+  );
+
+/* The stretch of the load where the element had arrived and was waiting to
+   paint, in the same observed timeline the long tasks are reported in. */
+const windowOf = (phases: Phases | null): [number, number] | null => {
+  if (!phases) return null;
+
+  const start = phases.ttfbMs + phases.loadDelayMs + phases.loadDurationMs;
+
+  return [start, start + phases.renderDelayMs];
+};
+
+const mainThreadAudits = ['long-tasks', 'mainthread-work-breakdown'];
+
+const rawOf = (response: Response, audits: string[]): string =>
+  audits
+    .map(
+      (audit) =>
+        `${audit}: ${JSON.stringify(response.lighthouseResult?.audits?.[audit]?.details ?? null).slice(0, sample)}`,
+    )
+    .join('\n');
+
+type MainThread = {
+  window: [number, number] | null;
+  longTasks: LongTask[];
+  work: Record<string, number>;
+};
+
+const mainThreadOf = (
+  response: Response,
+): { mainThread: MainThread; mainThreadShape: string | null } => {
+  const longTasks = longTasksOf(response);
+  const work = workOf(response);
+
+  return {
+    mainThread: { window: windowOf(phasesOf(response)), longTasks, work },
+    mainThreadShape:
+      longTasks.length === 0 && Object.keys(work).length === 0
+        ? rawOf(response, mainThreadAudits)
+        : null,
+  };
+};
+
 const median = (values: number[]): number =>
   [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]!;
 
@@ -332,6 +424,9 @@ type Run = {
   metrics: Metrics;
   phases: Phases | null;
   element: string | null;
+  mainThread: MainThread;
+  /* Only set when neither main-thread reader found anything, to say why. */
+  mainThreadShape: string | null;
   /* Only set when phases is null, and only to say why. */
   shape: string | null;
   version: string;
@@ -370,6 +465,9 @@ const summarise = (
   /* One entry per run that could not read the breakdown, so the two branches
      below come from the same fact rather than two tests of it. */
   const unread = perSitting.flat().flatMap(({ shape }) => shape ?? []);
+  const threadUnread = perSitting
+    .flat()
+    .flatMap(({ mainThreadShape }) => mainThreadShape ?? []);
 
   const phased = (phase: keyof Phases): number[][] =>
     perSitting.map((results) => results.map(({ phases }) => phases![phase]));
@@ -386,6 +484,10 @@ const summarise = (
     lcpElements: perSitting.map((results) =>
       results.map(({ element }) => element),
     ),
+    mainThread: perSitting.map((results) =>
+      results.map(({ mainThread }) => mainThread),
+    ),
+    ...(threadUnread.length > 0 && { mainThreadMissing: threadUnread[0]! }),
     ...(unread.length === 0
       ? {
           phases: Object.fromEntries(
@@ -463,6 +565,7 @@ const run = async (
     },
     phases: phasesOf(body),
     element: elementOf(body),
+    ...mainThreadOf(body),
     shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
@@ -566,6 +669,10 @@ export {
   bounds,
   gap,
   elementOf,
+  longTasksOf,
+  rowsOf,
+  windowOf,
+  workOf,
   phaseOrder,
   phasesOf,
   shapeOf,
@@ -587,6 +694,8 @@ export type {
   Scores,
   Metrics,
   Phases,
+  LongTask,
+  MainThread,
   Figure,
   Bounds,
   Strategy,
