@@ -161,6 +161,10 @@ type Measurement = {
   /* And when they are absent, what was there instead - so the next run
      answers the question rather than repeating it. */
   phasesMissing?: string;
+  /* The element LCP chose in each counted run, one list per sitting. A list
+     rather than a single name because it can change from run to run, and the
+     change is the thing being looked for. */
+  lcpElements: (string | null)[][];
 };
 
 type Report = {
@@ -227,6 +231,33 @@ type PhaseRow = { subpart?: unknown; duration?: unknown };
 
 const isRow = (row: unknown): row is PhaseRow =>
   typeof row === 'object' && row !== null;
+
+/* Which element LCP settled on, as the breakdown audit names it beside its
+   table. Recorded because LCP is the largest contentful paint, not the first:
+   if a bigger element appears late, LCP moves to it and takes its paint time.
+   On CV mobile the render delay spiked to 1.1s in one sitting before and
+   after #100 removed the page-level boundary, and the question is whether
+   that sitting was still measuring the logo or something larger revealed
+   after it. */
+const label = 120;
+
+type NodeRow = { type?: unknown; nodeLabel?: unknown; selector?: unknown };
+
+const elementOf = (response: Response): string | null => {
+  const items =
+    response.lighthouseResult?.audits?.['lcp-breakdown-insight']?.details
+      ?.items ?? [];
+
+  const node = items.find(
+    (item): item is NodeRow => isRow(item) && (item as NodeRow).type === 'node',
+  );
+
+  const name = [node?.nodeLabel, node?.selector].find(
+    (value): value is string => typeof value === 'string' && value !== '',
+  );
+
+  return name ? name.slice(0, label) : null;
+};
 
 /* Enough of the audit to recognise its shape, when the reader found nothing
    in it. The first attempt at phasesOf guessed the shape from memory and came
@@ -300,6 +331,7 @@ type Run = {
   scores: Scores;
   metrics: Metrics;
   phases: Phases | null;
+  element: string | null;
   /* Only set when phases is null, and only to say why. */
   shape: string | null;
   version: string;
@@ -351,6 +383,9 @@ const summarise = (
     metrics: Object.fromEntries(
       metricNames.map((metric) => [metric, figureOf(timed(metric))]),
     ) as Record<keyof Metrics, Figure>,
+    lcpElements: perSitting.map((results) =>
+      results.map(({ element }) => element),
+    ),
     ...(unread.length === 0
       ? {
           phases: Object.fromEntries(
@@ -427,6 +462,7 @@ const run = async (
       tbtMs: metricOf(body, 'total-blocking-time'),
     },
     phases: phasesOf(body),
+    element: elementOf(body),
     shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
@@ -529,6 +565,7 @@ const measure = async (
 export {
   bounds,
   gap,
+  elementOf,
   phaseOrder,
   phasesOf,
   shapeOf,
