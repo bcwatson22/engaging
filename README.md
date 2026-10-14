@@ -5,7 +5,7 @@
 
 This is a project created with [Next](https://nextjs.org/), [Node](https://nodejs.org/en), [GraphQL](https://graphql.org/), [Vitest](https://vitest.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind](https://tailwindcss.com/) and [Motion](https://motion.dev/) - powered by [Hygraph](https://hygraph.com/), deployed and hosted with [Vercel](https://vercel.com/). Linting and formatting run on [oxlint and oxfmt](https://oxc.rs/). The [Home page](https://www.engaging.engineering/) showcases technologies and expertise offered by Engaging Engineering, the [CV page](https://www.engaging.engineering/cv) is an interactive overview of Billy Watson's vast range of skills and experience, and there is a [Contact page](https://www.engaging.engineering/contact), a [Motes](https://www.engaging.engineering/motes) demo of the WebAssembly particle field behind the Home page, and a [Status page](https://www.engaging.engineering/status) for the render pipeline.
 
-The browser-rendered artifacts the site links to — the CV PDF and the PWA splash screens — are produced by [engaging-worker](https://github.com/bcwatson22/engaging-worker) rather than at build time. [engaging-service](https://github.com/bcwatson22/engaging-service) sits in front of it, queueing those renders and answering the contact form and the status page.
+The browser-rendered artifacts the site links to - the CV PDF and the PWA splash screens - are produced by [engaging-worker](https://github.com/bcwatson22/engaging-worker) rather than at build time. [engaging-service](https://github.com/bcwatson22/engaging-service) sits in front of it, queueing those renders and answering the contact form and the status page.
 
 To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pnpm.io/) package manager installed you can do this with `npm i -g pnpm`) and then `pnpm dev` to spin up the dev server.
 
@@ -15,20 +15,20 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) — mobile | 97          | 100           | 100            | 100 |
-| Home — desktop                                     | 100         | 100           | 100            | 100 |
-| [CV](https://www.engaging.engineering/cv) — mobile | 99          | 100           | 100            | 100 |
-| CV — desktop                                       | 100         | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) - mobile | 97          | 100           | 100            | 100 |
+| Home - desktop                                     | 100         | 100           | 100            | 100 |
+| [CV](https://www.engaging.engineering/cv) - mobile | 99          | 100           | 100            | 100 |
+| CV - desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
 4G, and it is what Google ranks on. Largest Contentful Paint is still the only
-metric not at full marks there — 2.6s on Home, 2.0s on the CV — with everything
+metric not at full marks there - 2.6s on Home, 2.0s on the CV - with everything
 else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
 20ms).
 
 Each figure is the median of three runs, taken after one discarded warm-up run
 per page. A single run moves by a point or two either way, which is wide enough
-to invent an improvement that is not there — and the warm-up matters more than
+to invent an improvement that is not there - and the warm-up matters more than
 that: the LCP element is an image served through `/_next/image`, which took
 311ms against a cold edge cache and about 20ms against a warm one. Six
 measurements of unchanged code once ranged from 90 to 100 on that alone.
@@ -57,7 +57,7 @@ These are lab numbers. Field data needs enough real traffic for the Chrome UX
 Report to have a sample, and this domain does not have it, so there is nothing
 to publish there yet.
 
-Run it yourself with the link above rather than taking these on trust — and note
+Run it yourself with the link above rather than taking these on trust - and note
 Chrome's own Lighthouse tab will disagree, mostly because it runs on your machine
 and inside your extensions. PageSpeed Insights is the reproducible one.
 
@@ -65,7 +65,7 @@ and inside your extensions. PageSpeed Insights is the reproducible one.
 
 Two routines run monthly in GitHub Actions, and both open a pull request rather
 than changing anything themselves. Each splits the work the same way: a script
-does what can be decided — measuring, taking a median, reading version numbers —
+does what can be decided - measuring, taking a median, reading version numbers -
 and Claude does the part that needs judgement, then explains it in the PR.
 
 **PageSpeed** (`.github/workflows/pageSpeed.yml`, the 1st of each month) measures
@@ -104,7 +104,7 @@ measurements taken far enough apart to be separate questions.
 **Dependencies** (`.github/workflows/dependencies.yml`, the 2nd) raises every
 patch and minor version, runs `pnpm verify`, and opens a PR if it passes. If it
 fails, Claude finds the package that broke it, drops that one, and ships the
-rest with the error that caused it — the first month's run would have dropped
+rest with the error that caused it - the first month's run would have dropped
 jsdom 30.1.0 for exactly this. It may only edit `package.json` and the lockfile, and a check after it enforces
 that: a branch that changes anything else is closed and the run fails.
 
@@ -116,7 +116,7 @@ one on when asked by name:
 gh workflow run dependencyMajor.yml -f packages="vitest,@vitest/coverage-istanbul"
 ```
 
-That one may change code, because a major usually needs it — under a rule
+That one may change code, because a major usually needs it - under a rule
 against weakening any check to reach green. If the only way through is a lower
 threshold or a skipped test, it opens no PR and explains why instead.
 
