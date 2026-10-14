@@ -4,7 +4,7 @@ import { Details } from '@/components/molecules/Details/Details';
 import { Technology } from '@/components/molecules/Technology/Technology';
 import { mockHome } from '@/data/mock/home';
 
-import { Mugshot, MugshotSkeleton, type MugshotProps } from './Mugshot';
+import { Mugshot, type MugshotProps } from './Mugshot';
 
 vi.mock(
   import('@/components/molecules/Details/Details'),
@@ -107,39 +107,5 @@ describe('Mugshot', () => {
 
       expect(Technology).toHaveBeenCalledTimes(technologies.length);
     });
-  });
-});
-
-describe('MugshotSkeleton', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    cleanup();
-  });
-
-  it('renders a skeleton state', () => {
-    const { container } = render(<MugshotSkeleton />);
-
-    const numOfPulses = 13;
-
-    expect(
-      container.querySelectorAll('.skeleton[aria-hidden="true"]'),
-    ).toHaveLength(numOfPulses);
-  });
-
-  it('announces that it is loading', () => {
-    render(<MugshotSkeleton />);
-
-    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
-  });
-
-  it('renders the same wrapper as Mugshot', () => {
-    render(<MugshotSkeleton />);
-
-    const { className: skeleton } = screen.getByRole('article');
-
-    cleanup();
-    setup();
-
-    expect(screen.getByRole('article')).toHaveClass(skeleton, { exact: true });
   });
 });

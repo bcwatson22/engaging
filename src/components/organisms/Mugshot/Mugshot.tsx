@@ -1,12 +1,8 @@
 import Image from 'next/image';
 
 import type { Link } from '@/components/atoms/Link/Link';
-import { Skeleton, SkeletonStatus } from '@/components/atoms/Skeleton/Skeleton';
 import { Details } from '@/components/molecules/Details/Details';
-import {
-  Technology,
-  TechnologySkeleton,
-} from '@/components/molecules/Technology/Technology';
+import { Technology } from '@/components/molecules/Technology/Technology';
 import { mugshotDimensions } from '@/constants/dimensions';
 
 import { Reveal } from './Reveal';
@@ -23,20 +19,6 @@ type Props = {
   mugshot: Mugshot;
   technologies: Technology[];
 };
-
-const MugshotSkeleton = () => (
-  <article className="mugshot">
-    <SkeletonStatus />
-    <Skeleton className="overview rounded-full" />
-    <ul className="technologies loading">
-      {[...Array(12).keys()].map((key) => (
-        <li key={key}>
-          <TechnologySkeleton />
-        </li>
-      ))}
-    </ul>
-  </article>
-);
 
 const { width, height } = mugshotDimensions;
 
@@ -77,5 +59,5 @@ const Mugshot = ({
   </article>
 );
 
-export { Mugshot, MugshotSkeleton };
+export { Mugshot };
 export type { Props as MugshotProps };
