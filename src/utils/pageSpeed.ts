@@ -636,6 +636,21 @@ const pairs = pages.flatMap((page) =>
   strategies.map((strategy) => ({ ...page, strategy })),
 );
 
+type Fresh = (url: string) => string;
+
+/* PageSpeed hands back its earlier report when asked about the same URL again
+   soon after. Run 38697615689 had runs two and three of a sitting agree to the
+   millisecond, host benchmark included, so one slow load counted twice and
+   made a whole sitting look slow. A query string nothing on the site reads
+   makes every request a URL it hasn't seen. Vercel serves the same cached page
+   whatever the query, so a fresh report doesn't mean a cold document. */
+const freshener = (): Fresh => {
+  const stamp = Date.now().toString(36);
+  let request = 0;
+
+  return (url) => `${url}?pagespeed=${stamp}-${request++}`;
+};
+
 /* One sitting: a discarded warm-up then the runs that count, for each pair.
 
    One request at a time. Sixteen runs take minutes and nothing is waiting on
@@ -646,6 +661,7 @@ const sit = async (
   key: string | undefined,
   fetcher: Fetch,
   wait: Wait,
+  fresh: Fresh,
 ): Promise<Run[][]> => {
   const sitting: Run[][] = [];
 
@@ -654,10 +670,10 @@ const sit = async (
     const url = `${siteUrl}${path}`;
 
     for (let warmUp = 0; warmUp < warmUps; warmUp++)
-      await attempted(url, strategy, key, fetcher, wait);
+      await attempted(fresh(url), strategy, key, fetcher, wait);
 
     for (let attempt = 0; attempt < runs; attempt++)
-      results.push(await attempted(url, strategy, key, fetcher, wait));
+      results.push(await attempted(fresh(url), strategy, key, fetcher, wait));
 
     sitting.push(results);
   }
@@ -672,12 +688,13 @@ const measure = async (
   wait: Wait = pause,
 ): Promise<Report> => {
   const taken: Run[][][] = [];
+  const fresh = freshener();
 
   for (let sitting = 0; sitting < sittings; sitting++) {
     /* Before the second and any after it, never before the first. */
     if (sitting) await wait(gap);
 
-    taken.push(await sit(siteUrl, key, fetcher, wait));
+    taken.push(await sit(siteUrl, key, fetcher, wait, fresh));
   }
 
   return {

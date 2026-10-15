@@ -539,6 +539,27 @@ describe('measure', () => {
     expect(home?.scores.performance.sittings[0]).toBe(97);
   });
 
+  /* PageSpeed returns a cached report for a URL it was just asked about, which
+     is how one slow load once filled two runs of the same sitting. */
+  it('asks about a page URL it has not asked about before, every time', async () => {
+    const { fetcher, wait } = setup();
+
+    await measure('https://example.com', undefined, fetcher, wait);
+
+    const asked = fetcher.mock.calls.map(([request]) =>
+      new URL(request as string).searchParams.get('url'),
+    );
+
+    expect(new Set(asked).size).toBe(32);
+    expect(
+      asked.every((url) =>
+        /^https:\/\/example\.com(\/|\/cv)\?pagespeed=[0-9a-z]+-\d+$/.test(
+          url ?? '',
+        ),
+      ),
+    ).toBe(true);
+  });
+
   /* Two sittings of four pairs, each a discarded warm-up plus three counted. */
   it('runs three times per page and strategy, twice, after a warm-up', async () => {
     const { fetcher, wait } = setup();
