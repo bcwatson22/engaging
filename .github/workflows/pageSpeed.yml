@@ -105,6 +105,19 @@ jobs:
             If that file is missing or unreadable, stop and say so. Do not
             infer the rules from this prompt or from the README.
 
+      # The agent's own transcript. On 2026-10-15 a run ran out of turns after
+      # eight refused commands and opened no PR, and with the transcript
+      # gone the cause had to be inferred from a stale branch. Kept briefly:
+      # it is for diagnosing a run, not a record.
+      - name: Keep the agent's log
+        if: ${{ always() && !inputs.measureOnly }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: pageSpeed-agent-log
+          path: ${{ runner.temp }}/claude-execution-output.json
+          if-no-files-found: ignore
+          retention-days: 14
+
       # Claude's own output is hidden by the action, and two of the three
       # outcomes open no PR, so without this a held or unconfirmed month leaves
       # nothing anybody can read. Same mechanism as dependencyMajor.yml.
