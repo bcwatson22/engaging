@@ -120,7 +120,8 @@ job.
 
 ## Every outcome: write the report
 
-Before you finish, write what you found to `$RUNNER_TEMP/report.md`: the
+Before you finish, write what you found to `$RUNNER_TEMP/report.md`, using
+the full path the workflow's prompt gives you: the
 outcome, each figure that moved, by how much, and its spread this run. A step
 after yours puts that file in the run summary, and for Held and Unconfirmed it
 is the only place your reasoning survives — this action hides its own output,
@@ -164,10 +165,10 @@ how it gets corrected.
 - Commit on a branch named `chore/page-speed-<yyyy-mm-dd>`, dated from
   `measuredAt`, and open a PR with `gh pr create --assignee bcwatson22`, so it
   reaches the one person who reviews it whatever their watch settings say.
-  - If the push or the PR is refused, stop there and put the error in the
-    report. Never force-push, and never reuse or work around a branch that is
-    already there: someone else's branch is not yours to overwrite, and the
-    turns spent trying are turns the report needed.
+  - Don't check whether the branch exists first: push, and if the push or
+    the PR is refused, stop there and put the error in the report. Never
+    force-push, and never reuse or work around a branch that is already
+    there.
   - Title: `docs: refresh the PageSpeed table for <Month Year>`.
   - Body: what moved, by how much, in which direction, **and both sittings
     plus the range behind each figure you are claiming moved**. Then your
@@ -179,6 +180,13 @@ how it gets corrected.
     in a repo whose PR bodies are prose.
 
 ## Always
+
+Your shell is limited to `git checkout`, `git add`, `git commit`, `git push`,
+`gh pr create` and `gh pr edit`. Anything else - printing the environment,
+listing remotes or branches, `gh api`, `gh auth`, python - is refused, and
+every refusal spends one of a fixed budget of turns. Two runs have run out of
+turns that way before writing a report. Read files with the Read tool, and
+don't look anything up that this file or the prompt already tells you.
 
 You are measuring a live site you did not deploy, so never change application
 code, and never present a regression as an improvement.
