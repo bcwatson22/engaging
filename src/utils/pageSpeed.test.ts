@@ -1,6 +1,7 @@
 import {
   bounds,
   elementOf,
+  hostOf,
   longTasksOf,
   rowsOf,
   windowOf,
@@ -27,6 +28,10 @@ type RunValues = {
 const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
   lighthouseResult: {
     lighthouseVersion: '13.4.1',
+    environment: { benchmarkIndex: 1540 },
+    runWarnings: [
+      'The tested device appears to have a slower CPU than expected.',
+    ],
     categories: {
       performance: { score: performance },
       accessibility: { score: 1 },
@@ -418,6 +423,29 @@ describe('windowOf', () => {
 
   it('is absent without a breakdown', () => {
     expect(windowOf(null)).toBeNull();
+  });
+});
+
+describe('hostOf', () => {
+  it('reads the benchmark and the warnings', () => {
+    expect(
+      hostOf({
+        lighthouseResult: {
+          environment: { benchmarkIndex: 3900 },
+          runWarnings: ['slow CPU', 42, null],
+        },
+      }),
+    ).toEqual({ benchmark: 3900, warnings: ['slow CPU'] });
+  });
+
+  /* An unbenchmarked run is reported as such, not as a fast or slow one. */
+  it('leaves the benchmark empty when Lighthouse did not record one', () => {
+    expect(hostOf({})).toEqual({ benchmark: null, warnings: [] });
+    expect(
+      hostOf({
+        lighthouseResult: { environment: { benchmarkIndex: undefined } },
+      }),
+    ).toEqual({ benchmark: null, warnings: [] });
   });
 });
 
@@ -815,6 +843,24 @@ describe('measure', () => {
 
   /* The readers were written from memory, as three before them were and got
      wrong. When they find nothing, the measurement says what was there. */
+  /* Whether the slow sittings ran on slow machines is the question this
+     answers, so the host travels per run beside everything else. */
+  it('records the host each run used', async () => {
+    const { fetcher, wait } = setup();
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.hosts).toHaveLength(2);
+    expect(home?.hosts[1]?.[2]).toEqual({
+      benchmark: 1540,
+      warnings: [
+        'The tested device appears to have a slower CPU than expected.',
+      ],
+    });
+  });
+
   it('records the raw audits when the main thread cannot be read', async () => {
     const { fetcher, wait } = setup({ omit: 'thread' });
 

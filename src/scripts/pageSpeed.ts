@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 
 import { measure, phaseOrder } from '../utils/pageSpeed.ts';
-import type { Figure, MainThread } from '../utils/pageSpeed.ts';
+import type { Figure, Host, MainThread } from '../utils/pageSpeed.ts';
 
 /* Entry point for the monthly routine in .github/workflows/pageSpeed.yml. The
    measuring lives in utils, where it is tested; this only reads the
@@ -80,7 +80,18 @@ const overlaps = (
   [from, to]: [number, number],
 ): boolean => startMs !== null && startMs < to && startMs + durationMs > from;
 
-const thread = (sittings: MainThread[][]): string =>
+const host = (
+  { benchmark, warnings }: Host | undefined = {
+    benchmark: null,
+    warnings: [],
+  },
+): string =>
+  `host ${benchmark === null ? 'unbenchmarked' : Math.round(benchmark)}` +
+  (warnings.length > 0
+    ? `, ${warnings.length} warning(s): ${warnings.join(' / ').slice(0, 160)}`
+    : '');
+
+const thread = (sittings: MainThread[][], hosts: Host[][]): string =>
   sittings
     .flatMap((runs, sitting) =>
       runs.map(({ window, longTasks, work }, run) => {
@@ -100,7 +111,7 @@ const thread = (sittings: MainThread[][]): string =>
           .map(([group, value]) => `${group} ${ms(value)}`)
           .join(', ');
 
-        return `\n    sitting ${sitting + 1} run ${run + 1}: ${waiting}; ${task}; ${top || 'no work breakdown'}`;
+        return `\n    sitting ${sitting + 1} run ${run + 1}: ${host(hosts[sitting]?.[run])}; ${waiting}; ${task}; ${top || 'no work breakdown'}`;
       }),
     )
     .join('');
@@ -118,6 +129,7 @@ for (const {
   lcpElements,
   mainThread,
   mainThreadMissing,
+  hosts,
 } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
@@ -131,7 +143,7 @@ for (const {
       breakdown(phases) +
       missing(phasesMissing) +
       chosen(lcpElements) +
-      thread(mainThread) +
+      thread(mainThread, hosts) +
       (mainThreadMissing
         ? `\n    main thread: not reported. The audits held: ${mainThreadMissing}`
         : ''),

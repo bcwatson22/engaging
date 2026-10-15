@@ -93,6 +93,10 @@ type PageName = (typeof pages)[number]['name'];
 type Response = {
   lighthouseResult?: {
     lighthouseVersion?: string;
+    /* How fast the machine that ran the test was, by Lighthouse's own CPU
+       benchmark, and anything it noticed was wrong with the run. */
+    environment?: { benchmarkIndex?: number };
+    runWarnings?: unknown[];
     categories?: Record<string, { score?: number | null } | undefined>;
     audits?: Record<
       string,
@@ -168,6 +172,8 @@ type Measurement = {
   /* Per sitting, per counted run, so a slow sitting can be laid beside a
      fast one task by task. */
   mainThread: MainThread[][];
+  /* Per sitting, per counted run, beside the main thread it ran. */
+  hosts: Host[][];
   /* When no run could read the main-thread audits, what they held instead. */
   mainThreadMissing?: string;
 };
@@ -390,6 +396,30 @@ const rawOf = (response: Response, audits: string[]): string =>
     )
     .join('\n');
 
+/* The machine Lighthouse ran on, as Lighthouse measured it.
+
+   Nine local runs of Lighthouse 13.5.0 against the live site, with the same
+   mobile emulation and throttling simulation PageSpeed uses, scored 99 every
+   time with a render delay under 45ms, on a host benchmarking about 3,900.
+   PageSpeed's slow sittings hold the paint for one to two seconds while the
+   main thread sits idle - which is what starved compositor and raster
+   threads look like, since they do the painting and never appear among the
+   long tasks. If those sittings ran on hosts that benchmark low, or carry
+   Lighthouse's slow-CPU warning, the variance belongs to PageSpeed's lab and
+   not to this page. */
+type Host = { benchmark: number | null; warnings: string[] };
+
+const hostOf = (response: Response): Host => {
+  const benchmark = response.lighthouseResult?.environment?.benchmarkIndex;
+
+  return {
+    benchmark: typeof benchmark === 'number' ? benchmark : null,
+    warnings: (response.lighthouseResult?.runWarnings ?? []).filter(
+      (warning): warning is string => typeof warning === 'string',
+    ),
+  };
+};
+
 type MainThread = {
   window: [number, number] | null;
   longTasks: LongTask[];
@@ -424,6 +454,7 @@ type Run = {
   metrics: Metrics;
   phases: Phases | null;
   element: string | null;
+  host: Host;
   mainThread: MainThread;
   /* Only set when neither main-thread reader found anything, to say why. */
   mainThreadShape: string | null;
@@ -487,6 +518,7 @@ const summarise = (
     mainThread: perSitting.map((results) =>
       results.map(({ mainThread }) => mainThread),
     ),
+    hosts: perSitting.map((results) => results.map(({ host }) => host)),
     ...(threadUnread.length > 0 && { mainThreadMissing: threadUnread[0]! }),
     ...(unread.length === 0
       ? {
@@ -565,6 +597,7 @@ const run = async (
     },
     phases: phasesOf(body),
     element: elementOf(body),
+    host: hostOf(body),
     ...mainThreadOf(body),
     shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
@@ -669,6 +702,7 @@ export {
   bounds,
   gap,
   elementOf,
+  hostOf,
   longTasksOf,
   rowsOf,
   windowOf,
@@ -696,6 +730,7 @@ export type {
   Phases,
   LongTask,
   MainThread,
+  Host,
   Figure,
   Bounds,
   Strategy,
