@@ -1,7 +1,10 @@
 import {
   bounds,
   elementOf,
+  framesOf,
   hostOf,
+  lateOf,
+  paintsOf,
   longTasksOf,
   rowsOf,
   windowOf,
@@ -66,6 +69,39 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
           ],
         },
       },
+      metrics: {
+        details: {
+          items: [
+            {
+              firstContentfulPaint: 1800,
+              observedFirstContentfulPaint: 400,
+              observedFirstContentfulPaintTs: 123_456_789,
+              observedLargestContentfulPaint: 2100,
+              observedDomContentLoaded: 380,
+            },
+          ],
+        },
+      },
+      'screenshot-thumbnails': {
+        details: {
+          items: [
+            { timing: 300, data: 'AAAA' },
+            { timing: 2400, data: 'AAAABBBB' },
+          ],
+        },
+      },
+      'network-requests': {
+        details: {
+          items: [
+            { url: 'https://example.com/', rendererStartTime: 0 },
+            {
+              url: 'https://example.com/_next/static/chunks/motes.js?v=1',
+              rendererStartTime: 2050,
+              networkEndTime: 2080,
+            },
+          ],
+        },
+      },
       /* As lcp-breakdown-insight returns it: a list whose first entry is
          the subpart table. */
       'lcp-breakdown-insight': {
@@ -105,7 +141,7 @@ type Options = {
   /* What a refused request answers with. Google sends JSON; a proxy or an
      error page does not. */
   errorBody?: string;
-  omit?: 'score' | 'metric' | 'version' | 'phases' | 'thread';
+  omit?: 'score' | 'metric' | 'version' | 'phases' | 'thread' | 'visual';
 };
 
 const setup = ({
@@ -130,6 +166,11 @@ const setup = ({
       const audits = payload.lighthouseResult.audits as Record<string, unknown>;
       delete audits['long-tasks'];
       delete audits['mainthread-work-breakdown'];
+    }
+    if (omit === 'visual') {
+      const audits = payload.lighthouseResult.audits as Record<string, unknown>;
+      delete audits.metrics;
+      delete audits['screenshot-thumbnails'];
     }
     if (omit === 'phases')
       delete (payload.lighthouseResult.audits as Record<string, unknown>)[
@@ -446,6 +487,115 @@ describe('hostOf', () => {
         lighthouseResult: { environment: { benchmarkIndex: undefined } },
       }),
     ).toEqual({ benchmark: null, warnings: [] });
+  });
+});
+
+describe('paintsOf', () => {
+  const audit = (items: unknown[]) => ({
+    lighthouseResult: { audits: { metrics: { details: { items } } } },
+  });
+
+  /* Lighthouse's metrics table mixes simulated timings, observed ones, raw
+     trace timestamps and layout shift. Only the observed paints are on the
+     timeline the stalls happen on. */
+  it('keeps the observed paint timings, without their prefix', () => {
+    expect(
+      paintsOf(
+        audit([
+          {
+            largestContentfulPaint: 3000,
+            observedFirstContentfulPaint: 350,
+            observedFirstContentfulPaintTs: 987_654_321,
+            observedLastVisualChange: 4060,
+            observedTraceEnd: 4075,
+            observedSpeedIndex: 910,
+            observedLoad: 'unknown',
+          },
+        ]),
+      ),
+    ).toEqual({ firstContentfulPaint: 350, speedIndex: 910 });
+  });
+
+  it('is empty when the audit is missing', () => {
+    expect(paintsOf({})).toEqual({});
+  });
+});
+
+describe('framesOf', () => {
+  const audit = (items: unknown[]) => ({
+    lighthouseResult: {
+      audits: { 'screenshot-thumbnails': { details: { items } } },
+    },
+  });
+
+  /* Identical frames have to read as identical, or a screen that did not
+     change looks like one that did. */
+  it('sizes and fingerprints each frame, and drops rows that are not one', () => {
+    const frames = framesOf(
+      audit([
+        { timing: 300, data: 'AAAA' },
+        { timing: 600, data: 'AAAA' },
+        { timing: 900, data: 'AAAABBBB' },
+        { timing: 1200 },
+      ]),
+    );
+
+    expect(frames.map(({ ms, bytes }) => [ms, bytes])).toEqual([
+      [300, 3],
+      [600, 3],
+      [900, 6],
+    ]);
+    expect(frames[0]?.id).toMatch(/^[0-9a-f]{6}$/);
+    expect(frames[1]?.id).toBe(frames[0]?.id);
+    expect(frames[2]?.id).not.toBe(frames[0]?.id);
+  });
+});
+
+describe('lateOf', () => {
+  const audit = (items: unknown[]) => ({
+    lighthouseResult: {
+      audits: { 'network-requests': { details: { items } } },
+    },
+  });
+
+  it('keeps what started after the cut-off, in order, by name', () => {
+    expect(
+      lateOf(
+        audit([
+          {
+            url: 'https://example.com/_next/b.js?v=2',
+            rendererStartTime: 2050,
+            networkEndTime: 2080,
+          },
+          { url: 'https://example.com/early.js', rendererStartTime: 120 },
+          { url: 'https://example.com/cv?_rsc=1', networkRequestTime: 900 },
+          { url: 'https://example.com/?_rsc=2', rendererStartTime: 400 },
+          {
+            url: 'https://example.com/icon.webp',
+            rendererStartTime: 450,
+            resourceType: 'Image',
+          },
+          { url: 'https://example.com/untimed.js' },
+          { rendererStartTime: 500 },
+        ]),
+        393,
+      ),
+    ).toEqual([
+      { url: 'https://example.com/', startMs: 400, endMs: null },
+      { url: 'cv', startMs: 900, endMs: null },
+      { url: 'b.js', startMs: 2050, endMs: 2080 },
+    ]);
+  });
+
+  /* A local run of Home makes about twenty requests after parsing, and the
+     particle field's chunk is among the last of them. */
+  it('keeps no more than twenty-four', () => {
+    const many = Array.from({ length: 30 }, (_, index) => ({
+      url: `${index}.js`,
+      rendererStartTime: 300 + index,
+    }));
+
+    expect(lateOf(audit(many), 0)).toHaveLength(24);
   });
 });
 
@@ -880,6 +1030,44 @@ describe('measure', () => {
         'The tested device appears to have a slower CPU than expected.',
       ],
     });
+  });
+
+  /* Whether text painted on time while the portrait waited, and what the
+     page fetched around the paint, per run beside the main thread. */
+  it('records what the screen did, per run', async () => {
+    const { fetcher, wait } = setup();
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+    const [first] = home?.visuals[0] ?? [];
+
+    expect(home?.visuals).toHaveLength(2);
+    expect(home?.visuals[1]).toHaveLength(3);
+    expect(first?.paints).toEqual({
+      firstContentfulPaint: 400,
+      largestContentfulPaint: 2100,
+      domContentLoaded: 380,
+    });
+    expect(first?.frames.map(({ ms }) => ms)).toEqual([300, 2400]);
+    expect(first?.late).toEqual([
+      { url: 'motes.js', startMs: 2050, endMs: 2080 },
+    ]);
+    expect(home?.visualMissing).toBeUndefined();
+  });
+
+  it('records the raw audits when neither paints nor frames can be read', async () => {
+    const { fetcher, wait } = setup({ omit: 'visual' });
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.visuals[0]?.[0]?.paints).toEqual({});
+    /* With no DOMContentLoaded to cut at, every request is late. */
+    expect(home?.visuals[0]?.[0]?.late).toHaveLength(2);
+    expect(home?.visualMissing).toContain('metrics: null');
+    expect(home?.visualMissing).toContain('screenshot-thumbnails: null');
   });
 
   it('records the raw audits when the main thread cannot be read', async () => {

@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 
 import { measure, phaseOrder } from '../utils/pageSpeed.ts';
-import type { Figure, Host, MainThread } from '../utils/pageSpeed.ts';
+import type { Figure, Host, MainThread, Visual } from '../utils/pageSpeed.ts';
 
 /* Entry point for the monthly routine in .github/workflows/pageSpeed.yml. The
    measuring lives in utils, where it is tested; this only reads the
@@ -116,6 +116,41 @@ const thread = (sittings: MainThread[][], hosts: Host[][]): string =>
     )
     .join('');
 
+/* One line per counted run of what the screen did: when text first painted
+   against when the LCP did, when parsing finished, the filmstrip as
+   time, size and fingerprint, and what the page fetched late. A stalled run
+   with an early first contentful paint is the portrait being held; one where
+   that waits too is the whole frame. */
+const paint = (paints: Visual['paints'], name: string, as: string): string =>
+  name in paints ? `${as} ${ms(paints[name]!)}` : `${as} -`;
+
+const screen = (sittings: Visual[][]): string =>
+  sittings
+    .flatMap((runs, sitting) =>
+      runs.map(({ paints, frames, late }, run) => {
+        const timings = [
+          paint(paints, 'firstContentfulPaint', 'FCP'),
+          paint(paints, 'largestContentfulPaint', 'LCP'),
+          paint(paints, 'domContentLoaded', 'DCL'),
+        ].join(', ');
+        const film = frames
+          .map(
+            ({ ms: at, bytes, id }) =>
+              `${ms(at)}:${Math.round(bytes / 1024)}k:${id}`,
+          )
+          .join(' ');
+        const fetched = late
+          .map(
+            ({ url, startMs, endMs }) =>
+              `${url}@${ms(startMs)}` + (endMs === null ? '' : `-${ms(endMs)}`),
+          )
+          .join(', ');
+
+        return `\n    sitting ${sitting + 1} run ${run + 1} screen: ${timings}; frames ${film || 'none'}; late ${fetched || 'none'}`;
+      }),
+    )
+    .join('');
+
 const missing = (why: string | undefined): string =>
   why ? `\n    LCP phases: not reported. The audit held: ${why}` : '';
 
@@ -130,6 +165,8 @@ for (const {
   mainThread,
   mainThreadMissing,
   hosts,
+  visuals,
+  visualMissing,
 } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
@@ -146,5 +183,9 @@ for (const {
       thread(mainThread, hosts) +
       (mainThreadMissing
         ? `\n    main thread: not reported. The audits held: ${mainThreadMissing}`
+        : '') +
+      screen(visuals) +
+      (visualMissing
+        ? `\n    screen: not reported. The audits held: ${visualMissing}`
         : ''),
   );
