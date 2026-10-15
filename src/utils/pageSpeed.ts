@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+
 /* Measures the four figures the README quotes: three runs per page and
    strategy, twice, with a gap between.
 
@@ -176,6 +178,10 @@ type Measurement = {
   hosts: Host[][];
   /* When no run could read the main-thread audits, what they held instead. */
   mainThreadMissing?: string;
+  /* Per sitting, per counted run, beside the main thread it ran. */
+  visuals: Visual[][];
+  /* When no run could read paints or frames, what the audits held instead. */
+  visualMissing?: string;
 };
 
 type Report = {
@@ -420,6 +426,133 @@ const hostOf = (response: Response): Host => {
   };
 };
 
+/* What the screen did, as opposed to what the main thread did.
+
+   The stalls hold the LCP paint for about one or two seconds with the main
+   thread idle, at rates that change through the day, and never locally. Two
+   explanations are left and these numbers separate them. If text paints on
+   time and only the portrait waits, something holds that image - and the
+   particle field, which mounts on an idle callback with a 2000ms timeout and
+   draws a full-screen canvas every frame, is the first suspect: the late
+   requests show when its chunk and WASM arrive beside the LCP. If first
+   contentful paint waits as well, the whole frame was held, and that is
+   PageSpeed's renderer rather than this page.
+
+   `paints` are Lighthouse's observed timings in ms from navigation start,
+   keyed without their `observed` prefix. Not the last visual change: the
+   particle field moves until the trace ends, so that is always the end. `frames` are the filmstrip: when
+   each thumbnail was taken, how big it was, and a short hash, so identical
+   frames read as identical - a size jump is the portrait arriving. The
+   images themselves stay out, because an agent reads this file. */
+type Frame = { ms: number; bytes: number; id: string };
+
+type Request = { url: string; startMs: number; endMs: number | null };
+
+type Visual = {
+  paints: Record<string, number>;
+  frames: Frame[];
+  late: Request[];
+};
+
+const paintNames = [
+  'firstContentfulPaint',
+  'largestContentfulPaint',
+  'firstVisualChange',
+  'speedIndex',
+  'domContentLoaded',
+  'load',
+] as const;
+
+const paintsOf = (response: Response): Record<string, number> => {
+  const row = rowsOf(response, 'metrics')[0] ?? {};
+
+  return Object.fromEntries(
+    paintNames.flatMap((name) => {
+      const value =
+        row[`observed${name.charAt(0).toUpperCase()}${name.slice(1)}`];
+
+      return typeof value === 'number' ? [[name, value]] : [];
+    }),
+  );
+};
+
+const framesOf = (response: Response): Frame[] =>
+  rowsOf(response, 'screenshot-thumbnails').flatMap(({ timing, data }) =>
+    typeof timing === 'number' && typeof data === 'string'
+      ? [
+          {
+            ms: timing,
+            bytes: Math.round((data.length * 3) / 4),
+            id: createHash('sha1').update(data).digest('hex').slice(0, 6),
+          },
+        ]
+      : [],
+  );
+
+/* Requests that start once the document has been parsed: what the page chose
+   to fetch after it was running. That is where the particle field's chunk
+   shows up, and the link prefetches, which a local run makes between about
+   0.9s and 1.9s - the same window the stalls end in. Images are left out
+   because the twelve technology icons would fill the list on their own. */
+const keepLate = 24;
+
+const lateOf = (response: Response, afterMs: number): Request[] =>
+  rowsOf(response, 'network-requests')
+    .flatMap(
+      ({
+        url,
+        rendererStartTime,
+        networkRequestTime,
+        networkEndTime,
+        resourceType,
+      }) => {
+        const startMs =
+          typeof rendererStartTime === 'number'
+            ? rendererStartTime
+            : networkRequestTime;
+        const path = typeof url === 'string' ? url.split('?')[0]! : '';
+
+        return path &&
+          resourceType !== 'Image' &&
+          typeof startMs === 'number' &&
+          startMs >= afterMs
+          ? [
+              {
+                url: path.split('/').pop() || path,
+                startMs,
+                endMs:
+                  typeof networkEndTime === 'number' ? networkEndTime : null,
+              },
+            ]
+          : [];
+      },
+    )
+    .sort((a, b) => a.startMs - b.startMs)
+    .slice(0, keepLate);
+
+const visualAudits = ['metrics', 'screenshot-thumbnails', 'network-requests'];
+
+const visualOf = (
+  response: Response,
+): { visual: Visual; visualShape: string | null } => {
+  const paints = paintsOf(response);
+  const visual = {
+    paints,
+    frames: framesOf(response),
+    /* Without a recorded DOMContentLoaded, every request: too many beats
+       guessing where the page finished parsing. */
+    late: lateOf(response, paints.domContentLoaded ?? 0),
+  };
+
+  return {
+    visual,
+    visualShape:
+      Object.keys(visual.paints).length === 0 && visual.frames.length === 0
+        ? rawOf(response, visualAudits)
+        : null,
+  };
+};
+
 type MainThread = {
   window: [number, number] | null;
   longTasks: LongTask[];
@@ -458,6 +591,9 @@ type Run = {
   mainThread: MainThread;
   /* Only set when neither main-thread reader found anything, to say why. */
   mainThreadShape: string | null;
+  visual: Visual;
+  /* Only set when neither paints nor frames could be read, to say why. */
+  visualShape: string | null;
   /* Only set when phases is null, and only to say why. */
   shape: string | null;
   version: string;
@@ -499,6 +635,9 @@ const summarise = (
   const threadUnread = perSitting
     .flat()
     .flatMap(({ mainThreadShape }) => mainThreadShape ?? []);
+  const visualUnread = perSitting
+    .flat()
+    .flatMap(({ visualShape }) => visualShape ?? []);
 
   const phased = (phase: keyof Phases): number[][] =>
     perSitting.map((results) => results.map(({ phases }) => phases![phase]));
@@ -520,6 +659,8 @@ const summarise = (
     ),
     hosts: perSitting.map((results) => results.map(({ host }) => host)),
     ...(threadUnread.length > 0 && { mainThreadMissing: threadUnread[0]! }),
+    visuals: perSitting.map((results) => results.map(({ visual }) => visual)),
+    ...(visualUnread.length > 0 && { visualMissing: visualUnread[0]! }),
     ...(unread.length === 0
       ? {
           phases: Object.fromEntries(
@@ -599,6 +740,7 @@ const run = async (
     element: elementOf(body),
     host: hostOf(body),
     ...mainThreadOf(body),
+    ...visualOf(body),
     shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
@@ -719,7 +861,11 @@ export {
   bounds,
   gap,
   elementOf,
+  framesOf,
   hostOf,
+  lateOf,
+  paintsOf,
+  visualOf,
   longTasksOf,
   rowsOf,
   windowOf,
@@ -748,6 +894,9 @@ export type {
   LongTask,
   MainThread,
   Host,
+  Visual,
+  Frame,
+  Request,
   Figure,
   Bounds,
   Strategy,
