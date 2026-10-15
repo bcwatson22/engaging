@@ -144,9 +144,13 @@ how it gets corrected.
   current measurement.
 - Do not touch `pageSpeed.json`, any other file, or any other part of the
   README.
-- Commit on a branch named `chore/page-speed-<yyyy-mm>`, and open a PR with
-  `gh pr create --assignee bcwatson22`, so it reaches the one person who
-  reviews it whatever their watch settings say.
+- Commit on a branch named `chore/page-speed-<yyyy-mm-dd>`, dated from
+  `measuredAt`, and open a PR with `gh pr create --assignee bcwatson22`, so it
+  reaches the one person who reviews it whatever their watch settings say.
+  - If the push or the PR is refused, stop there and put the error in the
+    report. Never force-push, and never reuse or work around a branch that is
+    already there: someone else's branch is not yours to overwrite, and the
+    turns spent trying are turns the report needed.
   - Title: `docs: refresh the PageSpeed table for <Month Year>`.
   - Body: what moved, by how much, in which direction, **and both sittings
     plus the range behind each figure you are claiming moved**. Then your
