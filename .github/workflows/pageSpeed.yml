@@ -105,10 +105,22 @@ jobs:
             If that file is missing or unreadable, stop and say so. Do not
             infer the rules from this prompt or from the README.
 
-      # The agent's own transcript. On 2026-10-15 a run ran out of turns after
-      # eight refused commands and opened no PR, and with the transcript
-      # gone the cause had to be inferred from a stale branch. Kept briefly:
-      # it is for diagnosing a run, not a record.
+            RUNNER_TEMP is ${{ runner.temp }}, so the report goes to
+            ${{ runner.temp }}/report.md. Don't look it up.
+
+      # The agent's own transcript, kept briefly for diagnosing a run. It can
+      # hold the job's token - git remote -v prints it in the remote URL - and
+      # artifacts on a public repository are readable by anyone signed in, so
+      # tokens are scrubbed first. The token dies with the job anyway; this is
+      # so nothing in the artifact ever looks like a live credential.
+      - name: Scrub the agent's log
+        if: ${{ always() && !inputs.measureOnly }}
+        run: |
+          log="$RUNNER_TEMP/claude-execution-output.json"
+          if [ -f "$log" ]; then
+            sed -E -i 's/x-access-token:[^@"]+@/x-access-token:***@/g; s/gh[opsu]_[A-Za-z0-9._-]{20,}/***/g' "$log"
+          fi
+
       - name: Keep the agent's log
         if: ${{ always() && !inputs.measureOnly }}
         uses: actions/upload-artifact@v7
