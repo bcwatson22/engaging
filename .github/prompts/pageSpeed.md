@@ -152,11 +152,17 @@ how it gets corrected.
   mix of old and new figures under a single date would be a worse record than
   either.
 - Update the prose under it so it still matches the numbers, including the LCP,
-  CLS and TBT sentence. Keep its voice: plain, specific, no marketing words. Do
-  not add a changelog of this run.
-- Say in the prose which figures were confirmed and which were left
-  unconfirmed, if any were. A reader comparing two months of the table should
-  not have to guess which numbers were trusted.
+  CLS and TBT sentence. Every number it quotes is the one you carried forward
+  from this report, even where that figure was quiet: rounding a measured 1.8s
+  up to the 2.0s already written there is quoting last month. A figure that
+  failed gate 1 has no number to carry, so leave its previous wording. Keep
+  the voice: plain, specific, no marketing words.
+- In the README, one sentence at most on what was confirmed: which changes are
+  confirmed, and that any unconfirmed move is not claimed. A reader comparing
+  two months of the table should not have to guess which numbers were trusted,
+  but the README is a portfolio, not a log. The figure-by-figure detail -
+  sittings, ranges and which gate each one failed - goes in the PR body, which
+  #111 had to cut an eleven-line paragraph back to one sentence to fix.
 - Quote the figure you carried forward from gate 1, not the average of the two
   sittings and not the better one.
 - Leave the paragraph about the inlineCss change alone; it is history, not a
