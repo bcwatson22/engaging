@@ -22,21 +22,13 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
 4G, the harder of the two tests. Largest Contentful Paint is still the only
-metric not at full marks there - 2.3s on Home, 2.0s on the CV - with everything
+metric not at full marks there - 2.3s on Home, 1.8s on the CV - with everything
 else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms on
 Home and 30ms on the CV).
 
-None of this update's moves are confirmed changes to the site - they are
-flagged here rather than silently dropped, because the table and the prose
-above are both from this one measurement rather than a mix of old and new.
-Home's mobile performance score (97 to 99) and its LCP (2.6s to 2.3s) each
-moved by no more than their own individual runs already wander by. Home's
-Total Blocking Time could not even be checked against itself this time: the
-two sittings read 47ms and 8ms, too far apart to agree on a number, so the
-figure above is last run's, carried over unconfirmed. The CV's Total
-Blocking Time (20ms to 30ms) is likewise within the spread of its own
-individual runs. The one change here that is simply true rather than a
-judgement call is the Lighthouse version, 13.4.1 to 13.5.0.
+Only the Lighthouse version is a confirmed change since the last table. Home's
+99 and 2.3s moved no further than its own runs varied by this time, so they are
+not claimed as an improvement.
 
 Each figure is the median of three runs, taken after one discarded warm-up run
 per page. A single run moves by a point or two either way, which is wide enough
