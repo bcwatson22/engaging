@@ -11,20 +11,32 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 26 August 2026, Lighthouse 13.4.1:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 16 October 2026, Lighthouse 13.5.0:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) - mobile | 97          | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) - mobile | 99          | 100           | 100            | 100 |
 | Home - desktop                                     | 100         | 100           | 100            | 100 |
 | [CV](https://www.engaging.engineering/cv) - mobile | 99          | 100           | 100            | 100 |
 | CV - desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
 4G, the harder of the two tests. Largest Contentful Paint is still the only
-metric not at full marks there - 2.6s on Home, 2.0s on the CV - with everything
-else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
-20ms).
+metric not at full marks there - 2.3s on Home, 2.0s on the CV - with everything
+else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms on
+Home and 30ms on the CV).
+
+None of this update's moves are confirmed changes to the site - they are
+flagged here rather than silently dropped, because the table and the prose
+above are both from this one measurement rather than a mix of old and new.
+Home's mobile performance score (97 to 99) and its LCP (2.6s to 2.3s) each
+moved by no more than their own individual runs already wander by. Home's
+Total Blocking Time could not even be checked against itself this time: the
+two sittings read 47ms and 8ms, too far apart to agree on a number, so the
+figure above is last run's, carried over unconfirmed. The CV's Total
+Blocking Time (20ms to 30ms) is likewise within the spread of its own
+individual runs. The one change here that is simply true rather than a
+judgement call is the Lighthouse version, 13.4.1 to 13.5.0.
 
 Each figure is the median of three runs, taken after one discarded warm-up run
 per page. A single run moves by a point or two either way, which is wide enough
