@@ -11,20 +11,24 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 26 August 2026, Lighthouse 13.4.1:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 16 October 2026, Lighthouse 13.5.0:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) - mobile | 97          | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) - mobile | 99          | 100           | 100            | 100 |
 | Home - desktop                                     | 100         | 100           | 100            | 100 |
 | [CV](https://www.engaging.engineering/cv) - mobile | 99          | 100           | 100            | 100 |
 | CV - desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
 4G, the harder of the two tests. Largest Contentful Paint is still the only
-metric not at full marks there - 2.6s on Home, 2.0s on the CV - with everything
-else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
-20ms).
+metric not at full marks there - 2.3s on Home, 1.8s on the CV - with everything
+else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms on
+Home and 30ms on the CV).
+
+Only the Lighthouse version is a confirmed change since the last table. Home's
+99 and 2.3s moved no further than its own runs varied by this time, so they are
+not claimed as an improvement.
 
 Each figure is the median of three runs, taken after one discarded warm-up run
 per page. A single run moves by a point or two either way, which is wide enough
