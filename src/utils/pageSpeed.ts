@@ -81,6 +81,27 @@ const limit = 200;
 const tries = 3;
 const retryDelay = 10_000;
 
+/* A held frame: the page had finished parsing, and PageSpeed's browser drew
+   nothing for over half a second afterwards.
+
+   On 2026-10-15 a stalled run of the CV had parsed by 379ms, hydrated by
+   749ms and sent its analytics beacon at 790ms, with an idle main thread -
+   and nothing reached the screen until 1453ms. The page was ready and the
+   test machine was not. Across the 48 runs recorded with paint timings, the
+   gap between parsing and first paint was at most 202ms in the 44 clean ones
+   and at least 993ms in the four held ones, with nothing in between, so the
+   line sits in the empty space rather than near either edge.
+
+   A held run is a failure of the instrument, like a page that timed out, so
+   it is measured again rather than counted. The test is fixed in advance and
+   blind to the score: a held run that scored 100 is discarded too. Every
+   discarded attempt is recorded. Five tries, because at the worst rate seen
+   (seven runs in twelve) three would still give up on a fifth of runs; if
+   all five are held the run is kept and marked, and the sittings will say
+   so. */
+const heldAfter = 500;
+const heldTries = 5;
+
 const pages = [
   { name: 'Home', path: '/' },
   { name: 'CV', path: '/cv' },
@@ -182,6 +203,9 @@ type Measurement = {
   visuals: Visual[][];
   /* When no run could read paints or frames, what the audits held instead. */
   visualMissing?: string;
+  /* Per sitting, per counted run: attempts discarded for a held frame, and
+     whether the run kept was held as well. */
+  heldFrames: HeldFrames[][];
 };
 
 type Report = {
@@ -574,6 +598,26 @@ const mainThreadOf = (
   };
 };
 
+type Held = { firstPaintAfterParseMs: number; benchmark: number | null };
+
+/* Per counted run: the held attempts measured again, and whether the run
+   finally kept was held too because every try was. */
+type HeldFrames = { discarded: Held[]; kept: Held | null };
+
+const heldOf = (
+  { firstContentfulPaint, domContentLoaded }: Record<string, number>,
+  { benchmark }: Host,
+): Held | null => {
+  /* Without both timings there is nothing to judge, and a run is not
+     discarded on a guess. */
+  if (firstContentfulPaint === undefined || domContentLoaded === undefined)
+    return null;
+
+  const gap = firstContentfulPaint - domContentLoaded;
+
+  return gap > heldAfter ? { firstPaintAfterParseMs: gap, benchmark } : null;
+};
+
 const median = (values: number[]): number =>
   [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]!;
 
@@ -594,6 +638,7 @@ type Run = {
   visual: Visual;
   /* Only set when neither paints nor frames could be read, to say why. */
   visualShape: string | null;
+  heldFrames: HeldFrames;
   /* Only set when phases is null, and only to say why. */
   shape: string | null;
   version: string;
@@ -660,6 +705,9 @@ const summarise = (
     hosts: perSitting.map((results) => results.map(({ host }) => host)),
     ...(threadUnread.length > 0 && { mainThreadMissing: threadUnread[0]! }),
     visuals: perSitting.map((results) => results.map(({ visual }) => visual)),
+    heldFrames: perSitting.map((results) =>
+      results.map(({ heldFrames }) => heldFrames),
+    ),
     ...(visualUnread.length > 0 && { visualMissing: visualUnread[0]! }),
     ...(unread.length === 0
       ? {
@@ -726,6 +774,8 @@ const run = async (
     );
 
   const body = (await response.json()) as Response;
+  const host = hostOf(body);
+  const seen = visualOf(body);
 
   return {
     scores: Object.fromEntries(
@@ -738,9 +788,10 @@ const run = async (
     },
     phases: phasesOf(body),
     element: elementOf(body),
-    host: hostOf(body),
+    host,
     ...mainThreadOf(body),
-    ...visualOf(body),
+    ...seen,
+    heldFrames: { discarded: [], kept: heldOf(seen.visual.paints, host) },
     shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
@@ -769,6 +820,29 @@ const attempted = async (
 
       await wait(retryDelay);
     }
+  }
+};
+
+/* A counted run, measured again with a fresh URL while the frame was held,
+   so a cached copy of the held report cannot come back. Warm-ups are not
+   checked: they are discarded whatever they show. */
+const steady = async (
+  url: () => string,
+  strategy: Strategy,
+  key: string | undefined,
+  fetcher: Fetch,
+  wait: Wait,
+): Promise<Run> => {
+  const discarded: Held[] = [];
+
+  for (let attempt = 1; ; attempt++) {
+    const result = await attempted(url(), strategy, key, fetcher, wait);
+    const { kept } = result.heldFrames;
+
+    if (!kept || attempt >= heldTries)
+      return { ...result, heldFrames: { discarded, kept } };
+
+    discarded.push(kept);
   }
 };
 
@@ -815,7 +889,9 @@ const sit = async (
       await attempted(fresh(url), strategy, key, fetcher, wait);
 
     for (let attempt = 0; attempt < runs; attempt++)
-      results.push(await attempted(fresh(url), strategy, key, fetcher, wait));
+      results.push(
+        await steady(() => fresh(url), strategy, key, fetcher, wait),
+      );
 
     sitting.push(results);
   }
@@ -862,6 +938,9 @@ export {
   gap,
   elementOf,
   framesOf,
+  heldAfter,
+  heldOf,
+  heldTries,
   hostOf,
   lateOf,
   paintsOf,
@@ -895,6 +974,8 @@ export type {
   MainThread,
   Host,
   Visual,
+  Held,
+  HeldFrames,
   Frame,
   Request,
   Figure,

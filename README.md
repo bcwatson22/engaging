@@ -21,7 +21,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 | CV - desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
-4G, and it is what Google ranks on. Largest Contentful Paint is still the only
+4G, the harder of the two tests. Largest Contentful Paint is still the only
 metric not at full marks there - 2.6s on Home, 2.0s on the CV - with everything
 else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
 20ms).
@@ -35,17 +35,23 @@ measurements of unchanged code once ranged from 90 to 100 on that alone.
 
 The warm-up narrowed that but did not close it. Two sittings 27 minutes apart
 on the same commit later read 99 and 91 on Home mobile, with LCPs of 2.0s and
-3.3s, and the three runs inside each sitting agreed with each other to within a
-point. Across four sittings that figure reads 2.6s, 3.2s, 2.0s and 3.3s: two
-clusters about 1.2s apart rather than scatter, so something switches between
-states rather than wobbling. What, is still open: the LCP image is 23KB and
-preloaded in the first 350 bytes, while the document is 322KB, which is itself
-over a second of transfer on the profile mobile is scored against.
+3.3s. The cause turned out to be PageSpeed's test machines rather than the page.
+In some runs the browser drew nothing for one to two seconds after the page had
+finished parsing: one CV run had parsed by 379ms and hydrated by 749ms, with an
+idle main thread, and nothing reached the screen until 1453ms. Lighthouse
+simulates mobile LCP from everything that happened before the observed paint,
+so a held frame of a second can cost five or six points. How often it happens
+varies through the day, from 1 mobile run in 12 to 7 in 12, and it has never
+happened in a local run.
 
 So the site is now measured twice with a gap, and each figure records both
-sittings and the range across every run. A single sitting cannot be questioned;
-two can disagree, and when they do the routine publishes nothing. It is
-described under [Maintenance](#maintenance).
+sittings and the range across every run. A run where nothing was drawn for over
+500ms after parsing is measured again, up to five times, and every discarded
+attempt stays in the report. Across the 48 runs recorded with paint timings,
+clean runs painted within 202ms of parsing and held ones at least 993ms after,
+so the test sits well clear of both, and it ignores the score. If the two
+sittings still disagree, the routine publishes nothing. It is described under
+[Maintenance](#maintenance).
 
 The mobile numbers moved from 93 and 94, measured the same way immediately
 before the change, when the stylesheet stopped being a second request:
@@ -57,9 +63,10 @@ These are lab numbers. Field data needs enough real traffic for the Chrome UX
 Report to have a sample, and this domain does not have it, so there is nothing
 to publish there yet.
 
-Run it yourself with the link above rather than taking these on trust - and note
-Chrome's own Lighthouse tab will disagree, mostly because it runs on your machine
-and inside your extensions. PageSpeed Insights is the reproducible one.
+Run it yourself with the link above rather than taking these on trust. A mobile
+run that hits a held frame will come in a few points lower, so run it again if
+it does. Chrome's own Lighthouse tab will disagree too, mostly because it runs
+on your machine and inside your extensions.
 
 ## Maintenance
 

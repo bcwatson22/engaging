@@ -1,7 +1,13 @@
 import { writeFile } from 'fs/promises';
 
 import { measure, phaseOrder } from '../utils/pageSpeed.ts';
-import type { Figure, Host, MainThread, Visual } from '../utils/pageSpeed.ts';
+import type {
+  Figure,
+  HeldFrames,
+  Host,
+  MainThread,
+  Visual,
+} from '../utils/pageSpeed.ts';
 
 /* Entry point for the monthly routine in .github/workflows/pageSpeed.yml. The
    measuring lives in utils, where it is tested; this only reads the
@@ -124,7 +130,16 @@ const thread = (sittings: MainThread[][], hosts: Host[][]): string =>
 const paint = (paints: Visual['paints'], name: string, as: string): string =>
   name in paints ? `${as} ${ms(paints[name]!)}` : `${as} -`;
 
-const screen = (sittings: Visual[][]): string =>
+/* Held attempts are discarded from the figures, so the log is where they
+   stay visible. */
+const holds = ({ discarded, kept }: HeldFrames): string =>
+  (discarded.length > 0
+    ? `; ${discarded.length} held attempt(s) measured again (first paint ${discarded
+        .map(({ firstPaintAfterParseMs }) => ms(firstPaintAfterParseMs))
+        .join(', ')} after parsing)`
+    : '') + (kept ? '; KEPT HELD after every try' : '');
+
+const screen = (sittings: Visual[][], held: HeldFrames[][]): string =>
   sittings
     .flatMap((runs, sitting) =>
       runs.map(({ paints, frames, late }, run) => {
@@ -146,7 +161,9 @@ const screen = (sittings: Visual[][]): string =>
           )
           .join(', ');
 
-        return `\n    sitting ${sitting + 1} run ${run + 1} screen: ${timings}; frames ${film || 'none'}; late ${fetched || 'none'}`;
+        const heldHere = held[sitting]?.[run];
+
+        return `\n    sitting ${sitting + 1} run ${run + 1} screen: ${timings}; frames ${film || 'none'}; late ${fetched || 'none'}${heldHere ? holds(heldHere) : ''}`;
       }),
     )
     .join('');
@@ -167,6 +184,7 @@ for (const {
   hosts,
   visuals,
   visualMissing,
+  heldFrames,
 } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
@@ -184,7 +202,7 @@ for (const {
       (mainThreadMissing
         ? `\n    main thread: not reported. The audits held: ${mainThreadMissing}`
         : '') +
-      screen(visuals) +
+      screen(visuals, heldFrames) +
       (visualMissing
         ? `\n    screen: not reported. The audits held: ${visualMissing}`
         : ''),
