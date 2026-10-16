@@ -11,20 +11,26 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 26 August 2026, Lighthouse 13.4.1:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 16 October 2026, Lighthouse 13.5.0:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
-| [Home](https://www.engaging.engineering/) - mobile | 97          | 100           | 100            | 100 |
+| [Home](https://www.engaging.engineering/) - mobile | 94          | 100           | 100            | 100 |
 | Home - desktop                                     | 100         | 100           | 100            | 100 |
 | [CV](https://www.engaging.engineering/cv) - mobile | 99          | 100           | 100            | 100 |
 | CV - desktop                                       | 100         | 100           | 100            | 100 |
 
 Mobile is the number worth quoting: it is an emulated Moto G Power on throttled
-4G, and it is what Google ranks on. Largest Contentful Paint is still the only
-metric not at full marks there - 2.6s on Home, 2.0s on the CV - with everything
-else passing comfortably (CLS 0 on both, Total Blocking Time around 40ms and
-20ms).
+4G, and it is what Google ranks on. This table is republished because
+Lighthouse itself moved, from 13.4.1 to 13.5.0, not because anything below is
+a confirmed change on the site. Home's performance score split 94 and 98
+across this run's two sittings, wider than the quiet band, so it is
+unconfirmed; the CV's sittings agreed and held at 99. Largest Contentful Paint
+did not hold still on either page - Home's two sittings read 2.9s and 1.7s,
+the CV's read 1.7s and 2.0s - so neither is confirmed. CLS stayed at 0 on both
+pages. Total Blocking Time disagreed outright for Home (96ms and 50ms) and
+agreed for the CV (39ms and 49ms), but the CV's move from the ~20ms quoted
+before is no bigger than this run's own spread, so it stays unconfirmed too.
 
 Each figure is the median of three runs, taken after one discarded warm-up run
 per page. A single run moves by a point or two either way, which is wide enough
