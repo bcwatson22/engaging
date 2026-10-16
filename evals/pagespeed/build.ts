@@ -1,6 +1,13 @@
 /* Writes each case's prompt.md from three sources: the real judging rules, the
    README section they are judged against, and the case's own report.json.
 
+   The README section is a frozen copy in readme.md, not the live README. The
+   cases' reports were written against that table - "held" means held against
+   those figures - so a live README would silently change what every case
+   tests the first time the routine published. It also failed CI on #109, the
+   routine's own README update, which the agent cannot regenerate prompts for.
+   Change readme.md only alongside the reports that depend on it.
+
    Generated rather than written by hand for the reason .github/prompts exists
    at all: a second copy of the rules drifts from the first, and a suite passing
    against a stale copy reports confidence it has not earned. `pnpm verify`
@@ -13,15 +20,6 @@ import path from 'path';
 import { buildSuite } from '../suite.ts';
 
 const here = path.dirname(new URL(import.meta.url).pathname);
-
-const section = (readme: string, heading: string): string => {
-  const start = readme.indexOf(`## ${heading}`);
-  const after = readme.indexOf('\n## ', start + 1);
-
-  if (start < 0) throw new Error(`No "## ${heading}" in the README`);
-
-  return readme.slice(start, after < 0 ? undefined : after).trim();
-};
 
 const promptFor = (rules: string, performance: string, report: string) =>
   `---
@@ -54,12 +52,11 @@ ${report}
 \`\`\`
 `;
 
-/* The README is read once rather than per case: every case is judged against
-   the same table. */
-const performance = section(
-  await readFile(path.resolve(here, '../../README.md'), 'utf8'),
-  'Performance',
-);
+/* Read once rather than per case: every case is judged against the same
+   table. */
+const performance = (
+  await readFile(path.join(here, 'readme.md'), 'utf8')
+).trim();
 
 await buildSuite({
   dir: here,

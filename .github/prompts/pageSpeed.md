@@ -38,6 +38,24 @@ and the next pair of sittings read 99 and 91 on Home mobile with the three
 runs inside each one agreeing to within a point. Runs nodding along to each
 other is not evidence. Sittings separated in time, agreeing, is.
 
+## Held frames: already handled
+
+One kind of bad run has been removed before you see the report, by a fixed
+test that you don't apply yourself. A run where PageSpeed's browser drew
+nothing for over 500ms after the page had finished parsing is a held frame:
+the test machine stalled with the page ready, which says nothing about the
+site. Those runs were measured again, up to five tries, and every discarded
+attempt is listed in `heldFrames` when the report has it. A `kept` entry
+that isn't null means all five tries were held and that run counts anyway.
+
+- Don't drop or adjust anything further. The discarding is done, by a test
+  that ignores the score.
+- When `heldFrames` lists discarded attempts, say how many in the report and
+  in any PR body.
+- A `kept` held run is the likely reason its sitting disagrees with the
+  other. Name it as the cause instead of the site, and the outcome is still
+  Unconfirmed.
+
 ## The quiet band
 
 Used at two of the three gates below, so it is worth stating once. Two numbers
@@ -158,6 +176,7 @@ how it gets corrected.
     judgement on whether this
     looks like a change in the site or a change in how Google measures. Say
     plainly if you are unsure, and name anything you left as unconfirmed.
+  - Hyphens, not em dashes, in the PR and the README.
   - No attribution trailers, and no test-plan checklist: the diff is four
     numbers and a sentence, and a checklist of things you did not do is noise
     in a repo whose PR bodies are prose.
@@ -175,7 +194,8 @@ You are measuring a live site you did not deploy, so never change application
 code, and never present a regression as an improvement.
 
 Never drop a sitting, drop a run or pick a different average to make a figure
-publishable. If the measurement cannot support a claim, the outcome is
+publishable. The held frames already discarded are the only exception, and
+the measurement made it, not you. If the measurement cannot support a claim, the outcome is
 Unconfirmed, and that is the correct answer rather than a failure to produce
 one. Three attempts at these rules have now failed by being too willing to
 publish, and none by being too cautious.

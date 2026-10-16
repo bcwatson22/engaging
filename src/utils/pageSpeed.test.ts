@@ -2,6 +2,9 @@ import {
   bounds,
   elementOf,
   framesOf,
+  heldAfter,
+  heldOf,
+  heldTries,
   hostOf,
   lateOf,
   paintsOf,
@@ -23,12 +26,19 @@ import {
 type RunValues = {
   performance?: number;
   lcpMs?: number;
+  /* First paint as PageSpeed observed it. The stub parses at 380ms, so
+     anything past 880ms is a held frame. */
+  firstPaintMs?: number;
 };
 
 /* A response carrying only what the reader takes from it. Scores go in as the
    0–1 Lighthouse reports rather than the 0–100 the README quotes, so the test
    would notice the conversion disappearing. */
-const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
+const body = ({
+  performance = 0.97,
+  lcpMs = 2600,
+  firstPaintMs = 400,
+}: RunValues = {}) => ({
   lighthouseResult: {
     lighthouseVersion: '13.4.1',
     environment: { benchmarkIndex: 1540 },
@@ -74,7 +84,7 @@ const body = ({ performance = 0.97, lcpMs = 2600 }: RunValues = {}) => ({
           items: [
             {
               firstContentfulPaint: 1800,
-              observedFirstContentfulPaint: 400,
+              observedFirstContentfulPaint: firstPaintMs,
               observedFirstContentfulPaintTs: 123_456_789,
               observedLargestContentfulPaint: 2100,
               observedDomContentLoaded: 380,
@@ -599,6 +609,35 @@ describe('lateOf', () => {
   });
 });
 
+describe('heldOf', () => {
+  const host = { benchmark: 600, warnings: [] };
+
+  it('holds a run whose first paint came long after parsing', () => {
+    expect(
+      heldOf({ domContentLoaded: 379, firstContentfulPaint: 1453 }, host),
+    ).toEqual({ firstPaintAfterParseMs: 1074, benchmark: 600 });
+  });
+
+  /* The line sits in the gap between the slowest clean run seen (202ms) and
+     the quickest held one (993ms), and a run on it is not held. */
+  it('passes a run at or under the line', () => {
+    expect(
+      heldOf(
+        { domContentLoaded: 100, firstContentfulPaint: 100 + heldAfter },
+        host,
+      ),
+    ).toBeNull();
+    expect(
+      heldOf({ domContentLoaded: 380, firstContentfulPaint: 582 }, host),
+    ).toBeNull();
+  });
+
+  it('does not judge a run missing either timing', () => {
+    expect(heldOf({ firstContentfulPaint: 2000 }, host)).toBeNull();
+    expect(heldOf({ domContentLoaded: 100 }, host)).toBeNull();
+  });
+});
+
 describe('bounds', () => {
   it('reports the range the runs covered', () => {
     expect(bounds([99, 97, 100])).toEqual({ min: 97, max: 100 });
@@ -687,6 +726,56 @@ describe('measure', () => {
     ).measurements;
 
     expect(home?.scores.performance.sittings[0]).toBe(97);
+  });
+
+  /* A held frame is the test machine failing, so the run is measured again
+     and the clean result counts. Request two is Home mobile's first counted
+     run, after its warm-up. */
+  it('measures a held run again and counts the clean one', async () => {
+    const { fetcher, wait } = setup({
+      responses: [{}, { firstPaintMs: 2000, performance: 0.9 }, {}],
+    });
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(fetcher).toHaveBeenCalledTimes(33);
+    expect(home?.scores.performance.min).toBe(97);
+    expect(home?.heldFrames[0]?.[0]).toEqual({
+      discarded: [{ firstPaintAfterParseMs: 1620, benchmark: 1540 }],
+      kept: null,
+    });
+    expect(home?.heldFrames[0]?.[1]).toEqual({ discarded: [], kept: null });
+
+    const asked = fetcher.mock.calls.map(([request]) =>
+      new URL(request as string).searchParams.get('url'),
+    );
+
+    expect(new Set(asked).size).toBe(33);
+  });
+
+  /* Five held tries in a row is a test machine that will not settle, and
+     the run is kept rather than retried for ever - marked, so the sittings
+     carry it in plain sight. */
+  it('keeps and marks the run once every try was held', async () => {
+    const held = { firstPaintMs: 2000, performance: 0.9 };
+    const { fetcher, wait } = setup({
+      responses: [{}, ...Array.from({ length: heldTries }, () => held), {}],
+    });
+
+    const [home] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+    const [first] = home?.heldFrames[0] ?? [];
+
+    expect(fetcher).toHaveBeenCalledTimes(32 + heldTries - 1);
+    expect(first?.discarded).toHaveLength(heldTries - 1);
+    expect(first?.kept).toEqual({
+      firstPaintAfterParseMs: 1620,
+      benchmark: 1540,
+    });
+    expect(home?.scores.performance.min).toBe(90);
   });
 
   /* PageSpeed returns a cached report for a URL it was just asked about, which
