@@ -120,11 +120,21 @@ type Response = {
        benchmark, and anything it noticed was wrong with the run. */
     environment?: { benchmarkIndex?: number };
     runWarnings?: unknown[];
-    categories?: Record<string, { score?: number | null } | undefined>;
+    categories?: Record<
+      string,
+      | {
+          score?: number | null;
+          auditRefs?: { id?: unknown; weight?: unknown }[];
+        }
+      | undefined
+    >;
     audits?: Record<
       string,
       | {
           numericValue?: number;
+          title?: string;
+          score?: number | null;
+          displayValue?: string;
           /* The LCP element audit carries a second table breaking the metric
              into its four phases. Typed loosely because it is one shape among
              several the audit can return, and the reader below checks rather
@@ -206,6 +216,8 @@ type Measurement = {
   /* Per sitting, per counted run: attempts discarded for a held frame, and
      whether the run kept was held as well. */
   heldFrames: HeldFrames[][];
+  /* Audits that failed outside performance, across every counted run. */
+  shortfalls: Shortfall[];
 };
 
 type Report = {
@@ -242,6 +254,80 @@ const scoreOf = (response: Response, category: Category): number => {
     throw new Error(`No ${category} score in the response`);
 
   return Math.round(score * 100);
+};
+
+/* Why a category other than performance fell short of 100: each weighted
+   audit that failed, with a sample of what it flagged.
+
+   Recorded because November's run took Home's best practices from 100 to 96
+   on both strategies, every run, and the report could not say why. The
+   arithmetic said one audit of weight 1 out of 26, and a local run of the
+   same Lighthouse passed every audit, so the answer only exists in
+   PageSpeed's own response - which was being thrown away.
+
+   Performance is left out: its audits are opportunities and diagnostics
+   that fail on any page, and its score comes from the metrics already
+   recorded. */
+type Failing = {
+  category: Category;
+  id: string;
+  title: string;
+  sample: string;
+};
+
+const failingOf = (response: Response): Failing[] =>
+  categories
+    .filter((category) => category !== 'performance')
+    .flatMap((category) =>
+      (
+        response.lighthouseResult?.categories?.[category]?.auditRefs ?? []
+      ).flatMap(({ id, weight }) => {
+        const audit =
+          typeof id === 'string'
+            ? response.lighthouseResult?.audits?.[id]
+            : undefined;
+
+        if (
+          typeof id !== 'string' ||
+          typeof weight !== 'number' ||
+          weight <= 0 ||
+          typeof audit?.score !== 'number' ||
+          audit.score >= 1
+        )
+          return [];
+
+        return [
+          {
+            category,
+            id,
+            title: audit.title ?? id,
+            sample: (
+              audit.displayValue ??
+              JSON.stringify(audit.details?.items?.slice(0, 3) ?? [])
+            ).slice(0, sample),
+          },
+        ];
+      }),
+    );
+
+/* One entry per audit across every counted run of a measurement: how many
+   runs it failed in, and what it flagged the first time. An audit failing
+   in every run is the page; one failing in a single run is the machine. */
+type Shortfall = Failing & { runs: number };
+
+const shortfallsOf = (failing: Failing[][]): Shortfall[] => {
+  const found = new Map<string, Shortfall>();
+
+  for (const audit of failing.flat()) {
+    const seen = found.get(audit.id);
+
+    found.set(
+      audit.id,
+      seen ? { ...seen, runs: seen.runs + 1 } : { ...audit, runs: 1 },
+    );
+  }
+
+  return [...found.values()].sort((a, b) => b.runs - a.runs);
 };
 
 const metricOf = (response: Response, audit: string): number => {
@@ -639,6 +725,7 @@ type Run = {
   /* Only set when neither paints nor frames could be read, to say why. */
   visualShape: string | null;
   heldFrames: HeldFrames;
+  failing: Failing[];
   /* Only set when phases is null, and only to say why. */
   shape: string | null;
   version: string;
@@ -708,6 +795,7 @@ const summarise = (
     heldFrames: perSitting.map((results) =>
       results.map(({ heldFrames }) => heldFrames),
     ),
+    shortfalls: shortfallsOf(perSitting.flat().map(({ failing }) => failing)),
     ...(visualUnread.length > 0 && { visualMissing: visualUnread[0]! }),
     ...(unread.length === 0
       ? {
@@ -792,6 +880,7 @@ const run = async (
     ...mainThreadOf(body),
     ...seen,
     heldFrames: { discarded: [], kept: heldOf(seen.visual.paints, host) },
+    failing: failingOf(body),
     shape: phasesOf(body) === null ? shapeOf(body) : null,
     version: body.lighthouseResult?.lighthouseVersion ?? 'unknown',
   };
@@ -941,6 +1030,8 @@ export {
   heldAfter,
   heldOf,
   heldTries,
+  failingOf,
+  shortfallsOf,
   hostOf,
   lateOf,
   paintsOf,
@@ -976,6 +1067,8 @@ export type {
   Visual,
   Held,
   HeldFrames,
+  Failing,
+  Shortfall,
   Frame,
   Request,
   Figure,
