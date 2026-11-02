@@ -56,6 +56,15 @@ that isn't null means all five tries were held and that run counts anyway.
   other. Name it as the cause instead of the site, and the outcome is still
   Unconfirmed.
 
+## When a category other than performance moves
+
+`shortfalls` lists, per page and strategy, each audit that cost a score
+outside performance: its category and id, how many counted runs it failed
+in, and a sample of what it flagged. When accessibility, best practices or
+SEO moved, name the audit behind it from there in the report and any PR
+body, and say whether it failed in every run (the page) or only some (the
+test machine). Don't guess at a cause the report doesn't show.
+
 ## The quiet band
 
 Used at two of the three gates below, so it is worth stating once. Two numbers
