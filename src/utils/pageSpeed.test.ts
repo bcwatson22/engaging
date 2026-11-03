@@ -1,12 +1,14 @@
 import {
   bounds,
   elementOf,
+  failingOf,
   framesOf,
   heldAfter,
   heldOf,
   heldTries,
   hostOf,
   lateOf,
+  shortfallsOf,
   paintsOf,
   longTasksOf,
   rowsOf,
@@ -29,6 +31,8 @@ type RunValues = {
   /* First paint as PageSpeed observed it. The stub parses at 380ms, so
      anything past 880ms is a held frame. */
   firstPaintMs?: number;
+  /* Whether the page logged an error, failing one best-practices audit. */
+  consoleError?: boolean;
 };
 
 /* A response carrying only what the reader takes from it. Scores go in as the
@@ -38,6 +42,7 @@ const body = ({
   performance = 0.97,
   lcpMs = 2600,
   firstPaintMs = 400,
+  consoleError = false,
 }: RunValues = {}) => ({
   lighthouseResult: {
     lighthouseVersion: '13.4.1',
@@ -48,11 +53,27 @@ const body = ({
     categories: {
       performance: { score: performance },
       accessibility: { score: 1 },
-      'best-practices': { score: 1 },
+      'best-practices': {
+        score: consoleError ? 0.96 : 1,
+        auditRefs: [
+          { id: 'errors-in-console', weight: 1 },
+          { id: 'doctype', weight: 1 },
+        ],
+      },
       seo: { score: 1 },
     },
     audits: {
       'largest-contentful-paint': { numericValue: lcpMs },
+      'errors-in-console': {
+        title: 'No browser errors logged to the console',
+        score: consoleError ? 0 : 1,
+        details: {
+          items: consoleError
+            ? [{ source: 'network', description: 'Failed to load: 404' }]
+            : [],
+        },
+      },
+      doctype: { title: 'Page has the HTML doctype', score: 1 },
       'cumulative-layout-shift': { numericValue: 0 },
       'total-blocking-time': { numericValue: 40 },
       'long-tasks': {
@@ -638,6 +659,126 @@ describe('heldOf', () => {
   });
 });
 
+describe('failingOf', () => {
+  const response = (
+    refs: unknown[],
+    audits: Record<string, unknown>,
+    category = 'best-practices',
+  ) =>
+    ({
+      lighthouseResult: {
+        categories: { [category]: { score: 0.9, auditRefs: refs } },
+        audits,
+      },
+    }) as Parameters<typeof failingOf>[0];
+
+  it('names each weighted audit that failed, with what it flagged', () => {
+    expect(
+      failingOf(
+        response(
+          [
+            { id: 'errors-in-console', weight: 1 },
+            { id: 'image-size-responsive', weight: 1 },
+            { id: 'doctype', weight: 1 },
+          ],
+          {
+            'errors-in-console': {
+              title: 'No browser errors logged to the console',
+              score: 0,
+              details: { items: [{ description: 'Failed to load: 404' }] },
+            },
+            'image-size-responsive': { score: 0.5, displayValue: '2 images' },
+            doctype: { title: 'Page has the HTML doctype', score: 1 },
+          },
+        ),
+      ),
+    ).toEqual([
+      {
+        category: 'best-practices',
+        id: 'errors-in-console',
+        title: 'No browser errors logged to the console',
+        sample: '[{"description":"Failed to load: 404"}]',
+      },
+      {
+        category: 'best-practices',
+        id: 'image-size-responsive',
+        title: 'image-size-responsive',
+        sample: '2 images',
+      },
+    ]);
+  });
+
+  /* An unweighted audit cannot move the score, and one Lighthouse could not
+     run (null) has not failed. */
+  it('ignores audits that cannot have cost the score', () => {
+    expect(
+      failingOf(
+        response(
+          [
+            { id: 'csp-xss', weight: 0 },
+            { id: 'js-libraries', weight: 1 },
+            { id: 'absent', weight: 1 },
+            { id: 42, weight: 1 },
+            { id: 'charset' },
+          ],
+          {
+            'csp-xss': { score: 0 },
+            'js-libraries': { score: null },
+            charset: { score: 0 },
+          },
+        ),
+      ),
+    ).toEqual([]);
+  });
+
+  it('still names a failed audit that flagged nothing in particular', () => {
+    expect(
+      failingOf(
+        response([{ id: 'charset', weight: 1 }], { charset: { score: 0 } }),
+      ),
+    ).toEqual([
+      {
+        category: 'best-practices',
+        id: 'charset',
+        title: 'charset',
+        sample: '[]',
+      },
+    ]);
+  });
+
+  it('leaves performance to the metrics', () => {
+    expect(
+      failingOf(
+        response(
+          [{ id: 'render-blocking-resources', weight: 1 }],
+          { 'render-blocking-resources': { score: 0 } },
+          'performance',
+        ),
+      ),
+    ).toEqual([]);
+  });
+
+  it('copes with a response that has no categories', () => {
+    expect(failingOf({})).toEqual([]);
+  });
+});
+
+describe('shortfallsOf', () => {
+  const audit = (id: string) => ({
+    category: 'seo' as const,
+    id,
+    title: id,
+    sample: '[]',
+  });
+
+  it('counts the runs each audit failed in, most first', () => {
+    expect(shortfallsOf([[audit('a')], [audit('b'), audit('a')], []])).toEqual([
+      { ...audit('a'), runs: 2 },
+      { ...audit('b'), runs: 1 },
+    ]);
+  });
+});
+
 describe('bounds', () => {
   it('reports the range the runs covered', () => {
     expect(bounds([99, 97, 100])).toEqual({ min: 97, max: 100 });
@@ -776,6 +917,29 @@ describe('measure', () => {
       benchmark: 1540,
     });
     expect(home?.scores.performance.min).toBe(90);
+  });
+
+  /* November's run dropped Home's best practices to 96 and the report could
+     not say why. Now it names the audit and how many runs it failed in. */
+  it('records the audits that cost a score, across the counted runs', async () => {
+    const { fetcher, wait } = setup({
+      responses: [{}, { consoleError: true }, {}],
+    });
+
+    const [home, desktop] = (
+      await measure('https://example.com', undefined, fetcher, wait)
+    ).measurements;
+
+    expect(home?.shortfalls).toEqual([
+      {
+        category: 'best-practices',
+        id: 'errors-in-console',
+        title: 'No browser errors logged to the console',
+        sample: '[{"source":"network","description":"Failed to load: 404"}]',
+        runs: 1,
+      },
+    ]);
+    expect(desktop?.shortfalls).toEqual([]);
   });
 
   /* PageSpeed returns a cached report for a URL it was just asked about, which

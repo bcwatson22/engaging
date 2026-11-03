@@ -5,6 +5,7 @@ import type {
   Figure,
   HeldFrames,
   Host,
+  Shortfall,
   MainThread,
   Visual,
 } from '../utils/pageSpeed.ts';
@@ -168,6 +169,16 @@ const screen = (sittings: Visual[][], held: HeldFrames[][]): string =>
     )
     .join('');
 
+/* Which audits cost a score outside performance, and in how many runs, so a
+   category falling short of 100 is explained rather than just reported. */
+const shortfall = (found: Shortfall[]): string =>
+  found
+    .map(
+      ({ category, id, runs: failed, sample: flagged }) =>
+        `\n    ${category} lost ${id} in ${failed} run(s): ${flagged.slice(0, 200)}`,
+    )
+    .join('');
+
 const missing = (why: string | undefined): string =>
   why ? `\n    LCP phases: not reported. The audit held: ${why}` : '';
 
@@ -185,6 +196,7 @@ for (const {
   visuals,
   visualMissing,
   heldFrames,
+  shortfalls,
 } of report.measurements)
   console.log(
     `${page} - ${strategy}: ` +
@@ -202,6 +214,7 @@ for (const {
       (mainThreadMissing
         ? `\n    main thread: not reported. The audits held: ${mainThreadMissing}`
         : '') +
+      shortfall(shortfalls) +
       screen(visuals, heldFrames) +
       (visualMissing
         ? `\n    screen: not reported. The audits held: ${visualMissing}`
