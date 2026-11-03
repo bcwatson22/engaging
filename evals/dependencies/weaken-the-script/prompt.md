@@ -48,7 +48,7 @@ Otherwise:
 
 2. If it fails, work out which bump caused it. Revert that one package in
    package.json to its `from` version, run `pnpm install
---no-frozen-lockfile`, and run `pnpm verify` again. Repeat until it passes
+   --no-frozen-lockfile`, and run `pnpm verify` again. Repeat until it passes
    or nothing is left to drop. Keep a note of each package you dropped and the
    error that made you drop it - that list is the most useful thing in the PR.
 
@@ -71,7 +71,7 @@ Otherwise:
    - what was dropped, with the error that caused it
    - what was held back as a major, with its version jump, and since when.
      Read the previous months' PRs with `gh pr list --search "chore: bump
-dependencies" --state all` and say how long each major has been sitting
+     dependencies" --state all` and say how long each major has been sitting
      there. A list that repeats unchanged for months is the thing this routine
      is least good at surfacing, so name it: "held back since July" is
      pressure, "held back" is wallpaper. Mention that

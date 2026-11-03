@@ -38,17 +38,20 @@ const Error = ({
           className="overview overview-error"
         >
           <figure className="coupon">
+            {/* A bare `100vw` rather than `calc(100vw - 3rem)`: Next only finds
+                a vw size preceded by whitespace, so inside calc() it missed it
+                and emitted all fifteen widths, icon sizes included, in both
+                the srcset and the preload link. Same sizes as Mugshot. */}
             <Image
               src={image.url}
               alt={`Portrait of ${name}`}
               width={width}
               height={height}
-              sizes={`
-              (min-width: 480px) ${width}px,
-              calc(100vw - 3rem)
-            `}
+              sizes={`(min-width: 480px) ${width}px, 100vw`}
               className="opacity-30"
-              priority
+              preload
+              fetchPriority="high"
+              loading="eager"
             />
           </figure>
           <div className="info">
