@@ -11,7 +11,7 @@ To get it running locally, run `pnpm i` (if you don't have the [pnpm](https://pn
 
 ## Performance
 
-[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 16 October 2026, Lighthouse 13.5.0:
+[PageSpeed Insights](https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fwww.engaging.engineering), 2 November 2026, Lighthouse 13.6.0:
 
 | Page                                               | Performance | Accessibility | Best Practices | SEO |
 | -------------------------------------------------- | ----------- | ------------- | -------------- | --- |
