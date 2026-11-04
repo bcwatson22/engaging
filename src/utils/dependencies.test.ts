@@ -4,6 +4,7 @@ import {
   jsonFrom,
   planFrom,
   summarise,
+  typesFollowRuntime,
   type Outdated,
 } from './dependencies';
 
@@ -142,6 +143,88 @@ describe('planFrom', () => {
       'next',
       'vitest',
     ]);
+  });
+});
+
+describe('typesFollowRuntime', () => {
+  const engine = '^24.0.0';
+
+  /* null rather than undefined for a lookup that finds nothing, so it cannot
+     fall through to the default. */
+  const setupTypes = (latest?: string, found: string | null = '24.20.0') => {
+    const { outdated } = setup({
+      '@types/node': {
+        current: '24.19.2',
+        latest,
+        dependencyType: 'devDependencies',
+      },
+    });
+    const latestWithin = vi.fn<
+      (name: string, major: number) => string | undefined
+    >(() => found ?? undefined);
+
+    return { outdated, latestWithin };
+  };
+
+  /* The case this exists for: the registry is a major ahead of the runtime,
+     and the routine should take the newest types for the Node it runs. */
+  it('offers the newest release within the runtime major', () => {
+    const { outdated, latestWithin } = setupTypes('26.6.6');
+
+    const plan = planFrom(typesFollowRuntime(outdated, engine, latestWithin));
+
+    expect(latestWithin).toHaveBeenNthCalledWith(1, '@types/node', 24);
+    expect(summarise(plan.apply)).toContain(
+      '@types/node 24.19.2 → 24.20.0 (minor)',
+    );
+    expect(plan.hold.map(({ name }) => name)).not.toContain('@types/node');
+  });
+
+  /* Already on the newest types for this Node, so there is nothing to do and
+     nothing to say about it. */
+  it('drops the bump when the runtime major has nothing newer', () => {
+    const { outdated, latestWithin } = setupTypes('26.6.6', '24.19.2');
+
+    const plan = planFrom(typesFollowRuntime(outdated, engine, latestWithin));
+
+    expect([...plan.apply, ...plan.hold].map(({ name }) => name)).not.toContain(
+      '@types/node',
+    );
+  });
+
+  it('leaves a bump within the runtime major to the registry', () => {
+    const { outdated, latestWithin } = setupTypes('24.21.0');
+
+    expect(typesFollowRuntime(outdated, engine, latestWithin)).toBe(outdated);
+    expect(latestWithin).toHaveBeenCalledTimes(0);
+  });
+
+  /* A failed lookup must not lose the bump: holding it back keeps it in front
+     of a person. */
+  it('holds the major back when the lookup finds nothing', () => {
+    const { outdated, latestWithin } = setupTypes('26.6.6', null);
+
+    const plan = planFrom(typesFollowRuntime(outdated, engine, latestWithin));
+
+    expect(summarise(plan.hold)).toContain(
+      '@types/node 24.19.2 → 26.6.6 (major)',
+    );
+  });
+
+  it('leaves everything alone without an engine to follow', () => {
+    const { outdated, latestWithin } = setupTypes('26.6.6');
+
+    expect(typesFollowRuntime(outdated, undefined, latestWithin)).toBe(
+      outdated,
+    );
+    expect(latestWithin).toHaveBeenCalledTimes(0);
+  });
+
+  it('leaves everything alone when @types/node is not outdated', () => {
+    const { outdated, latestWithin } = setupTypes(undefined);
+
+    expect(typesFollowRuntime(outdated, engine, latestWithin)).toBe(outdated);
+    expect(latestWithin).toHaveBeenCalledTimes(0);
   });
 });
 

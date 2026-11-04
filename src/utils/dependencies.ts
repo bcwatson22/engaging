@@ -78,6 +78,35 @@ const changeBetween = (from: string, to: string): Change => {
   return 'patch';
 };
 
+/* @types/node describes the runtime, so its major is decided by engines.node
+   rather than by the registry. Offered the absolute latest, the routine held
+   it back as a major every month - "held back since September" for a bump
+   nobody should take while the site runs on an older Node. Pointing it at the
+   newest release within the runtime's major makes it an ordinary patch or
+   minor, and it moves on its own once engines does.
+
+   The lookup is passed in so this stays free of the registry. A lookup that
+   finds nothing leaves the entry alone, which holds it back as before: the
+   safe failure is a bump a person reads about, not one quietly dropped. */
+const typesFollowRuntime = (
+  outdated: Record<string, Outdated>,
+  engine: string | undefined,
+  latestWithin: (name: string, major: number) => string | undefined,
+): Record<string, Outdated> => {
+  const name = '@types/node';
+  const types = outdated[name];
+
+  if (!engine || !types?.latest) return outdated;
+
+  const { major } = partsOf(engine);
+
+  if (partsOf(types.latest).major <= major) return outdated;
+
+  const latest = latestWithin(name, major);
+
+  return latest ? { ...outdated, [name]: { ...types, latest } } : outdated;
+};
+
 /* Sorted by name so a month's PR reads the same way as the last one, and a
    diff of two reports is about versions rather than ordering. */
 const planFrom = (outdated: Record<string, Outdated>): Plan => {
@@ -125,5 +154,12 @@ const summarise = (bumps: Bump[]): string[] =>
     ({ name, from, to, change }) => `${name} ${from} → ${to} (${change})`,
   );
 
-export { planFrom, changeBetween, applied, jsonFrom, summarise };
+export {
+  planFrom,
+  changeBetween,
+  applied,
+  jsonFrom,
+  summarise,
+  typesFollowRuntime,
+};
 export type { Plan, Bump, Change, Outdated };
