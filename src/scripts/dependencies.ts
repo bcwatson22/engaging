@@ -6,6 +6,7 @@ import {
   jsonFrom,
   planFrom,
   summarise,
+  typesFollowRuntime,
   type Outdated,
 } from '../utils/dependencies.ts';
 
@@ -40,12 +41,33 @@ const outdated = (): Record<string, Outdated> => {
   }
 };
 
-const plan = planFrom(outdated());
+/* npm answers a range with one version as a bare string and with several as
+   an array, newest last. Any failure reads as not found, which leaves the
+   package held back rather than stopping the run. */
+const latestWithin = (name: string, major: number): string | undefined => {
+  try {
+    const json = execFileSync(
+      'npm',
+      ['view', `${name}@${major}`, 'version', '--json'],
+      { encoding: 'utf8' },
+    );
+    const versions = JSON.parse(json) as string | string[];
+
+    return Array.isArray(versions) ? versions.at(-1) : versions;
+  } catch {
+    return undefined;
+  }
+};
 
 const manifest = JSON.parse(await readFile('package.json', 'utf8')) as Record<
   string,
   unknown
 >;
+const engines = manifest.engines as { node?: string } | undefined;
+
+const plan = planFrom(
+  typesFollowRuntime(outdated(), engines?.node, latestWithin),
+);
 
 if (plan.apply.length) {
   await writeFile(
