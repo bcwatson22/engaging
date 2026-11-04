@@ -16,7 +16,7 @@ const Logo = ({ logoDarkBackground, logoLightBackground }: Logo) => {
     alt,
     width,
     height,
-    priority: true,
+    preload: true,
   };
   const {
     props: { srcSet: dark },
